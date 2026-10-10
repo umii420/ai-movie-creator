@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Groq Instant Active
+                <i class="fas fa-bolt text-yellow-400"></i> Groq GPT-OSS Active
             </span>
         </div>
     </header>
@@ -144,8 +144,7 @@
     </footer>
 
     <script>
-        // Yahan apni Nayi Groq API Key paste karein:
-        const GROQ_API_KEY = "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"; 
+        const GROQ_API_KEY = "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"; 
 
         let currentFrames = [];
         let isPlaying = false;
@@ -194,7 +193,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.1-8b-instant",
+                        model: "openai/gpt-oss-120b",
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
@@ -322,5 +321,5 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-                                </html>
-                    
+                        </html>
+                        
