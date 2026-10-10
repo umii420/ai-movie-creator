@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + STABLE HD</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + BLOB STUDIO</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تمام 6 تصاویر ایک ایک کر کے بالکل مکمل لوڈ ہوں گی۔</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تمام 6 تصاویر بیک وقت بالکل پرفیکٹ لوڈ ہوں گی۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -243,13 +243,15 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 }
 
                 output.classList.remove('hidden');
+                loaderText.innerText = "تمام مناظر کی ایچ ڈی تصاویر بیک وقت تیار ہو رہی ہیں...";
+
+                // Fetch all 6 images concurrently using fetch + blob to bypass browser queuing blocks
+                const imagePromises = [];
 
                 for(let i = 0; i < 6; i++) {
-                    loaderText.innerText = `منظر ${i + 1} آف 6 کی ایچ ڈی تصویر لوڈ ہو رہی ہے...`;
-
                     const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1}`;
                     const enhancedPrompt = `${sceneVisual}, cinematic movie shot, photorealistic masterwork, dramatic 8k lighting`;
-                    const seedVal = Math.floor(Math.random() * 899999) + 100000 + (i * 21);
+                    const seedVal = Math.floor(Math.random() * 899999) + 100000 + (i * 37);
                     
                     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${seedVal}&nologo=true`;
                     currentFrames.push(imageUrl);
@@ -264,36 +266,32 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     const pText = extractedPrompts[i] || promptText;
                     btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
 
-                    await new Promise((resolve) => {
-                        imgElem.onload = function() {
-                            spinnerElem.style.display = 'none';
-                            imgElem.classList.remove('opacity-0');
-                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                            resolve();
-                        };
-                        imgElem.onerror = function() {
-                            spinnerElem.style.display = 'none';
-                            imgElem.classList.remove('opacity-0');
-                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                            resolve();
-                        };
-                        imgElem.src = imageUrl;
-
-                        setTimeout(() => {
-                            spinnerElem.style.display = 'none';
-                            imgElem.classList.remove('opacity-0');
-                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                            resolve();
-                        }, 5000);
-                    });
-
-                    if(i === 0) {
-                        moviePreview.src = imageUrl;
-                    }
-
-                    await delay(600);
+                    imagePromises.push(
+                        fetch(imageUrl)
+                            .then(res => res.blob())
+                            .then(blob => {
+                                const objectURL = URL.createObjectURL(blob);
+                                imgElem.src = objectURL;
+                                spinnerElem.style.display = 'none';
+                                imgElem.classList.remove('opacity-0');
+                                actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                                if(i === 0) {
+                                    moviePreview.src = objectURL;
+                                }
+                            })
+                            .catch(() => {
+                                imgElem.src = imageUrl;
+                                spinnerElem.style.display = 'none';
+                                imgElem.classList.remove('opacity-0');
+                                actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                                if(i === 0) {
+                                    moviePreview.src = objectURL;
+                                }
+                            })
+                    );
                 }
 
+                await Promise.all(imagePromises);
                 loader.classList.add('hidden');
                 loaderText.innerText = "تمام مناظر کامیابی سے تیار ہو گئے!";
 
