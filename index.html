@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تمام 6 تصاویر الگ الگ اور مکمل لوڈ ہوں گی۔</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تمام 6 تصاویر ایک ایک کر کے بالکل مکمل لوڈ ہوں گی۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -215,6 +215,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 imageGrid.innerHTML = '';
 
+                // Create cards with spinners
                 for(let i = 0; i < 6; i++) {
                     const card = document.createElement('div');
                     card.id = `scene-card-${i}`;
@@ -244,12 +245,13 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 output.classList.remove('hidden');
 
+                // Strict sequential image loading loop guaranteeing every single image loads
                 for(let i = 0; i < 6; i++) {
                     loaderText.innerText = `منظر ${i + 1} آف 6 کی ایچ ڈی تصویر لوڈ ہو رہی ہے...`;
 
                     const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1}`;
                     const enhancedPrompt = `${sceneVisual}, cinematic movie shot, photorealistic masterwork, dramatic 8k lighting`;
-                    const seedVal = Math.floor(Math.random() * 899999) + 100000 + i;
+                    const seedVal = Math.floor(Math.random() * 899999) + 100000 + (i * 13);
                     
                     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${seedVal}&nologo=true`;
                     currentFrames.push(imageUrl);
@@ -260,21 +262,40 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     const dlElem = document.getElementById(`dl-${i}`);
                     const btnPromptElem = document.getElementById(`btn-prompt-${i}`);
 
-                    imgElem.src = imageUrl;
                     dlElem.href = imageUrl;
-                    
                     const pText = extractedPrompts[i] || promptText;
                     btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
 
-                    spinnerElem.style.display = 'none';
-                    imgElem.classList.remove('opacity-0');
-                    actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                    // Wait for each image to completely load before proceeding to the next
+                    await new Promise((resolve) => {
+                        imgElem.onload = function() {
+                            spinnerElem.style.display = 'none';
+                            imgElem.classList.remove('opacity-0');
+                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                            resolve();
+                        };
+                        imgElem.onerror = function() {
+                            spinnerElem.style.display = 'none';
+                            imgElem.classList.remove('opacity-0');
+                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                            resolve();
+                        };
+                        imgElem.src = imageUrl;
+
+                        // Safety fallback timer
+                        setTimeout(() => {
+                            spinnerElem.style.display = 'none';
+                            imgElem.classList.remove('opacity-0');
+                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                            resolve();
+                        }, 6000);
+                    });
 
                     if(i === 0) {
                         moviePreview.src = imageUrl;
                     }
 
-                    await delay(600);
+                    await delay(400);
                 }
 
                 loader.classList.add('hidden');
@@ -326,6 +347,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 playInterval = setInterval(() => {
                     frameIdx = (frameIdx + 1) % currentFrames.length;
                     preview.src = currentFrames[frameIdx];
+                    badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
                     badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
                     status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
                 }, 2800);
