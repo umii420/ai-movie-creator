@@ -184,7 +184,7 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
+                        model: "llama-3.1-8b-instant",
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
@@ -222,7 +222,6 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                     const sceneVisual = extractedPrompts[i] || `${promptText} cinematic scene ${i+1} 8k photorealistic`;
                     const cleanPrompt = encodeURIComponent(sceneVisual + ", highly detailed cinematic film shot 8k");
                     
-                    // High-quality Flux model engine URL via Pollinations
                     const seedVal = Math.floor(Math.random() * 899999) + 100000;
                     const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&model=flux&nologo=true&seed=${seedVal}`;
                     currentFrames.push(imageUrl);
@@ -313,5 +312,5 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
         }
     </script>
 </body>
-                                </html>
-    
+                    </html>
+                    
