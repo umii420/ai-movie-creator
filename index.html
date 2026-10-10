@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Movie Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0b0f19; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        .glass { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-4 sm:p-6">
+
+    <!-- Header -->
+    <header class="text-center py-6">
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mb-2">
+            🎬 AI Movie Creator
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base">سکرپٹ لیں، سین تصاویر دیکھیں اور مکمل AI مووی تیار کریں</p>
+    </header>
+
+    <!-- Main Form Section -->
+    <main class="max-w-4xl mx-auto w-full glass rounded-2xl p-6 shadow-2xl space-y-8">
+        
+        <form id="movieForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-2 text-slate-300">اپنی فلم کی کہانی / پرامپٹ درج کریں</label>
+                <textarea id="promptInput" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-slate-500 text-right" placeholder="مثال: ایک سائنس فکشن دنیا جہاں روبوٹس اور انسان مل کر ایک نیا سیارہ بناتے ہیں..." required></textarea>
+            </div>
+
+            <button type="submit" id="generateBtn" class="w-full py-4 px-4 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:opacity-90 text-white font-bold rounded-xl shadow-lg transition duration-200">
+                <i class="fas fa-wand-magic-sparkles ml-2"></i> پروسیس شروع کریں
+            </button>
+        </form>
+
+        <!-- Loader -->
+        <div id="loader" class="hidden text-center my-8 space-y-3">
+            <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-purple-500 border-t-transparent"></div>
+            <p class="text-slate-400 text-sm">AI تینوں خانے تیار کر رہا ہے...</p>
+        </div>
+
+        <!-- 3 Boxes Output Section -->
+        <div id="outputContainer" class="hidden space-y-8">
+            
+            <!-- Box 1: AI Script / ChatGPT Prompt Generator -->
+            <div class="bg-slate-900/90 p-5 rounded-xl border border-purple-500/30 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-lg font-bold text-purple-400 flex items-center gap-2">
+                        <i class="fas fa-scroll"></i> خانہ 1: AI سکرپٹ اور پرامپٹ (ChatGPT Prompt)
+                    </h3>
+                    <button onclick="copyScript()" class="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-lg">
+                        <i class="fas fa-copy ml-1"></i> کاپی کریں
+                    </button>
+                </div>
+                <p id="scriptText" class="text-slate-300 text-sm leading-relaxed bg-slate-950 p-4 rounded-lg border border-slate-800"></p>
+            </div>
+
+            <!-- Box 2: Visual Scene Photos -->
+            <div class="bg-slate-900/90 p-5 rounded-xl border border-pink-500/30 shadow-lg">
+                <h3 class="text-lg font-bold text-pink-400 mb-4 flex items-center gap-2">
+                    <i class="fas fa-images"></i> خانہ 2: مناظر کی تصاویر (Scene Photos)
+                </h3>
+                <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Dynamic Images -->
+                </div>
+            </div>
+
+            <!-- Box 3: Final AI Animated Movie Preview -->
+            <div class="bg-slate-900/90 p-5 rounded-xl border border-red-500/30 shadow-lg">
+                <h3 class="text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
+                    <i class="fas fa-circle-play"></i> خانہ 3: مکمل AI مووی (Final Movie Animation)
+                </h3>
+                <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden border border-slate-700 shadow-xl flex items-center justify-center">
+                    <img id="moviePreview" class="w-full h-full object-cover opacity-80" src="" alt="Movie Preview">
+                    <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center p-4 text-center">
+                        <i class="fas fa-play text-5xl text-white hover:text-pink-500 transition cursor-pointer mb-2"></i>
+                        <span class="bg-red-600 text-white text-xs px-3 py-1 rounded-full font-bold">AI Movie Rendered</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 text-xs text-slate-500">
+        AI Movie Creator &copy; 2026 - All-in-One Movie Suite
+    </footer>
+
+    <script>
+        document.getElementById('movieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const prompt = document.getElementById('promptInput').value;
+            const loader = document.getElementById('loader');
+            const output = document.getElementById('outputContainer');
+            const scriptText = document.getElementById('scriptText');
+            const imageGrid = document.getElementById('imageGrid');
+            const moviePreview = document.getElementById('moviePreview');
+
+            loader.classList.remove('hidden');
+            output.classList.add('hidden');
+
+            const encodedPrompt = encodeURIComponent(prompt);
+            const img1 = `https://pollinations.ai/p/${encodedPrompt}%20cinematic%20scene%201?width=800&height=450&seed=10`;
+            const img2 = `https://pollinations.ai/p/${encodedPrompt}%20cinematic%20scene%202?width=800&height=450&seed=20`;
+
+            setTimeout(() => {
+                // Set Script
+                scriptText.innerText = `[AI Generated Script & ChatGPT Prompt]\n\nTitle: ${prompt.substring(0, 30)}...\n\nScene Description: High-quality cinematic production inspired by "${prompt}".\n\nPrompt for ChatGPT / AI Video Generator: "A detailed cinematic 8k shot of ${prompt}, studio lighting, dramatic angles, photorealistic render."`;
+
+                // Set Photos
+                imageGrid.innerHTML = `
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+                        <img src="${img1}" class="w-full h-44 object-cover rounded-lg mb-2" alt="Scene 1">
+                        <a href="${img1}" target="_blank" class="block text-center text-xs text-purple-400 hover:underline">تصویر ڈاؤن لوڈ کریں (Scene 1)</a>
+                    </div>
+                    <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+                        <img src="${img2}" class="w-full h-44 object-cover rounded-lg mb-2" alt="Scene 2">
+                        <a href="${img2}" target="_blank" class="block text-center text-xs text-purple-400 hover:underline">تصویر ڈاؤن لوڈ کریں (Scene 2)</a>
+                    </div>
+                `;
+
+                // Set Movie
+                moviePreview.src = img1;
+
+                loader.classList.add('hidden');
+                output.classList.remove('hidden');
+            }, 2500);
+        });
+
+        function copyScript() {
+            const text = document.getElementById('scriptText').innerText;
+            navigator.clipboard.writeText(text);
+            alert("سکرپٹ اور پرامپٹ کاپی ہو گیا ہے!");
+        }
+    </script>
+</body>
+  </html>
+  
