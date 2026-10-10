@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Auto AI Backend Linked
+                <i class="fas fa-bolt text-yellow-400"></i> Auto AI Engine Active
             </span>
         </div>
     </header>
@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K Cinematic AI Movies</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Select your AI engine and turn any story prompt into an automated 6-scene cinematic masterpiece.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Turn any story prompt into fully visual 6-scene AI generated movie frames.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -61,7 +61,7 @@
 
                 <!-- Story Input -->
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Describe your movie concept e.g., An epic futuristic cyberpunk city under heavy rain with neon lights, 8k cinematic..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Mujhe paharo ki pics do, ya cyberpunk warrior standing on rooftop..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
@@ -73,7 +73,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Connected AI engine is analyzing story, writing scene script & generating 6 motion frames...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">AI is rendering real-time cinematic frames & script breakdown...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -172,7 +172,7 @@
         document.getElementById('movieForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const prompt = document.getElementById('promptInput').value.trim();
+            const rawPrompt = document.getElementById('promptInput').value.trim();
             const loader = document.getElementById('loader');
             const output = document.getElementById('outputContainer');
             const scriptText = document.getElementById('scriptText');
@@ -185,7 +185,7 @@
 
             try {
                 let generatedScript = "";
-                const aiPrompt = `You are an elite movie director. Write a full 6-scene cinematic script and prompt breakdown for: "${prompt}". List Scene 1 to Scene 6 with camera shots, visual directions and lighting details.`;
+                const aiPrompt = `You are a professional film director. Write a movie scene script breakdown for this concept: "${rawPrompt}". Also provide a 3-word English visual theme summary at the very end. Format response cleanly.`;
 
                 if(selectedEngine === 'gemini') {
                     activeLabel.innerText = "Gemini Direct Linked";
@@ -196,7 +196,7 @@
                         body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
                     });
                     const data = await res.json();
-                    generatedScript = data.candidates?.[0]?.content?.parts?.[0]?.text || "Gemini script generated successfully.";
+                    generatedScript = data.candidates?.[0]?.content?.parts?.[0]?.text || "Gemini script generated.";
                 } else {
                     if(DEFAULT_GROQ_KEY === "YOUR_GROQ_KEY_HERE") {
                         alert("Please insert your Groq API Key in the code first!");
@@ -217,14 +217,17 @@
                         })
                     });
                     const data = await res.json();
-                    generatedScript = data.choices?.[0]?.message?.content || "Groq script generated successfully.";
+                    generatedScript = data.choices?.[0]?.message?.content || "Groq script generated.";
                 }
 
-                // Generate 6 visual frames
-                const encoded = encodeURIComponent(prompt);
+                // Clean Prompt for Pure AI Image Generation
+                const cleanedKeyword = encodeURIComponent(rawPrompt.replace(/[^a-zA-Z0-9 ]/g, " "));
                 currentFrames = [];
+                const timestamps = [101, 202, 303, 404, 505, 606];
+
                 for(let i = 1; i <= 6; i++) {
-                    currentFrames.push(`https://image.pollinations.ai/prompt/${encoded}%20cinematic%20movie%20shot%20scene%20${i}%20photorealistic%208k?width=800&height=450&nologo=true&seed=${i * 97}`);
+                    const sceneTag = i === 1 ? "establishing shot" : i === 3 ? "action wide view" : i === 5 ? "close up detail shot" : "cinematic scene";
+                    currentFrames.push(`https://image.pollinations.ai/prompt/majestic%20${cleanedKeyword}%20${sceneTag}%20hyperrealistic%208k%20cinematic%20lighting?width=800&height=450&nologo=true&seed=${timestamps[i-1]}`);
                 }
 
                 scriptText.innerText = generatedScript;
@@ -234,12 +237,12 @@
                     const card = document.createElement('div');
                     card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
                     card.innerHTML = `
-                        <div class="relative overflow-hidden rounded-xl mb-3">
-                            <img src="${url}" class="w-full h-36 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${idx + 1}" onerror="this.src='https://picsum.photos/800/450?random=${idx + 1}'">
+                        <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[140px]">
+                            <img src="${url}" class="w-full h-36 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${idx + 1}" loading="lazy">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${idx + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1">
-                            <span class="text-xs text-slate-400 font-semibold">HD Cinema Frame</span>
+                            <span class="text-xs text-slate-400 font-semibold">AI Generated Scene</span>
                             <a href="${url}" target="_blank" class="text-xs bg-slate-800 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition border border-slate-700">
                                 <i class="fas fa-download mr-1"></i> Download
                             </a>
@@ -301,5 +304,4 @@
         }
     </script>
 </body>
-                        </html>
-                
+</html>
