@@ -356,8 +356,6 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
         document.getElementById('movieForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const prompt = document.getElementById('promptInput'document.getElementById('movieForm').addEventListener('submit', function(e) {
-            e.preventDefault();
             const prompt = document.getElementById('promptInput').value.trim();
             if(prompt) fetchScriptAndRender(prompt);
         });
