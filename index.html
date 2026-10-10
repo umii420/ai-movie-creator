@@ -261,6 +261,34 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
             alert("Luma Video Prompt copied! Now click 'Open Luma' and paste it there.");
         }
 
+        async function generateVideoDirect(promptText, btnElement) {
+    btnElement.innerText = "Generating Video...";
+    btnElement.disabled = true;
+
+    try {
+        const response = await fetch("https://ai-movie-backend-api.vercel.app/api/generate-video", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ prompt: promptText })
+        });
+
+        const data = await response.json();
+        
+        if (data.id || data.url) {
+            alert("Video Generation Started Successfully! ID: " + (data.id || "Success"));
+        } else {
+            alert("API Response: " + JSON.stringify(data));
+        }
+    } catch (error) {
+        alert("Error generating video: " + error.message);
+    } finally {
+        btnElement.innerText = "Generate Video";
+        btnElement.disabled = false;
+    }
+        }
+        
         document.getElementById('movieForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const prompt = document.getElementById('promptInput').value.trim();
