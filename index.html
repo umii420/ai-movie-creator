@@ -144,9 +144,8 @@
     </footer>
 
     <script>
-        // Insert your free Groq API Key here
-        const GROQ_API_KEY = "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";
-            "; 
+        // Your active Groq API Key embedded directly
+        const GROQ_API_KEY = "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"; 
 
         let currentFrames = [];
         let isPlaying = false;
@@ -205,6 +204,11 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                 });
                 
                 const data = await res.json();
+                
+                if(!res.ok) {
+                    throw new Error(data.error?.message || "Failed to fetch response from Groq API");
+                }
+
                 const responseText = data.choices?.[0]?.message?.content || "Movie script generated.";
 
                 scriptText.value = responseText;
@@ -253,7 +257,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                 output.classList.remove('hidden');
 
             } catch (err) {
-                alert("Error connecting to Groq AI Engine. Please check your Groq API Key!");
+                alert("API Error: " + err.message);
                 loader.classList.add('hidden');
             }
         }
@@ -318,5 +322,5 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-                            </html>
+    </html>
     
