@@ -348,4 +348,19 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
 
                 playInterval = setInterval(() => {
-  
+                    frameIdx = (frameIdx + 1) % currentFrames.length;
+                    preview.src = currentFrames[frameIdx];
+                    badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
+                    status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
+                }, 2800);
+            }
+        });
+
+        function copyScript() {
+            const text = document.getElementById('scriptText').value;
+            navigator.clipboard.writeText(text);
+            alert("اسکرپٹ کاپی ہو گیا ہے!");
+        }
+    </script>
+</body>
+</html>
