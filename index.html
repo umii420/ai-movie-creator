@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Integrated AI Studio</title>
+    <title>AI Movie Creator - Pro Studio Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body { background-color: #030712; color: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-        .netflix-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .netflix-card { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
         .cinema-glow { box-shadow: 0 0 50px rgba(229, 9, 20, 0.15); }
-        .kenburns-active { animation: kenburns 3s infinite alternate ease-in-out; }
+        .kenburns-active { animation: kenburns 4s infinite alternate ease-in-out; }
         @keyframes kenburns {
             0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.08) translate(-8px, -4px); }
+            100% { transform: scale(1.1) translate(-10px, -5px); }
         }
     </style>
 </head>
@@ -22,14 +22,14 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">PRO</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">PRO STUDIO</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Auto AI Engine Active
+                <i class="fas fa-bolt text-yellow-400"></i> Gemini Pro Active
             </span>
         </div>
     </header>
@@ -41,31 +41,16 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K Cinematic AI Movies</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Turn any story prompt into fully visual 6-scene AI generated movie frames.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Type any concept in Urdu or English. Gemini will write the script & generate 6 unique AI cinematic frames.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
-                
-                <!-- AI Selector Pills -->
-                <div class="flex items-center justify-center gap-3 mb-2">
-                    <label class="text-xs text-slate-400 font-medium">Select Script Engine:</label>
-                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
-                        <button type="button" id="btnGemini" onclick="setEngine('gemini')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition bg-red-600 text-white shadow">
-                            <i class="fas fa-robot mr-1"></i> Gemini AI
-                        </button>
-                        <button type="button" id="btnGroq" onclick="setEngine('groq')" class="px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white">
-                            <i class="fas fa-bolt mr-1"></i> Groq Llama 3
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Story Input -->
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Mujhe paharo ki pics do, ya cyberpunk warrior standing on rooftop..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ki choti par aik sher khڑا hai, ya Cyberpunk city at night..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
-                    <i class="fas fa-wand-magic-sparkles"></i> Render Movie Production
+                    <i class="fas fa-wand-magic-sparkles"></i> Render AI Movie Production
                 </button>
             </form>
         </div>
@@ -73,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">AI is rendering real-time cinematic frames & script breakdown...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Gemini is directing scenes & generating custom 8K AI frames...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -90,20 +75,20 @@
                 </div>
                 
                 <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center group">
-                    <img id="moviePreview" class="w-full h-full object-cover opacity-90 transition duration-700" src="" alt="Movie Stream">
+                    <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
                             <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">8K Cinema Render</span>
-                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Scenes • Motion Sync</span>
+                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Custom AI Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
                             <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
                                 <i id="playIcon" class="fas fa-play text-2xl sm:text-3xl ml-1"></i>
                             </div>
-                            <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream 6-Scene AI Movie</p>
+                            <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream AI Movie</p>
                         </div>
                         <div class="w-full text-left text-[11px] text-slate-400 font-mono">
-                            Status: High Dynamic Range (HDR) Enabled
+                            Status: Ultra HD Neural Engine Active
                         </div>
                     </div>
                 </div>
@@ -113,9 +98,9 @@
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-film text-purple-500"></i> 6-Scene Production Storyboard
+                        <i class="fas fa-film text-purple-500"></i> 6-Scene AI Visual Storyboard
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">6 Ultra HD Shots</span>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">Custom AI Rendered</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
@@ -125,9 +110,9 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-blue-500"></i> Script Section
+                            <i class="fas fa-scroll text-blue-500"></i> Director Script & AI Prompts
                         </h3>
-                        <span id="activeEngineLabel" class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Gemini Active</span>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Gemini Pro</span>
                     </div>
                     <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
                         <i class="fas fa-copy"></i> Copy Script
@@ -142,95 +127,64 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Enterprise Multi-Engine AI Integration
+        AI Movie Creator Pro &copy; 2026 - Powered by Google Gemini Pro
     </footer>
 
     <script>
-        // Integrated API Keys (Set by Developer)
         const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6If2nS2-PQaD4-0bnWCyGU94QFarLLxr_SA03tH9C4wEQ"; 
-        const DEFAULT_GROQ_KEY = "YOUR_GROQ_KEY_HERE";
 
-        let selectedEngine = 'gemini';
         let currentFrames = [];
         let isPlaying = false;
         let playInterval = null;
 
-        function setEngine(engine) {
-            selectedEngine = engine;
-            const btnG = document.getElementById('btnGemini');
-            const btnQ = document.getElementById('btnGroq');
-            
-            if(engine === 'gemini') {
-                btnG.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition bg-red-600 text-white shadow";
-                btnQ.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
-            } else {
-                btnQ.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition bg-red-600 text-white shadow";
-                btnG.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition text-slate-400 hover:text-white";
-            }
-        }
-
         document.getElementById('movieForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const rawPrompt = document.getElementById('promptInput').value.trim();
+            const prompt = document.getElementById('promptInput').value.trim();
             const loader = document.getElementById('loader');
             const output = document.getElementById('outputContainer');
             const scriptText = document.getElementById('scriptText');
             const imageGrid = document.getElementById('imageGrid');
             const moviePreview = document.getElementById('moviePreview');
-            const activeLabel = document.getElementById('activeEngineLabel');
 
             loader.classList.remove('hidden');
             output.classList.add('hidden');
 
             try {
-                let generatedScript = "";
-                const aiPrompt = `You are a professional film director. Write a movie scene script breakdown for this concept: "${rawPrompt}". Also provide a 3-word English visual theme summary at the very end. Format response cleanly.`;
+                // Gemini se script aur 6 specific visual prompts mangwayenge
+                const aiPrompt = `You are a Hollywood movie director. Based on the concept: "${prompt}", write a cinematic script breakdown AND create exactly 6 distinct, highly detailed visual English image generation prompts for 6 sequential scenes. 
+                Format your response clearly with the Script first, and at the bottom provide exactly 6 lines starting with "PROMPT 1:", "PROMPT 2:", "PROMPT 3:", "PROMPT 4:", "PROMPT 5:", "PROMPT 6:" containing hyper-realistic 8k cinematic visual descriptions.`;
 
-                if(selectedEngine === 'gemini') {
-                    activeLabel.innerText = "Gemini Direct Linked";
-                    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${DEFAULT_GEMINI_KEY}`;
-                    const res = await fetch(geminiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
-                    });
-                    const data = await res.json();
-                    generatedScript = data.candidates?.[0]?.content?.parts?.[0]?.text || "Gemini script generated.";
-                } else {
-                    if(DEFAULT_GROQ_KEY === "YOUR_GROQ_KEY_HERE") {
-                        alert("Please insert your Groq API Key in the code first!");
-                        loader.classList.add('hidden');
-                        return;
-                    }
-                    activeLabel.innerText = "Groq Llama 3 Direct Linked";
-                    const groqUrl = `https://api.groq.com/openai/v1/chat/completions`;
-                    const res = await fetch(groqUrl, {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${DEFAULT_GROQ_KEY}`
-                        },
-                        body: JSON.stringify({
-                            model: "llama3-8b-8192",
-                            messages: [{ role: "user", content: aiPrompt }]
-                        })
-                    });
-                    const data = await res.json();
-                    generatedScript = data.choices?.[0]?.message?.content || "Groq script generated.";
-                }
+                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${DEFAULT_GEMINI_KEY}`;
+                const res = await fetch(geminiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
+                });
+                
+                const data = await res.json();
+                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cinematic script generated.";
 
-                // Clean Prompt for Pure AI Image Generation
-                const cleanedKeyword = encodeURIComponent(rawPrompt.replace(/[^a-zA-Z0-9 ]/g, " "));
+                scriptText.innerText = responseText;
+
+                // Gemini ke response se 6 specific prompts extract karna ya fallback use karna
                 currentFrames = [];
-                const timestamps = [101, 202, 303, 404, 505, 606];
+                const lines = responseText.split('\n');
+                let extractedPrompts = [];
+                
+                lines.forEach(line => {
+                    if(line.toUpperCase().includes("PROMPT")) {
+                        const cleanP = line.replace(/PROMPT\s*\d*[:\-]/i, "").trim();
+                        if(cleanP.length > 5) extractedPrompts.push(cleanP);
+                    }
+                });
 
-                for(let i = 1; i <= 6; i++) {
-                    const sceneTag = i === 1 ? "establishing shot" : i === 3 ? "action wide view" : i === 5 ? "close up detail shot" : "cinematic scene";
-                    currentFrames.push(`https://image.pollinations.ai/prompt/majestic%20${cleanedKeyword}%20${sceneTag}%20hyperrealistic%208k%20cinematic%20lighting?width=800&height=450&nologo=true&seed=${timestamps[i-1]}`);
+                // Agar 6 prompts na milein toh original user prompt ko enhance kar ke 6 variants bana lo
+                for(let i = 0; i < 6; i++) {
+                    let sceneDesc = extractedPrompts[i] || `${prompt} cinematic scene ${i+1} dramatic lighting hyperrealistic 8k`;
+                    const encodedVisual = encodeURIComponent(sceneDesc + " unreal engine 5 photorealistic cinematic movie still");
+                    currentFrames.push(`https://image.pollinations.ai/prompt/${encodedVisual}?width=800&height=450&nologo=true&seed=${(i + 1) * 777}`);
                 }
-
-                scriptText.innerText = generatedScript;
 
                 imageGrid.innerHTML = '';
                 currentFrames.forEach((url, idx) => {
@@ -242,7 +196,7 @@
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${idx + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1">
-                            <span class="text-xs text-slate-400 font-semibold">AI Generated Scene</span>
+                            <span class="text-xs text-slate-400 font-semibold">AI Generated Frame</span>
                             <a href="${url}" target="_blank" class="text-xs bg-slate-800 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition border border-slate-700">
                                 <i class="fas fa-download mr-1"></i> Download
                             </a>
@@ -258,7 +212,7 @@
                 output.classList.remove('hidden');
 
             } catch (err) {
-                alert("Error connecting to AI backend. Please verify your API key!");
+                alert("Error connecting to Gemini AI. Please check network!");
                 loader.classList.add('hidden');
             }
         });
