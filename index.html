@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Ultimate Studio</title>
+    <title>AI Movie Creator - Pro Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + ULTIMATE ENGINE</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + PRO STUDIO</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">سرور کی قید سے بچنے کے لیے اب تصاویر کو انتہائی محفوظ وقفے کے ساتھ لوڈ کیا جائے گا۔</p>
+                <p class="text-slate-400 text-xs sm:text-sm">اب آپ ہر منظر کو الگ سے ری لوڈ یا جنरेट بھی کر سکتے ہیں تاکہ کوئی رکاوٹ نہ آئے۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -95,7 +95,7 @@
                     <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
-                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Ultimate Engine</span>
+                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Pro Studio Render</span>
                             <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Synced Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
@@ -128,7 +128,7 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Ultimate Studio Engine
+        AI Movie Creator Pro &copy; 2026 - Pro Studio Engine
     </footer>
 
     <script>
@@ -215,7 +215,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 imageGrid.innerHTML = '';
 
-                // Build grid layout first
+                // Build grid cards with individual Reload buttons
                 for(let i = 0; i < 6; i++) {
                     const card = document.createElement('div');
                     card.id = `scene-card-${i}`;
@@ -228,15 +228,20 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                             <img id="img-${i}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105 opacity-0" alt="Scene ${i + 1}">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10 z-20">Scene ${i + 1}</span>
                         </div>
-                        <div id="actions-${i}" class="flex items-center justify-between px-1 gap-1 opacity-50 pointer-events-none">
-                            <a id="dl-${i}" href="#" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-2 rounded-lg transition border border-slate-700 flex-1 text-center">
-                                <i class="fas fa-download"></i> امیج
+                        <div class="flex items-center justify-between gap-1 mb-2">
+                            <button onclick="reloadScene(${i})" class="text-[10px] bg-amber-600 hover:bg-amber-500 text-white px-2 py-1.5 rounded-lg font-bold transition flex-1 text-center shadow">
+                                <i class="fas fa-sync-alt mr-1"></i> ری لوڈ امیج
+                            </button>
+                            <a id="dl-${i}" href="#" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg transition border border-slate-700 flex-1 text-center">
+                                <i class="fas fa-download"></i> ڈاؤن لوڈ
                             </a>
+                        </div>
+                        <div id="actions-${i}" class="flex items-center gap-1 opacity-50 pointer-events-none">
                             <button id="btn-prompt-${i}" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1">
                                 <i class="fas fa-copy mr-1"></i> پرامپٹ کاپی
                             </button>
                             <a href="https://lumalabs.ai/dream-machine" target="_blank" class="text-[10px] bg-red-600 hover:bg-red-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1 text-center">
-                                <i class="fas fa-video mr-1"></i> لوما کھولیں
+                                <i class="fas fa-video mr-1"></i> لوما
                             </a>
                         </div>
                     `;
@@ -245,17 +250,14 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 output.classList.remove('hidden');
 
-                // High-Delay Sequential Loading Loop to completely prevent server IP-rate-limiting blocks
+                // Sequential loading loop using stable pollinations.ai/p/ format
                 for(let i = 0; i < 6; i++) {
-                    loaderText.innerText = `منظر ${i + 1} آف 6 کی ایچ ڈی تصویر جنریٹ ہو رہی ہے...`;
+                    loaderText.innerText = `منظر ${i + 1} آف 6 کی AI تصویر تیار ہو رہی ہے...`;
 
-                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1}`;
-                    const enhancedPrompt = `${sceneVisual}, cinematic movie shot, photorealistic masterwork, dramatic 8k lighting`;
+                    const sceneVisual = extractedPrompts[i] || `${promptText} cinematic scene ${i+1}`;
+                    const enhancedPrompt = `${sceneVisual}, cinematic movie scene, highly detailed, dramatic 8k lighting`;
                     
-                    // Distinct parameters for each scene
-                    const uniqueSeed = 500000 + (i * 12345);
-                    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${uniqueSeed}&nologo=true`;
-                    
+                    const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${9999 + i}&nologo=true`;
                     currentFrames.push(imageUrl);
 
                     const imgElem = document.getElementById(`img-${i}`);
@@ -268,13 +270,12 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     const pText = extractedPrompts[i] || promptText;
                     btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
 
-                    // Safe image loading with 6 seconds max fallback timeout per image
                     await new Promise((resolve) => {
-                        let isLoaded = false;
+                        let done = false;
 
                         imgElem.onload = function() {
-                            if (!isLoaded) {
-                                isLoaded = true;
+                            if (!done) {
+                                done = true;
                                 spinnerElem.style.display = 'none';
                                 imgElem.classList.remove('opacity-0');
                                 actionsElem.classList.remove('opacity-50', 'pointer-events-none');
@@ -283,8 +284,8 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                         };
 
                         imgElem.onerror = function() {
-                            if (!isLoaded) {
-                                isLoaded = true;
+                            if (!done) {
+                                done = true;
                                 spinnerElem.style.display = 'none';
                                 imgElem.classList.remove('opacity-0');
                                 actionsElem.classList.remove('opacity-50', 'pointer-events-none');
@@ -295,8 +296,8 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                         imgElem.src = imageUrl;
 
                         setTimeout(() => {
-                            if (!isLoaded) {
-                                isLoaded = true;
+                            if (!done) {
+                                done = true;
                                 spinnerElem.style.display = 'none';
                                 imgElem.classList.remove('opacity-0');
                                 actionsElem.classList.remove('opacity-50', 'pointer-events-none');
@@ -309,18 +310,47 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                         moviePreview.src = imageUrl;
                     }
 
-                    // 2.5 seconds gap between each image request to trick server rate-limiters
-                    await delay(2500);
+                    await delay(2000);
                 }
 
                 loader.classList.add('hidden');
-                loaderText.innerText = "تمام مناظر کامیابی سے تیار ہو گئے!";
+                loaderText.innerText = "تمام مناظر تیار ہو گئے! (اگر کوئی تصویر نہ آئے تو 'ری لوڈ امیج' دبائیں)";
 
             } catch (err) {
                 alert("API Error: " + err.message);
                 loader.classList.add('hidden');
             }
         }
+
+        function reloadScene(i) {
+            const pText = extractedPrompts[i] || document.getElementById('promptInput').value;
+            const enhancedPrompt = `${pText}, cinematic movie scene, highly detailed, dramatic 8k lighting`;
+            const spinnerElem = document.getElementById(`spinner-${i}`);
+            const imgElem = document.getElementById(`img-${i}`);
+            const actionsElem = document.getElementById(`actions-${i}`);
+
+            spinnerElem.style.display = 'flex';
+            imgElem.classList.add('opacity-0');
+
+            const newUrl = `https://pollinations.ai/p/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${Math.floor(Math.random()*99999)}&nologo=true`;
+            currentFrames[i] = newUrl;
+
+            imgElem.onload = function() {
+                spinnerElem.style.display = 'none';
+                imgElem.classList.remove('opacity-0');
+                actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+            };
+            imgElem.onerror = function() {
+                spinnerElem.style.display = 'none';
+                imgElem.classList.remove('opacity-0');
+                actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+            };
+            imgElem.src = newUrl;
+        }
+
+        function copyLumaPrompt(text) {
+            navigator.clipboard.writeText(text);
+                    }
 
         function copyLumaPrompt(text) {
             navigator.clipboard.writeText(text);
