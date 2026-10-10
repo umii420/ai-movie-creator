@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Groq Llama-3 Active
+                <i class="fas fa-bolt text-yellow-400"></i> Groq Llama-3.3 Active
             </span>
         </div>
     </header>
@@ -58,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Llama 3 Director is generating cinematic script & scene matching 8K frames...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Llama 3.3 Director is generating cinematic script & scene matching 8K frames...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -71,7 +71,7 @@
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                             <i class="fas fa-scroll text-blue-500"></i> AI Director Script & Vision Editor
                         </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Llama-3 Powered</span>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Llama-3.3 Powered</span>
                     </div>
                     <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
                         <i class="fas fa-copy"></i> Copy Script
@@ -140,7 +140,7 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Powered by Groq Llama-3 AI Engine
+        AI Movie Creator Pro &copy; 2026 - Powered by Groq Llama-3.3 AI Engine
     </footer>
 
     <script>
@@ -194,7 +194,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.1-70b-versatile",
+                        model: "llama-3.3-70b-versatile",
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
@@ -213,7 +213,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
                 scriptText.value = responseText;
 
-                // Extract Visual Prompts from Llama 3
+                // Extract Visual Prompts from Llama 3.3
                 currentFrames = [];
                 const lines = responseText.split('\n');
                 let extractedPrompts = [];
@@ -322,5 +322,4 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-                        </html>
-                                                                                                     
+</html>
