@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Groq Engine Active
+                <i class="fas fa-bolt text-yellow-400"></i> Groq Instant Active
             </span>
         </div>
     </header>
@@ -186,7 +186,6 @@ SCENE_PROMPT_4: [Pure English detailed visual prompt for Scene 4]
 SCENE_PROMPT_5: [Pure English detailed visual prompt for Scene 5]
 SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
-                // We use llama-3.1-8b-instant or fallback mechanism if 70b gives error
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
                     headers: { 
@@ -265,12 +264,8 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         document.getElementById('movieForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const prompt = document.getElementById('promptInput').value.trim();
-            fetchScriptAndReadAndRender(prompt); // fix call
+            fetchScriptAndRender(prompt);
         });
-
-        async function fetchScriptAndReadAndRender(promptText) {
-            await fetchScriptAndRender(promptText);
-        }
 
         async function updateScriptVision() {
             const currentScript = document.getElementById('scriptText').value.trim();
@@ -326,5 +321,4 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-    </html>
-                    
+</html>
