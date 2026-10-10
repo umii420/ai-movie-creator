@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Ultra Realism Edition</title>
+    <title>AI Movie Creator - Ultra Studio Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">CINEMATIC REALISM</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + FLUX REALISM</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
@@ -40,17 +40,17 @@
         <!-- Hero Input Studio -->
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
-                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate Ultra-Photorealistic Movie Stories</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Apna idea Roman Urdu ya Urdu me likhein. Groq Script banaye ga aur 35mm Hollywood Cinema Style realistic pictures render hon gi.</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
+                <p class="text-slate-400 text-xs sm:text-sm">اپنا کہانی کا آئیڈیا رومن اردو یا انگلش میں لکھیں۔ AI ڈائریکٹر مکمل کہانی اور بہترین تصاویر بنائے گا۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ke gao me rehne wale aik larke Hammad ki mehnat aur kamyabi ki dastan..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="مثال کے طور پر: پہاڑ کے گاؤں میں رہنے والے ایک لڑکے حماد کی محنت اور کامیابی کی داستان..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
-                    <i class="fas fa-wand-magic-sparkles"></i> Render AI Movie Production
+                    <i class="fas fa-wand-magic-sparkles"></i> مووی کی پروڈکشن شروع کریں
                 </button>
             </form>
         </div>
@@ -58,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Groq Engine writing script & 35mm visual prompts...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Groq انجن رومن اردو اسکرپٹ اور 8K مناظر تیار کر رہا ہے...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -69,16 +69,16 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-blue-500"></i> Roman Urdu Director Script
+                            <i class="fas fa-scroll text-blue-500"></i> رومن اردو ڈائریکٹر اسکرپٹ
                         </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Editable</span>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">ایڈیٹیبل</span>
                     </div>
                     <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
-                        <i class="fas fa-copy"></i> Copy Script
+                        <i class="fas fa-copy"></i> اسکرپٹ کاپی کریں
                     </button>
                 </div>
 
-                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="Script yahan nazar aaye gi..."></textarea>
+                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="اسکرپٹ یہاں نظر آئے گی..."></textarea>
             </div>
 
             <!-- SECTION 2: Master Cinema Player -->
@@ -86,26 +86,26 @@
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded-full bg-red-600 animate-ping"></span>
-                        <h3 class="text-sm sm:text-lg font-bold text-white uppercase tracking-wider">Master AI Movie Sequence Player</h3>
+                        <h3 class="text-sm sm:text-lg font-bold text-white uppercase tracking-wider">ماسٹر مووی پلیئر (سین بائی سین)</h3>
                     </div>
-                    <span id="sceneBadge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold">Ready</span>
+                    <span id="sceneBadge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold">ریڈی</span>
                 </div>
                 
                 <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center group">
                     <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
-                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">35mm Ultra Photorealistic</span>
-                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Script-Matched Scenes</span>
+                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">8K سنیما رینڈر</span>
+                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 اسکرپٹ میچنگ مناظر</span>
                         </div>
                         <div class="text-center space-y-3">
                             <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
                                 <i id="playIcon" class="fas fa-play text-2xl sm:text-3xl ml-1"></i>
                             </div>
-                            <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream AI Movie Sequence</p>
+                            <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">پلے پر کلک کر کے مووی اسٹریم شروع کریں</p>
                         </div>
                         <div class="w-full text-left text-[11px] text-slate-400 font-mono">
-                            Status: Ultra Dynamic Range (HDR) Enabled
+                            اسٹیٹس: الٹرا ایچ ڈی کوالٹی ایکٹو
                         </div>
                     </div>
                 </div>
@@ -115,9 +115,9 @@
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-film text-purple-500"></i> 6-Scene AI Visual Storyboard
+                        <i class="fas fa-film text-purple-500"></i> 6 مناظر کا AI اسٹوری بورڈ
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">High-Realism Photorealistic Images</span>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">رئیلسٹک سنیماٹک شاٹس</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
@@ -151,15 +151,11 @@
             output.classList.add('hidden');
 
             try {
-                loaderText.innerText = "Groq is generating Roman Urdu script & cinematic visual prompts...";
+                loaderText.innerText = "Groq انجن رومن اردو اسکرپٹ لکھ رہا ہے...";
 
-                const systemInstructions = `You are an award-winning Hollywood AI Director.
-User gives a story concept. You MUST output a 6-scene movie script written in ROMAN URDU.
-
-IMPORTANT INSTRUCTIONS FOR SCENE PROMPTS:
-Create 6 scene prompts in English for image generation.
-Make sure the main character looks consistent across all scenes (e.g. "a young Pakistani boy, 18 years old, dark hair, wearing brown traditional shirt").
-Use camera shots: 35mm photograph, cinematic lighting, national geographic style, hyper-realistic, 8k resolution, detailed skin textures.
+                const systemInstructions = `You are a Hollywood AI Film Director.
+User gives a concept. Output a 6-scene movie script in ROMAN URDU.
+Also generate 6 concise, photorealistic English prompts describing each scene.
 
 STRICT RESPONSE FORMAT:
 --- SCRIPT START ---
@@ -175,12 +171,12 @@ Scene 5: [Detailed description in Roman Urdu]
 Scene 6: [Detailed description in Roman Urdu]
 --- SCRIPT END ---
 
-SCENE_PROMPT_1: [High quality photorealistic visual prompt for Scene 1]
-SCENE_PROMPT_2: [High quality photorealistic visual prompt for Scene 2]
-SCENE_PROMPT_3: [High quality photorealistic visual prompt for Scene 3]
-SCENE_PROMPT_4: [High quality photorealistic visual prompt for Scene 4]
-SCENE_PROMPT_5: [High quality photorealistic visual prompt for Scene 5]
-SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
+SCENE_PROMPT_1: [Photorealistic 35mm film shot of Scene 1, highly detailed skin texture, natural cinematic lighting]
+SCENE_PROMPT_2: [Photorealistic 35mm film shot of Scene 2, highly detailed skin texture, natural cinematic lighting]
+SCENE_PROMPT_3: [Photorealistic 35mm film shot of Scene 3, highly detailed skin texture, natural cinematic lighting]
+SCENE_PROMPT_4: [Photorealistic 35mm film shot of Scene 4, highly detailed skin texture, natural cinematic lighting]
+SCENE_PROMPT_5: [Photorealistic 35mm film shot of Scene 5, highly detailed skin texture, natural cinematic lighting]
+SCENE_PROMPT_6: [Photorealistic 35mm film shot of Scene 6, highly detailed skin texture, natural cinematic lighting]`;
 
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
@@ -201,7 +197,7 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
                 const data = await res.json();
                 
                 if(!res.ok) {
-                    throw new Error(data.error?.message || "Failed to fetch script from Groq API");
+                    throw new Error(data.error?.message || "Groq API سے اسکرپٹ نہیں مل سکا");
                 }
 
                 const responseText = data.choices?.[0]?.message?.content || "Movie script generated.";
@@ -215,17 +211,17 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
                 lines.forEach(line => {
                     if(line.startsWith("SCENE_PROMPT_")) {
                         const cleanLine = line.replace(/SCENE_PROMPT_\d*[:\-]/g, "").trim();
-                        if(cleanLine.length > 5) extractedPrompts.push(cleanLine);
+                        if(cleanLine.length > 3) extractedPrompts.push(cleanLine);
                     }
                 });
 
-                loaderText.innerText = "Rendering 35mm Photorealistic Cinema Shots...";
+                loaderText.innerText = "8K ایچ ڈی مناظر رینڈر کیے جا رہے ہیں...";
 
                 imageGrid.innerHTML = '';
 
                 for(let i = 0; i < 6; i++) {
-                    const sceneVisual = extractedPrompts[i] || `${promptText} cinematic scene ${i+1}`;
-                    const cleanPrompt = encodeURIComponent(sceneVisual + ", 35mm photograph, award winning photography, ultra realistic, highly detailed, 8k resolution, cinematic lighting");
+                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1}`;
+                    const cleanPrompt = encodeURIComponent(sceneVisual + ", cinematic photography 8k resolution 35mm photo");
                     
                     const seedVal = Math.floor(Math.random() * 899999) + 100000;
                     
@@ -237,18 +233,18 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
                     card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
                     card.innerHTML = `
                         <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[160px] flex items-center justify-center">
-                            <img src="${imageUrl}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${i + 1}" loading="lazy" onerror="this.src='https://image.pollinations.ai/prompt/cinematic%20movie%20frame%20${i+1}?width=800&height=450&nologo=true'">
+                            <img src="${imageUrl}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${i + 1}" loading="lazy" onerror="this.onerror=null; this.src='https://image.pollinations.ai/prompt/cinematic%20movie%20scene%20${i+1}?width=800&height=450&nologo=true&seed=${seedVal}';">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${i + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1 gap-1">
                             <a href="${imageUrl}" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-2 rounded-lg transition border border-slate-700 flex-1 text-center">
-                                <i class="fas fa-download"></i> Image
+                                <i class="fas fa-download"></i> امیج
                             </a>
                             <button onclick="copyLumaPrompt('${pText.replace(/'/g, "\\'")}')" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1">
-                                <i class="fas fa-copy mr-1"></i> Copy Prompt
+                                <i class="fas fa-copy mr-1"></i> پرامپٹ کاپی
                             </button>
                             <a href="https://lumalabs.ai/dream-machine" target="_blank" class="text-[10px] bg-red-600 hover:bg-red-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1 text-center">
-                                <i class="fas fa-video mr-1"></i> Open Luma
+                                <i class="fas fa-video mr-1"></i> لوما کھولیں
                             </a>
                         </div>
                     `;
@@ -269,7 +265,7 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
 
         function copyLumaPrompt(text) {
             navigator.clipboard.writeText(text);
-            alert("Luma Video Prompt copied! Now click 'Open Luma' and paste it there.");
+            alert("لوما ویڈیو کا پرامپٹ کاپی ہو گیا ہے!");
         }
 
         document.getElementById('movieForm').addEventListener('submit', function(e) {
@@ -288,9 +284,9 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
                 clearInterval(playInterval);
                 isPlaying = false;
                 icon.className = "fas fa-play text-2xl sm:text-3xl ml-1";
-                status.innerText = "Paused - Click to Resume Stream";
+                status.innerText = "روک دیا گیا - پلے پر کلک کریں";
                 preview.classList.remove('kenburns-active');
-                badge.innerText = "Paused";
+                badge.innerText = "پاز";
                 badge.className = "text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold";
             } else {
                 isPlaying = true;
@@ -298,15 +294,15 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
                 preview.classList.add('kenburns-active');
                 
                 let frameIdx = 0;
-                badge.innerText = `Streaming Scene ${frameIdx + 1}/6`;
+                badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
                 badge.className = "text-xs bg-red-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
-                status.innerText = `▶ Playing Scene ${frameIdx + 1} of 6 Sequence...`;
+                status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
 
                 playInterval = setInterval(() => {
                     frameIdx = (frameIdx + 1) % currentFrames.length;
                     preview.src = currentFrames[frameIdx];
-                    badge.innerText = `Streaming Scene ${frameIdx + 1}/6`;
-                    status.innerText = `▶ Playing Scene ${frameIdx + 1} of 6 Sequence...`;
+                    badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
+                    status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
                 }, 2800);
             }
         });
@@ -314,8 +310,9 @@ SCENE_PROMPT_6: [High quality photorealistic visual prompt for Scene 6]`;
         function copyScript() {
             const text = document.getElementById('scriptText').value;
             navigator.clipboard.writeText(text);
-            alert("Script copied to clipboard!");
+            alert("اسکرپٹ کاپی ہو گیا ہے!");
         }
     </script>
 </body>
-</html>
+                        </html>
+                        
