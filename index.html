@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Groq & Luma Hybrid Studio</title>
+    <title>AI Movie Creator - Groq & Luma Agents Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">HYBRID STUDIO</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">LUMA AGENTS ENGINE</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
@@ -40,21 +40,21 @@
         <!-- Hero Input Studio -->
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
-                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate Cinematic AI Script & Videos</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Type any idea in Urdu or English. Groq writes the master script and Luma renders Dream Machine videos.</p>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate Cinematic AI Movie & Luma Render</h2>
+                <p class="text-slate-400 text-xs sm:text-sm">Type any idea in Urdu or English. Groq writes the master script and Luma Agents renders visual outputs.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ki choti par ik sher khara hai..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: A teddy bear in sunglasses playing electric guitar..." required></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button type="submit" id="generateBtn" class="py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-sm sm:text-base">
-                        <i class="fas fa-wand-magic-sparkles"></i> Render Full AI Movie Studio
+                        <i class="fas fa-wand-magic-sparkles"></i> Render AI Movie Production
                     </button>
-                    <button type="button" onclick="renderLumaVideoDirect()" class="py-4 px-6 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-sm sm:text-base">
-                        <i class="fas fa-video"></i> Generate Luma AI Video
+                    <button type="button" onclick="triggerLumaDirect()" class="py-4 px-6 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-sm sm:text-base">
+                        <i class="fas fa-image"></i> Render Luma Agent Image
                     </button>
                 </div>
             </form>
@@ -63,13 +63,13 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Groq Director is generating cinematic script & scene matching frames...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Director is generating cinematic script & processing rendering...</p>
         </div>
 
         <!-- Production Output Suite -->
         <div id="outputContainer" class="hidden space-y-8">
             
-            <!-- SECTION 1: Editable AI Script & Vision Refinement Box -->
+            <!-- SECTION 1: Editable AI Script -->
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-blue-600 space-y-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -86,22 +86,21 @@
                 <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="Script will appear here..."></textarea>
             </div>
 
-            <!-- SECTION 2: Luma Dream Machine Dedicated Video Player -->
-            <div id="lumaPlayerBox" class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600 space-y-4 hidden">
+            <!-- SECTION 2: Luma Rendered Asset Preview -->
+            <div id="lumaResultBox" class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600 space-y-4 hidden">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-video text-purple-500"></i> Luma Dream Machine 5-Sec AI Video
+                        <i class="fas fa-bolt text-purple-500"></i> Luma Agents API Output (uni-1)
                     </h3>
-                    <span class="text-xs bg-purple-900/60 text-purple-300 px-3 py-1 rounded-full border border-purple-700/50 font-bold">HD Video</span>
+                    <span class="text-xs bg-purple-900/60 text-purple-300 px-3 py-1 rounded-full border border-purple-700/50 font-bold">Luma Render</span>
                 </div>
-                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
-                    <video id="lumaVideoPlayer" class="w-full h-full object-cover" controls autoplay loop>
-                        <source src="" type="video/mp4">
-                    </video>
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center">
+                    <img id="lumaImageOutput" class="w-full h-full object-cover hidden" src="" alt="Luma Render">
+                    <video id="lumaVideoOutput" class="w-full h-full object-cover hidden" controls autoplay loop></video>
                 </div>
             </div>
 
-            <!-- SECTION 3: Master Cinema Player (Storyboard Sequence) -->
+            <!-- SECTION 3: Master Cinema Player -->
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-red-600">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
@@ -131,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: 6 Scene Visual Storyboard Grid -->
+            <!-- SECTION 4: Storyboard Grid -->
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
@@ -148,14 +147,15 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Powered by Groq AI & Luma Dream Machine
+        AI Movie Creator Pro &copy; 2026 - Powered by Groq AI & Luma Agents API
     </footer>
 
     <script>
         const GROQ_API_KEY = "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"; 
-        const LUMA_API_KEY = "luma-api-3unAWbv3RGzfX0rlq1jOYIM_4HwZEYqBlACUTg5ZKkY";
+        const LUMA_API_KEY = "luma-api-3unAWbv3RGzfX0rlq1jOYIM_4HwZEYqBlACUTg5ZKkY"; 
 
         let currentFrames = [];
+        let extractedPrompts = [];
         let isPlaying = false;
         let playInterval = null;
 
@@ -223,10 +223,9 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
                 scriptText.value = responseText;
 
-                // Extract Visual Prompts
                 currentFrames = [];
+                extractedPrompts = [];
                 const lines = responseText.split('\n');
-                let extractedPrompts = [];
 
                 lines.forEach(line => {
                     if(line.startsWith("SCENE_PROMPT_")) {
@@ -243,6 +242,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
                 imageGrid.innerHTML = '';
                 currentFrames.forEach((url, idx) => {
+                    const pText = extractedPrompts[idx] || promptText;
                     const card = document.createElement('div');
                     card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
                     card.innerHTML = `
@@ -250,12 +250,12 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                             <img src="${url}" class="w-full h-36 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${idx + 1}" loading="lazy">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${idx + 1}</span>
                         </div>
-                        <div class="flex items-center justify-between px-1 gap-2">
-                            <a href="${url}" target="_blank" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-white px-2.5 py-1 rounded-lg transition border border-slate-700 flex items-center">
-                                <i class="fas fa-download mr-1"></i> Image
+                        <div class="flex items-center justify-between px-1 gap-1">
+                            <a href="${url}" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg transition border border-slate-700">
+                                <i class="fas fa-download"></i> Image
                             </a>
-                            <button onclick="renderLumaForPrompt('${extractedPrompts[idx] || promptText}')" class="text-[11px] bg-purple-600 hover:bg-purple-500 text-white px-2.5 py-1 rounded-lg font-bold transition shadow-md flex items-center">
-                                <i class="fas fa-video mr-1"></i> Render Luma Video
+                            <button onclick="callLumaAgentApi('${pText.replace(/'/g, "\\'")}')" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-2 py-1.5 rounded-lg font-bold transition shadow-md">
+                                <i class="fas fa-bolt mr-1"></i> Luma Render
                             </button>
                         </div>
                     `;
@@ -274,22 +274,19 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
             }
         }
 
-        async function renderLumaForPrompt(promptText) {
+        async function callLumaAgentApi(promptText) {
             const loader = document.getElementById('loader');
             const loaderText = document.getElementById('loaderText');
-            const lumaPlayerBox = document.getElementById('lumaPlayerBox');
-            const lumaVideoPlayer = document.getElementById('lumaVideoPlayer');
+            const lumaResultBox = document.getElementById('lumaResultBox');
+            const lumaImg = document.getElementById('lumaImageOutput');
+            const lumaVid = document.getElementById('lumaVideoOutput');
 
-            if(!LUMA_API_KEY || LUMA_API_KEY.includes("PASTE_YOUR_LUMA")) {
-                alert("Please add your Luma API Key on Line 161 first!");
-                return;
-            }
-
-            loaderText.innerText = "Luma Dream Machine is rendering 5-second cinematic video (this may take 1-2 minutes)...";
+            loaderText.innerText = "Connecting to Luma Agents API (uni-1)... Please wait...";
             loader.classList.remove('hidden');
 
             try {
-                const response = await fetch("https://api.lumalabs.ai/dream-machine/v1/generations", {
+                // Step 1: Post request matching official cURL specs
+                const response = await fetch("https://agents.lumalabs.ai/v1/generations", {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${LUMA_API_KEY}`,
@@ -297,56 +294,54 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                     },
                     body: JSON.stringify({
                         prompt: promptText,
-                        aspect_ratio: "16:9",
-                        loop: false
+                        model: "uni-1",
+                        type: "image",
+                        aspect_ratio: "16:9"
                     })
                 });
 
                 const data = await response.json();
-                if (!response.ok) throw new Error(data.message || "Luma API Error");
+                if (!response.ok) throw new Error(data.message || data.error || "Luma API Error");
 
                 const generationId = data.id;
-                let videoUrl = null;
+                let assetUrl = null;
+                let isVideo = false;
 
-                while (!videoUrl) {
-                    await new Promise(resolve => setTimeout(resolve, 5000));
-                    const checkStatus = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
+                // Step 2: Poll generation status
+                while (!assetUrl) {
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    const checkStatus = await fetch(`https://agents.lumalabs.ai/v1/generations/${generationId}`, {
                         headers: { "Authorization": `Bearer ${LUMA_API_KEY}` }
                     });
                     const statusData = await checkStatus.json();
                     
                     if (statusData.state === "completed") {
-                        videoUrl = statusData.assets.video;
+                        if (statusData.assets && statusData.assets.image) {
+                            assetUrl = statusData.assets.image;
+                        } else if (statusData.assets && statusData.assets.video) {
+                            assetUrl = statusData.assets.video;
+                            isVideo = true;
+                        } else if (statusData.output && statusData.output[0] && statusData.output[0].url) {
+                            assetUrl = statusData.output[0].url;
+                        }
                     } else if (statusData.state === "failed") {
-                        throw new Error("Luma AI server failed to render video.");
+                        throw new Error("Generation failed on Luma servers.");
                     }
                 }
 
-                lumaVideoPlayer.src = videoUrl;
-                lumaPlayerBox.classList.remove('hidden');
+                lumaImg.classList.add('hidden');
+                lumaVid.classList.add('hidden');
+
+                if (isVideo) {
+                    lumaVid.src = assetUrl;
+                    lumaVid.classList.remove('hidden');
+                } else {
+                    lumaImg.src = assetUrl;
+                    lumaImg.classList.remove('hidden');
+                }
+
+                lumaResultBox.classList.remove('hidden');
                 loader.classList.add('hidden');
-                window.scrollTo({ top: lumaPlayerBox.offsetTop - 100, behavior: 'smooth' });
+                window.scrollTo({ top: lumaResultBox.offsetTop - 80, behavior: 'smooth' });
 
-            } catch (err) {
-                alert("Luma Generation Error: " + err.message);
-                loader.classList.add('hidden');
-            }
-        }
-
-        function renderLumaVideoDirect() {
-            const prompt = document.getElementById('promptInput').value.trim();
-            if(!prompt) {
-                alert("Please write an idea in text area first!");
-                return;
-            }
-            renderLumaForPrompt(prompt);
-        }
-
-        document.getElementById('movieForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const prompt = document.getElementById('promptInput').value.trim();
-            fetchScriptAndRender(prompt);
-        });
-
-        document.getElementById('playTrigger').addEventListener('click', function() {
-            const preview = do
+            } cat
