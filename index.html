@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تمام تصاویر ایک ایک کر کے مکمل لوڈ ہوں گی۔</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور تصاویر ایک ایک کر کے بالکل درست لوڈ ہوں گی۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -215,7 +215,6 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 imageGrid.innerHTML = '';
 
-                // Create placeholder cards
                 for(let i = 0; i < 6; i++) {
                     const card = document.createElement('div');
                     card.id = `scene-card-${i}`;
@@ -245,7 +244,6 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 output.classList.remove('hidden');
 
-                // Load each image safely using background preloader
                 for(let i = 0; i < 6; i++) {
                     loaderText.innerText = `منظر ${i + 1} آف 6 کی ایچ ڈی تصویر لوڈ ہو رہی ہے...`;
 
@@ -256,49 +254,27 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=1280&height=720&model=flux&seed=${seedVal}&nologo=true`;
                     currentFrames.push(imageUrl);
 
-                    // Preload image in background to ensure it's fully ready before showing
-                    await new Promise((resolve) => {
-                        const tempImg = new Image();
-                        tempImg.src = imageUrl;
-                        
-                        tempImg.onload = function() {
-                            const imgElem = document.getElementById(`img-${i}`);
-                            const spinnerElem = document.getElementById(`spinner-${i}`);
-                            const actionsElem = document.getElementById(`actions-${i}`);
-                            const dlElem = document.getElementById(`dl-${i}`);
-                            const btnPromptElem = document.getElementById(`btn-prompt-${i}`);
+                    const imgElem = document.getElementById(`img-${i}`);
+                    const spinnerElem = document.getElementById(`spinner-${i}`);
+                    const actionsElem = document.getElementById(`actions-${i}`);
+                    const dlElem = document.getElementById(`dl-${i}`);
+                    const btnPromptElem = document.getElementById(`btn-prompt-${i}`);
 
-                            imgElem.src = imageUrl;
-                            dlElem.href = imageUrl;
-                            
-                            const pText = extractedPrompts[i] || promptText;
-                            btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
+                    imgElem.src = imageUrl;
+                    dlElem.href = imageUrl;
+                    
+                    const pText = extractedPrompts[i] || promptText;
+                    btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
 
-                            spinnerElem.style.display = 'none';
-                            imgElem.classList.remove('opacity-0');
-                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                    spinnerElem.style.display = 'none';
+                    imgElem.classList.remove('opacity-0');
+                    actionsElem.classList.remove('opacity-50', 'pointer-events-none');
 
-                            if(i === 0) {
-                                moviePreview.src = imageUrl;
-                            }
-                            resolve();
-                        };
+                    if(i === 0) {
+                        moviePreview.src = imageUrl;
+                    }
 
-                        tempImg.onerror = function() {
-                            // Fallback if image load fails
-                            const imgElem = document.getElementById(`img-${i}`);
-                            const spinnerElem = document.getElementById(`spinner-${i}`);
-                            const actionsElem = document.getElementById(`actions-${i}`);
-                            
-                            imgElem.src = imageUrl;
-                            spinnerElem.style.display = 'none';
-                            imgElem.classList.remove('opacity-0');
-                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                            resolve();
-                        };
-                    });
-
-                    await delay(600);
+                    await delay(800);
                 }
 
                 loader.classList.add('hidden');
@@ -363,4 +339,5 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
         }
     </script>
 </body>
-</html>
+                                </html>
+        
