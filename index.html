@@ -3,108 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Studio - AI Movie & Video Creator</title>
+    <title>AI Movie Creator - Pro Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #030712; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
-        .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-effect { box-shadow: 0 0 25px rgba(168, 85, 247, 0.15); }
+        body { background-color: #070913; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        .glass-panel { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glow-glow { box-shadow: 0 0 35px rgba(236, 72, 153, 0.2); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-4 sm:p-6">
 
-    <!-- Top Navigation Header -->
-    <header class="max-w-5xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800 mb-6">
-        <div class="flex items-center gap-2">
-            <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-2 rounded-xl text-lg font-black shadow-lg">✨</span>
-            <h1 class="text-xl sm:text-2xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-red-400">
-                Dream Studio AI
-            </h1>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="text-xs bg-slate-800 text-purple-300 px-3 py-1.5 rounded-full border border-purple-500/30 font-medium">
-                <i class="fas fa-bolt text-yellow-400 mr-1"></i> Pro Suite v2.5
-            </span>
-        </div>
+    <!-- Header: Restored Original Name -->
+    <header class="max-w-4xl mx-auto w-full text-center py-6">
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mb-2">
+            🎬 AI Movie Creator
+        </h1>
+        <p class="text-slate-400 text-sm sm:text-base">Advanced AI Video Generation & Cinematic Suite (Luma Dream Engine)</p>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-5xl mx-auto w-full space-y-8">
+    <!-- Main Studio Box -->
+    <main class="max-w-4xl mx-auto w-full glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl glow-glow space-y-8">
         
-        <!-- Hero Input Section -->
-        <div class="glass-card rounded-3xl p-6 sm:p-8 glow-effect">
-            <div class="text-center mb-6">
-                <h2 class="text-2xl sm:text-3xl font-extrabold mb-2 text-white">Create AI Movies, Scripts & Scenes</h2>
-                <p class="text-slate-400 text-sm">Transform your imagination into cinematic videos, Urdu/English scripts, and 6 visual scene photos instantly.</p>
+        <!-- Input Form -->
+        <form id="movieForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-semibold mb-2 text-slate-300">Enter Your Movie Concept / Video Prompt</label>
+                <textarea id="promptInput" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-500 text-sm" placeholder="Example: A cinematic drone shot of a futuristic neon city at night, 4k ultra realistic..." required></textarea>
             </div>
 
-            <form id="movieForm" class="space-y-4">
-                <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-900/90 border border-slate-700 rounded-2xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-slate-500 text-sm shadow-inner" placeholder="Type your story: e.g., A cinematic drone shot of a futuristic flying city at sunset with glowing neon lights..." required></textarea>
-                </div>
+            <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-base">
+                <i class="fas fa-wand-magic-sparkles"></i> Render AI Movie & 6 Video Scenes
+            </button>
+        </form>
 
-                <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:opacity-95 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-base">
-                    <i class="fas fa-wand-magic-sparkles text-yellow-300"></i> Generate Movie & 6 Scene Photos
-                </button>
-            </form>
+        <!-- Advanced Video Engine Loader -->
+        <div id="loader" class="hidden text-center my-12 space-y-4">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-pink-500 border-t-transparent"></div>
+            <p id="loaderText" class="text-pink-400 text-sm font-semibold animate-pulse">Initializing Luma Neural Engine & Rendering Video Frames...</p>
         </div>
 
-        <!-- Loader State -->
-        <div id="loader" class="hidden text-center my-16 space-y-4">
-            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-purple-500 border-t-transparent"></div>
-            <p class="text-purple-300 text-sm font-semibold tracking-wide animate-pulse">AI Director is rendering your script, generating 6 cinematic frames & building movie preview...</p>
-        </div>
-
-        <!-- Output Results Container -->
+        <!-- Output Container -->
         <div id="outputContainer" class="hidden space-y-8">
             
-            <!-- SECTION 1: Script & Prompt Box -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl border-l-4 border-l-purple-500">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-base sm:text-lg font-bold text-purple-300 flex items-center gap-2">
-                        <i class="fas fa-file-lines"></i> AI Generated Script & Prompt
+            <!-- Box 1: Professional Script & Prompt -->
+            <div class="bg-slate-900/90 p-5 rounded-2xl border border-purple-500/30 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-base font-bold text-purple-300 flex items-center gap-2">
+                        <i class="fas fa-scroll"></i> 1. AI Director Script & Prompt
                     </h3>
-                    <button onclick="copyScript()" class="text-xs bg-purple-600/80 hover:bg-purple-600 text-white px-3.5 py-1.5 rounded-xl font-medium transition flex items-center gap-1">
-                        <i class="fas fa-copy"></i> Copy Script
+                    <button onclick="copyScript()" class="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-xl transition">
+                        <i class="fas fa-copy mr-1"></i> Copy Script
                     </button>
                 </div>
-                <div id="scriptText" class="text-slate-300 text-sm leading-relaxed bg-slate-950/80 p-4 rounded-2xl border border-slate-800 font-mono"></div>
+                <p id="scriptText" class="text-slate-300 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono"></p>
             </div>
 
-            <!-- SECTION 2: 6 Scene Photos Grid -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl border-l-4 border-l-pink-500">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-base sm:text-lg font-bold text-pink-300 flex items-center gap-2">
-                        <i class="fas fa-images"></i> 6 Cinematic Scene Photos (Visual Breakdown)
-                    </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg">6 Frames</span>
-                </div>
-                <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <!-- 6 Dynamic Cards will be injected here -->
-                </div>
-            </div>
-
-            <!-- SECTION 3: Final AI Movie Preview Player -->
-            <div class="glass-card rounded-3xl p-6 shadow-xl border-l-4 border-l-red-500">
-                <h3 class="text-base sm:text-lg font-bold text-red-400 mb-4 flex items-center gap-2">
-                    <i class="fas fa-clapperboard"></i> AI Movie & Video Animation Preview
+            <!-- Box 2: 6 Scene Video Frames Grid -->
+            <div class="bg-slate-900/90 p-5 rounded-2xl border border-pink-500/30 shadow-lg">
+                <h3 class="text-base font-bold text-pink-300 mb-4 flex items-center gap-2">
+                    <i class="fas fa-film"></i> 2. Generated 6 Cinematic Scene Frames
                 </h3>
+                <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- 6 Frames will load here -->
+                </div>
+            </div>
+
+            <!-- Box 3: Main AI Movie Preview Player (Luma Style) -->
+            <div class="bg-slate-900/90 p-5 rounded-2xl border border-red-500/30 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-base font-bold text-red-400 flex items-center gap-2">
+                        <i class="fas fa-play-circle"></i> 3. Master AI Movie Animation Preview
+                    </h3>
+                    <span class="text-[10px] bg-red-600/80 text-white px-2.5 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse">HD Rendered</span>
+                </div>
+                
                 <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center group">
-                    <img id="moviePreview" class="w-full h-full object-cover opacity-85 transition duration-500 group-hover:scale-105" src="" alt="AI Movie Preview">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col items-center justify-between p-6">
-                        <div class="w-full flex justify-between items-center">
-                            <span class="bg-red-600 text-white text-[10px] sm:text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider flex items-center gap-1 shadow-lg">
-                                <i class="fas fa-circle text-white animate-ping"></i> Live Preview
-                            </span>
-                            <span class="text-xs text-slate-300 bg-black/50 px-2.5 py-1 rounded-lg backdrop-blur-md">5s Cinematic Shot</span>
+                    <img id="moviePreview" class="w-full h-full object-cover opacity-90 transition duration-700 group-hover:scale-105" src="" alt="Movie Preview">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col items-center justify-center">
+                        <div id="playTrigger" class="w-16 h-16 bg-pink-600/90 hover:bg-pink-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110">
+                            <i class="fas fa-play text-2xl ml-1"></i>
                         </div>
-                        <div class="text-center space-y-2">
-                            <div class="w-14 h-14 bg-pink-600/90 hover:bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto shadow-xl cursor-pointer transition transform hover:scale-110">
-                                <i class="fas fa-play text-xl ml-1"></i>
-                            </div>
-                            <p class="text-slate-300 text-xs font-medium">Click to play generated AI movie animation</p>
-                        </div>
+                        <span id="playerStatus" class="text-xs text-slate-300 mt-3 bg-black/60 px-3 py-1 rounded-full backdrop-blur-md">Click play to run motion preview</span>
                     </div>
                 </div>
             </div>
@@ -114,8 +94,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="max-w-5xl mx-auto w-full text-center py-6 text-xs text-slate-500 border-t border-slate-800 mt-8">
-        Dream Studio AI &copy; 2026 - Advanced Generative Movie Suite
+    <footer class="text-center py-6 text-xs text-slate-500">
+        AI Movie Creator &copy; 2026 - Professional Generative Suite
     </footer>
 
     <script>
@@ -124,42 +104,70 @@
             
             const prompt = document.getElementById('promptInput').value.trim();
             const loader = document.getElementById('loader');
+            const loaderText = document.getElementById('loaderText');
             const output = document.getElementById('outputContainer');
             const scriptText = document.getElementById('scriptText');
             const imageGrid = document.getElementById('imageGrid');
             const moviePreview = document.getElementById('moviePreview');
+            const playerStatus = document.getElementById('playerStatus');
 
             loader.classList.remove('hidden');
             output.classList.add('hidden');
 
-            const encodedPrompt = encodeURIComponent(prompt);
+            // Simulated step loader steps for advanced AI feel
+            setTimeout(() => { loaderText.innerText = "Analyzing prompt & generating storyboard..."; }, 600);
+            setTimeout(() => { loaderText.innerText = "Rendering 6 cinematic video frames..."; }, 1200);
 
-            // Generate 6 unique high quality scene image URLs
-            const imgs = [];
-            for(let i = 1; i <= 6; i++) {
-                imgs.push(`https://image.pollinations.ai/prompt/${encodedPrompt}%20cinematic%20shot%20scene%20${i}?width=800&height=450&nologo=true&seed=${i * 37}`);
+            const encoded = encodeURIComponent(prompt);
+            const frames = [];
+            for(let i=1; i<=6; i++) {
+                frames.push(`https://image.pollinations.ai/prompt/${encoded}%20cinematic%20motion%20shot%20${i}?width=800&height=450&nologo=true&seed=${i*43}`);
             }
 
             setTimeout(() => {
                 // 1. Script
-                scriptText.innerText = `[CINEMATIC AI SCRIPT & PROMPT]\n\nConcept: "${prompt}"\n\n• Scene 1-2: Atmospheric opening & character focus.\n• Scene 3-4: Action build-up & main conflict.\n• Scene 5-6: Dramatic climax & cinematic resolution.\n\nAI Video Prompt: "Hyper-realistic 8k resolution cinematic shot of ${prompt}, award-winning cinematography, studio lighting, photorealistic."`;
+                scriptText.innerText = `[AI CINEMATIC SCRIPT]\n\nConcept: "${prompt}"\n\n• Act I: Atmospheric Setup & Visual Introduction.\n• Act II: Dynamic Camera Movement & Subject Focus.\n• Act III: Cinematic Climax & Motion Fade Out.\n\nPrompt Tag: "Hyper-detailed 8k resolution motion video of ${prompt}, volumetric studio lighting, photorealistic cinematic render."`;
 
-                // 2. 6 Scene Photos
+                // 2. 6 Frames Grid
                 imageGrid.innerHTML = '';
-                imgs.forEach((imgUrl, index) => {
+                frames.forEach((url, idx) => {
                     const card = document.createElement('div');
-                    card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800/80 flex flex-col justify-between shadow-lg group";
+                    card.className = "bg-slate-950 p-2 rounded-xl border border-slate-800 flex flex-col justify-between";
                     card.innerHTML = `
-                        <div class="relative overflow-hidden rounded-xl mb-3">
-                            <img src="${imgUrl}" class="w-full h-36 object-cover rounded-xl transition duration-300 group-hover:scale-105" alt="Scene ${index + 1}" onerror="this.src='https://picsum.photos/800/450?random=${index + 1}'">
-                            <span class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[10px] px-2 py-0.5 rounded-md font-bold">Scene ${index + 1}</span>
+                        <div class="relative overflow-hidden rounded-lg mb-2">
+                            <img src="${url}" class="w-full h-32 object-cover rounded-lg hover:scale-105 transition duration-300" alt="Frame ${idx+1}">
+                            <span class="absolute top-1 left-1 bg-black/60 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">Scene ${idx+1}</span>
                         </div>
-                        <div class="flex items-center justify-between px-1">
-                            <span class="text-xs text-purple-300 font-medium">HD Frame</span>
-                            <a href="${imgUrl}" target="_blank" class="text-xs bg-purple-900/40 hover:bg-purple-800 text-purple-200 px-3 py-1 rounded-lg transition border border-purple-500/20">
-                                <i class="fas fa-download mr-1"></i> Save
-                            </a>
+                        <div class="flex justify-between items-center text-[11px]">
+                            <span class="text-purple-400 font-medium">Motion Frame</span>
+                            <a href="${url}" target="_blank" class="text-slate-300 hover:text-white bg-purple-900/50 px-2 py-0.5 rounded">Download</a>
                         </div>
                     `;
-                    image
-                        
+                    imageGrid.appendChild(card);
+                });
+
+                // 3. Movie Preview
+                moviePreview.src = frames[0];
+                playerStatus.innerText = "Ready - Click to play motion sequence";
+
+                loader.classList.add('hidden');
+                output.classList.remove('hidden');
+            }, 2200);
+        });
+
+        document.getElementById('playTrigger').addEventListener('click', function() {
+            const status = document.getElementById('playerStatus');
+            status.innerText = "▶ Playing AI Motion Sequence...";
+            setTimeout(() => {
+                status.innerText = "✔ Playback completed.";
+            }, 3000);
+        });
+
+        function copyScript() {
+            const text = document.getElementById('scriptText').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Script & prompt copied to clipboard!");
+        }
+    </script>
+</body>
+</html>
