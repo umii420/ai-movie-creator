@@ -184,7 +184,8 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.1-8b-instant",
+                        model: "model: "llama-3.3-70b-versatile",
+                    
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
