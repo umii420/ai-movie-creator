@@ -29,7 +29,7 @@
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Groq Llama-3.3 Active
+                <i class="fas fa-bolt text-yellow-400"></i> Groq Engine Active
             </span>
         </div>
     </header>
@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K Cinematic AI Movies</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Type any idea in Urdu or English. Llama 3 will write a high-level script & render matching visuals.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Type any idea in Urdu or English. AI will write a high-level script & render matching visuals.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -58,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Llama 3.3 Director is generating cinematic script & scene matching 8K frames...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Director is generating cinematic script & scene matching 8K frames...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -71,7 +71,7 @@
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                             <i class="fas fa-scroll text-blue-500"></i> AI Director Script & Vision Editor
                         </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Llama-3.3 Powered</span>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Editable</span>
                     </div>
                     <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
                         <i class="fas fa-copy"></i> Copy Script
@@ -140,11 +140,10 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Powered by Groq Llama-3.3 AI Engine
+        AI Movie Creator Pro &copy; 2026 - Powered by Groq AI Engine
     </footer>
 
     <script>
-        // Your active Groq API Key embedded directly
         const GROQ_API_KEY = "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"; 
 
         let currentFrames = [];
@@ -187,6 +186,7 @@ SCENE_PROMPT_4: [Pure English detailed visual prompt for Scene 4]
 SCENE_PROMPT_5: [Pure English detailed visual prompt for Scene 5]
 SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
+                // We use llama-3.1-8b-instant or fallback mechanism if 70b gives error
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
                     headers: { 
@@ -194,7 +194,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "llama-3.3-70b-versatile",
+                        model: "llama-3.1-8b-instant",
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
@@ -213,7 +213,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
 
                 scriptText.value = responseText;
 
-                // Extract Visual Prompts from Llama 3.3
+                // Extract Visual Prompts
                 currentFrames = [];
                 const lines = responseText.split('\n');
                 let extractedPrompts = [];
@@ -265,8 +265,12 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         document.getElementById('movieForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const prompt = document.getElementById('promptInput').value.trim();
-            fetchScriptAndRender(prompt);
+            fetchScriptAndReadAndRender(prompt); // fix call
         });
+
+        async function fetchScriptAndReadAndRender(promptText) {
+            await fetchScriptAndRender(promptText);
+        }
 
         async function updateScriptVision() {
             const currentScript = document.getElementById('scriptText').value.trim();
@@ -322,4 +326,5 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-</html>
+    </html>
+                    
