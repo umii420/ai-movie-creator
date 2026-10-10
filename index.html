@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Pro Studio Engine</title>
+    <title>AI Movie Creator - Director Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,14 +22,14 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">PRO STUDIO</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">DIRECTOR EDITION</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Gemini Pro Active
+                <i class="fas fa-bolt text-yellow-400"></i> Gemini AI Director Active
             </span>
         </div>
     </header>
@@ -41,12 +41,12 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K Cinematic AI Movies</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Type any concept in Urdu or English. Gemini will write the script & generate 6 unique AI cinematic frames.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Type any concept. Gemini will generate script & scene visuals with full edit capabilities.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ki choti par aik sher khڑا hai, ya Cyberpunk city at night..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ki choti par ik sher khara hai..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
@@ -58,13 +58,44 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Gemini is directing scenes & generating custom 8K AI frames...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Gemini Director is writing script & generating matching scene images...</p>
         </div>
 
         <!-- Production Output Suite -->
         <div id="outputContainer" class="hidden space-y-8">
             
-            <!-- SECTION 1: Master Cinema Player -->
+            <!-- SECTION 1: Editable AI Script & Vision Refinement Box -->
+            <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-blue-600 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-scroll text-blue-500"></i> AI Director Script & Vision Editor
+                        </h3>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Editable</span>
+                    </div>
+                    <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
+                        <i class="fas fa-copy"></i> Copy Script
+                    </button>
+                </div>
+
+                <!-- Editable Textarea for Script -->
+                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="Script will appear here... You can edit it directly!"></textarea>
+
+                <!-- Add New Vision Section -->
+                <div class="pt-2 border-t border-slate-800 space-y-3">
+                    <label class="text-xs font-bold text-slate-300 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-yellow-400"></i> Add New Vision or Modify Scene Instructions:
+                    </label>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="newVisionInput" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-600" placeholder="e.g. Add a stormy night effect, or add a hunter in scene 3...">
+                        <button onclick="updateScriptVision()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+                            <i class="fas fa-sync-alt"></i> Update Script Vision
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Master Cinema Player -->
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-red-600">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
@@ -79,7 +110,7 @@
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
                             <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">8K Cinema Render</span>
-                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Custom AI Scenes</span>
+                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Script-Matched Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
                             <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
@@ -88,37 +119,21 @@
                             <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream AI Movie</p>
                         </div>
                         <div class="w-full text-left text-[11px] text-slate-400 font-mono">
-                            Status: Ultra HD Neural Engine Active
+                            Status: Dynamic Script Sync Active
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 2: 6 Scene Storyboard Grid -->
+            <!-- SECTION 3: 6 Scene Storyboard Grid -->
             <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                         <i class="fas fa-film text-purple-500"></i> 6-Scene AI Visual Storyboard
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">Custom AI Rendered</span>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">Script Matched Visuals</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-            </div>
-
-            <!-- SECTION 3: AI Script & Prompt Box -->
-            <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-blue-600">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-blue-500"></i> Director Script & AI Prompts
-                        </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Gemini Pro</span>
-                    </div>
-                    <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
-                        <i class="fas fa-copy"></i> Copy Script
-                    </button>
-                </div>
-                <div id="scriptText" class="text-slate-300 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono whitespace-pre-wrap"></div>
             </div>
 
         </div>
@@ -137,10 +152,7 @@
         let isPlaying = false;
         let playInterval = null;
 
-        document.getElementById('movieForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const prompt = document.getElementById('promptInput').value.trim();
+        async function fetchScriptAndRender(promptText) {
             const loader = document.getElementById('loader');
             const output = document.getElementById('outputContainer');
             const scriptText = document.getElementById('scriptText');
@@ -151,9 +163,9 @@
             output.classList.add('hidden');
 
             try {
-                // Gemini se script aur 6 specific visual prompts mangwayenge
-                const aiPrompt = `You are a Hollywood movie director. Based on the concept: "${prompt}", write a cinematic script breakdown AND create exactly 6 distinct, highly detailed visual English image generation prompts for 6 sequential scenes. 
-                Format your response clearly with the Script first, and at the bottom provide exactly 6 lines starting with "PROMPT 1:", "PROMPT 2:", "PROMPT 3:", "PROMPT 4:", "PROMPT 5:", "PROMPT 6:" containing hyper-realistic 8k cinematic visual descriptions.`;
+                const aiPrompt = `You are a Hollywood Film Director. Write a complete 6-scene movie script for the concept: "${promptText}". 
+                Write full script details first. 
+                At the very end of your response, write exactly 6 lines starting with "SCENE_PROMPT_1:", "SCENE_PROMPT_2:", "SCENE_PROMPT_3:", "SCENE_PROMPT_4:", "SCENE_PROMPT_5:", "SCENE_PROMPT_6:" providing hyper-realistic 8k English image generation descriptions for each scene.`;
 
                 const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${DEFAULT_GEMINI_KEY}`;
                 const res = await fetch(geminiUrl, {
@@ -163,27 +175,26 @@
                 });
                 
                 const data = await res.json();
-                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cinematic script generated.";
+                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cinematic script generated successfully.";
 
-                scriptText.innerText = responseText;
+                scriptText.value = responseText;
 
-                // Gemini ke response se 6 specific prompts extract karna ya fallback use karna
+                // Extract visual prompts
                 currentFrames = [];
                 const lines = responseText.split('\n');
                 let extractedPrompts = [];
-                
+
                 lines.forEach(line => {
-                    if(line.toUpperCase().includes("PROMPT")) {
-                        const cleanP = line.replace(/PROMPT\s*\d*[:\-]/i, "").trim();
-                        if(cleanP.length > 5) extractedPrompts.push(cleanP);
+                    if(line.includes("SCENE_PROMPT_")) {
+                        const cleanLine = line.replace(/SCENE_PROMPT_\d*[:\-]/g, "").trim();
+                        if(cleanLine.length > 5) extractedPrompts.push(cleanLine);
                     }
                 });
 
-                // Agar 6 prompts na milein toh original user prompt ko enhance kar ke 6 variants bana lo
                 for(let i = 0; i < 6; i++) {
-                    let sceneDesc = extractedPrompts[i] || `${prompt} cinematic scene ${i+1} dramatic lighting hyperrealistic 8k`;
-                    const encodedVisual = encodeURIComponent(sceneDesc + " unreal engine 5 photorealistic cinematic movie still");
-                    currentFrames.push(`https://image.pollinations.ai/prompt/${encodedVisual}?width=800&height=450&nologo=true&seed=${(i + 1) * 777}`);
+                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1} cinematic shot unreal engine 5 photorealistic 8k`;
+                    const cleanPrompt = encodeURIComponent(sceneVisual + " cinematic movie screenshot lighting masterpiece");
+                    currentFrames.push(`https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&nologo=true&seed=${Math.floor(Math.random() * 90000) + 1000}`);
                 }
 
                 imageGrid.innerHTML = '';
@@ -196,7 +207,7 @@
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${idx + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1">
-                            <span class="text-xs text-slate-400 font-semibold">AI Generated Frame</span>
+                            <span class="text-xs text-slate-400 font-semibold">Script-Matched Visual</span>
                             <a href="${url}" target="_blank" class="text-xs bg-slate-800 hover:bg-red-600 text-white px-3 py-1 rounded-lg transition border border-slate-700">
                                 <i class="fas fa-download mr-1"></i> Download
                             </a>
@@ -212,10 +223,31 @@
                 output.classList.remove('hidden');
 
             } catch (err) {
-                alert("Error connecting to Gemini AI. Please check network!");
+                alert("Error connecting to Gemini AI Director!");
                 loader.classList.add('hidden');
             }
+        }
+
+        document.getElementById('movieForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const prompt = document.getElementById('promptInput').value.trim();
+            fetchScriptAndRender(prompt);
         });
+
+        // Function to update script vision based on user addition
+        async function updateScriptVision() {
+            const currentScript = document.getElementById('scriptText').value.trim();
+            const newVision = document.getElementById('newVisionInput').value.trim();
+
+            if(!newVision) {
+                alert("Please type a new vision or change instruction first!");
+                return;
+            }
+
+            const combinedPrompt = `Existing Script:\n${currentScript}\n\nUSER NEW VISION / INSTRUCTION:\n${newVision}\n\nPlease update and rewrite the script with this new vision integrated into the 6 scenes.`;
+            fetchScriptAndRender(combinedPrompt);
+            document.getElementById('newVisionInput').value = '';
+        }
 
         // Player Motion Sequence
         document.getElementById('playTrigger').addEventListener('click', function() {
@@ -252,7 +284,7 @@
         });
 
         function copyScript() {
-            const text = document.getElementById('scriptText').innerText;
+            const text = document.getElementById('scriptText').value;
             navigator.clipboard.writeText(text);
             alert("Script copied to clipboard!");
         }
