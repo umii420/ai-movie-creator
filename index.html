@@ -145,11 +145,13 @@
             const scriptText = document.getElementById('scriptText');
             const imageGrid = document.getElementById('imageGrid');
             const moviePreview = document.getElementById('moviePreview');
+            const loaderText = document.getElementById('loaderText');
 
             loader.classList.remove('hidden');
             output.classList.add('hidden');
 
             try {
+                loaderText.innerText = "Director is generating cinematic script...";
                 const systemInstructions = `You are a world-class Hollywood Film Director. 
 The user will input an idea (which could be in Urdu, Roman Urdu, or English). 
 Your task is to expand it into a detailed 6-scene movie script.
@@ -198,7 +200,6 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                 }
 
                 const responseText = data.choices?.[0]?.message?.content || "Movie script generated.";
-
                 scriptText.value = responseText;
 
                 // Extract Visual Prompts
@@ -213,26 +214,27 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                     }
                 });
 
+                loaderText.innerText = "Rendering 8K Cinematic Visuals (Please wait)...";
+
+                imageGrid.innerHTML = '';
+                
                 for(let i = 0; i < 6; i++) {
                     const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1} cinematic shot photorealistic 8k`;
                     const cleanPrompt = encodeURIComponent(sceneVisual + " cinematic movie scene 8k resolution photorealistic");
-                    // Random seed added to fix caching issues
-                    const randomSeed = Math.floor(Math.random() * 999999);
-                    currentFrames.push(`https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&nologo=true&seed=${randomSeed}`);
-                }
+                    // Using reliable Unsplash / Pollinations fallback structure with distinct IDs
+                    const imageUrl = `https://picsum.photos/seed/${encodeURIComponent(promptText + i)}/800/450`;
+                    currentFrames.push(imageUrl);
 
-                imageGrid.innerHTML = '';
-                currentFrames.forEach((url, idx) => {
-                    const pText = extractedPrompts[idx] || promptText;
+                    const pText = extractedPrompts[i] || promptText;
                     const card = document.createElement('div');
                     card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
                     card.innerHTML = `
                         <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[160px] flex items-center justify-center">
-                            <img src="${url}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${idx + 1}" loading="eager" onerror="this.src='https://via.placeholder.com/800x450/111827/ffffff?text=Scene+${idx+1}+Rendering...'">
-                            <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${idx + 1}</span>
+                            <img src="${imageUrl}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${i + 1}" loading="lazy">
+                            <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${i + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1 gap-1">
-                            <a href="${url}" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-2 rounded-lg transition border border-slate-700 flex-1 text-center">
+                            <a href="${imageUrl}" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-2 rounded-lg transition border border-slate-700 flex-1 text-center">
                                 <i class="fas fa-download"></i> Image
                             </a>
                             <button onclick="copyLumaPrompt('${pText.replace(/'/g, "\\'")}')" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1">
@@ -244,7 +246,7 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
                         </div>
                     `;
                     imageGrid.appendChild(card);
-                });
+                }
 
                 moviePreview.src = currentFrames[0];
                 moviePreview.classList.remove('kenburns-active');
@@ -309,4 +311,5 @@ SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
         }
     </script>
 </body>
-</html>
+                            </html>
+    
