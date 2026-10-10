@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - High Power Studio Edition</title>
+    <title>AI Movie Creator - Studio Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,7 +22,7 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + FLUX ENGINE</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + GEMINI REALISM</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
@@ -41,12 +41,12 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K AI Movie & Luma Prompts</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Apna idea Roman Urdu ya English me likhein. Groq Engine script likhega aur Flux Engine kahani ke mutabiq HD visuals banaye ga.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Apna idea Roman Urdu ya English me likhein. Groq script banaye ga aur Gemini-Style Ultra Real AI Pictures render hon gi.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Ek jungle me sher aur uske dost ki dastan..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="Misal ke tor par: Pahar ki choti par ek sher aur shikar ki kahani..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
@@ -58,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Groq script bana raha hai...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Director is generating Roman Urdu script & Gemini-style HD frames...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -69,7 +69,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-blue-500"></i> Roman Urdu Director Script (Groq Engine)
+                            <i class="fas fa-scroll text-blue-500"></i> Roman Urdu Director Script
                         </h3>
                         <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Editable</span>
                     </div>
@@ -95,7 +95,7 @@
                     <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
-                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">8K Flux Render</span>
+                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Ultra Photorealistic Render</span>
                             <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Script-Matched Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
@@ -105,7 +105,7 @@
                             <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream AI Movie Sequence</p>
                         </div>
                         <div class="w-full text-left text-[11px] text-slate-400 font-mono">
-                            Status: High Dynamic Range (HDR) Enabled
+                            Status: Ultra HDR Gemini-Style Quality Active
                         </div>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                         <i class="fas fa-film text-purple-500"></i> 6-Scene AI Visual Storyboard
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">Flux Script Matched Visuals</span>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">High-Realism Photorealistic Images</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
@@ -128,7 +128,7 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Powered by Groq & Flux Engine
+        AI Movie Creator Pro &copy; 2026 - Powered by Groq & Realism Engine
     </footer>
 
     <script>
@@ -151,10 +151,11 @@
             output.classList.add('hidden');
 
             try {
-                loaderText.innerText = "Groq Engine writing script in Roman Urdu...";
+                loaderText.innerText = "Groq Engine is creating Roman Urdu script...";
 
-                const systemInstructions = `You are an expert Hollywood AI Director.
-User gives an idea. You MUST output a 6-scene movie script written in ROMAN URDU.
+                const systemInstructions = `You are a professional film director. 
+User gives an idea. You MUST write a 6-scene movie script in ROMAN URDU.
+Also write extremely photorealistic, detailed English visual prompts for each scene that look like real photography or high-budget cinema stills.
 
 STRICT RESPONSE FORMAT:
 --- SCRIPT START ---
@@ -170,12 +171,12 @@ Scene 5: [Detailed description in Roman Urdu]
 Scene 6: [Detailed description in Roman Urdu]
 --- SCRIPT END ---
 
-SCENE_PROMPT_1: [High quality English visual prompt describing Scene 1, cinematic lighting, 8k resolution, unreal engine 5, photorealistic movie scene]
-SCENE_PROMPT_2: [High quality English visual prompt for Scene 2]
-SCENE_PROMPT_3: [High quality English visual prompt for Scene 3]
-SCENE_PROMPT_4: [High quality English visual prompt for Scene 4]
-SCENE_PROMPT_5: [High quality English visual prompt for Scene 5]
-SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
+SCENE_PROMPT_1: [National Geographic style photorealistic cinematic 8k shot of Scene 1, highly detailed skin textures, natural lighting, 35mm photograph]
+SCENE_PROMPT_2: [Photorealistic cinematic 8k shot for Scene 2, 35mm photo, detailed lighting]
+SCENE_PROMPT_3: [Photorealistic cinematic 8k shot for Scene 3, 35mm photo, detailed lighting]
+SCENE_PROMPT_4: [Photorealistic cinematic 8k shot for Scene 4, 35mm photo, detailed lighting]
+SCENE_PROMPT_5: [Photorealistic cinematic 8k shot for Scene 5, 35mm photo, detailed lighting]
+SCENE_PROMPT_6: [Photorealistic cinematic 8k shot for Scene 6, 35mm photo, detailed lighting]`;
 
                 const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
@@ -184,8 +185,7 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                         'Authorization': `Bearer ${GROQ_API_KEY}`
                     },
                     body: JSON.stringify({
-                        model: "model: "llama-3.3-70b-versatile",
-                    
+                        model: "openai/gpt-oss-120b",
                         messages: [
                             { role: "system", content: systemInstructions },
                             { role: "user", content: promptText }
@@ -215,16 +215,18 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                     }
                 });
 
-                loaderText.innerText = "Flux AI Engine is rendering 8K script-matched pictures...";
+                loaderText.innerText = "Generating Gemini-Style Photorealistic AI Visuals...";
 
                 imageGrid.innerHTML = '';
 
                 for(let i = 0; i < 6; i++) {
-                    const sceneVisual = extractedPrompts[i] || `${promptText} cinematic scene ${i+1} 8k photorealistic`;
-                    const cleanPrompt = encodeURIComponent(sceneVisual + ", highly detailed cinematic film shot 8k");
+                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1} photorealistic 8k cinematic shot`;
+                    const cleanPrompt = encodeURIComponent(sceneVisual + ", award winning photography, ultra realistic, highly detailed 8k");
                     
                     const seedVal = Math.floor(Math.random() * 899999) + 100000;
-                    const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&model=flux&nologo=true&seed=${seedVal}`;
+                    
+                    // Ultra Realism Model via Pollinations Engine
+                    const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&model=flux-realism&nologo=true&seed=${seedVal}`;
                     currentFrames.push(imageUrl);
 
                     const pText = extractedPrompts[i] || promptText;
@@ -232,7 +234,7 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
                     card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
                     card.innerHTML = `
                         <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[160px] flex items-center justify-center">
-                            <img src="${imageUrl}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${i + 1}" loading="lazy" onerror="this.src='https://image.pollinations.ai/prompt/cinematic%20movie%20frame%20${i+1}?width=800&height=450&nologo=true'">
+                            <img src="${imageUrl}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105" alt="Scene ${i + 1}" loading="lazy" onerror="this.src='https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&model=flux&nologo=true&seed=${seedVal}'">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10">Scene ${i + 1}</span>
                         </div>
                         <div class="flex items-center justify-between px-1 gap-1">
@@ -313,5 +315,4 @@ SCENE_PROMPT_6: [High quality English visual prompt for Scene 6]`;
         }
     </script>
 </body>
-                    </html>
-                    
+</html>
