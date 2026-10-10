@@ -266,23 +266,29 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     const pText = extractedPrompts[i] || promptText;
                     btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${pText.replace(/'/g, "\\'")}')`);
 
-                    imgElem.onload = function() {
-                        spinnerElem.style.display = 'none';
-                        imgElem.classList.remove('opacity-0');
-                        actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                    };
-
-                    setTimeout(() => {
-                        spinnerElem.style.display = 'none';
-                        imgElem.classList.remove('opacity-0');
-                        actionsElem.classList.remove('opacity-50', 'pointer-events-none');
-                    }, 3000);
+                    // Ensure smooth appearance when image loads
+                    await new Promise((resolve) => {
+                        imgElem.onload = function() {
+                            spinnerElem.style.display = 'none';
+                            imgElem.classList.remove('opacity-0');
+                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                            resolve();
+                        };
+                        // Fallback timeout in case image takes a few seconds
+                        setTimeout(() => {
+                            spinnerElem.style.display = 'none';
+                            imgElem.classList.remove('opacity-0');
+                            actionsElem.classList.remove('opacity-50', 'pointer-events-none');
+                            resolve();
+                        }, 4000);
+                    });
 
                     if(i === 0) {
                         moviePreview.src = imageUrl;
                     }
 
-                    await delay(1200);
+                    // Small breathing room before loading the next image
+                    await delay(800);
                 }
 
                 loader.classList.add('hidden');
@@ -347,4 +353,5 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
         }
     </script>
 </body>
-</html>
+    </html>
+    
