@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Director Edition</title>
+    <title>AI Movie Creator - Ultra Groq Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,14 +22,14 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">DIRECTOR EDITION</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">ULTRA ENGINE</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Gemini AI Director Active
+                <i class="fas fa-bolt text-yellow-400"></i> Groq Llama-3 Active
             </span>
         </div>
     </header>
@@ -41,7 +41,7 @@
         <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">Generate 8K Cinematic AI Movies</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Type any concept. Gemini will generate script & scene visuals with full edit capabilities.</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Type any idea in Urdu or English. Llama 3 will write a high-level script & render matching visuals.</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
@@ -58,7 +58,7 @@
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
             <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Gemini Director is writing script & generating matching scene images...</p>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">Llama 3 Director is generating cinematic script & scene matching 8K frames...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -71,17 +71,15 @@
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                             <i class="fas fa-scroll text-blue-500"></i> AI Director Script & Vision Editor
                         </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Editable</span>
+                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">Llama-3 Powered</span>
                     </div>
                     <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
                         <i class="fas fa-copy"></i> Copy Script
                     </button>
                 </div>
 
-                <!-- Editable Textarea for Script -->
-                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="Script will appear here... You can edit it directly!"></textarea>
+                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="Script will appear here..."></textarea>
 
-                <!-- Add New Vision Section -->
                 <div class="pt-2 border-t border-slate-800 space-y-3">
                     <label class="text-xs font-bold text-slate-300 flex items-center gap-2">
                         <i class="fas fa-lightbulb text-yellow-400"></i> Add New Vision or Modify Scene Instructions:
@@ -119,7 +117,7 @@
                             <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">Click Play to Stream AI Movie</p>
                         </div>
                         <div class="w-full text-left text-[11px] text-slate-400 font-mono">
-                            Status: Dynamic Script Sync Active
+                            Status: High Dynamic Range (HDR) Enabled
                         </div>
                     </div>
                 </div>
@@ -142,11 +140,13 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Powered by Google Gemini Pro
+        AI Movie Creator Pro &copy; 2026 - Powered by Groq Llama-3 AI Engine
     </footer>
 
     <script>
-        const DEFAULT_GEMINI_KEY = "AQ.Ab8RN6If2nS2-PQaD4-0bnWCyGU94QFarLLxr_SA03tH9C4wEQ"; 
+        // Insert your free Groq API Key here
+        const GROQ_API_KEY = "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";
+            "; 
 
         let currentFrames = [];
         let isPlaying = false;
@@ -163,37 +163,67 @@
             output.classList.add('hidden');
 
             try {
-                const aiPrompt = `You are a Hollywood Film Director. Write a complete 6-scene movie script for the concept: "${promptText}". 
-                Write full script details first. 
-                At the very end of your response, write exactly 6 lines starting with "SCENE_PROMPT_1:", "SCENE_PROMPT_2:", "SCENE_PROMPT_3:", "SCENE_PROMPT_4:", "SCENE_PROMPT_5:", "SCENE_PROMPT_6:" providing hyper-realistic 8k English image generation descriptions for each scene.`;
+                const systemInstructions = `You are a world-class Hollywood Film Director. 
+The user will input an idea (which could be in Urdu, Roman Urdu, or English). 
+Your task is to expand it into a detailed 6-scene movie script.
 
-                const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${DEFAULT_GEMINI_KEY}`;
-                const res = await fetch(geminiUrl, {
+FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
+--- SCRIPT START ---
+Title: [Movie Title]
+Genre: [Genre]
+Logline: [Short Story Summary]
+
+Scene 1: [Detailed Scene Description, Characters, Lighting, Atmosphere]
+Scene 2: [Detailed Scene Description]
+Scene 3: [Detailed Scene Description]
+Scene 4: [Detailed Scene Description]
+Scene 5: [Detailed Scene Description]
+Scene 6: [Detailed Scene Description]
+--- SCRIPT END ---
+
+SCENE_PROMPT_1: [Pure English detailed visual prompt for Scene 1, 8k cinematic unreal engine 5]
+SCENE_PROMPT_2: [Pure English detailed visual prompt for Scene 2]
+SCENE_PROMPT_3: [Pure English detailed visual prompt for Scene 3]
+SCENE_PROMPT_4: [Pure English detailed visual prompt for Scene 4]
+SCENE_PROMPT_5: [Pure English detailed visual prompt for Scene 5]
+SCENE_PROMPT_6: [Pure English detailed visual prompt for Scene 6]`;
+
+                const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: aiPrompt }] }] })
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${GROQ_API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [
+                            { role: "system", content: systemInstructions },
+                            { role: "user", content: promptText }
+                        ],
+                        temperature: 0.7
+                    })
                 });
                 
                 const data = await res.json();
-                const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Cinematic script generated successfully.";
+                const responseText = data.choices?.[0]?.message?.content || "Movie script generated.";
 
                 scriptText.value = responseText;
 
-                // Extract visual prompts
+                // Extract Visual Prompts from Llama 3
                 currentFrames = [];
                 const lines = responseText.split('\n');
                 let extractedPrompts = [];
 
                 lines.forEach(line => {
-                    if(line.includes("SCENE_PROMPT_")) {
+                    if(line.startsWith("SCENE_PROMPT_")) {
                         const cleanLine = line.replace(/SCENE_PROMPT_\d*[:\-]/g, "").trim();
                         if(cleanLine.length > 5) extractedPrompts.push(cleanLine);
                     }
                 });
 
                 for(let i = 0; i < 6; i++) {
-                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1} cinematic shot unreal engine 5 photorealistic 8k`;
-                    const cleanPrompt = encodeURIComponent(sceneVisual + " cinematic movie screenshot lighting masterpiece");
+                    const sceneVisual = extractedPrompts[i] || `${promptText} scene ${i+1} cinematic shot photorealistic 8k`;
+                    const cleanPrompt = encodeURIComponent(sceneVisual + " cinematic movie scene 8k resolution photorealistic");
                     currentFrames.push(`https://image.pollinations.ai/prompt/${cleanPrompt}?width=800&height=450&nologo=true&seed=${Math.floor(Math.random() * 90000) + 1000}`);
                 }
 
@@ -223,7 +253,7 @@
                 output.classList.remove('hidden');
 
             } catch (err) {
-                alert("Error connecting to Gemini AI Director!");
+                alert("Error connecting to Groq AI Engine. Please check your Groq API Key!");
                 loader.classList.add('hidden');
             }
         }
@@ -234,7 +264,6 @@
             fetchScriptAndRender(prompt);
         });
 
-        // Function to update script vision based on user addition
         async function updateScriptVision() {
             const currentScript = document.getElementById('scriptText').value.trim();
             const newVision = document.getElementById('newVisionInput').value.trim();
@@ -244,12 +273,11 @@
                 return;
             }
 
-            const combinedPrompt = `Existing Script:\n${currentScript}\n\nUSER NEW VISION / INSTRUCTION:\n${newVision}\n\nPlease update and rewrite the script with this new vision integrated into the 6 scenes.`;
+            const combinedPrompt = `Existing Script:\n${currentScript}\n\nREVISE WITH THIS NEW VISION / INSTRUCTION:\n${newVision}`;
             fetchScriptAndRender(combinedPrompt);
             document.getElementById('newVisionInput').value = '';
         }
 
-        // Player Motion Sequence
         document.getElementById('playTrigger').addEventListener('click', function() {
             const preview = document.getElementById('moviePreview');
             const status = document.getElementById('playerStatus');
@@ -290,4 +318,5 @@
         }
     </script>
 </body>
-</html>
+                            </html>
+    
