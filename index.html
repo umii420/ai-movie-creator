@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Fixed viewport scale to give professional AI App (ElevenLabs/Luma) desktop feel on mobile without forcing manual desktop toggle -->
-    <meta name="viewport" content="width=1200, initial-scale=0.32, maximum-scale=3.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Movie Creator - Mythic Cinematic Engine</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,39 +19,36 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(255, 255, 255, 0.1);
-            --header-bg: rgba(5, 5, 7, 0.88);
+            --header-bg: rgba(5, 5, 7, 0.9);
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
         }
 
-        /* Fixed App Width like professional AI platforms (ElevenLabs style) */
-        html, body {
-            width: 1200px !important;
-            min-width: 1200px !important;
-            margin: 0 auto !important;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
             background-color: var(--bg-black);
             color: var(--text-main);
-            font-family: var(--font-body);
-            line-height: 1.6;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        * {
-            box-sizing: border-box;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Header / Navbar */
+        /* Header / Navbar - Fully Responsive */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 22px 8%;
+            padding: 15px 6%;
             background: var(--header-bg);
             backdrop-filter: blur(12px);
             position: fixed;
-            width: 1200px;
+            width: 100%;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border-glow);
@@ -60,7 +56,7 @@
 
         .logo {
             font-family: var(--font-heading);
-            font-size: 1.6rem;
+            font-size: 1.1rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: var(--text-main);
@@ -69,7 +65,7 @@
 
         .nav-btns {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
 
@@ -77,89 +73,84 @@
             background: transparent;
             color: var(--text-main);
             border: 1px solid var(--border-glow);
-            padding: 10px 22px;
+            padding: 8px 16px;
             border-radius: 30px;
             font-weight: 600;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: 0.3s ease;
             white-space: nowrap;
-        }
-
-        .btn-contact:hover {
-            background: var(--text-main);
-            color: var(--bg-black);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         .menu-btn {
             background: transparent;
             border: 1px solid var(--border-glow);
             color: var(--text-main);
-            font-size: 1.2rem;
-            padding: 10px 14px;
-            border-radius: 12px;
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
         }
 
-        /* Hero Section */
+        /* Hero Section - Balanced Layout for Mobile & Desktop without Desktop Mode */
         .hero {
-            padding: 180px 8% 60px;
+            padding: 130px 6% 50px;
             text-align: center;
-            width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: 3.2rem;
+            font-size: clamp(1.6rem, 4.5vw, 2.8rem);
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.25;
             text-transform: uppercase;
-            letter-spacing: -1px;
-            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
             color: var(--text-main);
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
             color: var(--text-muted);
-            max-width: 850px;
-            margin: 0 auto 40px;
+            max-width: 750px;
+            margin: 0 auto 35px;
         }
 
         /* Describe Your Video Prompt Box */
         .prompt-container {
-            width: 800px;
-            margin: 0 auto 40px;
+            width: 100%;
+            max-width: 750px;
+            margin: 0 auto 30px;
             background: linear-gradient(145deg, rgba(20, 22, 30, 0.9), rgba(10, 11, 15, 0.95)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 20px;
             border: 1px solid var(--border-glow);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
         .prompt-title {
             font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: left;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             color: #fff;
         }
 
         .prompt-input-box {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 18px;
-            padding: 10px 15px;
+            border-radius: 14px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .prompt-input-box input {
@@ -167,35 +158,34 @@
             border: none;
             outline: none;
             background: transparent;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #111;
-            padding: 8px;
+            width: 100%;
         }
 
         .model-select {
             background: #e5e7eb;
             border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #374151;
             cursor: pointer;
             outline: none;
-            white-space: nowrap;
         }
 
         .btn-generate-arrow {
             background: #000;
             color: #fff;
             border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
             flex-shrink: 0;
         }
@@ -208,23 +198,25 @@
         .hero-cta-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
         }
 
         .btn-primary {
             background: var(--accent-green);
             color: #000;
-            padding: 14px 32px;
+            padding: 12px 28px;
             border-radius: 30px;
             font-weight: 700;
             text-decoration: none;
+            font-size: 0.9rem;
         }
 
-        /* Gemini-Style Output Page Modal */
+        /* Gemini Modal */
         .gemini-modal-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 1200px; height: 100%;
+            width: 100%; height: 100%;
             background: var(--bg-black);
             z-index: 2000;
             display: flex;
@@ -232,7 +224,7 @@
             opacity: 0;
             pointer-events: none;
             transition: 0.4s ease;
-            padding: 40px 8%;
+            padding: 30px 5%;
             overflow-y: auto;
         }
 
@@ -245,119 +237,50 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border-glow);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .gemini-content-box {
-            width: 900px;
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
             font-family: var(--font-gemini);
         }
 
         .gemini-prompt-display {
-            font-size: 1.6rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-main);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .gemini-response-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
-            border-radius: 20px;
-            padding: 35px;
-            line-height: 1.8;
-            font-size: 1.05rem;
+            border-radius: 16px;
+            padding: 22px;
+            line-height: 1.7;
+            font-size: 0.92rem;
             color: var(--text-main);
             white-space: pre-wrap;
-        }
-
-        /* Trusted Platforms Section */
-        .trusted-section {
-            padding: 50px 8%;
-            text-align: center;
-            border-top: 1px solid var(--border-glow);
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .trusted-title {
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .trusted-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .brand-badge {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Features Section */
-        .features-section { padding: 100px 8%; }
-
-        .section-header {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 50px;
-            text-align: center;
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            padding: 35px;
-            border-radius: 20px;
-        }
-
-        .card-green {
-            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, var(--card-bg) 100%);
-            border-color: rgba(0, 255, 135, 0.3);
-        }
-
-        .card-title {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 15px;
         }
 
         /* Footer */
         footer {
             background: var(--bg-black);
-            padding: 80px 8% 40px;
+            padding: 50px 6% 30px;
             border-top: 1px solid var(--border-glow);
             text-align: center;
         }
 
         .big-footer-logo {
             font-family: var(--font-heading);
-            font-size: 5.5rem;
+            font-size: clamp(2rem, 8vw, 4.5rem);
             font-weight: 900;
             letter-spacing: -2px;
-            margin: 40px 0;
+            margin: 20px 0;
             color: var(--text-main);
             text-transform: uppercase;
         }
@@ -397,11 +320,11 @@
 
         <div class="hero-cta-group">
             <a href="#" class="btn-primary">Start Creating Now</a>
-            <button class="btn-contact" style="padding: 14px 28px;">Contact Support</button>
+            <button class="btn-contact" style="padding: 12px 24px;">Contact Support</button>
         </div>
     </section>
 
-    <!-- Gemini-Style Script Output Page Modal -->
+    <!-- Gemini Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
@@ -413,39 +336,10 @@
         </div>
     </div>
 
-    <!-- Trusted Section -->
-    <section class="trusted-section">
-        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
-        <div class="trusted-logos">
-            <div class="brand-badge"><i class="fa-solid fa-bolt" style="color: #ffaa00;"></i> GROQ AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA DREAM ENGINE</div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section class="features-section">
-        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
-        <div class="grid-cards">
-            <div class="card card-green">
-                <div class="card-title">Text to Video Script</div>
-                <p>Prompt-only cinematic scene creation with fast Groq AI script generation tailored for visual directors.</p>
-            </div>
-            <div class="card">
-                <div class="card-title">8K Photorealistic Rendering</div>
-                <p>Generate high-fidelity movie stills and visuals matching precise camera parameters and aesthetic angles.</p>
-            </div>
-            <div class="card">
-                <div class="card-title">Multi-Act Storyboards</div>
-                <p>Organize complete film scenes with character consistency, lighting cues, and prompt controls.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="big-footer-logo">AI MOVIE CREATOR</div>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">© 2026 All Rights Reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.8rem;">© 2026 All Rights Reserved.</p>
     </footer>
 
     <script>
