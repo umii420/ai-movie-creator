@@ -430,7 +430,7 @@
             text-transform: uppercase;
         }
 
-        /* Settings Drawer Panel */
+        /* VIP Settings Drawer Panel */
         .settings-drawer {
             position: fixed;
             top: 0; right: -380px;
@@ -451,7 +451,7 @@
             border-bottom: 1px solid var(--border-glow);
         }
 
-        .settings-header h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; }
+        .settings-header h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .close-drawer { background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
 
         .setting-group { margin-bottom: 18px; }
@@ -501,6 +501,14 @@
         .gemini-response-card {
             background: var(--card-bg); border: 1px solid var(--border-glow);
             border-radius: 16px; padding: 25px; line-height: 1.7; font-size: 0.95rem; color: var(--text-main); white-space: pre-wrap;
+            position: relative;
+        }
+
+        .btn-copy-script {
+            position: absolute; top: 15px; right: 15px;
+            background: var(--accent-green); color: #000; border: none;
+            padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 0.75rem;
+            cursor: pointer; display: flex; align-items: center; gap: 5px;
         }
 
         .modal-overlay {
@@ -530,7 +538,7 @@
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
             <button class="btn-contact" onclick="openModal()">Contact Us</button>
-            <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-bars"></i></button>
+            <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-sliders"></i></button>
         </div>
     </header>
 
@@ -539,7 +547,7 @@
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
         <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
-        <!-- Luma Labs Inspired Prompt Box -->
+        <!-- Prompt Box -->
         <div class="prompt-container">
             <div class="prompt-title-luma">Describe your video</div>
             
@@ -548,7 +556,7 @@
                 <button class="btn-arrow-luma active" onclick="generateScript()"><i class="fa-solid fa-arrow-up"></i></button>
             </div>
 
-            <!-- Movie Category Genre Buttons -->
+            <!-- Movie Genre Chips -->
             <div class="genre-chips-wrapper">
                 <button class="genre-chip" onclick="selectGenre('Horror')">Horror</button>
                 <button class="genre-chip" onclick="selectGenre('Romance')">Romance</button>
@@ -641,10 +649,10 @@
         <p style="color: var(--text-muted); font-size: 0.8rem;">© 2026 All Rights Reserved.</p>
     </footer>
 
-    <!-- App Settings Drawer Panel -->
+    <!-- VIP App Settings Drawer Panel -->
     <div class="settings-drawer" id="settingsDrawer">
         <div class="settings-header">
-            <h3><i class="fa-solid fa-sliders"></i> App Settings</h3>
+            <h3><i class="fa-solid fa-crown" style="color: var(--accent-green);"></i> VIP Settings</h3>
             <button class="close-drawer" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
@@ -657,17 +665,16 @@
         </div>
 
         <div class="setting-group" style="margin-top: 15px;">
-            <label class="setting-label"><i class="fa-solid fa-microchip"></i> Script Model</label>
+            <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
             <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
-                <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
-                <option value="llama3-8b-8192">llama3-8b-8192</option>
-                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+                <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile (Ultra)</option>
+                <option value="llama3-8b-8192">llama3-8b-8192 (Fast)</option>
+                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768 (Creative)</option>
             </select>
         </div>
 
-        <!-- All Languages Supported by Groq AI -->
         <div class="setting-group">
-            <label class="setting-label"><i class="fa-solid fa-language"></i> Script Language</label>
+            <label class="setting-label"><i class="fa-solid fa-language"></i> Output Language</label>
             <select class="setting-select" id="scriptLangSelect" onchange="saveSetting('script_lang', this.value)">
                 <option value="Roman Urdu">Roman Urdu</option>
                 <option value="Urdu Script">Urdu (اردو)</option>
@@ -681,13 +688,38 @@
                 <option value="French">French (Français)</option>
                 <option value="German">German (Deutsch)</option>
                 <option value="Turkish">Turkish (Türkçe)</option>
-                <option value="Chinese">Chinese (中文)</option>
-                <option value="Japanese">Japanese (日本語)</option>
-                <option value="Russian">Russian (Русский)</option>
             </select>
         </div>
 
-        <button onclick="resetSettings()" style="width: 100%; padding: 10px; margin-top: 20px; background: rgba(255, 59, 48, 0.2); border: 1px solid #ff3b30; color: #ff3b30; border-radius: 10px; font-weight: 600; cursor: pointer;">
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-video"></i> Aspect Ratio Format</label>
+            <select class="setting-select" id="aspectRatioSelect" onchange="saveSetting('aspect_ratio', this.value)">
+                <option value="16:9 Cinematic">16:9 Cinematic (YouTube / Movie)</option>
+                <option value="9:16 Vertical">9:16 Vertical (Reels / TikTok)</option>
+                <option value="1:1 Square">1:1 Square (Instagram Post)</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-clapperboard"></i> Director Style & Tone</label>
+            <select class="setting-select" id="directorStyleSelect" onchange="saveSetting('director_style', this.value)">
+                <option value="Hollywood Blockbuster">Hollywood Blockbuster</option>
+                <option value="Bollywood Drama">Bollywood Drama</option>
+                <option value="Cyberpunk Sci-Fi">Cyberpunk Sci-Fi</option>
+                <option value="Dark Noir Thriller">Dark Noir Thriller</option>
+                <option value="Emotional Indie">Emotional Indie</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-file-lines"></i> Script Length</label>
+            <select class="setting-select" id="scriptLengthSelect" onchange="saveSetting('script_length', this.value)">
+                <option value="Detailed Multi-Scene Story">Detailed Multi-Scene Story</option>
+                <option value="Short Teaser / Trailer">Short Teaser / Trailer</option>
+            </select>
+        </div>
+
+        <button onclick="resetSettings()" style="width: 100%; padding: 10px; margin-top: 15px; background: rgba(255, 59, 48, 0.2); border: 1px solid #ff3b30; color: #ff3b30; border-radius: 10px; font-weight: 600; cursor: pointer;">
             <i class="fa-solid fa-rotate-left"></i> Reset All Settings
         </button>
     </div>
@@ -700,7 +732,10 @@
         </div>
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
-            <div class="gemini-response-card" id="scriptResultContent">Generating your script...</div>
+            <div class="gemini-response-card" id="scriptResultContent">
+                <button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>
+                Generating your script...
+            </div>
         </div>
     </div>
 
@@ -751,6 +786,15 @@
             inputField.focus();
         }
 
+        function copyScriptText() {
+            const textCard = document.getElementById('scriptResultContent');
+            // Remove the copy button text from selection
+            let textToCopy = textCard.innerText.replace("Copy Script", "").trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("Script copied to clipboard successfully!");
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme_preference');
             if (savedTheme === 'light') {
@@ -759,15 +803,11 @@
                 document.getElementById('themeStatusLabel').innerText = 'Light Mode';
             }
             
-            const savedLang = localStorage.getItem('script_lang');
-            if (savedLang) {
-                document.getElementById('scriptLangSelect').value = savedLang;
-            }
-
-            const savedModel = localStorage.getItem('ai_model');
-            if (savedModel) {
-                document.getElementById('scriptModelSelect').value = savedModel;
-            }
+            if (localStorage.getItem('script_lang')) document.getElementById('scriptLangSelect').value = localStorage.getItem('script_lang');
+            if (localStorage.getItem('ai_model')) document.getElementById('scriptModelSelect').value = localStorage.getItem('ai_model');
+            if (localStorage.getItem('aspect_ratio')) document.getElementById('aspectRatioSelect').value = localStorage.getItem('aspect_ratio');
+            if (localStorage.getItem('director_style')) document.getElementById('directorStyleSelect').value = localStorage.getItem('director_style');
+            if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
         });
 
         // Built-in Secure Encrypted API Key
@@ -787,11 +827,14 @@
                 apiKey = "";
             }
 
-            const chosenLang = document.getElementById('scriptLangSelect').value || localStorage.getItem('script_lang') || 'Roman Urdu';
-            const chosenModel = document.getElementById('scriptModelSelect').value || 'llama-3.3-70b-versatile';
+            const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
+            const chosenModel = localStorage.getItem('ai_model') || 'llama-3.3-70b-versatile';
+            const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
+            const chosenStyle = localStorage.getItem('director_style') || 'Hollywood Blockbuster';
+            const chosenLength = localStorage.getItem('script_length') || 'Detailed Multi-Scene Story';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerText = "⏳ Groq AI is generating your cinematic script in " + chosenLang + "...";
+            document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>⏳ Groq AI is generating your ${chosenStyle} script in ${chosenLang} (${chosenRatio})...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
@@ -805,7 +848,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: `You are an expert film director. Write a cinematic script in ${chosenLang}. Include visual prompts, camera directions, and dialogues.`
+                                content: `You are an expert film director. Style: ${chosenStyle}. Format: ${chosenRatio}. Length: ${chosenLength}. Write a cinematic script in ${chosenLang}. Include visual prompts, camera directions, and dialogues.`
                             },
                             { role: "user", content: inputVal }
                         ],
@@ -815,12 +858,12 @@
 
                 const data = await response.json();
                 if (data.choices && data.choices[0]) {
-                    document.getElementById('scriptResultContent').innerText = data.choices[0].message.content;
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>` + data.choices[0].message.content;
                 } else {
-                    document.getElementById('scriptResultContent').innerText = "❌ Unable to generate script. Please try again.";
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Unable to generate script. Please try again.`;
                 }
             } catch (error) {
-                document.getElementById('scriptResultContent').innerText = "❌ Connection error. Please check network.";
+                document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Connection error. Please check network.`;
             }
         }
 
