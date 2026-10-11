@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     try {
         const { prompt, style, ratio, length, lang } = req.body;
 
-        const systemPrompt = `You are an expert film director. Style: ${style || 'Hollywood'}. Format: ${ratio || '16:9'}. Length: ${length || 'Detailed'}. Write a professional cinematic script in ${lang || 'Roman Urdu'}. Include visual prompts, camera directions, and dialogues.`;
+        const systemPrompt = `You are an expert film director. Style: ${style || 'Hollywood Blockbuster'}. Format: ${ratio || '16:9 Cinematic'}. Length: ${length || 'Detailed Multi-Scene Story'}. Write a professional cinematic script in ${lang || 'Roman Urdu'}. Include visual prompts, camera directions, and dialogues based on the user prompt.`;
 
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "llama3-70b-8192", // Correct active Groq model
+                model: "llama-3.3-70b-versatile",
                 messages: [
                     { role: "system", content: systemPrompt },
                     { role: "user", content: prompt }
