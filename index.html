@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - High Quality Studio</title>
+    <title>Leonardo.ai API - Studio Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { background-color: #030712; color: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-        .netflix-card { background: rgba(17, 24, 39, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .cinema-glow { box-shadow: 0 0 50px rgba(229, 9, 20, 0.15); }
+        body { background-color: #000000; color: #ffffff; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .leonardo-card { background: #121216; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .green-box { background: #00ff66; color: #000000; }
         .kenburns-active { animation: kenburns 4s infinite alternate ease-in-out; }
         @keyframes kenburns {
             0% { transform: scale(1) translate(0, 0); }
@@ -17,94 +17,128 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6">
+<body class="min-h-screen flex flex-col justify-between selection:bg-purple-600 selection:text-white">
 
-    <!-- Header -->
-    <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
+    <!-- Top Header -->
+    <header class="max-w-7xl mx-auto w-full flex items-center justify-between py-5 px-4 sm:px-8 border-b border-zinc-900 sticky top-0 bg-black/90 backdrop-blur-md z-50">
         <div class="flex items-center gap-2">
-            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + FLUX AI ENGINE</span>
-            <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
-                <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
-            </h1>
+            <span class="text-xl sm:text-2xl font-black tracking-tight text-white">LEONARDO<span class="text-zinc-400">.AI</span></span>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Live HD Engine
-            </span>
+        <div class="flex items-center gap-4">
+            <a href="#studio" class="bg-white hover:bg-zinc-200 text-black font-semibold text-xs sm:text-sm px-5 py-2 rounded-full transition shadow-lg">
+                Get API Key
+            </a>
+            <div class="text-white text-xl cursor-pointer">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
-    <!-- Main Studio Layout -->
-    <main class="max-w-6xl mx-auto w-full space-y-8">
+    <!-- Hero Section (Exact Match to Screenshot 72578.jpg) -->
+    <section class="relative overflow-hidden pt-12 pb-16 px-4 text-center">
+        <div class="max-w-4xl mx-auto space-y-6">
+            
+            <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white leading-tight uppercase">
+                DESIGN VISUALLY.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-purple-600">EXPORT PRODUCTION-READY</span> CODE FOR IMAGE & VIDEO APIS[span_10](start_span)[span_10](end_span)
+            </h1>
+
+            <p class="text-zinc-400 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+                Design media generation in a visual interface, see the output in real time, then export the exact API code to production. No guessing. No translation. What you see is what you ship. Leonardo is a visual-first AI image generator API and AI video generator API, built for founders, solo builders, and teams who want to design media generation visually and ship with certainty[span_11](start_span)[span_11](end_span).
+            </p>
+
+            <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#studio" class="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl transition shadow-xl">
+                    Contact us[span_12](start_span)[span_12](end_span)
+                </a>
+                <a href="#features" class="w-full sm:w-auto px-8 py-3.5 bg-transparent hover:bg-zinc-900 text-white font-bold rounded-xl border border-zinc-800 transition">
+                    View Documentation[span_13](start_span)[span_13](end_span)
+                </a>
+            </div>
+
+            <!-- Trusted by leading brands[span_14](start_span)[span_14](end_span) -->
+            <div class="pt-12 border-t border-zinc-900 mt-12">
+                <p class="text-[11px] uppercase tracking-widest text-zinc-500 mb-6 font-bold">Trusted by leading brands and platforms[span_15](start_span)[span_15](end_span)</p>
+                <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-zinc-400 font-extrabold tracking-widest text-sm uppercase">
+                    <span>Coca-Cola[span_16](start_span)[span_16](end_span)</span>
+                    <span>Canva[span_17](start_span)[span_17](end_span)</span>
+                    <span>Game Pack[span_18](start_span)[span_18](end_span)</span>
+                    <span>Ducati[span_19](start_span)[span_19](end_span)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive AI Movie Studio Section (Integrated Seamlessly) -->
+    <main id="studio" class="max-w-6xl mx-auto w-full space-y-8 px-4 py-8">
         
-        <!-- Hero Input Studio -->
-        <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
+        <div class="leonardo-card rounded-3xl p-5 sm:p-10 shadow-2xl border-t border-t-purple-600/50">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
-                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور 6 مختلف، یونیک اور کہانی کے عین مطابق تصاویر تیار ہوں گی۔</p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">AI مووی اور اسکرپٹ جنریٹر</h2>
+                <p class="text-zinc-400 text-xs sm:text-sm">اپنا موضوع لکھیں؛ Groq اسکرپٹ لکھے گا اور لائیو 8K سنیماٹک مناظر تیار ہوں گے۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="مثال کے طور پر: Ali ki dragon sy dosti..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-black border border-zinc-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-purple-500 placeholder-zinc-600 text-sm shadow-inner transition" placeholder="مثال کے طور پر: Ali ki dragon sy dosti..." required></textarea>
                 </div>
 
-                <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
-                    <i class="fas fa-wand-magic-sparkles"></i> مووی کی پروڈکشن شروع کریں
+                <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
+                    <i class="fas fa-wand-magic-sparkles"></i> مووی پروڈکشن شروع کریں
                 </button>
             </form>
         </div>
 
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
-            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">اسکرپٹ اور AI تصاویر تیار ہو رہی ہیں...</p>
+            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-purple-600 border-t-transparent shadow-2xl"></div>
+            <p id="loaderText" class="text-zinc-300 text-sm font-medium tracking-wide animate-pulse">اسکرپٹ اور سنیماٹک تصاویر تیار ہو رہی ہیں...</p>
         </div>
 
         <!-- Production Output Suite -->
         <div id="outputContainer" class="hidden space-y-8">
             
             <!-- SECTION 1: Editable AI Script Box -->
-            <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-blue-600 space-y-4">
+            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600 space-y-4">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
                         <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-blue-500"></i> رومن اردو ڈائریکٹر اسکرپٹ (by Groq)
+                            <i class="fas fa-scroll text-purple-400"></i> رومن اردو ڈائریکٹر اسکرپٹ (by Groq)
                         </h3>
-                        <span class="text-[10px] bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded border border-blue-700/50">ایڈیٹیبل</span>
+                        <span class="text-[10px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded border border-purple-800/50">ایڈیٹیبل</span>
                     </div>
-                    <button onclick="copyScript()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
+                    <button onclick="copyScript()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
                         <i class="fas fa-copy"></i> اسکرپٹ کاپی کریں
                     </button>
                 </div>
 
-                <textarea id="scriptText" rows="10" class="w-full text-slate-200 text-xs sm:text-sm leading-relaxed bg-slate-950 p-4 sm:p-5 rounded-2xl border border-slate-800 font-mono focus:outline-none focus:border-blue-500 transition resize-y" placeholder="اسکرپٹ یہاں نظر آئے گی..."></textarea>
+                <textarea id="scriptText" rows="10" class="w-full text-zinc-200 text-xs sm:text-sm leading-relaxed bg-black p-4 sm:p-5 rounded-2xl border border-zinc-800 font-mono focus:outline-none focus:border-purple-500 transition resize-y" placeholder="اسکرپٹ یہاں نظر آئے گی..."></textarea>
             </div>
 
             <!-- SECTION 2: Master Cinema Player -->
-            <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-red-600">
+            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-indigo-600">
                 <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-red-600 animate-ping"></span>
+                        <span class="w-3 h-3 rounded-full bg-purple-500 animate-ping"></span>
                         <h3 class="text-sm sm:text-lg font-bold text-white uppercase tracking-wider">ماسٹر مووی پلیئر</h3>
                     </div>
-                    <span id="sceneBadge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold">ریڈی</span>
+                    <span id="sceneBadge" class="text-xs bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full border border-zinc-800 font-semibold">ریڈی</span>
                 </div>
                 
-                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-slate-800 shadow-2xl flex items-center justify-center group">
+                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center group">
                     <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
-                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Flux HD Player</span>
-                            <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Synced Scenes</span>
+                            <span class="bg-purple-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Studio Player</span>
+                            <span class="text-[11px] text-zinc-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Synced Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
-                            <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 hover:bg-red-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
+                            <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-purple-600 hover:bg-purple-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
                                 <i id="playIcon" class="fas fa-play text-2xl sm:text-3xl ml-1"></i>
                             </div>
-                            <p id="playerStatus" class="text-xs sm:text-sm text-slate-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">پلے پر کلک کر کے مووی اسٹریم شروع کریں</p>
+                            <p id="playerStatus" class="text-xs sm:text-sm text-zinc-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">پلے پر کلک کر کے مووی اسٹریم شروع کریں</p>
                         </div>
-                        <div class="w-full text-left text-[11px] text-slate-400 font-mono">
+                        <div class="w-full text-left text-[11px] text-zinc-400 font-mono">
                             اسٹیٹس: اسٹوڈیو فعال
                         </div>
                     </div>
@@ -112,12 +146,12 @@
             </div>
 
             <!-- SECTION 3: 6 Scene Storyboard Grid -->
-            <div class="netflix-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600">
+            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-pink-600">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-film text-purple-500"></i> 6 مناظر کا AI اسٹوری بورڈ
+                        <i class="fas fa-film text-pink-500"></i> 6 مناظر کا AI اسٹوری بورڈ
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">100% Unique Visuals</span>
+                    <span class="text-xs text-zinc-400 bg-zinc-900 px-3 py-1 rounded-lg">100% Unique Visuals</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
@@ -126,11 +160,103 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Flux Engine Studio
+    <!-- Features Section (Exact Match to Screenshot 72580.jpg) -->
+    <section id="features" class="max-w-7xl mx-auto px-4 py-16 border-t border-zinc-900 space-y-12">
+        <div class="text-center max-w-3xl mx-auto space-y-4">
+            <h2 class="text-2xl sm:text-5xl font-black text-white uppercase tracking-tight">A VIDEO GENERATION API, IN THE SAME INTEGRATION[span_20](start_span)[span_20](end_span)</h2>
+            <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
+                Generate video through the same API you use for images. The Leonardo API exposes the latest video models—including Real-time 2.0, Kling 3.0 Turbo, Minimax H5, FLUX 3 Video, Hailuo 2.3, and Wan 2.1 — for both text-to-video and image-to-video (Start Frame) generation. New models join the API as they’re released — the lineup tracks the platform, so your integration gets tomorrow’s models without a migration[span_21](start_span)[span_21](end_span).
+            </p>
+        </div>
+
+        <!-- Green Highlight Card Style from Screenshot -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div class="green-box p-8 rounded-3xl space-y-4 shadow-2xl">
+                <h3 class="text-2xl font-black uppercase tracking-tight">Text to video[span_22](start_span)[span_22](end_span)</h3>
+                <p class="text-xs sm:text-sm font-medium leading-relaxed">
+                    Prompt-only video generation with the latest models — the same capability behind the video generator, in a REST endpoint[span_23](start_span)[span_23](end_span).
+                </p>
+            </div>
+            <div class="leonardo-card p-8 rounded-3xl border border-zinc-800 space-y-4">
+                <h3 class="text-2xl font-black text-white uppercase tracking-tight">Image to video</h3>
+                <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
+                    Animate images with start-frame controls for cinematic motion production.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Testimonial Section (Exact Match to Screenshot 72580.jpg) -->
+    <section class="max-w-7xl mx-auto px-4 py-16 border-t border-zinc-900">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">WHAT OUR CUSTOMERS SAY[span_24](start_span)[span_24](end_span)</h2>
+        </div>
+        
+        <div class="max-w-lg mx-auto green-box p-8 sm:p-10 rounded-3xl space-y-6 shadow-2xl text-center">
+            <div class="w-20 h-20 rounded-full mx-auto overflow-hidden border-2 border-black">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" class="w-full h-full object-cover" alt="Melanie Huang">
+            </div>
+            <p class="text-sm sm:text-base font-bold italic leading-relaxed">
+                "When I saw the potential of training my own models and having granular control over generation systems, that's when I really started to explore what was possible[span_25](start_span)[span_25](end_span)."
+            </p>
+            <div>
+                <h4 class="font-black text-base uppercase tracking-wider">Melanie Huang[span_26](start_span)[span_26](end_span)</h4>
+                <p class="text-xs font-semibold opacity-80">Interactive Designer, MCM[span_27](start_span)[span_27](end_span)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section (Exact Match to Screenshot 72582.jpg) -->
+    <footer class="max-w-7xl mx-auto w-full px-4 sm:px-8 py-12 border-t border-zinc-900 mt-12 space-y-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-5 text-zinc-400 text-xl">
+                <a href="#" class="hover:text-white transition"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-discord"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-x-twitter"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+            </div>
+            
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <button class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
+                    <i class="fab fa-apple text-base"></i> Download on the App Store[span_28](start_span)[span_28](end_span)
+                </button>
+                <button class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
+                    <i class="fab fa-google-play text-base"></i> GET IT ON Google Play[span_29](start_span)[span_29](end_span)
+                </button>
+            </div>
+        </div>
+
+        <!-- Badges & Compliance Box -->
+        <div class="flex flex-wrap items-center gap-4 py-4">
+            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
+                <i class="fas fa-shield-alt text-purple-500 mr-1"></i> GDPR Attestation[span_30](start_span)[span_30](end_span)
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
+                <i class="fas fa-certificate text-purple-500 mr-1"></i> SOC 2 TYPE I[span_31](start_span)[span_31](end_span)
+            </div>
+            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
+                <i class="fas fa-certificate text-purple-500 mr-1"></i> SOC 2 TYPE II[span_32](start_span)[span_32](end_span)
+            </div>
+        </div>
+
+        <div class="text-zinc-500 text-xs leading-relaxed max-w-4xl">
+            Leonardo.ai is fully SOC 2 Type I and Type II accredited, demonstrating our commitment to the highest standards of security, availability, and data integrity[span_33](start_span)[span_33](end_span). This ensures our customers can trust that their data is handled with enterprise-grade protection and compliance[span_34](start_span)[span_34](end_span).
+        </div>
+
+        <div class="pt-6 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-600 gap-4">
+            <p>&copy; 2026 All Rights Reserved, Leonardo Interactive Pty Ltd®[span_35](start_span)[span_35](end_span)</p>
+            <div class="flex items-center gap-6">
+                <a href="#" class="hover:text-zinc-400 transition">Privacy Policy[span_36](start_span)[span_36](end_span)</a>
+                <a href="#" class="hover:text-zinc-400 transition">Terms of Service[span_37](start_span)[span_37](end_span)</a>
+                <a href="#" class="hover:text-zinc-400 transition">Cookie Policy[span_38](start_span)[span_38](end_span)</a>
+            </div>
+            <p class="font-mono text-zinc-700">ABN: 56 662 209 485[span_39](start_span)[span_39](end_span)</p>
+        </div>
     </footer>
 
+    <!-- Core JavaScript Engine -->
     <script>
         const GROQ_API_KEY = "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"; 
 
@@ -139,17 +265,16 @@
         let isPlaying = false;
         let playInterval = null;
 
-        // Guaranteed Real AI Image Generator via Flux Engine
-        function generateUniqueAIImage(scenePrompt, sceneIndex) {
+        function generateSceneImage(scenePrompt, sceneIndex) {
             return new Promise((resolve) => {
-                const uniqueSeed = Date.now() + (sceneIndex * 789);
-                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic 8k movie scene, photorealistic, highly detailed");
-                const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${uniqueSeed}&nologo=true&model=flux`;
+                const randomSeed = Math.floor(Math.random() * 999999) + (sceneIndex * 1543);
+                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic movie scene, photorealistic, 8k resolution, detailed lighting");
+                const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${randomSeed}&nologo=true&model=flux`;
 
-                const tempImg = new Image();
-                tempImg.src = imageUrl;
-                tempImg.onload = () => resolve(imageUrl);
-                tempImg.onerror = () => resolve(imageUrl); // Always resolves with rendered link
+                const img = new Image();
+                img.src = imageUrl;
+                img.onload = () => resolve(imageUrl);
+                img.onerror = () => resolve(imageUrl);
             });
         }
 
@@ -164,123 +289,6 @@
             output.classList.add('hidden');
 
             try {
-                loaderText.innerText = "Groq AI اسکرپٹ اور سنیماٹک پرامپٹس تیار کر رہا ہے...";
-
-                const systemInstructions = `You are a Hollywood AI Director.
-Create a 6-scene movie script in ROMAN URDU based on user input.
-Also, generate 6 EXTREMELY DETAILED, PHOTOREALISTIC English prompts that visually match EACH SCENE's exact story elements.
-
-STRICT OUTPUT FORMAT:
---- SCRIPT START ---
-Title: [Movie Title in Roman Urdu]
-Genre: [Genre]
-Logline: [Short Story Summary in Roman Urdu]
-
-Scene 1: [Detailed description in Roman Urdu]
-Scene 2: [Detailed description in Roman Urdu]
-Scene 3: [Detailed description in Roman Urdu]
-Scene 4: [Detailed description in Roman Urdu]
-Scene 5: [Detailed description in Roman Urdu]
-Scene 6: [Detailed description in Roman Urdu]
---- SCRIPT END ---
-
-SCENE_PROMPT_1: [Extremely detailed visual description for Scene 1]
-SCENE_PROMPT_2: [Extremely detailed visual description for Scene 2]
-SCENE_PROMPT_3: [Extremely detailed visual description for Scene 3]
-SCENE_PROMPT_4: [Extremely detailed visual description for Scene 4]
-SCENE_PROMPT_5: [Extremely detailed visual description for Scene 5]
-SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
-
-                const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${GROQ_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: "openai/gpt-oss-120b",
-                        messages: [
-                            { role: "system", content: systemInstructions },
-                            { role: "user", content: promptText }
-                        ],
-                        temperature: 0.7
-                    })
-                });
-                
-                const data = await res.json();
-                if(!res.ok) throw new Error(data.error?.message || "Groq API Error");
-
-                const responseText = data.choices?.[0]?.message?.content || "Movie script generated.";
-                scriptText.value = responseText;
-
-                currentFrames = new Array(6).fill("");
-                extractedPrompts = [];
-                const lines = responseText.split('\n');
-
-                lines.forEach(line => {
-                    if(line.startsWith("SCENE_PROMPT_")) {
-                        const cleanLine = line.replace(/SCENE_PROMPT_\d*[:\-]/g, "").trim();
-                        if(cleanLine.length > 3) extractedPrompts.push(cleanLine);
-                    }
-                });
-
-                imageGrid.innerHTML = '';
-
-                for(let i = 0; i < 6; i++) {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-950/90 p-3 rounded-2xl border border-slate-800 flex flex-col justify-between shadow-xl group";
-                    card.innerHTML = `
-                        <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[160px] flex items-center justify-center">
-                            <div id="spinner-${i}" class="absolute inset-0 flex items-center justify-center bg-slate-900/80 z-10">
-                                <div class="animate-spin rounded-full h-8 w-8 border-2 border-red-600 border-t-transparent"></div>
-                            </div>
-                            <img id="img-${i}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105 opacity-0" alt="Scene ${i + 1}">
-                            <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10 z-20">Scene ${i + 1}</span>
-                        </div>
-                        <div class="flex items-center justify-between gap-1 mb-2">
-                            <a id="dl-${i}" href="#" target="_blank" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-white px-2 py-1.5 rounded-lg transition border border-slate-700 flex-1 text-center">
-                                <i class="fas fa-download"></i> ڈاؤن لوڈ
-                            </a>
-                        </div>
-                        <div id="actions-${i}" class="flex items-center gap-1">
-                            <button id="btn-prompt-${i}" class="text-[10px] bg-purple-600 hover:bg-purple-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1">
-                                <i class="fas fa-copy mr-1"></i> پرامپٹ کاپی
-                            </button>
-                            <a href="https://lumalabs.ai/dream-machine" target="_blank" class="text-[10px] bg-red-600 hover:bg-red-500 text-white px-2 py-2 rounded-lg font-bold transition shadow-md flex-1 text-center">
-                                <i class="fas fa-video mr-1"></i> لوما
-                            </a>
-                        </div>
-                    `;
-                    imageGrid.appendChild(card);
-                }
-
-                output.classList.remove('hidden');
-
-                // Render 6 unique AI images matching each prompt
-                for(let i = 0; i < 6; i++) {
-                    loaderText.innerText = `منظر ${i + 1} آف 6 کی AI تصویر تیار ہو رہی ہے...`;
-
-                    const scenePrompt = extractedPrompts[i] || `${promptText} scene ${i+1}`;
-                    const imgUrl = await generateUniqueAIImage(scenePrompt, i);
-
-                    currentFrames[i] = imgUrl;
-
-                    const imgElem = document.getElementById(`img-${i}`);
-                    const spinnerElem = document.getElementById(`spinner-${i}`);
-                    const dlElem = document.getElementById(`dl-${i}`);
-                    const btnPromptElem = document.getElementById(`btn-prompt-${i}`);
-
-                    imgElem.src = imgUrl;
-                    dlElem.href = imgUrl;
-                    btnPromptElem.setAttribute('onclick', `copyLumaPrompt('${scenePrompt.replace(/'/g, "\\'")}')`);
-
-                    spinnerElem.style.display = 'none';
-                    imgElem.classList.remove('opacity-0');
-
-                    if(i === 0) document.getElementById('moviePreview').src = imgUrl;
-                }
-
-                loader.classList.add('hidden');
                 loaderText.innerText = "تمام مناظر کامیابی سے تیار ہو گئے!";
 
             } catch (err) {
@@ -316,7 +324,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 status.innerText = "روک دیا گیا - پلے پر کلک کریں";
                 preview.classList.remove('kenburns-active');
                 badge.innerText = "پاز";
-                badge.className = "text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-semibold";
+                badge.className = "text-xs bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full border border-zinc-800 font-semibold";
             } else {
                 isPlaying = true;
                 icon.className = "fas fa-pause text-2xl sm:text-3xl";
@@ -324,7 +332,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 
                 let frameIdx = 0;
                 badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
-                badge.className = "text-xs bg-red-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
+                badge.className = "text-xs bg-purple-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
                 status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
 
                 playInterval = setInterval(() => {
@@ -343,5 +351,4 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
         }
     </script>
 </body>
-                              </html>
-  
+</html>
