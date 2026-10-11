@@ -183,6 +183,36 @@
             font-family: var(--font-body);
         }
 
+        .input-action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-mic-luma {
+            background: rgba(0,0,0,0.05);
+            color: #555;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.2s ease;
+        }
+        .btn-mic-luma:hover { background: rgba(0,0,0,0.1); color: #000; }
+        .btn-mic-luma.listening { background: #ff3b30; color: #fff; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
+
         .btn-arrow-luma {
             background: #9ca3af;
             color: #ffffff;
@@ -202,7 +232,9 @@
         .btn-arrow-luma:hover, .btn-arrow-luma.active {
             background: #000000;
             color: var(--accent-green);
+            transform: scale(1.05);
         }
+        .btn-arrow-luma:active { transform: scale(0.95); }
 
         .genre-chips-wrapper {
             display: flex;
@@ -621,7 +653,7 @@
         .toggle-switch.active { background: var(--accent-green); }
         .toggle-switch.active::after { left: 23px; background: #000; }
 
-        /* Gemini Modal Styling with Sticky Footer Input */
+        /* Professional Modal & Script Layout */
         .gemini-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-black); z-index: 2000; display: flex;
@@ -638,10 +670,15 @@
         .gemini-content-box { width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-gemini); padding-bottom: 120px; }
         .gemini-prompt-display { font-size: 1.2rem; font-weight: 600; color: var(--text-main); margin-bottom: 15px; }
         
+        /* Hollywood Script Look */
         .gemini-response-card {
             background: var(--card-bg); border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 25px; line-height: 1.7; font-size: 0.95rem; color: var(--text-main); white-space: pre-wrap;
-            position: relative; margin-bottom: 20px;
+            border-radius: 16px; padding: 30px; line-height: 1.8; font-size: 0.98rem; color: var(--text-main); white-space: pre-wrap;
+            position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            font-family: 'Courier New', Courier, monospace; /* Classic Screenplay Font Feel */
+        }
+        body.light-mode .gemini-response-card {
+            background: #ffffff; color: #111827; border-color: #d1d5db;
         }
 
         .script-action-bar {
@@ -652,9 +689,11 @@
             background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-glow); color: var(--text-main);
             padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
             cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+            font-family: var(--font-body);
         }
         .btn-script-action:hover { border-color: var(--accent-green); color: var(--accent-green); }
         .btn-script-action.btn-green { background: var(--accent-green); color: #000; border: none; }
+        .btn-script-action.btn-green:hover { opacity: 0.9; color: #000; }
         .btn-script-action.btn-red { background: rgba(255, 59, 48, 0.2); border-color: #ff3b30; color: #ff3b30; }
 
         /* Sticky Bottom Prompt Box inside Result Modal */
@@ -693,6 +732,7 @@
         .modal-prompt-input-row textarea {
             flex-grow: 1; border: none; outline: none; background: transparent;
             font-size: 0.9rem; color: #111; resize: none; height: 38px; line-height: 1.4;
+            font-family: var(--font-body);
         }
 
         .modal-overlay {
@@ -733,11 +773,14 @@
         <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
         <div class="prompt-container">
-            <div class="prompt-title-luma">Describe your video</div>
+            <div class="prompt-title-luma">Describe your video or chat with Director</div>
             
             <div class="prompt-input-box-luma">
-                <textarea id="userPromptInput" placeholder="A cyberpunk thriller scene in a rain-slicked city with neon lights..."></textarea>
-                <button class="btn-arrow-luma active" onclick="generateScript('userPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
+                <textarea id="userPromptInput" placeholder="A cyberpunk thriller scene or ask anything about your movie..."></textarea>
+                <div class="input-action-buttons">
+                    <button class="btn-mic-luma" id="homeMicBtn" onclick="toggleVoiceInput('userPromptInput', 'homeMicBtn')" title="Voice Typing"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="btn-arrow-luma active" id="homeSubmitBtn" onclick="generateScript('userPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
+                </div>
             </div>
 
             <div class="genre-chips-wrapper">
@@ -983,7 +1026,7 @@
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
             
-            <!-- Mythic Professional Action Bar -->
+            <!-- Professional Action Bar -->
             <div class="script-action-bar">
                 <button class="btn-script-action btn-green" onclick="copyAllScript()"><i class="fa-solid fa-copy"></i> Copy All</button>
                 <button class="btn-script-action btn-red" onclick="clearAllContent()"><i class="fa-solid fa-trash"></i> Clear All</button>
@@ -994,13 +1037,16 @@
             </div>
         </div>
 
-        <!-- Sticky Bottom Prompt Box -->
+        <!-- Sticky Bottom Prompt Box with Mic -->
         <div class="modal-prompt-container">
             <div class="modal-prompt-box">
-                <div class="prompt-title-luma" style="font-size: 0.9rem; margin-bottom: 6px; text-align: left;">Describe your story / next scene</div>
+                <div class="prompt-title-luma" style="font-size: 0.9rem; margin-bottom: 6px; text-align: left;">Describe your story / next scene or chat with AI</div>
                 <div class="modal-prompt-input-row">
-                    <textarea id="modalPromptInput" placeholder="Continue the story or write a new scene concept..."></textarea>
-                    <button class="btn-arrow-luma active" onclick="generateScript('modalPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
+                    <textarea id="modalPromptInput" placeholder="Continue story, ask questions or write new scene..."></textarea>
+                    <div class="input-action-buttons">
+                        <button class="btn-mic-luma" id="modalMicBtn" onclick="toggleVoiceInput('modalPromptInput', 'modalMicBtn')" title="Voice Typing"><i class="fa-solid fa-microphone"></i></button>
+                        <button class="btn-arrow-luma active" id="modalSubmitBtn" onclick="generateScript('modalPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1052,6 +1098,49 @@
             inputField.focus();
         }
 
+        // Voice Typing (Speech to Text) Functionality
+        function toggleVoiceInput(textareaId, micBtnId) {
+            const textarea = document.getElementById(textareaId);
+            const micBtn = document.getElementById(micBtnId);
+
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Voice typing is not supported on your browser. Please use Chrome or Safari.");
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            
+            recognition.lang = 'ur-PK'; // Supports Urdu/Roman Urdu & English
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            micBtn.classList.add('listening');
+
+            recognition.onstart = () => {
+                micBtn.innerHTML = '<i class="fa-solid fa-wave-square"></i>';
+            };
+
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                textarea.value += (textarea.value ? " " : "") + speechToText;
+                textarea.focus();
+            };
+
+            recognition.onerror = () => {
+                alert("Voice recognition error. Please try again.");
+                micBtn.classList.remove('listening');
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+
+            recognition.start();
+        }
+
         // Copy All Script Feature
         function copyAllScript() {
             const textCard = document.getElementById('scriptResultContent');
@@ -1065,7 +1154,7 @@
         function clearAllContent() {
             document.getElementById('userPromptInput').value = '';
             document.getElementById('modalPromptInput').value = '';
-            document.getElementById('scriptResultContent').innerHTML = 'Cleared! Ready for new story.';
+            document.getElementById('scriptResultContent').innerHTML = 'Cleared! Ready for new conversation or story.';
             document.getElementById('displayUserPrompt').innerText = '"New Concept"';
         }
 
@@ -1084,13 +1173,19 @@
             if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
         });
 
-        // Universal Generator Function (Supports Smart Chatbot & Script generation based on intent)
+        // Universal Generator Function with Click Feedback & Chatbot Intelligence
         async function generateScript(inputId) {
             let inputVal = document.getElementById(inputId).value;
             if (inputVal.trim() === "") {
                 alert("Please enter a message or prompt first!");
                 return;
             }
+
+            // Click Feedback & Loading State
+            const submitBtnId = inputId === 'userPromptInput' ? 'homeSubmitBtn' : 'modalSubmitBtn';
+            const submitBtn = document.getElementById(submitBtnId);
+            const originalIcon = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
             const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
             const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
@@ -1099,7 +1194,7 @@
             const chosenModel = localStorage.getItem('ai_model') || 'llama-3.3-70b-versatile';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Assistant is thinking...`;
+            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Director Assistant is processing your request...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
@@ -1132,6 +1227,9 @@
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerHTML = `❌ Connection Error: ${error.message}`;
+            } finally {
+                // Restore Button Icon
+                submitBtn.innerHTML = originalIcon;
             }
         }
 
