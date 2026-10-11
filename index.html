@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200, initial-scale=0.32, maximum-scale=3.0, user-scalable=yes">
     <title>AI Movie Creator - Mythic Cinematic Engine</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,36 +19,39 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(255, 255, 255, 0.1);
-            --header-bg: rgba(5, 5, 7, 0.9);
+            --header-bg: rgba(5, 5, 7, 0.88);
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: var(--font-body);
-        }
-
-        body {
+        /* Fixed App Width Layout matching your preferred size */
+        html, body {
+            width: 1200px !important;
+            min-width: 1200px !important;
+            margin: 0 auto !important;
             background-color: var(--bg-black);
             color: var(--text-main);
-            overflow-x: hidden;
+            font-family: var(--font-body);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Header / Navbar - Fully Responsive */
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Header / Navbar */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 6%;
+            padding: 22px 8%;
             background: var(--header-bg);
             backdrop-filter: blur(12px);
             position: fixed;
-            width: 100%;
+            width: 1200px;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border-glow);
@@ -56,7 +59,7 @@
 
         .logo {
             font-family: var(--font-heading);
-            font-size: 1.1rem;
+            font-size: 1.6rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: var(--text-main);
@@ -65,7 +68,7 @@
 
         .nav-btns {
             display: flex;
-            gap: 10px;
+            gap: 15px;
             align-items: center;
         }
 
@@ -73,84 +76,89 @@
             background: transparent;
             color: var(--text-main);
             border: 1px solid var(--border-glow);
-            padding: 8px 16px;
+            padding: 10px 22px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.8rem;
             cursor: pointer;
+            transition: 0.3s ease;
             white-space: nowrap;
+        }
+
+        .btn-contact:hover {
+            background: var(--text-main);
+            color: var(--bg-black);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         .menu-btn {
             background: transparent;
             border: 1px solid var(--border-glow);
             color: var(--text-main);
-            font-size: 1rem;
-            padding: 8px 12px;
-            border-radius: 10px;
+            font-size: 1.2rem;
+            padding: 10px 14px;
+            border-radius: 12px;
             cursor: pointer;
         }
 
-        /* Hero Section - Balanced Layout for Mobile & Desktop without Desktop Mode */
+        /* Hero Section */
         .hero {
-            padding: 130px 6% 50px;
+            padding: 180px 8% 60px;
             text-align: center;
-            max-width: 1000px;
+            width: 1200px;
             margin: 0 auto;
         }
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: clamp(1.6rem, 4.5vw, 2.8rem);
+            font-size: 3.2rem;
             font-weight: 800;
-            line-height: 1.25;
+            line-height: 1.15;
             text-transform: uppercase;
-            letter-spacing: -0.5px;
-            margin-bottom: 20px;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
             color: var(--text-main);
         }
 
         .hero p {
-            font-size: clamp(0.9rem, 1.8vw, 1.1rem);
+            font-size: 1.15rem;
             color: var(--text-muted);
-            max-width: 750px;
-            margin: 0 auto 35px;
+            max-width: 850px;
+            margin: 0 auto 40px;
         }
 
         /* Describe Your Video Prompt Box */
         .prompt-container {
-            width: 100%;
-            max-width: 750px;
-            margin: 0 auto 30px;
+            width: 800px;
+            margin: 0 auto 40px;
             background: linear-gradient(145deg, rgba(20, 22, 30, 0.9), rgba(10, 11, 15, 0.95)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 24px;
+            padding: 30px;
             border: 1px solid var(--border-glow);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
         .prompt-title {
             font-family: var(--font-heading);
-            font-size: 1.05rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-align: left;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             color: #fff;
         }
 
         .prompt-input-box {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 14px;
-            padding: 8px 12px;
+            border-radius: 18px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
         }
 
         .prompt-input-box input {
@@ -158,34 +166,35 @@
             border: none;
             outline: none;
             background: transparent;
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             color: #111;
-            width: 100%;
+            padding: 8px;
         }
 
         .model-select {
             background: #e5e7eb;
             border: none;
-            padding: 8px 10px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: #374151;
             cursor: pointer;
             outline: none;
+            white-space: nowrap;
         }
 
         .btn-generate-arrow {
             background: #000;
             color: #fff;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             flex-shrink: 0;
         }
@@ -198,25 +207,23 @@
         .hero-cta-group {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .btn-primary {
             background: var(--accent-green);
             color: #000;
-            padding: 12px 28px;
+            padding: 14px 32px;
             border-radius: 30px;
             font-weight: 700;
             text-decoration: none;
-            font-size: 0.9rem;
         }
 
-        /* Gemini Modal */
+        /* Gemini-Style Output Page Modal */
         .gemini-modal-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 100%; height: 100%;
+            width: 1200px; height: 100%;
             background: var(--bg-black);
             z-index: 2000;
             display: flex;
@@ -224,7 +231,7 @@
             opacity: 0;
             pointer-events: none;
             transition: 0.4s ease;
-            padding: 30px 5%;
+            padding: 40px 8%;
             overflow-y: auto;
         }
 
@@ -237,52 +244,168 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 15px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-glow);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .gemini-content-box {
-            width: 100%;
-            max-width: 800px;
+            width: 900px;
             margin: 0 auto;
             font-family: var(--font-gemini);
         }
 
         .gemini-prompt-display {
-            font-size: 1.25rem;
+            font-size: 1.6rem;
             font-weight: 600;
             color: var(--text-main);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .gemini-response-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            padding: 22px;
-            line-height: 1.7;
-            font-size: 0.92rem;
+            border-radius: 20px;
+            padding: 35px;
+            line-height: 1.8;
+            font-size: 1.05rem;
             color: var(--text-main);
             white-space: pre-wrap;
+        }
+
+        /* Trusted Platforms Section */
+        .trusted-section {
+            padding: 50px 8%;
+            text-align: center;
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .trusted-title {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .trusted-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .brand-badge {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Features Section */
+        .features-section { padding: 100px 8%; }
+
+        .section-header {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            padding: 35px;
+            border-radius: 20px;
+        }
+
+        .card-green {
+            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, var(--card-bg) 100%);
+            border-color: rgba(0, 255, 135, 0.3);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         /* Footer */
         footer {
             background: var(--bg-black);
-            padding: 50px 6% 30px;
+            padding: 80px 8% 40px;
             border-top: 1px solid var(--border-glow);
             text-align: center;
         }
 
         .big-footer-logo {
             font-family: var(--font-heading);
-            font-size: clamp(2rem, 8vw, 4.5rem);
+            font-size: 5.5rem;
             font-weight: 900;
             letter-spacing: -2px;
-            margin: 20px 0;
+            margin: 40px 0;
             color: var(--text-main);
             text-transform: uppercase;
+        }
+
+        /* WhatsApp Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 1200px; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            padding: 40px;
+            border-radius: 24px;
+            width: 450px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: none; border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem; cursor: pointer;
+        }
+
+        .whatsapp-icon { font-size: 3.5rem; color: #25D366; margin-bottom: 15px; }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center; gap: 10px;
+            background: #25D366; color: #000;
+            font-weight: 700; padding: 14px 28px;
+            border-radius: 30px; text-decoration: none;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -292,7 +415,8 @@
     <header>
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
-            <button class="btn-contact">Contact Us</button>
+            <button class="btn-contact" onclick="setCustomApiKey()"><i class="fa-solid fa-key"></i> Set API Key</button>
+            <button class="btn-contact" onclick="openModal()">Contact Us</button>
             <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
@@ -300,7 +424,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
-        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
+        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time. Powered by Groq AI and Flux rendering engines.</p>
 
         <!-- Describe Your Video Box -->
         <div class="prompt-container">
@@ -311,8 +435,8 @@
             <div class="prompt-input-box">
                 <input type="text" id="userPromptInput" placeholder="Describe your video idea or film scene...">
                 <select class="model-select">
-                    <option>Groq AI</option>
-                    <option>Pollinations</option>
+                    <option>Groq AI Engine</option>
+                    <option>Pollinations 8K</option>
                 </select>
                 <button class="btn-generate-arrow" onclick="generateScript()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
@@ -320,15 +444,15 @@
 
         <div class="hero-cta-group">
             <a href="#" class="btn-primary">Start Creating Now</a>
-            <button class="btn-contact" style="padding: 12px 24px;">Contact Support</button>
+            <button class="btn-contact" onclick="openModal()">Contact Support</button>
         </div>
     </section>
 
-    <!-- Gemini Modal -->
+    <!-- Gemini-Style Script Output Page Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
-            <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+            <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close Script</button>
         </div>
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
@@ -336,13 +460,67 @@
         </div>
     </div>
 
+    <!-- Trusted Section -->
+    <section class="trusted-section">
+        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
+        <div class="trusted-logos">
+            <div class="brand-badge"><i class="fa-solid fa-bolt" style="color: #ffaa00;"></i> GROQ AI</div>
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
+            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA DREAM ENGINE</div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
+        <div class="grid-cards">
+            <div class="card card-green">
+                <div class="card-title">Text to Video Script</div>
+                <p>Prompt-only cinematic scene creation with fast Groq AI script generation tailored for visual directors.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">8K Photorealistic Rendering</div>
+                <p>Generate high-fidelity movie stills and visuals matching precise camera parameters and aesthetic angles.</p>
+            </div>
+            <div class="card">
+                <div class="card-title">Multi-Act Storyboards</div>
+                <p>Organize complete film scenes with character consistency, lighting cues, and prompt controls.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer>
         <div class="big-footer-logo">AI MOVIE CREATOR</div>
-        <p style="color: var(--text-muted); font-size: 0.8rem;">© 2026 All Rights Reserved.</p>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">© 2026 All Rights Reserved. AI Movie Creator Inc.</p>
     </footer>
 
+    <!-- WhatsApp Contact Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">AI Movie Creator Support</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Connect with our director team directly on WhatsApp.</p>
+            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-top: 15px;">+92 308 4048921</div>
+            <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+        </div>
+    </div>
+
     <script>
+        function openModal() { document.getElementById('contactModal').classList.add('active'); }
+        function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
+
+        function setCustomApiKey() {
+            let key = prompt("Enter your Groq API Key:");
+            if (key) {
+                localStorage.setItem("GROQ_SECURE_KEY", key.trim());
+                alert("API Key saved successfully!");
+            }
+        }
+
         async function generateScript() {
             let inputVal = document.getElementById('userPromptInput').value;
             if (inputVal.trim() === "") {
@@ -350,12 +528,15 @@
                 return;
             }
 
-            const encKey = "Z3NrX0hjWVN2Z0gxWWNsZXdrVTd0WUJZV1dneWIzRllJRFFmMWtIOHRyZm5lV1NWcmN1NGVsUlRi";
-            let apiKey = "";
-            try {
-                apiKey = atob(encKey);
-            } catch (e) {
-                apiKey = "";
+            let apiKey = localStorage.getItem("GROQ_SECURE_KEY");
+            if (!apiKey) {
+                apiKey = prompt("Please enter your Groq API Key to generate script:");
+                if (apiKey) {
+                    localStorage.setItem("GROQ_SECURE_KEY", apiKey.trim());
+                } else {
+                    alert("API Key is required!");
+                    return;
+                }
             }
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
@@ -385,7 +566,7 @@
                 if (data.choices && data.choices[0]) {
                     document.getElementById('scriptResultContent').innerText = data.choices[0].message.content;
                 } else {
-                    document.getElementById('scriptResultContent').innerText = "Unable to generate script. Please try again.";
+                    document.getElementById('scriptResultContent').innerText = "Invalid API Key or Limit Exceeded. Please update via 'Set API Key'.";
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerText = "Connection error. Please check your network.";
