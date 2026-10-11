@@ -27,7 +27,6 @@
             --font-gemini: 'Inter', sans-serif;
         }
 
-        /* Light Mode Theme Overrides */
         body.light-mode {
             --bg-black: #f4f5f8;
             --card-bg: #ffffff;
@@ -54,7 +53,6 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Header / Navbar */
         header {
             display: flex;
             justify-content: space-between;
@@ -106,7 +104,6 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
         .hero {
             padding: 120px 5% 40px;
             text-align: center;
@@ -132,7 +129,6 @@
             margin: 0 auto 30px;
         }
 
-        /* Luma AI Styled Prompt Box */
         .prompt-container {
             width: 100%;
             max-width: 650px;
@@ -208,7 +204,6 @@
             color: var(--accent-green);
         }
 
-        /* Movie Genre Chips */
         .genre-chips-wrapper {
             display: flex;
             gap: 8px;
@@ -258,7 +253,6 @@
             display: inline-block;
         }
 
-        /* Trusted Section */
         .trusted-section {
             padding: 40px 5%;
             text-align: center;
@@ -294,7 +288,6 @@
             gap: 8px;
         }
 
-        /* Visual Media Cards Sections */
         .features-section { padding: 50px 5%; max-width: 800px; margin: 0 auto; }
 
         .section-header {
@@ -429,7 +422,6 @@
             line-height: 1.4;
         }
 
-        /* Mythic Professional Footer Styles */
         footer {
             background: var(--card-bg);
             padding: 60px 5% 40px;
@@ -579,7 +571,6 @@
             color: var(--text-main);
         }
 
-        /* VIP Settings Drawer Panel */
         .settings-drawer {
             position: fixed;
             top: 0; right: -380px;
@@ -630,7 +621,6 @@
         .toggle-switch.active { background: var(--accent-green); }
         .toggle-switch.active::after { left: 23px; background: #000; }
 
-        /* Output Modal & WhatsApp Modal */
         .gemini-modal-overlay, .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-black); z-index: 2000; display: flex;
@@ -682,7 +672,6 @@
 </head>
 <body>
 
-    <!-- Header -->
     <header>
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
@@ -691,12 +680,10 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
         <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
-        <!-- Prompt Box -->
         <div class="prompt-container">
             <div class="prompt-title-luma">Describe your video</div>
             
@@ -705,7 +692,6 @@
                 <button class="btn-arrow-luma active" onclick="generateScript()"><i class="fa-solid fa-arrow-up"></i></button>
             </div>
 
-            <!-- Movie Genre Chips -->
             <div class="genre-chips-wrapper">
                 <button class="genre-chip" onclick="selectGenre('Horror')">Horror</button>
                 <button class="genre-chip" onclick="selectGenre('Romance')">Romance</button>
@@ -721,7 +707,6 @@
         </div>
     </section>
 
-    <!-- Trusted Section -->
     <section class="trusted-section">
         <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
         <div class="trusted-logos">
@@ -731,12 +716,10 @@
         </div>
     </section>
 
-    <!-- Visual Media Cards Section -->
     <section class="features-section">
         <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
         
         <div class="cards-carousel">
-            <div class="cards-carousel">
             <div class="carousel-card">
                 <h3>Text to video</h3>
                 <p>Prompt-only video generation with the latest models — the same capability as the video generator, on a REST endpoint.</p>
@@ -793,7 +776,6 @@
         </div>
     </section>
 
-    <!-- Mythic Professional Footer -->
     <footer>
         <div class="footer-social-row">
             <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
@@ -842,7 +824,6 @@
             </div>
         </div>
 
-        <!-- App Store & Google Play Badges with Coming Soon -->
         <div class="app-store-badges">
             <a href="#" class="store-badge-box">
                 <i class="fa-brands fa-apple"></i>
@@ -860,7 +841,6 @@
             </a>
         </div>
 
-        <!-- Big Mythic App Branding -->
         <div class="footer-bottom-branding">AI MOVIE CREATOR</div>
 
         <div class="footer-legal-row">
@@ -873,7 +853,6 @@
         </div>
     </footer>
 
-    <!-- VIP App Settings Drawer Panel -->
     <div class="settings-drawer" id="settingsDrawer">
         <div class="settings-header">
             <h3><i class="fa-solid fa-crown" style="color: var(--accent-green);"></i> VIP Settings</h3>
@@ -891,8 +870,8 @@
         <div class="setting-group" style="margin-top: 15px;">
             <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
             <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
-                <option value="gemini-pro">Gemini Pro (Stable)</option>
-                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                <option value="gemini-1.5-flash">Gemini 1.5 Flash (Ultra)</option>
+                <option value="gemini-1.5-pro">Gemini 1.5 Pro (Creative)</option>
             </select>
         </div>
 
@@ -947,7 +926,6 @@
         </button>
     </div>
 
-    <!-- Script Output Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
@@ -962,7 +940,6 @@
         </div>
     </div>
 
-    <!-- WhatsApp Contact Modal -->
     <div class="modal-overlay" id="contactModal">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -1033,9 +1010,9 @@
         });
 
         // ==========================================
-        // اپنی Gemini API Key یہاں درج کریں (لائن نمبر 715)
+        // اپنی Gemini API Key یہاں درج کریں
         // ==========================================
-        const GEMINI_API_KEY = "AQ.Ab8RN6JFq8riWyjt5RrZg3YCUo4SCz34gDajwXo9IS08YH8e1Q";
+        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
 
         async function generateScript() {
             let inputVal = document.getElementById('userPromptInput').value;
@@ -1044,26 +1021,22 @@
                 return;
             }
 
-            if (GEMINI_API_KEY === "AQ.Ab8RN6KyrNyOLWmWe_tk7GYD_stLn5d4kzqyu1bOsy8sqRtMug" || !GEMINI_API_KEY) {
-                alert("Please configure your Gemini API Key in the code first!");
-                return;
-            }
-
             const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
             const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
             const chosenStyle = localStorage.getItem('director_style') || 'Hollywood Blockbuster';
             const chosenLength = localStorage.getItem('script_length') || 'Detailed Multi-Scene Story';
-            const chosenModel = localStorage.getItem('ai_model') || 'gemini-pro';
+            const chosenModel = localStorage.getItem('ai_model') || 'gemini-1.5-flash';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
             document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>⏳ Gemini AI is generating your ${chosenStyle} script in ${chosenLang} (${chosenRatio})...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${GEMINI_API_KEY}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent`, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "x-goog-api-key": "AQ.Ab8RN6JFq8riWyjt5RrZg3YCUo4SCz34gDajwXo9IS08YH8e1Q";
                     },
                     body: JSON.stringify({
                         contents: [
@@ -1079,8 +1052,8 @@
                 });
 
                 if (!response.ok) {
-                    const errRes = await response.json();
-                    throw new Error(errRes.error?.message || `HTTP error! status: ${response.status}`);
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `API Error: ${response.status}`);
                 }
 
                 const data = await response.json();
