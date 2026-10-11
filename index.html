@@ -348,7 +348,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 playInterval = setInterval(() => {
                     frameIdx = (frameIdx + 1) % validFrames.length;
                     preview.src = validFrames[frameIdx];
-                    badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
+                    badge.innerText =  `چل رہا ہے: منظر ${frameIdx + 1}/6`;
                 badge.className = "text-xs bg-indigo-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
                 status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
 
