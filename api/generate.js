@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-        return res.status(500).json({ error: 'GROQ_API_KEY is not configured on server.' });
+        return res.status(500).json({ error: 'GROQ_API_KEY environment variable is missing on Vercel.' });
     }
 
     try {
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${apiKey}`,
+                "Authorization": `Bearer ${apiKey.trim()}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -32,13 +32,15 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            return res.status(response.status).json({ error: data.error?.message || 'Groq API request failed' });
+            return res.status(response.status).json({ 
+                error: data.error?.message || `Groq API Error: ${response.status} ${response.statusText}` 
+            });
         }
 
         const scriptText = data.choices?.[0]?.message?.content || '';
         return res.status(200).json({ script: scriptText });
 
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Server Catch Error: " + error.message });
     }
 }
