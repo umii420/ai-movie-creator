@@ -128,82 +128,99 @@
             margin: 0 auto 30px;
         }
 
-        /* Describe Your Video Prompt Box */
+        /* Luma AI Styled Prompt Box */
         .prompt-container {
             width: 100%;
             max-width: 650px;
             margin: 0 auto 30px;
-            background: linear-gradient(145deg, rgba(20, 22, 30, 0.9), rgba(10, 11, 15, 0.95)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            border-radius: 20px;
-            padding: 20px;
+            background: linear-gradient(180deg, rgba(30, 32, 40, 0.95), rgba(15, 16, 22, 0.98));
+            border-radius: 24px;
+            padding: 24px 20px 18px;
             border: 1px solid var(--border-glow);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-        }
-
-        .prompt-title {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
             text-align: left;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #fff;
         }
 
-        .prompt-input-box {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 14px;
-            padding: 8px 12px;
+        .prompt-title-luma {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .prompt-input-box-luma {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 10px 14px;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 16px;
         }
 
-        .prompt-input-box input {
+        .prompt-input-box-luma textarea {
             flex-grow: 1;
             border: none;
             outline: none;
             background: transparent;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             color: #111;
             width: 100%;
+            resize: none;
+            height: 48px;
+            line-height: 1.4;
+            font-family: var(--font-body);
         }
 
-        .model-select {
-            background: #e5e7eb;
+        .btn-arrow-luma {
+            background: #9ca3af;
+            color: #ffffff;
             border: none;
-            padding: 8px 10px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            color: #374151;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .btn-generate-arrow {
-            background: #000;
-            color: #fff;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1rem;
+            font-size: 1.1rem;
             cursor: pointer;
             flex-shrink: 0;
+            transition: 0.2s ease;
         }
 
-        .btn-generate-arrow:hover {
+        .btn-arrow-luma:hover, .btn-arrow-luma.active {
+            background: #000000;
+            color: var(--accent-green);
+        }
+
+        /* Movie Genre Chips */
+        .genre-chips-wrapper {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .genre-chip {
+            background: rgba(255, 255, 255, 0.95);
+            color: #111827;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .genre-chip:hover, .genre-chip.selected {
             background: var(--accent-green);
-            color: #000;
+            color: #000000;
+            transform: translateY(-1px);
         }
 
         .hero-cta-group {
@@ -522,19 +539,23 @@
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
         <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
-        <!-- Prompt Box -->
+        <!-- Luma Labs Inspired Prompt Box -->
         <div class="prompt-container">
-            <div class="prompt-title">
-                <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-green);"></i>
-                Describe your video
+            <div class="prompt-title-luma">Describe your video</div>
+            
+            <div class="prompt-input-box-luma">
+                <textarea id="userPromptInput" placeholder="A cyberpunk thriller scene in a rain-slicked city with neon lights..."></textarea>
+                <button class="btn-arrow-luma active" onclick="generateScript()"><i class="fa-solid fa-arrow-up"></i></button>
             </div>
-            <div class="prompt-input-box">
-                <input type="text" id="userPromptInput" placeholder="Describe your video idea or film scene...">
-                <select class="model-select">
-                    <option>Groq AI</option>
-                    <option>Pollinations</option>
-                </select>
-                <button class="btn-generate-arrow" onclick="generateScript()"><i class="fa-solid fa-arrow-right"></i></button>
+
+            <!-- Movie Category Genre Buttons -->
+            <div class="genre-chips-wrapper">
+                <button class="genre-chip" onclick="selectGenre('Horror')">Horror</button>
+                <button class="genre-chip" onclick="selectGenre('Romance')">Romance</button>
+                <button class="genre-chip" onclick="selectGenre('Thriller')">Thriller</button>
+                <button class="genre-chip" onclick="selectGenre('Action')">Action</button>
+                <button class="genre-chip" onclick="selectGenre('Sci-Fi')">Sci-Fi</button>
+                <button class="genre-chip" onclick="selectGenre('Drama')">Drama</button>
             </div>
         </div>
 
@@ -717,6 +738,17 @@
                 localStorage.clear();
                 location.reload();
             }
+        }
+
+        function selectGenre(genreName) {
+            const inputField = document.getElementById('userPromptInput');
+            let currentText = inputField.value.trim();
+            if (currentText === "") {
+                inputField.value = genreName + " movie concept: ";
+            } else {
+                inputField.value = currentText + " [" + genreName + " Genre]";
+            }
+            inputField.focus();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
