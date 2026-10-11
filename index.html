@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Movie Creator - Eden AI Studio Pro</title>
+    <title>AI Movie Creator - Ultimate Pro Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -22,14 +22,14 @@
     <!-- Header -->
     <header class="max-w-6xl mx-auto w-full flex items-center justify-between py-4 border-b border-slate-800/80 mb-6 gap-2">
         <div class="flex items-center gap-2">
-            <span class="bg-indigo-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + EDEN AI</span>
+            <span class="bg-red-600 text-white px-2.5 py-1 rounded text-[10px] font-black tracking-widest uppercase">GROQ + ULTRA STUDIO</span>
             <h1 class="text-base sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5">
                 <i class="fas fa-clapperboard text-red-600"></i> AI MOVIE CREATOR
             </h1>
         </div>
         <div class="flex items-center gap-2">
             <span class="text-[11px] bg-slate-800/90 text-emerald-400 px-2.5 py-1 rounded-full border border-emerald-500/20 font-semibold flex items-center gap-1">
-                <i class="fas fa-bolt text-yellow-400"></i> Eden Live Engine
+                <i class="fas fa-bolt text-yellow-400"></i> Studio Live
             </span>
         </div>
     </header>
@@ -38,15 +38,15 @@
     <main class="max-w-6xl mx-auto w-full space-y-8">
         
         <!-- Hero Input Studio -->
-        <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-indigo-600/30">
+        <div class="netflix-card rounded-3xl p-5 sm:p-10 cinema-glow border-t border-t-red-600/30">
             <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
                 <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">8K AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور Eden AI کے ذریعے 6 مناظر کی ایچ ڈی تصاویر لائیو جنریٹ ہوں گی۔</p>
+                <p class="text-slate-400 text-xs sm:text-sm">Groq اسکرپٹ لکھے گا اور 6 انتہائی شاندار اور یونیک مناظر کی تصاویر لائیو تیار ہوں گی۔</p>
             </div>
 
             <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
                 <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-indigo-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="مثال کے طور پر: Ali ki dragon sy dosti..." required></textarea>
+                    <textarea id="promptInput" rows="3" class="w-full bg-slate-950/90 border border-slate-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-red-600 placeholder-slate-600 text-sm shadow-2xl transition" placeholder="مثال کے طور پر: Ali ki dragon sy dosti..." required></textarea>
                 </div>
 
                 <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
@@ -57,8 +57,8 @@
 
         <!-- Rendering Loader -->
         <div id="loader" class="hidden text-center my-16 space-y-4">
-            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-indigo-500 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">اسکرپٹ اور Eden AI تصاویر تیار ہو رہی ہیں...</p>
+            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-red-600 border-t-transparent shadow-2xl"></div>
+            <p id="loaderText" class="text-slate-300 text-sm font-medium tracking-wide animate-pulse">اسکرپٹ اور سنیماٹک تصاویر تیار ہو رہی ہیں...</p>
         </div>
 
         <!-- Production Output Suite -->
@@ -95,7 +95,7 @@
                     <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
                         <div class="w-full flex justify-between items-center">
-                            <span class="bg-indigo-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Eden AI Cinema Player</span>
+                            <span class="bg-red-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Cinema Player</span>
                             <span class="text-[11px] text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Synced Scenes</span>
                         </div>
                         <div class="text-center space-y-3">
@@ -117,7 +117,7 @@
                     <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
                         <i class="fas fa-film text-purple-500"></i> 6 مناظر کا AI اسٹوری بورڈ
                     </h3>
-                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">100% Script Synced</span>
+                    <span class="text-xs text-slate-400 bg-slate-800 px-3 py-1 rounded-lg">100% Unique Visuals</span>
                 </div>
                 <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </div>
@@ -128,47 +128,29 @@
 
     <!-- Footer -->
     <footer class="max-w-6xl mx-auto w-full text-center py-6 text-xs text-slate-600 border-t border-slate-800/80 mt-12">
-        AI Movie Creator Pro &copy; 2026 - Eden AI Studio Engine
+        AI Movie Creator Pro &copy; 2026 - Studio Engine
     </footer>
 
     <script>
         const GROQ_API_KEY = "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"; 
-        const EDEN_API_KEY = "sk-eden-live-CB9yNKhNm76ZVnL6x1yxhRer3nHQ5SPwFi-cApRZyYU14c63222";
 
         let currentFrames = [];
         let extractedPrompts = [];
         let isPlaying = false;
         let playInterval = null;
 
-        // Eden AI Image Generation Function
-        async function fetchEdenAIImage(scenePrompt, sceneIndex) {
-            try {
-                const res = await fetch("https://api.edenai.run/v2/image/generation", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${EDEN_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        providers: "openai", // OpenAI DALL-E 3 or Stability Engine via Eden AI
-                        text: scenePrompt + ", cinematic 8k movie scene, photorealistic, highly detailed lighting",
-                        resolution: "1024x1024"
-                    })
-                });
+        // Ultra-Fast & Non-Blocking Cinematic Image Generator
+        function generateSceneImage(scenePrompt, sceneIndex) {
+            return new Promise((resolve) => {
+                const randomSeed = Math.floor(Math.random() * 999999) + (sceneIndex * 1543);
+                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic movie scene, photorealistic, 8k resolution, detailed lighting");
+                const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${randomSeed}&nologo=true&model=flux`;
 
-                const data = await res.json();
-                const imgUrl = data.openai?.items?.[0]?.image_resource_url || data.openai?.image_resource_url;
-
-                if (imgUrl) return imgUrl;
-                
-                // Fallback to direct Flux AI rendering if Eden AI providers need fallback
-                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic 8k scene");
-                return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${Date.now() + sceneIndex}&nologo=true&model=flux`;
-            } catch (err) {
-                console.error("Eden AI Error: ", err);
-                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic 8k scene");
-                return `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${Date.now() + sceneIndex}&nologo=true&model=flux`;
-            }
+                const img = new Image();
+                img.src = imageUrl;
+                img.onload = () => resolve(imageUrl);
+                img.onerror = () => resolve(imageUrl);
+            });
         }
 
         async function fetchScriptAndRender(promptText) {
@@ -250,7 +232,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                     card.innerHTML = `
                         <div class="relative overflow-hidden rounded-xl mb-3 bg-slate-900 min-h-[160px] flex items-center justify-center">
                             <div id="spinner-${i}" class="absolute inset-0 flex items-center justify-center bg-slate-900/80 z-10">
-                                <div class="animate-spin rounded-full h-8 w-8 border-2 border-indigo-500 border-t-transparent"></div>
+                                <div class="animate-spin rounded-full h-8 w-8 border-2 border-red-600 border-t-transparent"></div>
                             </div>
                             <img id="img-${i}" class="w-full h-40 object-cover rounded-xl transition duration-500 group-hover:scale-105 opacity-0" alt="Scene ${i + 1}">
                             <span class="absolute top-2 left-2 bg-black/80 backdrop-blur-md text-white text-[10px] px-2.5 py-0.5 rounded-md font-bold border border-white/10 z-20">Scene ${i + 1}</span>
@@ -274,12 +256,12 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
 
                 output.classList.remove('hidden');
 
-                // Eden AI rendering loop
+                // Generate 6 unique dynamic scene images smoothly
                 for(let i = 0; i < 6; i++) {
-                    loaderText.innerText = `منظر ${i + 1} آف 6 کی HD تصویر Eden AI سے بن رہی ہے...`;
+                    loaderText.innerText = `منظر ${i + 1} آف 6 کی تصویر تیار ہو رہی ہے...`;
 
-                    const scenePrompt = extractedPrompts[i] || `${promptText} cinematic scene ${i+1}`;
-                    const imgUrl = await fetchEdenAIImage(scenePrompt, i);
+                    const scenePrompt = extractedPrompts[i] || `${promptText} scene ${i+1}`;
+                    const imgUrl = await generateSceneImage(scenePrompt, i);
 
                     currentFrames[i] = imgUrl;
 
@@ -342,14 +324,7 @@ SCENE_PROMPT_6: [Extremely detailed visual description for Scene 6]`;
                 
                 let frameIdx = 0;
                 badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
-                badge.className = "text-xs bg-indigo-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
-                status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
-
-                playInterval = setInterval(() => {
-                    frameIdx = (frameIdx + 1) % validFrames.length;
-                    preview.src = validFrames[frameIdx];
-                    badge.innerText =  `چل رہا ہے: منظر ${frameIdx + 1}/6`;
-                badge.className = "text-xs bg-indigo-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
+                badge.className = "text-xs bg-red-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
                 status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
 
                 playInterval = setInterval(() => {
