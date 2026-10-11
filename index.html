@@ -710,8 +710,8 @@
     <section class="trusted-section">
         <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
         <div class="trusted-logos">
-            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> GEMINI AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> GITHUB AI MODELS</div>
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> LLAMA 3.3</div>
             <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA ENGINE</div>
         </div>
     </section>
@@ -870,8 +870,8 @@
         <div class="setting-group" style="margin-top: 15px;">
             <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
             <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
-                <option value="openai">Pollinations OpenAI (Stable)</option>
-                <option value="mistral">Pollinations Mistral (Creative)</option>
+                <option value="Meta-Llama-3.3-70B-Instruct">GitHub Llama 3.3-70B (Recommended)</option>
+                <option value="gpt-4o">GitHub GPT-4o (High Quality)</option>
             </select>
         </div>
 
@@ -954,6 +954,9 @@
     </div>
 
     <script>
+        // ======= GITHUB TOKEN HARDCODED HERE =======
+        const HARDCODED_GITHUB_TOKEN = "YOUR_GITHUB_TOKEN_HERE";
+
         function openModal() { document.getElementById('contactModal').classList.add('active'); }
         function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
         function toggleSettingsDrawer() { document.getElementById('settingsDrawer').classList.toggle('active'); }
@@ -1016,11 +1019,16 @@
                 return;
             }
 
+            if (!HARDCODED_GITHUB_TOKEN || HARDCODED_GITHUB_TOKEN === "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") {
+                alert("Please replace YOUR_GITHUB_TOKEN_HERE in the HTML code with your actual GitHub Token!");
+                return;
+            }
+
             const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
             const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
             const chosenStyle = localStorage.getItem('director_style') || 'Hollywood Blockbuster';
             const chosenLength = localStorage.getItem('script_length') || 'Detailed Multi-Scene Story';
-            const chosenModel = localStorage.getItem('ai_model') || 'openai';
+            const chosenModel = localStorage.getItem('ai_model') || 'Meta-Llama-3.3-70B-Instruct';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
             document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>⏳ AI Director is generating your ${chosenStyle} script in ${chosenLang} (${chosenRatio})...`;
@@ -1029,30 +1037,33 @@
             try {
                 const systemPrompt = `You are an expert film director. Style: ${chosenStyle}. Format: ${chosenRatio}. Length: ${chosenLength}. Write a professional cinematic script in ${chosenLang}. Include visual prompts, camera directions, and dialogues based on the user prompt.`;
                 
-                const response = await fetch("https://text.pollinations.ai/", {
+                const response = await fetch("https://models.inference.ai.azure.com/chat/completions", {
                     method: "POST",
                     headers: {
+                        "Authorization": `Bearer ${HARDCODED_GITHUB_TOKEN}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
+                        model: chosenModel,
                         messages: [
                             { role: "system", content: systemPrompt },
                             { role: "user", content: inputVal }
                         ],
-                        model: chosenModel,
-                        json: false
+                        temperature: 0.7
                     })
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Generation failed with status: ${response.status}`);
+                    throw new Error(`GitHub Models API error: ${response.status}`);
                 }
 
-                const scriptText = await response.text();
+                const data = await response.json();
+                const scriptText = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : "";
+
                 if (scriptText && scriptText.trim() !== "") {
                     document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>` + scriptText;
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Received empty response from AI.`;
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Received empty response from GitHub AI.`;
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Connection Error: ${error.message}`;
