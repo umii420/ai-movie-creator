@@ -1,353 +1,524 @@
 <!DOCTYPE html>
-<html lang="ur" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leonardo.ai API - Studio Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>AI Movie Creator - Mythic Cinematic Engine</title>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #000000; color: #ffffff; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-        .leonardo-card { background: #121216; border: 1px solid rgba(255, 255, 255, 0.08); }
-        .green-box { background: #00ff66; color: #000000; }
-        .kenburns-active { animation: kenburns 4s infinite alternate ease-in-out; }
-        @keyframes kenburns {
-            0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.1) translate(-10px, -5px); }
+        :root {
+            --bg-black: #050507;
+            --card-bg: #0d0e12;
+            --accent-green: #00ff87;
+            --accent-purple: #7928ca;
+            --accent-cyan: #00dfd8;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-glow: rgba(255, 255, 255, 0.1);
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Utility Glow Classes */
+        .glow-effect {
+            position: relative;
+            transition: all 0.4s ease;
+        }
+        .glow-effect:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 135, 0.25);
+            border-color: var(--accent-green) !important;
+            transform: translateY(-3px);
+        }
+
+        /* Header / Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            background: rgba(5, 5, 7, 0.85);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-contact {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .btn-contact:hover {
+            background: #fff;
+            color: #000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 8% 100px;
+            text-align: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 1.8vw, 1.25rem);
+            color: var(--text-muted);
+            max-width: 850px;
+            margin: 0 auto 40px;
+            font-weight: 400;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 25px var(--accent-green);
+            transform: scale(1.03);
+        }
+
+        /* Trusted Platforms Section */
+        .trusted-section {
+            padding: 50px 8%;
+            text-align: center;
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .trusted-title {
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .trusted-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .brand-badge {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Feature Cards Grid */
+        .features-section {
+            padding: 100px 8%;
+        }
+
+        .section-header {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            padding: 35px;
+            border-radius: 20px;
+        }
+
+        .card-green {
+            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, rgba(13, 14, 18, 1) 100%);
+            border-color: rgba(0, 255, 135, 0.3);
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Banner CTA Box */
+        .banner-box {
+            margin: 80px 8%;
+            padding: 60px 40px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border-radius: 24px;
+            border: 1px solid var(--border-glow);
+            text-align: center;
+        }
+
+        .banner-box h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            padding: 80px 8% 40px;
+            border-top: 1px solid var(--border-glow);
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            font-size: 1.5rem;
+            margin-bottom: 50px;
+        }
+
+        .footer-socials a {
+            color: var(--text-muted);
+            transition: 0.3s;
+        }
+
+        .footer-socials a:hover {
+            color: var(--accent-green);
+        }
+
+        .app-downloads {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .coming-soon-tag {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-green);
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .download-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .app-btn {
+            border: 1px solid var(--border-glow);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 25px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .app-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .big-footer-logo {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: -2px;
+            margin: 40px 0;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 30px;
+        }
+
+        /* Contact WhatsApp Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: #0f1015;
+            border: 1px solid var(--border-glow);
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 255, 135, 0.15);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .whatsapp-icon {
+            font-size: 3.5rem;
+            color: #25D366;
+            margin-bottom: 15px;
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #25D366;
+            color: #000;
+            font-weight: 700;
+            padding: 14px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            box-shadow: 0 0 25px rgba(37, 211, 102, 0.5);
+            transform: scale(1.02);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-purple-600 selection:text-white">
+<body>
 
-    <!-- Top Header -->
-    <header class="max-w-7xl mx-auto w-full flex items-center justify-between py-5 px-4 sm:px-8 border-b border-zinc-900 sticky top-0 bg-black/90 backdrop-blur-md z-50">
-        <div class="flex items-center gap-2">
-            <span class="text-xl sm:text-2xl font-black tracking-tight text-white">LEONARDO<span class="text-zinc-400">.AI</span></span>
-        </div>
-        <div class="flex items-center gap-4">
-            <a href="#studio" class="bg-white hover:bg-zinc-200 text-black font-semibold text-xs sm:text-sm px-5 py-2 rounded-full transition shadow-lg">
-                Get API Key
-            </a>
-            <div class="text-white text-xl cursor-pointer">
-                <i class="fas fa-bars"></i>
-            </div>
+    <!-- Header -->
+    <header>
+        <div class="logo">AI MOVIE CREATOR</div>
+        <div class="nav-btns">
+            <button class="btn-contact" onclick="openModal()">Contact Us</button>
         </div>
     </header>
 
-    <!-- Hero Section (Exact Match to Screenshot 72578.jpg) -->
-    <section class="relative overflow-hidden pt-12 pb-16 px-4 text-center">
-        <div class="max-w-4xl mx-auto space-y-6">
-            
-            <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white leading-tight uppercase">
-                DESIGN VISUALLY.<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-indigo-300 to-purple-600">EXPORT PRODUCTION-READY</span> CODE FOR IMAGE & VIDEO APIS[span_10](start_span)[span_10](end_span)
-            </h1>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
+        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time. Powered by Groq AI and Flux rendering engines, transform your stories into production-ready scenes effortlessly. Built for creators, directors, and storytellers who want to produce video content visually and ship with complete dynamic control.</p>
+        <div class="hero-cta-group">
+            <a href="#" class="btn-primary">Start Creating Now</a>
+            <button class="btn-contact" onclick="openModal()">Contact Support</button>
+        </div>
+    </section>
 
-            <p class="text-zinc-400 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
-                Design media generation in a visual interface, see the output in real time, then export the exact API code to production. No guessing. No translation. What you see is what you ship. Leonardo is a visual-first AI image generator API and AI video generator API, built for founders, solo builders, and teams who want to design media generation visually and ship with certainty[span_11](start_span)[span_11](end_span).
-            </p>
+    <!-- Trusted Platforms -->
+    <section class="trusted-section">
+        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
+        <div class="trusted-logos">
+            <div class="brand-badge"><i class="fa-solid fa-bolt" style="color: #ffaa00;"></i> GROQ AI</div>
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
+            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA DREAM ENGINE</div>
+        </div>
+    </section>
 
-            <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="#studio" class="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl transition shadow-xl">
-                    Contact us[span_12](start_span)[span_12](end_span)
+    <!-- Features -->
+    <section class="features-section">
+        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
+        <div class="grid-cards">
+            <div class="card card-green glow-effect">
+                <div class="card-title">Text to Video Script</div>
+                <p>Prompt-only cinematic scene creation with fast Groq AI script generation tailored for visual directors.</p>
+            </div>
+            <div class="card glow-effect">
+                <div class="card-title">8K Photorealistic Rendering</div>
+                <p>Generate high-fidelity movie stills and visuals matching precise camera parameters and aesthetic angles.</p>
+            </div>
+            <div class="card glow-effect">
+                <div class="card-title">Multi-Act Storyboards</div>
+                <p>Organize complete film scenes with character consistency, lighting cues, and prompt controls.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Box -->
+    <section class="banner-box">
+        <h2>EXPLORE OUR DIRECTORS DOCUMENTATION OR SPEAK WITH OUR CREATIVE TEAM</h2>
+        <button class="btn-contact" style="background: #fff; color: #000;" onclick="openModal()">Contact Us</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-socials">
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+
+        <div class="app-downloads">
+            <span class="coming-soon-tag">COMING SOON</span>
+            <div class="download-btns">
+                <a href="#" class="app-btn">
+                    <i class="fa-brands fa-apple" style="font-size: 1.5rem;"></i>
+                    <div style="text-align: left;">
+                        <div style="font-size: 0.65rem; color: var(--text-muted);">Download on the</div>
+                        <div style="font-size: 0.9rem; font-weight:700;">App Store</div>
+                    </div>
                 </a>
-                <a href="#features" class="w-full sm:w-auto px-8 py-3.5 bg-transparent hover:bg-zinc-900 text-white font-bold rounded-xl border border-zinc-800 transition">
-                    View Documentation[span_13](start_span)[span_13](end_span)
+                <a href="#" class="app-btn">
+                    <i class="fa-brands fa-google-play" style="font-size: 1.3rem;"></i>
+                    <div style="text-align: left;">
+                        <div style="font-size: 0.65rem; color: var(--text-muted);">GET IT ON</div>
+                        <div style="font-size: 0.9rem; font-weight:700;">Google Play</div>
+                    </div>
                 </a>
             </div>
-
-            <!-- Trusted by leading brands[span_14](start_span)[span_14](end_span) -->
-            <div class="pt-12 border-t border-zinc-900 mt-12">
-                <p class="text-[11px] uppercase tracking-widest text-zinc-500 mb-6 font-bold">Trusted by leading brands and platforms[span_15](start_span)[span_15](end_span)</p>
-                <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-zinc-400 font-extrabold tracking-widest text-sm uppercase">
-                    <span>Coca-Cola[span_16](start_span)[span_16](end_span)</span>
-                    <span>Canva[span_17](start_span)[span_17](end_span)</span>
-                    <span>Game Pack[span_18](start_span)[span_18](end_span)</span>
-                    <span>Ducati[span_19](start_span)[span_19](end_span)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Interactive AI Movie Studio Section (Integrated Seamlessly) -->
-    <main id="studio" class="max-w-6xl mx-auto w-full space-y-8 px-4 py-8">
-        
-        <div class="leonardo-card rounded-3xl p-5 sm:p-10 shadow-2xl border-t border-t-purple-600/50">
-            <div class="max-w-2xl mx-auto text-center mb-6 sm:mb-8 space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">AI مووی اور اسکرپٹ جنریٹر</h2>
-                <p class="text-zinc-400 text-xs sm:text-sm">اپنا موضوع لکھیں؛ Groq اسکرپٹ لکھے گا اور لائیو 8K سنیماٹک مناظر تیار ہوں گے۔</p>
-            </div>
-
-            <form id="movieForm" class="max-w-3xl mx-auto space-y-4">
-                <div class="relative">
-                    <textarea id="promptInput" rows="3" class="w-full bg-black border border-zinc-800 rounded-2xl p-4 sm:p-5 text-white focus:outline-none focus:border-purple-500 placeholder-zinc-600 text-sm shadow-inner transition" placeholder="مثال کے طور پر: Ali ki dragon sy dosti..." required></textarea>
-                </div>
-
-                <button type="submit" id="generateBtn" class="w-full py-4 px-6 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-3 text-base">
-                    <i class="fas fa-wand-magic-sparkles"></i> مووی پروڈکشن شروع کریں
-                </button>
-            </form>
         </div>
 
-        <!-- Rendering Loader -->
-        <div id="loader" class="hidden text-center my-16 space-y-4">
-            <div class="inline-block animate-spin rounded-full h-14 w-14 border-4 border-purple-600 border-t-transparent shadow-2xl"></div>
-            <p id="loaderText" class="text-zinc-300 text-sm font-medium tracking-wide animate-pulse">اسکرپٹ اور سنیماٹک تصاویر تیار ہو رہی ہیں...</p>
-        </div>
+        <!-- Big Footer Brand Name -->
+        <div class="big-footer-logo">AI MOVIE CREATOR</div>
 
-        <!-- Production Output Suite -->
-        <div id="outputContainer" class="hidden space-y-8">
-            
-            <!-- SECTION 1: Editable AI Script Box -->
-            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-purple-600 space-y-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-scroll text-purple-400"></i> رومن اردو ڈائریکٹر اسکرپٹ (by Groq)
-                        </h3>
-                        <span class="text-[10px] bg-purple-950 text-purple-300 px-2 py-0.5 rounded border border-purple-800/50">ایڈیٹیبل</span>
-                    </div>
-                    <button onclick="copyScript()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-white px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1 shadow-lg">
-                        <i class="fas fa-copy"></i> اسکرپٹ کاپی کریں
-                    </button>
-                </div>
-
-                <textarea id="scriptText" rows="10" class="w-full text-zinc-200 text-xs sm:text-sm leading-relaxed bg-black p-4 sm:p-5 rounded-2xl border border-zinc-800 font-mono focus:outline-none focus:border-purple-500 transition resize-y" placeholder="اسکرپٹ یہاں نظر آئے گی..."></textarea>
-            </div>
-
-            <!-- SECTION 2: Master Cinema Player -->
-            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-indigo-600">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <span class="w-3 h-3 rounded-full bg-purple-500 animate-ping"></span>
-                        <h3 class="text-sm sm:text-lg font-bold text-white uppercase tracking-wider">ماسٹر مووی پلیئر</h3>
-                    </div>
-                    <span id="sceneBadge" class="text-xs bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full border border-zinc-800 font-semibold">ریڈی</span>
-                </div>
-                
-                <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl flex items-center justify-center group">
-                    <img id="moviePreview" class="w-full h-full object-cover opacity-95 transition duration-700" src="" alt="Movie Stream">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 flex flex-col items-center justify-between p-4 sm:p-6">
-                        <div class="w-full flex justify-between items-center">
-                            <span class="bg-purple-600 text-white text-[9px] sm:text-xs px-2.5 py-1 rounded-md font-extrabold uppercase tracking-widest shadow-lg">Studio Player</span>
-                            <span class="text-[11px] text-zinc-300 bg-black/60 px-2.5 py-1 rounded-lg backdrop-blur-md">6 Synced Scenes</span>
-                        </div>
-                        <div class="text-center space-y-3">
-                            <div id="playTrigger" class="w-16 h-16 sm:w-20 sm:h-20 bg-purple-600 hover:bg-purple-500 text-white rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition transform hover:scale-110 mx-auto">
-                                <i id="playIcon" class="fas fa-play text-2xl sm:text-3xl ml-1"></i>
-                            </div>
-                            <p id="playerStatus" class="text-xs sm:text-sm text-zinc-300 font-medium bg-black/60 px-4 py-1.5 rounded-full backdrop-blur-md inline-block">پلے پر کلک کر کے مووی اسٹریم شروع کریں</p>
-                        </div>
-                        <div class="w-full text-left text-[11px] text-zinc-400 font-mono">
-                            اسٹیٹس: اسٹوڈیو فعال
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 3: 6 Scene Storyboard Grid -->
-            <div class="leonardo-card rounded-3xl p-5 sm:p-6 shadow-2xl border-l-4 border-l-pink-600">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-sm sm:text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-film text-pink-500"></i> 6 مناظر کا AI اسٹوری بورڈ
-                    </h3>
-                    <span class="text-xs text-zinc-400 bg-zinc-900 px-3 py-1 rounded-lg">100% Unique Visuals</span>
-                </div>
-                <div id="imageGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-            </div>
-
-        </div>
-
-    </main>
-
-    <!-- Features Section (Exact Match to Screenshot 72580.jpg) -->
-    <section id="features" class="max-w-7xl mx-auto px-4 py-16 border-t border-zinc-900 space-y-12">
-        <div class="text-center max-w-3xl mx-auto space-y-4">
-            <h2 class="text-2xl sm:text-5xl font-black text-white uppercase tracking-tight">A VIDEO GENERATION API, IN THE SAME INTEGRATION[span_20](start_span)[span_20](end_span)</h2>
-            <p class="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-                Generate video through the same API you use for images. The Leonardo API exposes the latest video models—including Real-time 2.0, Kling 3.0 Turbo, Minimax H5, FLUX 3 Video, Hailuo 2.3, and Wan 2.1 — for both text-to-video and image-to-video (Start Frame) generation. New models join the API as they’re released — the lineup tracks the platform, so your integration gets tomorrow’s models without a migration[span_21](start_span)[span_21](end_span).
+        <div class="footer-bottom">
+            <p>© 2026 All Rights Reserved. AI Movie Creator Inc.</p>
+            <p style="margin-top: 8px;">
+                <a href="#" style="color: var(--text-muted); margin: 0 10px;">Privacy Policy</a> | 
+                <a href="#" style="color: var(--text-muted); margin: 0 10px;">Terms of Service</a>
             </p>
-        </div>
-
-        <!-- Green Highlight Card Style from Screenshot -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            <div class="green-box p-8 rounded-3xl space-y-4 shadow-2xl">
-                <h3 class="text-2xl font-black uppercase tracking-tight">Text to video[span_22](start_span)[span_22](end_span)</h3>
-                <p class="text-xs sm:text-sm font-medium leading-relaxed">
-                    Prompt-only video generation with the latest models — the same capability behind the video generator, in a REST endpoint[span_23](start_span)[span_23](end_span).
-                </p>
-            </div>
-            <div class="leonardo-card p-8 rounded-3xl border border-zinc-800 space-y-4">
-                <h3 class="text-2xl font-black text-white uppercase tracking-tight">Image to video</h3>
-                <p class="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                    Animate images with start-frame controls for cinematic motion production.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Customer Testimonial Section (Exact Match to Screenshot 72580.jpg) -->
-    <section class="max-w-7xl mx-auto px-4 py-16 border-t border-zinc-900">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">WHAT OUR CUSTOMERS SAY[span_24](start_span)[span_24](end_span)</h2>
-        </div>
-        
-        <div class="max-w-lg mx-auto green-box p-8 sm:p-10 rounded-3xl space-y-6 shadow-2xl text-center">
-            <div class="w-20 h-20 rounded-full mx-auto overflow-hidden border-2 border-black">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" class="w-full h-full object-cover" alt="Melanie Huang">
-            </div>
-            <p class="text-sm sm:text-base font-bold italic leading-relaxed">
-                "When I saw the potential of training my own models and having granular control over generation systems, that's when I really started to explore what was possible[span_25](start_span)[span_25](end_span)."
-            </p>
-            <div>
-                <h4 class="font-black text-base uppercase tracking-wider">Melanie Huang[span_26](start_span)[span_26](end_span)</h4>
-                <p class="text-xs font-semibold opacity-80">Interactive Designer, MCM[span_27](start_span)[span_27](end_span)</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer Section (Exact Match to Screenshot 72582.jpg) -->
-    <footer class="max-w-7xl mx-auto w-full px-4 sm:px-8 py-12 border-t border-zinc-900 mt-12 space-y-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-5 text-zinc-400 text-xl">
-                <a href="#" class="hover:text-white transition"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fab fa-discord"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fab fa-x-twitter"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fab fa-youtube"></i></a>
-                <a href="#" class="hover:text-white transition"><i class="fab fa-linkedin"></i></a>
-            </div>
-            
-            <div class="flex flex-wrap items-center justify-center gap-3">
-                <button class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
-                    <i class="fab fa-apple text-base"></i> Download on the App Store[span_28](start_span)[span_28](end_span)
-                </button>
-                <button class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2">
-                    <i class="fab fa-google-play text-base"></i> GET IT ON Google Play[span_29](start_span)[span_29](end_span)
-                </button>
-            </div>
-        </div>
-
-        <!-- Badges & Compliance Box -->
-        <div class="flex flex-wrap items-center gap-4 py-4">
-            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
-                <i class="fas fa-shield-alt text-purple-500 mr-1"></i> GDPR Attestation[span_30](start_span)[span_30](end_span)
-            </div>
-            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
-                <i class="fas fa-certificate text-purple-500 mr-1"></i> SOC 2 TYPE I[span_31](start_span)[span_31](end_span)
-            </div>
-            <div class="bg-zinc-900 border border-zinc-800 px-4 py-2 rounded-lg text-xs font-mono text-zinc-300">
-                <i class="fas fa-certificate text-purple-500 mr-1"></i> SOC 2 TYPE II[span_32](start_span)[span_32](end_span)
-            </div>
-        </div>
-
-        <div class="text-zinc-500 text-xs leading-relaxed max-w-4xl">
-            Leonardo.ai is fully SOC 2 Type I and Type II accredited, demonstrating our commitment to the highest standards of security, availability, and data integrity[span_33](start_span)[span_33](end_span). This ensures our customers can trust that their data is handled with enterprise-grade protection and compliance[span_34](start_span)[span_34](end_span).
-        </div>
-
-        <div class="pt-6 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between text-xs text-zinc-600 gap-4">
-            <p>&copy; 2026 All Rights Reserved, Leonardo Interactive Pty Ltd®[span_35](start_span)[span_35](end_span)</p>
-            <div class="flex items-center gap-6">
-                <a href="#" class="hover:text-zinc-400 transition">Privacy Policy[span_36](start_span)[span_36](end_span)</a>
-                <a href="#" class="hover:text-zinc-400 transition">Terms of Service[span_37](start_span)[span_37](end_span)</a>
-                <a href="#" class="hover:text-zinc-400 transition">Cookie Policy[span_38](start_span)[span_38](end_span)</a>
-            </div>
-            <p class="font-mono text-zinc-700">ABN: 56 662 209 485[span_39](start_span)[span_39](end_span)</p>
         </div>
     </footer>
 
-    <!-- Core JavaScript Engine -->
+    <!-- WhatsApp Contact Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">AI Movie Creator Support</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Have questions or want custom movie workflows? Connect with our director team directly on WhatsApp.</p>
+            <div style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 15px;">+92 308 4048921</div>
+            <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+        </div>
+    </div>
+
     <script>
-        const GROQ_API_KEY = "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"; 
-
-        let currentFrames = [];
-        let extractedPrompts = [];
-        let isPlaying = false;
-        let playInterval = null;
-
-        function generateSceneImage(scenePrompt, sceneIndex) {
-            return new Promise((resolve) => {
-                const randomSeed = Math.floor(Math.random() * 999999) + (sceneIndex * 1543);
-                const cleanPrompt = encodeURIComponent(scenePrompt + ", cinematic movie scene, photorealistic, 8k resolution, detailed lighting");
-                const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1280&height=720&seed=${randomSeed}&nologo=true&model=flux`;
-
-                const img = new Image();
-                img.src = imageUrl;
-                img.onload = () => resolve(imageUrl);
-                img.onerror = () => resolve(imageUrl);
-            });
+        function openModal() {
+            document.getElementById('contactModal').classList.add('active');
         }
-
-        async function fetchScriptAndRender(promptText) {
-            const loader = document.getElementById('loader');
-            const output = document.getElementById('outputContainer');
-            const scriptText = document.getElementById('scriptText');
-            const imageGrid = document.getElementById('imageGrid');
-            const loaderText = document.getElementById('loaderText');
-
-            loader.classList.remove('hidden');
-            output.classList.add('hidden');
-
-            try {
-                loaderText.innerText = "تمام مناظر کامیابی سے تیار ہو گئے!";
-
-            } catch (err) {
-                alert("Error: " + err.message);
-                loader.classList.add('hidden');
+        function closeModal() {
+            document.getElementById('contactModal').classList.remove('active');
+        }
+        // Close modal when clicking outside box
+        window.onclick = function(event) {
+            let modal = document.getElementById('contactModal');
+            if (event.target == modal) {
+                closeModal();
             }
-        }
-
-        function copyLumaPrompt(text) {
-            navigator.clipboard.writeText(text);
-            alert("پرامپٹ کاپی ہو گیا ہے!");
-        }
-
-        document.getElementById('movieForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const prompt = document.getElementById('promptInput').value.trim();
-            if(prompt) fetchScriptAndRender(prompt);
-        });
-
-        document.getElementById('playTrigger').addEventListener('click', function() {
-            const preview = document.getElementById('moviePreview');
-            const status = document.getElementById('playerStatus');
-            const icon = document.getElementById('playIcon');
-            const badge = document.getElementById('sceneBadge');
-
-            const validFrames = currentFrames.filter(f => f && f.length > 0);
-            if(validFrames.length === 0) return;
-
-            if(isPlaying) {
-                clearInterval(playInterval);
-                isPlaying = false;
-                icon.className = "fas fa-play text-2xl sm:text-3xl ml-1";
-                status.innerText = "روک دیا گیا - پلے پر کلک کریں";
-                preview.classList.remove('kenburns-active');
-                badge.innerText = "پاز";
-                badge.className = "text-xs bg-zinc-900 text-zinc-300 px-3 py-1 rounded-full border border-zinc-800 font-semibold";
-            } else {
-                isPlaying = true;
-                icon.className = "fas fa-pause text-2xl sm:text-3xl";
-                preview.classList.add('kenburns-active');
-                
-                let frameIdx = 0;
-                badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
-                badge.className = "text-xs bg-purple-600 text-white px-3 py-1 rounded-full font-bold uppercase tracking-wider animate-pulse";
-                status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
-
-                playInterval = setInterval(() => {
-                    frameIdx = (frameIdx + 1) % validFrames.length;
-                    preview.src = validFrames[frameIdx];
-                    badge.innerText = `چل رہا ہے: منظر ${frameIdx + 1}/6`;
-                    status.innerText = `▶ منظر ${frameIdx + 1} آف 6 چل رہا ہے...`;
-                }, 2800);
-            }
-        });
-
-        function copyScript() {
-            const text = document.getElementById('scriptText').value;
-            navigator.clipboard.writeText(text);
-            alert("اسکرپٹ کاپی ہو گیا ہے!");
         }
     </script>
 </body>
