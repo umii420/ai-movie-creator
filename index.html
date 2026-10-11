@@ -7,7 +7,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -19,8 +19,20 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(255, 255, 255, 0.1);
+            --header-bg: rgba(5, 5, 7, 0.85);
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
+            --font-gemini: 'Inter', sans-serif;
+        }
+
+        /* Light Mode Theme */
+        body.light-mode {
+            --bg-black: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-glow: rgba(0, 0, 0, 0.1);
+            --header-bg: rgba(255, 255, 255, 0.9);
         }
 
         * {
@@ -28,6 +40,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: var(--font-body);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         body {
@@ -54,7 +67,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 8%;
-            background: rgba(5, 5, 7, 0.85);
+            background: var(--header-bg);
             backdrop-filter: blur(12px);
             position: fixed;
             width: 100%;
@@ -68,7 +81,7 @@
             font-size: 1.6rem;
             font-weight: 800;
             letter-spacing: -0.5px;
-            color: #fff;
+            color: var(--text-main);
             text-transform: uppercase;
         }
 
@@ -81,7 +94,7 @@
         .btn-contact {
             background: transparent;
             color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-glow);
             padding: 10px 22px;
             border-radius: 30px;
             font-weight: 600;
@@ -90,14 +103,112 @@
         }
 
         .btn-contact:hover {
-            background: #fff;
-            color: #000;
+            background: var(--text-main);
+            color: var(--bg-black);
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
+        /* 3-Line Menu Button */
+        .menu-btn {
+            background: transparent;
+            border: 1px solid var(--border-glow);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            padding: 10px 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: var(--accent-green);
+            color: #000;
+        }
+
+        /* Settings Drawer / Modal */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 380px;
+            height: 100%;
+            background: var(--card-bg);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+            z-index: 1001;
+            transition: right 0.4s ease;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border-glow);
+        }
+
+        .drawer-overlay.active {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 15px;
+        }
+
+        .drawer-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Switch Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #374151;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px; width: 18px;
+            left: 4px; bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--accent-green); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
         /* Hero Section */
         .hero {
-            padding: 180px 8% 100px;
+            padding: 180px 8% 60px;
             text-align: center;
             max-width: 1100px;
             margin: 0 auto;
@@ -111,9 +222,7 @@
             text-transform: uppercase;
             letter-spacing: -1px;
             margin-bottom: 25px;
-            background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
         }
 
         .hero p {
@@ -124,26 +233,145 @@
             font-weight: 400;
         }
 
-        .hero-cta-group {
+        /* ElevenLabs Style Prompt Box Section */
+        .prompt-container {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            background: linear-gradient(145deg, rgba(20, 22, 30, 0.9), rgba(10, 11, 15, 0.95)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .prompt-title {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+        }
+
+        .prompt-input-box {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 18px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .prompt-input-box input {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 1.1rem;
+            color: #111;
+            font-family: var(--font-body);
+        }
+
+        .prompt-input-box input::placeholder {
+            color: #6b7280;
+        }
+
+        .model-select {
+            background: #f3f4f6;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .btn-generate-arrow {
+            background: #000;
+            color: #fff;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            flex-shrink: 0;
         }
 
-        .btn-primary {
+        .btn-generate-arrow:hover {
             background: var(--accent-green);
             color: #000;
-            padding: 14px 32px;
-            border-radius: 30px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: 0.3s ease;
+            transform: scale(1.05);
         }
 
-        .btn-primary:hover {
-            box-shadow: 0 0 25px var(--accent-green);
-            transform: scale(1.03);
+        /* Gemini-Style Output Page Modal */
+        .gemini-modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--bg-black);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s ease;
+            padding: 40px 8%;
+            overflow-y: auto;
+        }
+
+        .gemini-modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .gemini-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-glow);
+            margin-bottom: 30px;
+        }
+
+        .gemini-content-box {
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+            font-family: var(--font-gemini);
+        }
+
+        .gemini-prompt-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+
+        .gemini-response-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 35px;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            white-space: pre-line;
         }
 
         /* Trusted Platforms Section */
@@ -175,17 +403,15 @@
             font-family: var(--font-heading);
             font-size: 1.5rem;
             font-weight: 700;
-            color: #fff;
-            opacity: 0.8;
+            color: var(--text-main);
+            opacity: 0.9;
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         /* Feature Cards Grid */
-        .features-section {
-            padding: 100px 8%;
-        }
+        .features-section { padding: 100px 8%; }
 
         .section-header {
             font-family: var(--font-heading);
@@ -210,7 +436,7 @@
         }
 
         .card-green {
-            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, rgba(13, 14, 18, 1) 100%);
+            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, var(--card-bg) 100%);
             border-color: rgba(0, 255, 135, 0.3);
         }
 
@@ -231,6 +457,7 @@
             border-radius: 24px;
             border: 1px solid var(--border-glow);
             text-align: center;
+            color: #fff;
         }
 
         .banner-box h2 {
@@ -242,7 +469,7 @@
 
         /* Footer */
         footer {
-            background: #000;
+            background: var(--bg-black);
             padding: 80px 8% 40px;
             border-top: 1px solid var(--border-glow);
         }
@@ -255,19 +482,10 @@
             margin-bottom: 50px;
         }
 
-        .footer-socials a {
-            color: var(--text-muted);
-            transition: 0.3s;
-        }
+        .footer-socials a { color: var(--text-muted); transition: 0.3s; }
+        .footer-socials a:hover { color: var(--accent-green); }
 
-        .footer-socials a:hover {
-            color: var(--accent-green);
-        }
-
-        .app-downloads {
-            text-align: center;
-            margin-bottom: 60px;
-        }
+        .app-downloads { text-align: center; margin-bottom: 60px; }
 
         .coming-soon-tag {
             font-size: 0.75rem;
@@ -288,19 +506,15 @@
 
         .app-btn {
             border: 1px solid var(--border-glow);
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             padding: 12px 25px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #fff;
+            color: var(--text-main);
             text-decoration: none;
             transition: 0.3s;
-        }
-
-        .app-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
         }
 
         .big-footer-logo {
@@ -310,7 +524,7 @@
             text-align: center;
             letter-spacing: -2px;
             margin: 40px 0;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-main);
             text-transform: uppercase;
         }
 
@@ -318,17 +532,15 @@
             text-align: center;
             color: var(--text-muted);
             font-size: 0.85rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid var(--border-glow);
             padding-top: 30px;
         }
 
-        /* Contact WhatsApp Modal */
+        /* WhatsApp Modal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
             display: flex;
@@ -340,13 +552,10 @@
             transition: 0.3s ease;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
 
         .modal-card {
-            background: #0f1015;
+            background: var(--card-bg);
             border: 1px solid var(--border-glow);
             padding: 40px;
             border-radius: 24px;
@@ -359,38 +568,21 @@
 
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
+            top: 20px; right: 20px;
+            background: none; border: none;
             color: var(--text-muted);
-            font-size: 1.2rem;
-            cursor: pointer;
+            font-size: 1.2rem; cursor: pointer;
         }
 
-        .whatsapp-icon {
-            font-size: 3.5rem;
-            color: #25D366;
-            margin-bottom: 15px;
-        }
+        .whatsapp-icon { font-size: 3.5rem; color: #25D366; margin-bottom: 15px; }
 
         .btn-whatsapp {
             display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: #25D366;
-            color: #000;
-            font-weight: 700;
-            padding: 14px 28px;
-            border-radius: 30px;
-            text-decoration: none;
-            margin-top: 20px;
-            transition: 0.3s;
-        }
-
-        .btn-whatsapp:hover {
-            box-shadow: 0 0 25px rgba(37, 211, 102, 0.5);
-            transform: scale(1.02);
+            align-items: center; gap: 10px;
+            background: #25D366; color: #000;
+            font-weight: 700; padding: 14px 28px;
+            border-radius: 30px; text-decoration: none;
+            margin-top: 20px; transition: 0.3s;
         }
     </style>
 </head>
@@ -401,125 +593,68 @@
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
             <button class="btn-contact" onclick="openModal()">Contact Us</button>
+            <button class="menu-btn" onclick="toggleDrawer()"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
+
+    <!-- App Settings Side Drawer Menu -->
+    <div class="drawer-overlay" id="settingsDrawer">
+        <div class="drawer-header">
+            <div class="drawer-title"><i class="fa-solid fa-sliders"></i> App Settings</div>
+            <button class="close-modal" onclick="toggleDrawer()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">Light Theme (White Mode)</span>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle" onchange="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">Roman Urdu AI Scripting</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="setting-item">
+            <span class="setting-label">Groq AI Fast Engine</span>
+            <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div style="margin-top: auto; text-align: center;">
+            <p style="font-size: 0.8rem; color: var(--text-muted);">AI Movie Creator v2.4 (Pro)</p>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
-        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time. Powered by Groq AI and Flux rendering engines, transform your stories into production-ready scenes effortlessly. Built for creators, directors, and storytellers who want to produce video content visually and ship with complete dynamic control.</p>
+        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time. Powered by Groq AI and Flux rendering engines.</p>
+
+        <!-- Describe Your Video Input Box -->
+        <div class="prompt-container">
+            <div class="prompt-title">
+                <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-green);"></i>
+                AI Movie Generator
+            </div>
+            <div class="prompt-input-box">
+                <input type="text" id="userPromptInput" placeholder="Describe your video idea or film scene...">
+                <select class="model-select">
+                    <option>Groq AI Engine</option>
+                    <option>Pollinations 8K</option>
+                    <option>Luma Motion</option>
+                </select>
+                <button class="btn-generate-arrow" onclick="generateScript()"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
         <div class="hero-cta-group">
             <a href="#" class="btn-primary">Start Creating Now</a>
-            <button class="btn-contact" onclick="openModal()">Contact Support</button>
-        </div>
-    </section>
-
-    <!-- Trusted Platforms -->
-    <section class="trusted-section">
-        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
-        <div class="trusted-logos">
-            <div class="brand-badge"><i class="fa-solid fa-bolt" style="color: #ffaa00;"></i> GROQ AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA DREAM ENGINE</div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section class="features-section">
-        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
-        <div class="grid-cards">
-            <div class="card card-green glow-effect">
-                <div class="card-title">Text to Video Script</div>
-                <p>Prompt-only cinematic scene creation with fast Groq AI script generation tailored for visual directors.</p>
-            </div>
-            <div class="card glow-effect">
-                <div class="card-title">8K Photorealistic Rendering</div>
-                <p>Generate high-fidelity movie stills and visuals matching precise camera parameters and aesthetic angles.</p>
-            </div>
-            <div class="card glow-effect">
-                <div class="card-title">Multi-Act Storyboards</div>
-                <p>Organize complete film scenes with character consistency, lighting cues, and prompt controls.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Banner Box -->
-    <section class="banner-box">
-        <h2>EXPLORE OUR DIRECTORS DOCUMENTATION OR SPEAK WITH OUR CREATIVE TEAM</h2>
-        <button class="btn-contact" style="background: #fff; color: #000;" onclick="openModal()">Contact Us</button>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-socials">
-            <a href="#"><i class="fa-brands fa-facebook"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-discord"></i></a>
-            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="#"><i class="fa-brands fa-youtube"></i></a>
-            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
-        </div>
-
-        <div class="app-downloads">
-            <span class="coming-soon-tag">COMING SOON</span>
-            <div class="download-btns">
-                <a href="#" class="app-btn">
-                    <i class="fa-brands fa-apple" style="font-size: 1.5rem;"></i>
-                    <div style="text-align: left;">
-                        <div style="font-size: 0.65rem; color: var(--text-muted);">Download on the</div>
-                        <div style="font-size: 0.9rem; font-weight:700;">App Store</div>
-                    </div>
-                </a>
-                <a href="#" class="app-btn">
-                    <i class="fa-brands fa-google-play" style="font-size: 1.3rem;"></i>
-                    <div style="text-align: left;">
-                        <div style="font-size: 0.65rem; color: var(--text-muted);">GET IT ON</div>
-                        <div style="font-size: 0.9rem; font-weight:700;">Google Play</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <!-- Big Footer Brand Name -->
-        <div class="big-footer-logo">AI MOVIE CREATOR</div>
-
-        <div class="footer-bottom">
-            <p>© 2026 All Rights Reserved. AI Movie Creator Inc.</p>
-            <p style="margin-top: 8px;">
-                <a href="#" style="color: var(--text-muted); margin: 0 10px;">Privacy Policy</a> | 
-                <a href="#" style="color: var(--text-muted); margin: 0 10px;">Terms of Service</a>
-            </p>
-        </div>
-    </footer>
-
-    <!-- WhatsApp Contact Modal -->
-    <div class="modal-overlay" id="contactModal">
-        <div class="modal-card">
-            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
-            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">AI Movie Creator Support</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Have questions or want custom movie workflows? Connect with our director team directly on WhatsApp.</p>
-            <div style="font-size: 1.2rem; font-weight: 700; color: #fff; margin-top: 15px;">+92 308 4048921</div>
-            <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
-            </a>
-        </div>
-    </div>
-
-    <script>
-        function openModal() {
-            document.getElementById('contactModal').classList.add('active');
-        }
-        function closeModal() {
-            document.getElementById('contactModal').classList.remove('active');
-        }
-        // Close modal when clicking outside box
-        window.onclick = function(event) {
-            let modal = document.getElementById('contactModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-    </script>
-</body>
-</html>
+ 
