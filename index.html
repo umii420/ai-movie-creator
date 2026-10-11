@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200, initial-scale=0.32, maximum-scale=3.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Movie Creator - Mythic Cinematic Engine</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,26 +19,34 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(255, 255, 255, 0.1);
-            --header-bg: rgba(5, 5, 7, 0.88);
+            --header-bg: rgba(5, 5, 7, 0.9);
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
         }
 
-        /* Fixed App Width Layout matching your preferred size */
-        html, body {
-            width: 1200px !important;
-            min-width: 1200px !important;
-            margin: 0 auto !important;
-            background-color: var(--bg-black);
-            color: var(--text-main);
-            font-family: var(--font-body);
-            line-height: 1.6;
-            overflow-x: hidden;
+        /* Light Mode Theme Overrides */
+        body.light-mode {
+            --bg-black: #f4f5f8;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-glow: rgba(0, 0, 0, 0.12);
+            --header-bg: rgba(244, 245, 248, 0.92);
         }
 
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -47,11 +55,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 22px 8%;
+            padding: 15px 5%;
             background: var(--header-bg);
             backdrop-filter: blur(12px);
             position: fixed;
-            width: 1200px;
+            width: 100%;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border-glow);
@@ -59,7 +67,7 @@
 
         .logo {
             font-family: var(--font-heading);
-            font-size: 1.6rem;
+            font-size: 1.1rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             color: var(--text-main);
@@ -68,7 +76,7 @@
 
         .nav-btns {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
         }
 
@@ -76,89 +84,84 @@
             background: transparent;
             color: var(--text-main);
             border: 1px solid var(--border-glow);
-            padding: 10px 22px;
+            padding: 8px 16px;
             border-radius: 30px;
             font-weight: 600;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: 0.3s ease;
             white-space: nowrap;
-        }
-
-        .btn-contact:hover {
-            background: var(--text-main);
-            color: var(--bg-black);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
         .menu-btn {
             background: transparent;
             border: 1px solid var(--border-glow);
             color: var(--text-main);
-            font-size: 1.2rem;
-            padding: 10px 14px;
-            border-radius: 12px;
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border-radius: 10px;
             cursor: pointer;
         }
 
         /* Hero Section */
         .hero {
-            padding: 180px 8% 60px;
+            padding: 120px 5% 40px;
             text-align: center;
-            width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: 3.2rem;
+            font-size: clamp(1.8rem, 5.5vw, 2.7rem);
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.2;
             text-transform: uppercase;
-            letter-spacing: -1px;
-            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
             color: var(--text-main);
         }
 
         .hero p {
-            font-size: 1.15rem;
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
             color: var(--text-muted);
-            max-width: 850px;
-            margin: 0 auto 40px;
+            max-width: 650px;
+            margin: 0 auto 30px;
         }
 
         /* Describe Your Video Prompt Box */
         .prompt-container {
-            width: 800px;
-            margin: 0 auto 40px;
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto 30px;
             background: linear-gradient(145deg, rgba(20, 22, 30, 0.9), rgba(10, 11, 15, 0.95)), url('https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 20px;
             border: 1px solid var(--border-glow);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
         }
 
         .prompt-title {
             font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-align: left;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             color: #fff;
         }
 
         .prompt-input-box {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 18px;
-            padding: 10px 15px;
+            border-radius: 14px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         .prompt-input-box input {
@@ -166,35 +169,34 @@
             border: none;
             outline: none;
             background: transparent;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             color: #111;
-            padding: 8px;
+            width: 100%;
         }
 
         .model-select {
             background: #e5e7eb;
             border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             color: #374151;
             cursor: pointer;
             outline: none;
-            white-space: nowrap;
         }
 
         .btn-generate-arrow {
             background: #000;
             color: #fff;
             border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
             flex-shrink: 0;
         }
@@ -207,23 +209,118 @@
         .hero-cta-group {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .btn-primary {
             background: var(--accent-green);
             color: #000;
-            padding: 14px 32px;
+            padding: 12px 30px;
             border-radius: 30px;
             font-weight: 700;
             text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-block;
         }
 
-        /* Gemini-Style Output Page Modal */
+        /* Settings Drawer Panel */
+        .settings-drawer {
+            position: fixed;
+            top: 0; right: -380px;
+            width: 350px;
+            height: 100%;
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-glow);
+            z-index: 3000;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 25px;
+            overflow-y: auto;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .settings-drawer.active { right: 0; }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .settings-header h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .close-drawer {
+            background: none; border: none;
+            color: var(--text-main);
+            font-size: 1.2rem; cursor: pointer;
+        }
+
+        .setting-group {
+            margin-bottom: 18px;
+        }
+
+        .setting-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .setting-input, .setting-select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-glow);
+            background: var(--bg-black);
+            color: var(--text-main);
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .setting-toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #374151;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 18px; height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle-switch.active { background: var(--accent-green); }
+        .toggle-switch.active::after { left: 23px; background: #000; }
+
+        /* Gemini Output Modal */
         .gemini-modal-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 1200px; height: 100%;
+            width: 100%; height: 100%;
             background: var(--bg-black);
             z-index: 2000;
             display: flex;
@@ -231,150 +328,50 @@
             opacity: 0;
             pointer-events: none;
             transition: 0.4s ease;
-            padding: 40px 8%;
+            padding: 30px 5%;
             overflow-y: auto;
         }
 
-        .gemini-modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
+        .gemini-modal-overlay.active { opacity: 1; pointer-events: all; }
 
         .gemini-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border-glow);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .gemini-content-box {
-            width: 900px;
+            width: 100%; max-width: 800px;
             margin: 0 auto;
             font-family: var(--font-gemini);
         }
 
         .gemini-prompt-display {
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 25px;
+            font-size: 1.3rem; font-weight: 600;
+            color: var(--text-main); margin-bottom: 20px;
         }
 
         .gemini-response-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
-            border-radius: 20px;
-            padding: 35px;
-            line-height: 1.8;
-            font-size: 1.05rem;
-            color: var(--text-main);
-            white-space: pre-wrap;
-        }
-
-        /* Trusted Platforms Section */
-        .trusted-section {
-            padding: 50px 8%;
-            text-align: center;
-            border-top: 1px solid var(--border-glow);
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .trusted-title {
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        .trusted-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 60px;
-        }
-
-        .brand-badge {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Features Section */
-        .features-section { padding: 100px 8%; }
-
-        .section-header {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 50px;
-            text-align: center;
-        }
-
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            padding: 35px;
-            border-radius: 20px;
-        }
-
-        .card-green {
-            background: linear-gradient(135deg, rgba(0, 255, 135, 0.1) 0%, var(--card-bg) 100%);
-            border-color: rgba(0, 255, 135, 0.3);
-        }
-
-        .card-title {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--bg-black);
-            padding: 80px 8% 40px;
-            border-top: 1px solid var(--border-glow);
-            text-align: center;
-        }
-
-        .big-footer-logo {
-            font-family: var(--font-heading);
-            font-size: 5.5rem;
-            font-weight: 900;
-            letter-spacing: -2px;
-            margin: 40px 0;
-            color: var(--text-main);
-            text-transform: uppercase;
+            border-radius: 16px; padding: 25px;
+            line-height: 1.7; font-size: 0.95rem;
+            color: var(--text-main); white-space: pre-wrap;
         }
 
         /* WhatsApp Modal */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0;
-            width: 1200px; height: 100%;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s ease;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2500; opacity: 0; pointer-events: none;
+            transition: 0.3s ease; padding: 20px;
         }
 
         .modal-overlay.active { opacity: 1; pointer-events: all; }
@@ -382,30 +379,25 @@
         .modal-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
-            padding: 40px;
-            border-radius: 24px;
-            width: 450px;
-            text-align: center;
-            position: relative;
+            padding: 30px; border-radius: 24px;
+            width: 100%; max-width: 400px;
+            text-align: center; position: relative;
         }
 
         .close-modal {
-            position: absolute;
-            top: 20px; right: 20px;
+            position: absolute; top: 15px; right: 15px;
             background: none; border: none;
-            color: var(--text-muted);
-            font-size: 1.2rem; cursor: pointer;
+            color: var(--text-muted); font-size: 1.2rem; cursor: pointer;
         }
 
-        .whatsapp-icon { font-size: 3.5rem; color: #25D366; margin-bottom: 15px; }
+        .whatsapp-icon { font-size: 3rem; color: #25D366; margin-bottom: 12px; }
 
         .btn-whatsapp {
-            display: inline-flex;
-            align-items: center; gap: 10px;
+            display: inline-flex; align-items: center; gap: 10px;
             background: #25D366; color: #000;
-            font-weight: 700; padding: 14px 28px;
+            font-weight: 700; padding: 12px 24px;
             border-radius: 30px; text-decoration: none;
-            margin-top: 20px;
+            margin-top: 15px; font-size: 0.95rem;
         }
     </style>
 </head>
@@ -415,16 +407,15 @@
     <header>
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
-            <button class="btn-contact" onclick="setCustomApiKey()"><i class="fa-solid fa-key"></i> Set API Key</button>
             <button class="btn-contact" onclick="openModal()">Contact Us</button>
-            <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
+            <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
         <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
-        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time. Powered by Groq AI and Flux rendering engines.</p>
+        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
         <!-- Describe Your Video Box -->
         <div class="prompt-container">
@@ -434,9 +425,9 @@
             </div>
             <div class="prompt-input-box">
                 <input type="text" id="userPromptInput" placeholder="Describe your video idea or film scene...">
-                <select class="model-select">
-                    <option>Groq AI Engine</option>
-                    <option>Pollinations 8K</option>
+                <select class="model-select" id="modelSelectInput">
+                    <option>Groq AI</option>
+                    <option>Pollinations</option>
                 </select>
                 <button class="btn-generate-arrow" onclick="generateScript()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
@@ -444,15 +435,140 @@
 
         <div class="hero-cta-group">
             <a href="#" class="btn-primary">Start Creating Now</a>
-            <button class="btn-contact" onclick="openModal()">Contact Support</button>
         </div>
     </section>
 
-    <!-- Gemini-Style Script Output Page Modal -->
+    <!-- App Settings Drawer (12+ Options including Dark/Light mode) -->
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="settings-header">
+            <h3><i class="fa-solid fa-sliders"></i> App Settings</h3>
+            <button class="close-drawer" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- 1. Dark/Light Theme Switch -->
+        <div class="setting-toggle-row">
+            <div>
+                <span style="font-weight: 600; font-size: 0.9rem;">Theme Mode</span>
+                <span class="setting-label" id="themeStatusLabel">Dark Mode</span>
+            </div>
+            <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+        </div>
+
+        <!-- 2. Groq API Key -->
+        <div class="setting-group" style="margin-top: 15px;">
+            <label class="setting-label"><i class="fa-solid fa-key"></i> Groq API Key</label>
+            <input type="password" id="drawerApiKeyInput" class="setting-input" placeholder="gsk_..." onchange="saveSetting('groq_key', this.value)">
+        </div>
+
+        <!-- 3. Primary AI Engine -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-microchip"></i> Script Model</label>
+            <select class="setting-select" onchange="saveSetting('ai_model', this.value)">
+                <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
+                <option value="llama3-8b-8192">llama3-8b-8192</option>
+                <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
+            </select>
+        </div>
+
+        <!-- 4. Default Script Language -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-language"></i> Script Language</label>
+            <select class="setting-select" onchange="saveSetting('script_lang', this.value)">
+                <option value="Roman Urdu">Roman Urdu</option>
+                <option value="Urdu Script">Urdu (اردو)</option>
+                <option value="English">English</option>
+            </select>
+        </div>
+
+        <!-- 5. Script Length / Scene Depth -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-film"></i> Script Length</label>
+            <select class="setting-select" onchange="saveSetting('script_length', this.value)">
+                <option value="Multi-Scene Full Story">Multi-Scene Full Story (3-5 Acts)</option>
+                <option value="Short Teaser">Short Teaser Scene</option>
+                <option value="Detailed Director Cut">Detailed Director Cut</option>
+            </select>
+        </div>
+
+        <!-- 6. Temperature / Creativity -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-wand-magic"></i> Creativity Level</label>
+
+            <select class="setting-select" onchange="saveSetting('creativity', this.value)">
+                <option value="0.7">Balanced (0.7)</option>
+                <option value="0.9">High Cinema Creativity (0.9)</option>
+                <option value="0.4">Strict & Precise (0.4)</option>
+            </select>
+        </div>
+
+        <!-- 7. Image Engine Aspect Ratio -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-crop"></i> Visual Aspect Ratio</label>
+            <select class="setting-select" onchange="saveSetting('aspect_ratio', this.value)">
+                <option value="16:9">16:9 Cinematic Widescreen</option>
+                <option value="9:16">9:16 TikTok / Reel Vertical</option>
+                <option value="1:1">1:1 Square Visuals</option>
+            </select>
+        </div>
+
+        <!-- 8. Visual Quality Preset -->
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-display"></i> Visual Quality</label>
+
+            <select class="setting-select" onchange="saveSetting('visual_quality', this.value)">
+                <option value="8K Photorealistic">8K Ultra Photorealistic</option>
+                <option value="Anime Style">Cinematic Anime</option>
+                <option value="3D Unreal 5">Unreal Engine 5 Render</option>
+            </select>
+        </div>
+
+        <!-- 9. Sound Effects Prompts -->
+        <div class="setting-toggle-row">
+            <div>
+                <span style="font-weight: 600; font-size: 0.88rem;">Include SFX Prompts</span>
+                <span class="setting-label">Add sound cues in script</span>
+            </div>
+            <div class="toggle-switch active" id="sfxToggle" onclick="toggleSwitch(this, 'sfx_enabled')"></div>
+        </div>
+
+        <!-- 10. Camera Movement Cues -->
+        <div class="setting-toggle-row">
+            <div>
+                <span style="font-weight: 600; font-size: 0.88rem;">Camera Directions</span>
+                <span class="setting-label">Add zoom, pan & angle notes</span>
+            </div>
+            <div class="toggle-switch active" id="cameraToggle" onclick="toggleSwitch(this, 'camera_cues')"></div>
+        </div>
+
+        <!-- 11. Auto-Save Scripts -->
+        <div class="setting-toggle-row">
+            <div>
+                <span style="font-weight: 600; font-size: 0.88rem;">Auto-Save History</span>
+                <span class="setting-label">Save script outputs locally</span>
+            </div>
+            <div class="toggle-switch active" id="autoSaveToggle" onclick="toggleSwitch(this, 'auto_save')"></div>
+        </div>
+
+        <!-- 12. UI Animation Speed -->
+        <div class="setting-group" style="margin-top: 15px;">
+            <label class="setting-label"><i class="fa-solid fa-gauge-high"></i> UI Transition Speed</label>
+            <select class="setting-select" onchange="saveSetting('ui_speed', this.value)">
+                <option value="Fast">Fast Smooth</option>
+                <option value="Normal">Normal</option>
+            </select>
+        </div>
+
+        <!-- 13. Reset Settings Button -->
+        <button onclick="resetSettings()" style="width: 100%; padding: 10px; margin-top: 20px; background: rgba(255, 59, 48, 0.2); border: 1px solid #ff3b30; color: #ff3b30; border-radius: 10px; font-weight: 600; cursor: pointer;">
+            <i class="fa-solid fa-rotate-left"></i> Reset All Settings
+        </button>
+    </div>
+
+    <!-- Gemini-Style Script Output Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
-            <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close Script</button>
+            <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close</button>
         </div>
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
@@ -460,49 +576,14 @@
         </div>
     </div>
 
-    <!-- Trusted Section -->
-    <section class="trusted-section">
-        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
-        <div class="trusted-logos">
-            <div class="brand-badge"><i class="fa-solid fa-bolt" style="color: #ffaa00;"></i> GROQ AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> POLLINATIONS AI</div>
-            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA DREAM ENGINE</div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section class="features-section">
-        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
-        <div class="grid-cards">
-            <div class="card card-green">
-                <div class="card-title">Text to Video Script</div>
-                <p>Prompt-only cinematic scene creation with fast Groq AI script generation tailored for visual directors.</p>
-            </div>
-            <div class="card">
-                <div class="card-title">8K Photorealistic Rendering</div>
-                <p>Generate high-fidelity movie stills and visuals matching precise camera parameters and aesthetic angles.</p>
-            </div>
-            <div class="card">
-                <div class="card-title">Multi-Act Storyboards</div>
-                <p>Organize complete film scenes with character consistency, lighting cues, and prompt controls.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="big-footer-logo">AI MOVIE CREATOR</div>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">© 2026 All Rights Reserved. AI Movie Creator Inc.</p>
-    </footer>
-
     <!-- WhatsApp Contact Modal -->
     <div class="modal-overlay" id="contactModal">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
-            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">AI Movie Creator Support</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Connect with our director team directly on WhatsApp.</p>
-            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-top: 15px;">+92 308 4048921</div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 8px;">AI Movie Creator Support</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Connect with our director team directly on WhatsApp.</p>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 12px;">+92 308 4048921</div>
             <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
             </a>
@@ -510,17 +591,56 @@
     </div>
 
     <script>
+        // WhatsApp Modal Controls
         function openModal() { document.getElementById('contactModal').classList.add('active'); }
         function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
 
-        function setCustomApiKey() {
-            let key = prompt("Enter your Groq API Key:");
-            if (key) {
-                localStorage.setItem("GROQ_SECURE_KEY", key.trim());
-                alert("API Key saved successfully!");
+        // Settings Drawer Controls
+        function toggleSettingsDrawer() {
+            document.getElementById('settingsDrawer').classList.toggle('active');
+        }
+
+        // Dark / Light Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('themeToggle').classList.toggle('active', isLight);
+            document.getElementById('themeStatusLabel').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+            localStorage.setItem('theme_preference', isLight ? 'light' : 'dark');
+        }
+
+        function toggleSwitch(element, settingKey) {
+            element.classList.toggle('active');
+            localStorage.setItem(settingKey, element.classList.contains('active'));
+        }
+
+        function saveSetting(key, value) {
+            localStorage.setItem(key, value);
+        }
+
+        function resetSettings() {
+            if (confirm("Reset all settings to default?")) {
+                localStorage.clear();
+                location.reload();
             }
         }
 
+        // Load saved settings on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme_preference');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggle').classList.add('active');
+                document.getElementById('themeStatusLabel').innerText = 'Light Mode';
+            }
+
+            const savedKey = localStorage.getItem('groq_key') || localStorage.getItem('GROQ_SECURE_KEY');
+            if (savedKey) {
+                document.getElementById('drawerApiKeyInput').value = savedKey;
+            }
+        });
+
+        // Groq AI Script Generator
         async function generateScript() {
             let inputVal = document.getElementById('userPromptInput').value;
             if (inputVal.trim() === "") {
@@ -528,19 +648,24 @@
                 return;
             }
 
-            let apiKey = localStorage.getItem("GROQ_SECURE_KEY");
+            let apiKey = document.getElementById('drawerApiKeyInput').value.trim() || localStorage.getItem('groq_key') || localStorage.getItem('GROQ_SECURE_KEY');
+            
             if (!apiKey) {
-                apiKey = prompt("Please enter your Groq API Key to generate script:");
+                apiKey = prompt("Please enter your Groq API Key:");
                 if (apiKey) {
-                    localStorage.setItem("GROQ_SECURE_KEY", apiKey.trim());
+                    document.getElementById('drawerApiKeyInput').value = apiKey.trim();
+                    localStorage.setItem('groq_key', apiKey.trim());
                 } else {
-                    alert("API Key is required!");
+                    alert("API Key is required to generate script!");
                     return;
                 }
             }
 
+            const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
+            const chosenLength = localStorage.getItem('script_length') || 'Multi-Scene Full Story';
+
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerText = "⏳ Groq AI is generating your cinematic script in Roman Urdu...";
+            document.getElementById('scriptResultContent').innerText = "⏳ Groq AI is generating your cinematic script in " + chosenLang + "...";
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
@@ -554,7 +679,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: "You are an expert film director and scriptwriter. Write a full multi-scene cinematic movie script in Roman Urdu. Include scene description, 8K visual prompt, camera directions, and dialogues."
+                                content: `You are an expert film director. Write a ${chosenLength} script in ${chosenLang}. Include visual prompts, camera directions, and dialogues.`
                             },
                             { role: "user", content: inputVal }
                         ],
@@ -566,10 +691,10 @@
                 if (data.choices && data.choices[0]) {
                     document.getElementById('scriptResultContent').innerText = data.choices[0].message.content;
                 } else {
-                    document.getElementById('scriptResultContent').innerText = "Invalid API Key or Limit Exceeded. Please update via 'Set API Key'.";
+                    document.getElementById('scriptResultContent').innerText = "❌ Invalid API Key or limit exceeded. Please update in Settings Menu (☰).";
                 }
             } catch (error) {
-                document.getElementById('scriptResultContent').innerText = "Connection error. Please check your network.";
+                document.getElementById('scriptResultContent').innerText = "❌ Connection error. Please check network.";
             }
         }
 
