@@ -43,16 +43,6 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Light Mode Theme */
-        body.light-mode {
-            --bg-black: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-muted: #4b5563;
-            --border-glow: rgba(0, 0, 0, 0.1);
-            --header-bg: rgba(255, 255, 255, 0.9);
-        }
-
         /* Header / Navbar */
         header {
             display: flex;
@@ -371,53 +361,6 @@
             color: var(--text-main);
             text-transform: uppercase;
         }
-
-        /* WhatsApp Modal */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s ease;
-        }
-
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
-
-        .modal-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            padding: 40px;
-            border-radius: 24px;
-            width: 450px;
-            text-align: center;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px; right: 20px;
-            background: none; border: none;
-            color: var(--text-muted);
-            font-size: 1.2rem; cursor: pointer;
-        }
-
-        .whatsapp-icon { font-size: 3.5rem; color: #25D366; margin-bottom: 15px; }
-
-        .btn-whatsapp {
-            display: inline-flex;
-            align-items: center; gap: 10px;
-            background: #25D366; color: #000;
-            font-weight: 700; padding: 14px 28px;
-            border-radius: 30px; text-decoration: none;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -426,8 +369,7 @@
     <header>
         <div class="logo">AI MOVIE CREATOR</div>
         <div class="nav-btns">
-            <button class="btn-contact" onclick="setCustomApiKey()"><i class="fa-solid fa-key"></i> Set API Key</button>
-            <button class="btn-contact" onclick="openModal()">Contact Us</button>
+            <button class="btn-contact">Contact Us</button>
             <button class="menu-btn"><i class="fa-solid fa-bars"></i></button>
         </div>
     </header>
@@ -455,7 +397,7 @@
 
         <div class="hero-cta-group">
             <a href="#" class="btn-primary">Start Creating Now</a>
-            <button class="btn-contact" onclick="openModal()">Contact Support</button>
+            <button class="btn-contact">Contact Support</button>
         </div>
     </section>
 
@@ -506,32 +448,7 @@
         <p style="color: var(--text-muted); font-size: 0.9rem;">© 2026 All Rights Reserved. AI Movie Creator Inc.</p>
     </footer>
 
-    <!-- WhatsApp Contact Modal -->
-    <div class="modal-overlay" id="contactModal">
-        <div class="modal-card">
-            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
-            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px;">AI Movie Creator Support</h3>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">Connect with our director team directly on WhatsApp.</p>
-            <div style="font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin-top: 15px;">+92 308 4048921</div>
-            <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
-            </a>
-        </div>
-    </div>
-
     <script>
-        function openModal() { document.getElementById('contactModal').classList.add('active'); }
-        function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
-
-        function setCustomApiKey() {
-            let key = prompt("Enter your Groq API Key:");
-            if (key) {
-                localStorage.setItem("GROQ_SECURE_KEY", key.trim());
-                alert("API Key saved in browser!");
-            }
-        }
-
         async function generateScript() {
             let inputVal = document.getElementById('userPromptInput').value;
             if (inputVal.trim() === "") {
@@ -539,16 +456,8 @@
                 return;
             }
 
-            let apiKey = localStorage.getItem("GROQ_SECURE_KEY");
-            if (!apiKey) {
-                apiKey = prompt("Please enter your Groq API Key:");
-                if (apiKey) {
-                    localStorage.setItem("GROQ_SECURE_KEY", apiKey.trim());
-                } else {
-                    alert("API Key is required!");
-                    return;
-                }
-            }
+            // 📍 LINE 328: Paste your Groq API key inside the quotes below:
+            const apiKey = "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";
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
             document.getElementById('scriptResultContent').innerText = "⏳ Groq AI is generating your script in Roman Urdu...";
@@ -577,7 +486,7 @@
                 if (data.choices && data.choices[0]) {
                     document.getElementById('scriptResultContent').innerText = data.choices[0].message.content;
                 } else {
-                    document.getElementById('scriptResultContent').innerText = "Invalid API Key or Limit Exceeded. Update via 'Set API Key'.";
+                    document.getElementById('scriptResultContent').innerText = "Unable to generate script. Please verify your Groq API Key.";
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerText = "Connection error. Please check your network or API Key.";
