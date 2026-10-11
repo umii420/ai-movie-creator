@@ -260,7 +260,7 @@
             gap: 8px;
         }
 
-        /* Visual Media Cards Sections (Matching Screenshot) */
+        /* Visual Media Cards Sections */
         .features-section { padding: 50px 5%; max-width: 800px; margin: 0 auto; }
 
         .section-header {
@@ -273,7 +273,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* Horizontal Scroll Carousel for Video Generation Cards */
         .cards-carousel {
             display: flex;
             gap: 15px;
@@ -309,7 +308,6 @@
             font-weight: 500;
         }
 
-        /* Banner Card Section */
         .banner-card {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop');
             background-size: cover;
@@ -346,7 +344,6 @@
             text-decoration: none;
         }
 
-        /* Image Cards Grid (Matching Melanie Huang & Paraglider Screenshot) */
         .image-cards-grid {
             display: flex;
             flex-direction: column;
@@ -442,7 +439,7 @@
 
         .setting-group { margin-bottom: 18px; }
         .setting-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; }
-        .setting-input, .setting-select {
+        .setting-select {
             width: 100%; padding: 10px 12px; border-radius: 10px;
             border: 1px solid var(--border-glow); background: var(--bg-black);
             color: var(--text-main); font-size: 0.88rem; outline: none;
@@ -556,11 +553,10 @@
         </div>
     </section>
 
-    <!-- Visual Media Cards Section (As in Screenshot) -->
+    <!-- Visual Media Cards Section -->
     <section class="features-section">
         <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
         
-        <!-- Text to Video Carousel -->
         <div class="cards-carousel">
             <div class="carousel-card">
                 <h3>Text to video</h3>
@@ -572,7 +568,6 @@
             </div>
         </div>
 
-        <!-- Documentation Banner Card -->
         <div class="banner-card">
             <h2>EXPLORE OUR CLEAR, EASY TO FOLLOW DOCUMENTATION OR SPEAK WITH OUR TEAM TO DEPLOY AI MOVIE CREATOR IN YOUR ENVIRONMENT.</h2>
             <div class="banner-btns">
@@ -581,11 +576,9 @@
             </div>
         </div>
 
-        <!-- Customer Review & Image Cards Grid -->
         <div class="section-header" style="margin-top: 50px;">WHAT OUR CUSTOMERS SAY</div>
         
         <div class="image-cards-grid">
-            <!-- Customer Card: Melanie Huang -->
             <div class="media-card-green">
                 <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; border: 2px solid #000;">
                 <h3>Melanie Huang</h3>
@@ -593,10 +586,8 @@
                 <p>"When I saw the potential of training my own models and having cinematic and creative control over generation AI systems, that's when I really started to explore what was possible."</p>
             </div>
 
-            <!-- Build With Experts Section -->
             <div class="section-header" style="margin-top: 30px;">BUILD WHAT YOU NEED WITH OUR AI EXPERTS</div>
 
-            <!-- Custom Model Support Card -->
             <div class="media-card">
                 <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop" class="media-card-img">
                 <div class="media-card-content">
@@ -605,7 +596,6 @@
                 </div>
             </div>
 
-            <!-- Paraglider End-to-End Implementation Card -->
             <div class="media-card">
                 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop" class="media-card-img">
                 <div class="media-card-content">
@@ -614,7 +604,6 @@
                 </div>
             </div>
 
-            <!-- Tailored API Integrations Card -->
             <div class="media-card">
                 <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop" class="media-card-img">
                 <div class="media-card-content">
@@ -647,25 +636,33 @@
         </div>
 
         <div class="setting-group" style="margin-top: 15px;">
-            <label class="setting-label"><i class="fa-solid fa-key"></i> Custom API Key (Optional)</label>
-            <input type="password" id="drawerApiKeyInput" class="setting-input" placeholder="gsk_..." onchange="saveSetting('groq_key', this.value)">
-        </div>
-
-        <div class="setting-group">
             <label class="setting-label"><i class="fa-solid fa-microchip"></i> Script Model</label>
-            <select class="setting-select" onchange="saveSetting('ai_model', this.value)">
+            <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
                 <option value="llama-3.3-70b-versatile">llama-3.3-70b-versatile</option>
                 <option value="llama3-8b-8192">llama3-8b-8192</option>
                 <option value="mixtral-8x7b-32768">mixtral-8x7b-32768</option>
             </select>
         </div>
 
+        <!-- All Languages Supported by Groq AI -->
         <div class="setting-group">
             <label class="setting-label"><i class="fa-solid fa-language"></i> Script Language</label>
-            <select class="setting-select" onchange="saveSetting('script_lang', this.value)">
+            <select class="setting-select" id="scriptLangSelect" onchange="saveSetting('script_lang', this.value)">
                 <option value="Roman Urdu">Roman Urdu</option>
                 <option value="Urdu Script">Urdu (اردو)</option>
+                <option value="Hindi">Hindi (हिंदी)</option>
                 <option value="English">English</option>
+                <option value="Arabic">Arabic (العربية)</option>
+                <option value="Pashto">Pashto (پښتو)</option>
+                <option value="Punjabi">Punjabi (پنجابی)</option>
+                <option value="Persian">Persian (فارسی)</option>
+                <option value="Spanish">Spanish (Español)</option>
+                <option value="French">French (Français)</option>
+                <option value="German">German (Deutsch)</option>
+                <option value="Turkish">Turkish (Türkçe)</option>
+                <option value="Chinese">Chinese (中文)</option>
+                <option value="Japanese">Japanese (日本語)</option>
+                <option value="Russian">Russian (Русский)</option>
             </select>
         </div>
 
@@ -729,11 +726,19 @@
                 document.getElementById('themeToggle').classList.add('active');
                 document.getElementById('themeStatusLabel').innerText = 'Light Mode';
             }
-            const savedKey = localStorage.getItem('groq_key');
-            if (savedKey) document.getElementById('drawerApiKeyInput').value = savedKey;
+            
+            const savedLang = localStorage.getItem('script_lang');
+            if (savedLang) {
+                document.getElementById('scriptLangSelect').value = savedLang;
+            }
+
+            const savedModel = localStorage.getItem('ai_model');
+            if (savedModel) {
+                document.getElementById('scriptModelSelect').value = savedModel;
+            }
         });
 
-        // Built-in Secure Encrypted API Key (No popup required)
+        // Built-in Secure Encrypted API Key
         const SECURE_DEFAULT_KEY = "Z3NrX0hjWVN2Z0gxWWNsZXdrVTd0WUJZV1dneWIzRllJRFFmMWtIOHRyZm5lV1NWcmN1NGVsUlRi";
 
         async function generateScript() {
@@ -743,17 +748,16 @@
                 return;
             }
 
-            // Automatic API Key retrieval without popup dialog
-            let apiKey = document.getElementById('drawerApiKeyInput').value.trim() || localStorage.getItem('groq_key');
-            if (!apiKey) {
-                try {
-                    apiKey = atob(SECURE_DEFAULT_KEY);
-                } catch(e) {
-                    apiKey = "";
-                }
+            let apiKey = "";
+            try {
+                apiKey = atob(SECURE_DEFAULT_KEY);
+            } catch(e) {
+                apiKey = "";
             }
 
-            const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
+            const chosenLang = document.getElementById('scriptLangSelect').value || localStorage.getItem('script_lang') || 'Roman Urdu';
+            const chosenModel = document.getElementById('scriptModelSelect').value || 'llama-3.3-70b-versatile';
+
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
             document.getElementById('scriptResultContent').innerText = "⏳ Groq AI is generating your cinematic script in " + chosenLang + "...";
             document.getElementById('geminiOutputModal').classList.add('active');
@@ -773,7 +777,7 @@
                             },
                             { role: "user", content: inputVal }
                         ],
-                        model: "llama-3.3-70b-versatile"
+                        model: chosenModel
                     })
                 });
 
