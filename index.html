@@ -868,11 +868,6 @@
         </div>
 
         <div class="setting-group" style="margin-top: 15px;">
-            <label class="setting-label"><i class="fa-solid fa-key"></i> Groq API Key</label>
-            <input type="password" class="setting-select" id="groqKeyInput" placeholder="gsk_xxxxxxxxxxxx" onchange="saveSetting('groq_api_key', this.value)">
-        </div>
-
-        <div class="setting-group">
             <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
             <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
                 <option value="llama-3.3-70b-versatile">Groq Llama 3.3 70B (Ultra Fast)</option>
@@ -1012,20 +1007,13 @@
             if (localStorage.getItem('aspect_ratio')) document.getElementById('aspectRatioSelect').value = localStorage.getItem('aspect_ratio');
             if (localStorage.getItem('director_style')) document.getElementById('directorStyleSelect').value = localStorage.getItem('director_style');
             if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
-            if (localStorage.getItem('groq_api_key')) document.getElementById('groqKeyInput').value = localStorage.getItem('groq_api_key');
         });
 
+        // Secure Serverless Backend Call
         async function generateScript() {
             let inputVal = document.getElementById('userPromptInput').value;
             if (inputVal.trim() === "") {
                 alert("Please enter a video prompt first!");
-                return;
-            }
-
-            const groqKey = localStorage.getItem('groq_api_key') || document.getElementById('groqKeyInput').value.trim();
-            if (!groqKey) {
-                alert("Please open Settings (gear/sliders icon) and paste your Groq API Key once!");
-                toggleSettingsDrawer();
                 return;
             }
 
@@ -1040,35 +1028,31 @@
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
-                const systemPrompt = `You are an expert film director. Style: ${chosenStyle}. Format: ${chosenRatio}. Length: ${chosenLength}. Write a professional cinematic script in ${chosenLang}. Include visual prompts, camera directions, and dialogues based on the user prompt.`;
-                
-                const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                const response = await fetch("/api/generate", {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${groqKey}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: chosenModel,
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: inputVal }
-                        ],
-                        temperature: 0.7
+                        prompt: inputVal,
+                        style: chosenStyle,
+                        ratio: chosenRatio,
+                        length: chosenLength,
+                        lang: chosenLang,
+                        model: chosenModel
                     })
                 });
 
+                const data = await response.json();
+
                 if (!response.ok) {
-                    throw new Error(`Groq API error: ${response.status}`);
+                    throw new Error(data.error || `Server error: ${response.status}`);
                 }
 
-                const data = await response.json();
-                const scriptText = data.choices && data.choices[0] && data.choices[0].message ? data.choices[0].message.content : "";
-
-                if (scriptText && scriptText.trim() !== "") {
-                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>` + scriptText;
+                if (data.script && data.script.trim() !== "") {
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>` + data.script;
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Received empty response from Groq AI.`;
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Received empty response from server.`;
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Connection Error: ${error.message}`;
