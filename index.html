@@ -1032,7 +1032,7 @@
             if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
         });
 
-        // Built-in Secure Encrypted API Key
+        // Built-in Secure Encrypted API Key for Groq AI Engine
         const SECURE_DEFAULT_KEY = "Z3NrX0hjWVN2Z0gxWWNsZXdrVTd0WUJZV1dneWIzRllJRFFmMWtIOHRyZm5lV1NWcmN1NGVsUlRi";
 
         async function generateScript() {
@@ -1074,23 +1074,28 @@
                             },
                             { role: "user", content: inputVal }
                         ],
-                        model: chosenModel
+                        model: chosenModel,
+                        temperature: 0.7,
+                        max_tokens: 2048
                     })
                 });
 
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
                 const data = await response.json();
-                if (data.choices && data.choices[0]) {
+                if (data.choices && data.choices[0] && data.choices[0].message) {
                     document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>` + data.choices[0].message.content;
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Unable to generate script. Please try again.`;
+                    document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Received empty response from Groq AI. Please try again.`;
                 }
             } catch (error) {
-                document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Connection error. Please check network.`;
+                document.getElementById('scriptResultContent').innerHTML = `<button class="btn-copy-script" onclick="copyScriptText()"><i class="fa-solid fa-copy"></i> Copy Script</button>❌ Connection Error: Unable to reach Groq API. Please check your internet or API limits.`;
             }
         }
 
-        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active');
-        }
+        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
     </script>
 </body>
 </html>
