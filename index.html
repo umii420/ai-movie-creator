@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Marked.js for Clean Markdown Rendering (Fixes **, ###, ---) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
         :root {
@@ -653,7 +655,7 @@
         .toggle-switch.active { background: var(--accent-green); }
         .toggle-switch.active::after { left: 23px; background: #000; }
 
-        /* Professional Modal & Script Layout */
+        /* Clean Modern Gemini-Style Response Card */
         .gemini-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-black); z-index: 2000; display: flex;
@@ -670,16 +672,22 @@
         .gemini-content-box { width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-gemini); padding-bottom: 120px; }
         .gemini-prompt-display { font-size: 1.2rem; font-weight: 600; color: var(--text-main); margin-bottom: 15px; }
         
-        /* Hollywood Script Look */
         .gemini-response-card {
             background: var(--card-bg); border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 30px; line-height: 1.8; font-size: 0.98rem; color: var(--text-main); white-space: pre-wrap;
+            border-radius: 16px; padding: 25px 30px; line-height: 1.7; font-size: 1rem; color: var(--text-main);
             position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            font-family: 'Courier New', Courier, monospace; /* Classic Screenplay Font Feel */
+            font-family: var(--font-gemini);
         }
         body.light-mode .gemini-response-card {
             background: #ffffff; color: #111827; border-color: #d1d5db;
         }
+
+        /* Styling Clean Headings Inside Rendered Markdown */
+        .gemini-response-card h1, .gemini-response-card h2, .gemini-response-card h3 {
+            color: var(--accent-green); font-family: var(--font-heading); margin-top: 15px; margin-bottom: 10px;
+        }
+        .gemini-response-card p { margin-bottom: 12px; }
+        .gemini-response-card ul, .gemini-response-card ol { margin-left: 20px; margin-bottom: 12px; }
 
         .script-action-bar {
             display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;
@@ -974,13 +982,6 @@
                 <option value="Hindi">Hindi (हिंदी)</option>
                 <option value="English">English</option>
                 <option value="Arabic">Arabic (العربية)</option>
-                <option value="Pashto">Pashto (پښتو)</option>
-                <option value="Punjabi">Punjabi (پنجابی)</option>
-                <option value="Persian">Persian (فارسی)</option>
-                <option value="Spanish">Spanish (Español)</option>
-                <option value="French">French (Français)</option>
-                <option value="German">German (Deutsch)</option>
-                <option value="Turkish">Turkish (Türkçe)</option>
             </select>
         </div>
 
@@ -1017,7 +1018,7 @@
         </button>
     </div>
 
-    <!-- Result Modal with Copy All, Clear All and Sticky Bottom Prompt Box -->
+    <!-- Gemini Style Result Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
@@ -1026,7 +1027,6 @@
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
             
-            <!-- Professional Action Bar -->
             <div class="script-action-bar">
                 <button class="btn-script-action btn-green" onclick="copyAllScript()"><i class="fa-solid fa-copy"></i> Copy All</button>
                 <button class="btn-script-action btn-red" onclick="clearAllContent()"><i class="fa-solid fa-trash"></i> Clear All</button>
@@ -1098,7 +1098,7 @@
             inputField.focus();
         }
 
-        // Voice Typing (Speech to Text) Functionality
+        // Voice Typing Functionality (Fixed)
         function toggleVoiceInput(textareaId, micBtnId) {
             const textarea = document.getElementById(textareaId);
             const micBtn = document.getElementById(micBtnId);
@@ -1111,7 +1111,7 @@
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
             
-            recognition.lang = 'ur-PK'; // Supports Urdu/Roman Urdu & English
+            recognition.lang = 'ur-PK';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
 
@@ -1128,7 +1128,7 @@
             };
 
             recognition.onerror = () => {
-                alert("Voice recognition error. Please try again.");
+                alert("Voice recognition error or permission denied. Please check microphone access.");
                 micBtn.classList.remove('listening');
                 micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
             };
@@ -1141,16 +1141,14 @@
             recognition.start();
         }
 
-        // Copy All Script Feature
         function copyAllScript() {
             const textCard = document.getElementById('scriptResultContent');
             let textToCopy = textCard.innerText.trim();
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("Complete script copied successfully!");
+                alert("Copied successfully!");
             });
         }
 
-        // Clear All Feature
         function clearAllContent() {
             document.getElementById('userPromptInput').value = '';
             document.getElementById('modalPromptInput').value = '';
@@ -1173,15 +1171,17 @@
             if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
         });
 
-        // Universal Generator Function with Click Feedback & Chatbot Intelligence
+        // Fixed Generator Function for Both Inputs
         async function generateScript(inputId) {
-            let inputVal = document.getElementById(inputId).value;
-            if (inputVal.trim() === "") {
+            const inputField = document.getElementById(inputId);
+            if (!inputField) return;
+
+            let inputVal = inputField.value.trim();
+            if (inputVal === "") {
                 alert("Please enter a message or prompt first!");
                 return;
             }
 
-            // Click Feedback & Loading State
             const submitBtnId = inputId === 'userPromptInput' ? 'homeSubmitBtn' : 'modalSubmitBtn';
             const submitBtn = document.getElementById(submitBtnId);
             const originalIcon = submitBtn.innerHTML;
@@ -1194,7 +1194,7 @@
             const chosenModel = localStorage.getItem('ai_model') || 'llama-3.3-70b-versatile';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Director Assistant is processing your request...`;
+            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Director Assistant is thinking...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
@@ -1220,15 +1220,15 @@
                 }
 
                 if (data.script && data.script.trim() !== "") {
-                    document.getElementById('scriptResultContent').innerHTML = data.script;
-                    document.getElementById('modalPromptInput').value = ''; // clear input after success
+                    // Clean HTML Output via Marked.js Parser (Fixes raw **, ### symbols)
+                    document.getElementById('scriptResultContent').innerHTML = marked.parse(data.script);
+                    inputField.value = ''; // clear active field after success
                 } else {
                     document.getElementById('scriptResultContent').innerHTML = `❌ Received empty response from server.`;
                 }
             } catch (error) {
                 document.getElementById('scriptResultContent').innerHTML = `❌ Connection Error: ${error.message}`;
             } finally {
-                // Restore Button Icon
                 submitBtn.innerHTML = originalIcon;
             }
         }
