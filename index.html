@@ -689,20 +689,18 @@
         .gemini-response-card p { margin-bottom: 12px; }
         .gemini-response-card ul, .gemini-response-card ol { margin-left: 20px; margin-bottom: 12px; }
 
-        .script-action-bar {
-            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;
+        /* Compact Toolbar inside Card (Replaces Big Buttons) */
+        .card-toolbar {
+            display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px;
+            padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
         }
-
-        .btn-script-action {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-glow); color: var(--text-main);
-            padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
-            font-family: var(--font-body);
+        .icon-btn {
+            background: transparent; border: 1px solid var(--border-glow); color: var(--text-muted);
+            width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+            transition: 0.2s;
         }
-        .btn-script-action:hover { border-color: var(--accent-green); color: var(--accent-green); }
-        .btn-script-action.btn-green { background: var(--accent-green); color: #000; border: none; }
-        .btn-script-action.btn-green:hover { opacity: 0.9; color: #000; }
-        .btn-script-action.btn-red { background: rgba(255, 59, 48, 0.2); border-color: #ff3b30; color: #ff3b30; }
+        .icon-btn:hover { color: var(--accent-green); border-color: var(--accent-green); }
 
         /* Sticky Bottom Prompt Box inside Result Modal */
         .modal-prompt-container {
@@ -969,8 +967,8 @@
         <div class="setting-group" style="margin-top: 15px;">
             <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
             <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
+                <option value="openai/gpt-oss-120b">OpenAI GPT-OSS 120B (Default)</option>
                 <option value="llama-3.3-70b-versatile">Groq Llama 3.3 70B (Ultra Fast)</option>
-                <option value="llama-3.1-8b-instant">Groq Llama 3.1 8B (Instant)</option>
             </select>
         </div>
 
@@ -1027,13 +1025,14 @@
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
             
-            <div class="script-action-bar">
-                <button class="btn-script-action btn-green" onclick="copyAllScript()"><i class="fa-solid fa-copy"></i> Copy All</button>
-                <button class="btn-script-action btn-red" onclick="clearAllContent()"><i class="fa-solid fa-trash"></i> Clear All</button>
-            </div>
-
-            <div class="gemini-response-card" id="scriptResultContent">
-                Generating your script...
+            <div class="gemini-response-card">
+                <div id="scriptResultContent">Generating your script...</div>
+                
+                <!-- Compact Minimal Buttons Inside Card Footer -->
+                <div class="card-toolbar">
+                    <button class="icon-btn" onclick="copyAllScript()" title="Copy Response"><i class="fa-solid fa-copy"></i></button>
+                    <button class="icon-btn" onclick="clearAllContent()" title="Clear Conversation"><i class="fa-solid fa-trash"></i></button>
+                </div>
             </div>
         </div>
 
@@ -1098,7 +1097,7 @@
             inputField.focus();
         }
 
-        // Voice Typing Functionality (Fixed)
+        // Voice Typing Functionality
         function toggleVoiceInput(textareaId, micBtnId) {
             const textarea = document.getElementById(textareaId);
             const micBtn = document.getElementById(micBtnId);
@@ -1171,7 +1170,7 @@
             if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
         });
 
-        // Fixed Generator Function for Both Inputs
+        // Gemini-Style Streaming Script Generator
         async function generateScript(inputId) {
             const inputField = document.getElementById(inputId);
             if (!inputField) return;
@@ -1191,18 +1190,17 @@
             const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
             const chosenStyle = localStorage.getItem('director_style') || 'Hollywood Blockbuster';
             const chosenLength = localStorage.getItem('script_length') || 'Detailed Multi-Scene Story';
-            const chosenModel = localStorage.getItem('ai_model') || 'llama-3.3-70b-versatile';
+            const chosenModel = localStorage.getItem('ai_model') || 'openai/gpt-oss-120b';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Director Assistant is thinking...`;
+            const resultContent = document.getElementById('scriptResultContent');
+            resultContent.innerHTML = `⏳ AI Director Assistant is thinking...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
                 const response = await fetch("/api/generate", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                         prompt: inputVal,
                         style: chosenStyle,
@@ -1213,21 +1211,38 @@
                     })
                 });
 
-                const data = await response.json();
-
                 if (!response.ok) {
-                    throw new Error(data.error || `Server error: ${response.status}`);
+                    const errData = await response.json();
+                    throw new Error(errData.error || `Server error: ${response.status}`);
                 }
 
-                if (data.script && data.script.trim() !== "") {
-                    // Clean HTML Output via Marked.js Parser (Fixes raw **, ### symbols)
-                    document.getElementById('scriptResultContent').innerHTML = marked.parse(data.script);
-                    inputField.value = ''; // clear active field after success
+                // If Backend sends raw JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
+                    if (data.script) {
+                        resultContent.innerHTML = marked.parse(data.script);
+                    }
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `❌ Received empty response from server.`;
+                    // Streaming Response Rendering word-by-word
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let fullText = "";
+                    resultContent.innerHTML = "";
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        const chunk = decoder.decode(value, { stream: true });
+                        fullText += chunk;
+                        resultContent.innerHTML = marked.parse(fullText);
+                    }
                 }
+
+                inputField.value = '';
+
             } catch (error) {
-                document.getElementById('scriptResultContent').innerHTML = `❌ Connection Error: ${error.message}`;
+                resultContent.innerHTML = `❌ Connection Error: ${error.message}`;
             } finally {
                 submitBtn.innerHTML = originalIcon;
             }
