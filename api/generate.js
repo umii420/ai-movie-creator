@@ -4,29 +4,31 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, style, ratio, length, lang, model } = req.body;
+    const { prompt, model } = req.body;
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not configured on Vercel.' });
     }
 
-    // System Prompt for Smart Conversational Director Chatbot
-    const systemInstruction = `You are a world-class AI Film Director & Intelligent Chatbot named "AI Director Assistant".
-    
-    CORE RULES:
-    1. CONVERSATIONAL BEHAVIOR (GEMINI STYLE): Act as a conversational director assistant.
-    2. LANGUAGE STANDARD: Unless explicitly requested otherwise, default to natural, friendly **Roman Urdu** (e.g., "Haan Umar bhai, bataiye kis tarah ki movie ka scene likhna hai?").
-    3. NO UNASKED SCRIPT CREATION: Do NOT output formal screenplay structures like "Title Page", "Logline", or "Scene 1" unless the user explicitly asks for a script or story generation. If they are just chatting, asking questions, or discussing ideas, respond like a conversational human director in clean Roman Urdu.
-    4. SCRIPT FORMATTING: If and ONLY IF a script is requested, generate a high-fidelity cinematic screenplay formatted with clean Markdown formatting (bold names, clean scene headings) without messy unparsed text.
-    
-    Context Settings:
-    - Language Mode: ${lang || 'Roman Urdu'}
-    - Style: ${style || 'Hollywood Blockbuster'}
-    - Aspect Ratio: ${ratio || '16:9 Cinematic'}`;
+    // Auto-Detect Visitor Location from Vercel Request Headers
+    const userCountry = req.headers['x-vercel-ip-country'] || 'Unknown Country';
+    const userCity = req.headers['x-vercel-ip-city'] || 'Unknown City';
 
-    // Using exact model requested: openai/gpt-oss-120b
-    const selectedModel = model && model !== 'llama-3.3-70b-versatile' ? model : 'openai/gpt-oss-120b';
+    // System Prompt for Location-Aware Conversational Director
+    const systemInstruction = `You are an intelligent, world-class AI Film Director & Chatbot named "AI Director Assistant".
+
+    CRITICAL LOCATION & LANGUAGE ADAPTATION RULES:
+    1. VISITOR LOCATION: The user is accessing from Country: "${userCountry}", City: "${userCity}".
+    2. AUTOMATIC LANGUAGE DETECTION:
+       - If the user is from Pakistan/India or writes in Roman Urdu/Hindi/Hinglish, respond naturally in friendly Roman Urdu (e.g., "Haan Umar bhai, bataiye kya concept hai?").
+       - If the user is from an Arabic-speaking country (e.g., SA, AE, QA), respond in Arabic or regional language according to their prompt.
+       - Otherwise, adapt seamlessly to the primary language of the visitor's location or the language used in their prompt.
+    3. CONVERSATIONAL BEHAVIOR: Act like a human movie director. Chat warmly, discuss film ideas, and answer questions without forcing screenplay scripts.
+    4. SCRIPT FORMATTING: Only generate a full structured film script if the user explicitly requests one. When generating a script, use clean formatting without broken tags.`;
+
+    // Persistent Model Configuration: openai/gpt-oss-120b
+    const selectedModel = 'openai/gpt-oss-120b';
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -51,9 +53,9 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: data.error?.message || 'Groq API Error' });
     }
 
-    // Fixed missing dot syntax issue on Line 51
+    // Syntax-safe extraction (Fixed dot missing issue)
     const aiScript = data.choices[0]?.message?.content || '';
-    return res.status(200).json({ script: aiScript });
+    return res.status(200).json({ script: aiScript, detectedCountry: userCountry });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
