@@ -4,24 +4,35 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt, imageBase64, lang } = req.body;
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not configured on Vercel.' });
     }
 
-    const userCountry = req.headers['x-vercel-ip-country'] || 'Unknown Country';
-    const userCity = req.headers['x-vercel-ip-city'] || 'Unknown City';
+    const systemInstruction = `You are an AI Film Director. 
+    Analyze the provided input (and image if uploaded). 
+    If an image is uploaded, examine its visual elements (characters, background, emotions, color tone) and write a highly creative movie scene or script based on it in ${lang || 'Roman Urdu'}. 
+    Be direct, engaging, and atmospheric in clean Markdown formatting.`;
 
-    const systemInstruction = `You are a world-class AI Film Director & Chatbot named "AI Director Assistant", behaving exactly like Google Gemini.
+    let messages = [{ role: 'system', content: systemInstruction }];
 
-    LOCATION CONTEXT: Country: "${userCountry}", City: "${userCity}".
+    // Handle Vision Input (Image + Text)
+    if (imageBase64) {
+      messages.push({
+        role: 'user',
+        content: [
+          { type: 'text', text: prompt || 'Analyze this image and turn it into a cinematic movie scene script.' },
+          { type: 'image_url', image_url: { url: imageBase64 } }
+        ]
+      });
+    } else {
+      messages.push({ role: 'user', content: prompt });
+    }
 
-    RULES:
-    1. INSTANT EXECUTION: If asked for a script or story, generate it immediately in clean Markdown without extra questions.
-    2. CONVERSATIONAL CHAT: If user is chatting, respond as a friendly Director in natural Roman Urdu/Hinglish.
-    3. STREAMING OUTPUT: Output clean, continuous text for live rendering.`;
+    // Vision model for images, GPT-OSS/Llama for text
+    const selectedModel = imageBase64 ? 'llama-3.2-11b-vision-preview' : 'openai/gpt-oss-120b';
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -30,38 +41,21 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
-        messages: [
-          { role: 'system', content: systemInstruction },
-          { role: 'user', content: prompt }
-        ],
+        model: selectedModel,
+        messages: messages,
         temperature: 0.7,
-        max_tokens: 2048,
-        stream: true
+        max_tokens: 2048
       })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const errData = await response.json();
-      return res.status(response.status).json({ error: errData.error?.message || 'Groq API Error' });
+      return res.status(response.status).json({ error: data.error?.message || 'Groq Vision API Error' });
     }
 
-    // Set headers for Server-Sent Events (Streaming)
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      const chunk = decoder.decode(value);
-      res.write(chunk);
-    }
-
-    res.end();
+    const aiScript = data.choices[0]?.message?.content || '';
+    return res.status(200).json({ script: aiScript });
 
   } catch (error) {
     return res.status(500).json({ error: error.message });
