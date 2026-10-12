@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Marked.js for Rendering Clean Markdown -->
+    <!-- Marked.js for Clean Markdown Rendering (Fixes **, ###, ---) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <style>
@@ -22,91 +22,640 @@
             --text-muted: #9ca3af;
             --border-glow: rgba(255, 255, 255, 0.1);
             --header-bg: rgba(5, 5, 7, 0.9);
+            --store-bg: #12141c;
+            --store-text: #ffffff;
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font-body); }
+        body.light-mode {
+            --bg-black: #f4f5f8;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --border-glow: rgba(0, 0, 0, 0.12);
+            --header-bg: rgba(244, 245, 248, 0.92);
+            --store-bg: #111827;
+            --store-text: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
 
         body {
             background-color: var(--bg-black);
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 5%; background: var(--header-bg); backdrop-filter: blur(12px);
-            position: fixed; width: 100%; top: 0; z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
             border-bottom: 1px solid var(--border-glow);
         }
 
         .logo {
-            font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800;
-            letter-spacing: -0.5px; color: var(--text-main); text-transform: uppercase;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .nav-btns {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
         .btn-contact {
-            background: transparent; color: var(--text-main); border: 1px solid var(--border-glow);
-            padding: 8px 16px; border-radius: 30px; font-weight: 600; font-size: 0.8rem; cursor: pointer;
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-glow);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        .hero { padding: 120px 5% 40px; text-align: center; max-width: 800px; margin: 0 auto; }
+        .menu-btn {
+            background: transparent;
+            border: 1px solid var(--border-glow);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .hero {
+            padding: 120px 5% 40px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
         .hero h1 {
-            font-family: var(--font-heading); font-size: clamp(1.8rem, 5.5vw, 2.7rem);
-            font-weight: 800; line-height: 1.2; text-transform: uppercase; margin-bottom: 20px;
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 5.5vw, 2.7rem);
+            font-weight: 800;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .hero p {
+            font-size: clamp(0.9rem, 2vw, 1.05rem);
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 30px;
         }
 
         .prompt-container {
-            width: 100%; max-width: 650px; margin: 0 auto 30px;
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto 30px;
             background: linear-gradient(180deg, rgba(30, 32, 40, 0.95), rgba(15, 16, 22, 0.98));
-            border-radius: 24px; padding: 24px 20px 18px; border: 1px solid var(--border-glow);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: left;
+            border-radius: 24px;
+            padding: 24px 20px 18px;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            text-align: left;
+        }
+
+        body.light-mode .prompt-container {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98));
         }
 
         .prompt-title-luma {
-            font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800;
-            margin-bottom: 15px; color: #ffffff; text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        body.light-mode .prompt-title-luma {
+            color: #111827;
         }
 
         .prompt-input-box-luma {
-            background: #ffffff; border-radius: 16px; padding: 10px 14px;
-            display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 16px;
         }
 
         .prompt-input-box-luma textarea {
-            flex-grow: 1; border: none; outline: none; background: transparent;
-            font-size: 0.92rem; color: #111; width: 100%; resize: none; height: 48px;
-            line-height: 1.4; font-family: var(--font-body);
+            flex-grow: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.92rem;
+            color: #111;
+            width: 100%;
+            resize: none;
+            height: 48px;
+            line-height: 1.4;
+            font-family: var(--font-body);
         }
 
-        .input-action-buttons { display: flex; align-items: center; gap: 6px; }
+        .input-action-buttons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         .btn-mic-luma {
-            background: rgba(0,0,0,0.05); color: #555; border: none; width: 38px; height: 38px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 1rem; cursor: pointer; transition: 0.2s ease;
+            background: rgba(0,0,0,0.05);
+            color: #555;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.2s ease;
         }
-        .btn-mic-luma.listening { background: #ff3b30; color: #fff; }
+        .btn-mic-luma:hover { background: rgba(0,0,0,0.1); color: #000; }
+        .btn-mic-luma.listening { background: #ff3b30; color: #fff; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.4); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
 
         .btn-arrow-luma {
-            background: #9ca3af; color: #ffffff; border: none; width: 38px; height: 38px;
-            border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 1.1rem; cursor: pointer; transition: 0.2s ease;
+            background: #9ca3af;
+            color: #ffffff;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: 0.2s ease;
         }
-        .btn-arrow-luma:hover, .btn-arrow-luma.active { background: #000000; color: var(--accent-green); }
 
-        .genre-chips-wrapper { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .btn-arrow-luma:hover, .btn-arrow-luma.active {
+            background: #000000;
+            color: var(--accent-green);
+            transform: scale(1.05);
+        }
+        .btn-arrow-luma:active { transform: scale(0.95); }
+
+        .genre-chips-wrapper {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
         .genre-chip {
-            background: rgba(255, 255, 255, 0.95); color: #111827; border: none;
-            padding: 7px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer;
+            background: rgba(255, 255, 255, 0.95);
+            color: #111827;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        /* Gemini Response Overlay */
+        body.light-mode .genre-chip {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .genre-chip:hover, .genre-chip.selected {
+            background: var(--accent-green);
+            color: #000000;
+            transform: translateY(-1px);
+        }
+
+        .hero-cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: var(--accent-green);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-block;
+        }
+
+        .trusted-section {
+            padding: 40px 5%;
+            text-align: center;
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        .trusted-title {
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .trusted-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .brand-badge {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .features-section { padding: 50px 5%; max-width: 800px; margin: 0 auto; }
+
+        .section-header {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            text-align: left;
+            letter-spacing: -0.5px;
+        }
+
+        .cards-carousel {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scrollbar-width: none;
+        }
+        .cards-carousel::-webkit-scrollbar { display: none; }
+
+        .carousel-card {
+            min-width: 260px;
+            background: var(--accent-green);
+            color: #000;
+            padding: 22px;
+            border-radius: 18px;
+            flex-shrink: 0;
+        }
+
+        .carousel-card.yellow-card {
+            background: #ffcc00;
+        }
+
+        .carousel-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .carousel-card p {
+            font-size: 0.85rem;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .banner-card {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            padding: 30px 20px;
+            border: 1px solid var(--border-glow);
+            margin: 40px 0;
+            text-align: left;
+        }
+
+        .banner-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .banner-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-white {
+            background: #fff;
+            color: #000;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .image-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .media-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .media-card-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .media-card-content {
+            padding: 20px;
+            text-align: left;
+        }
+
+        .media-card-green {
+            background: var(--accent-green);
+            color: #000;
+            padding: 22px;
+            border-radius: 20px;
+        }
+
+        .media-card-green h3 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .media-card-green .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        .media-card-green p {
+            font-size: 0.88rem;
+            line-height: 1.4;
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 60px 5% 40px;
+            border-top: 1px solid var(--border-glow);
+            text-align: left;
+            margin-top: 60px;
+        }
+
+        .footer-social-row {
+            display: flex;
+            gap: 20px;
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            color: var(--text-main);
+            justify-content: flex-start;
+        }
+
+        .footer-social-row a {
+            color: var(--text-main);
+            transition: 0.2s;
+        }
+
+        .footer-social-row a:hover {
+            color: var(--accent-green);
+        }
+
+        .footer-accordion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--text-main);
+        }
+
+        .app-store-badges {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .store-badge-box {
+            background: var(--store-bg);
+            border: 1px solid var(--border-glow);
+            padding: 10px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--store-text);
+            transition: 0.2s;
+        }
+
+        .store-badge-box:hover {
+            border-color: var(--accent-green);
+        }
+
+        .store-badge-box i {
+            font-size: 1.8rem;
+            color: var(--store-text);
+        }
+
+        .store-badge-text small {
+            display: block;
+            font-size: 0.65rem;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .store-badge-text span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--store-text);
+        }
+
+        .footer-bottom-branding {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 6vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            margin: 30px 0 20px;
+            background: linear-gradient(135deg, var(--text-main) 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .footer-legal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-glow);
+            padding-top: 25px;
+        }
+
+        .footer-legal-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .footer-legal-links a:hover {
+            color: var(--text-main);
+        }
+
+        .settings-drawer {
+            position: fixed;
+            top: 0; right: -380px;
+            width: 350px; height: 100%;
+            background: var(--card-bg);
+            border-left: 1px solid var(--border-glow);
+            z-index: 3000;
+            transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 25px; overflow-y: auto;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .settings-drawer.active { right: 0; }
+
+        .settings-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 25px; padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-glow);
+        }
+
+        .settings-header h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .close-drawer { background: none; border: none; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
+
+        .setting-group { margin-bottom: 18px; }
+        .setting-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; }
+        .setting-select {
+            width: 100%; padding: 10px 12px; border-radius: 10px;
+            border: 1px solid var(--border-glow); background: var(--bg-black);
+            color: var(--text-main); font-size: 0.88rem; outline: none;
+        }
+
+        .setting-toggle-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid var(--border-glow);
+        }
+
+        .toggle-switch {
+            position: relative; width: 44px; height: 24px;
+            background: #374151; border-radius: 20px; cursor: pointer; transition: 0.3s;
+        }
+
+        .toggle-switch::after {
+            content: ''; position: absolute; top: 3px; left: 3px;
+            width: 18px; height: 18px; background: #fff;
+            border-radius: 50%; transition: 0.3s;
+        }
+
+        .toggle-switch.active { background: var(--accent-green); }
+        .toggle-switch.active::after { left: 23px; background: #000; }
+
+        /* Clean Modern Gemini-Style Response Card */
         .gemini-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-black); z-index: 2000; display: flex;
@@ -126,42 +675,70 @@
         .gemini-response-card {
             background: var(--card-bg); border: 1px solid var(--border-glow);
             border-radius: 16px; padding: 25px 30px; line-height: 1.7; font-size: 1rem; color: var(--text-main);
-            margin-bottom: 20px; font-family: var(--font-gemini);
+            position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            font-family: var(--font-gemini);
+        }
+        body.light-mode .gemini-response-card {
+            background: #ffffff; color: #111827; border-color: #d1d5db;
         }
 
+        /* Styling Clean Headings Inside Rendered Markdown */
         .gemini-response-card h1, .gemini-response-card h2, .gemini-response-card h3 {
             color: var(--accent-green); font-family: var(--font-heading); margin-top: 15px; margin-bottom: 10px;
         }
         .gemini-response-card p { margin-bottom: 12px; }
+        .gemini-response-card ul, .gemini-response-card ol { margin-left: 20px; margin-bottom: 12px; }
 
-        .script-action-bar { display: flex; gap: 10px; margin-bottom: 15px; }
-
-        .btn-script-action {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-glow); color: var(--text-main);
-            padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.8rem; cursor: pointer;
+        /* Compact Toolbar inside Card (Replaces Big Buttons) */
+        .card-toolbar {
+            display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px;
+            padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-script-action.btn-green { background: var(--accent-green); color: #000; border: none; }
-        .btn-script-action.btn-red { background: rgba(255, 59, 48, 0.2); border-color: #ff3b30; color: #ff3b30; }
+        .icon-btn {
+            background: transparent; border: 1px solid var(--border-glow); color: var(--text-muted);
+            width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .icon-btn:hover { color: var(--accent-green); border-color: var(--accent-green); }
 
+        /* Sticky Bottom Prompt Box inside Result Modal */
         .modal-prompt-container {
-            position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 5%;
-            background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-glow); z-index: 2500; display: flex; justify-content: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(5, 5, 7, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-glow);
+            z-index: 2500;
+            display: flex;
+            justify-content: center;
+        }
+        body.light-mode .modal-prompt-container {
+            background: rgba(244, 245, 248, 0.95);
         }
 
         .modal-prompt-box {
-            width: 100%; max-width: 800px; background: linear-gradient(180deg, rgba(30, 32, 40, 0.95), rgba(15, 16, 22, 0.98));
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(180deg, rgba(30, 32, 40, 0.95), rgba(15, 16, 22, 0.98));
             border-radius: 18px; padding: 12px 16px; border: 1px solid var(--border-glow);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+        }
+        body.light-mode .modal-prompt-box {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98));
         }
 
         .modal-prompt-input-row {
             background: #ffffff; border-radius: 12px; padding: 6px 12px;
-            display: flex; align-items: center; gap: 10px;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-
         .modal-prompt-input-row textarea {
             flex-grow: 1; border: none; outline: none; background: transparent;
             font-size: 0.9rem; color: #111; resize: none; height: 38px; line-height: 1.4;
+            font-family: var(--font-body);
         }
 
         .modal-overlay {
@@ -191,18 +768,21 @@
 
     <header>
         <div class="logo">AI MOVIE CREATOR</div>
-        <button class="btn-contact" onclick="openModal()">Contact Us</button>
+        <div class="nav-btns">
+            <button class="btn-contact" onclick="openModal()">Contact Us</button>
+            <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-sliders"></i></button>
+        </div>
     </header>
 
     <section class="hero">
-        <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS IN SECONDS.</h1>
-        <p>AI Movie Creator automatically detects your language and interacts naturally like an expert film director.</p>
+        <h1>CREATE CINEMATIC MOVIES VISUALLY. EXPORT PRODUCTION-READY SCRIPTS & 8K SCENES IN SECONDS.</h1>
+        <p>AI Movie Creator lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals in real time.</p>
 
         <div class="prompt-container">
-            <div class="prompt-title-luma">Describe your story or chat with Director</div>
+            <div class="prompt-title-luma">Describe your video or chat with Director</div>
             
             <div class="prompt-input-box-luma">
-                <textarea id="userPromptInput" placeholder="A thriller scene or ask anything about your movie..."></textarea>
+                <textarea id="userPromptInput" placeholder="A cyberpunk thriller scene or ask anything about your movie..."></textarea>
                 <div class="input-action-buttons">
                     <button class="btn-mic-luma" id="homeMicBtn" onclick="toggleVoiceInput('userPromptInput', 'homeMicBtn')" title="Voice Typing"><i class="fa-solid fa-microphone"></i></button>
                     <button class="btn-arrow-luma active" id="homeSubmitBtn" onclick="generateScript('userPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
@@ -215,11 +795,228 @@
                 <button class="genre-chip" onclick="selectGenre('Thriller')">Thriller</button>
                 <button class="genre-chip" onclick="selectGenre('Action')">Action</button>
                 <button class="genre-chip" onclick="selectGenre('Sci-Fi')">Sci-Fi</button>
+                <button class="genre-chip" onclick="selectGenre('Drama')">Drama</button>
+            </div>
+        </div>
+
+        <div class="hero-cta-group">
+            <a href="#" class="btn-primary">Start Creating Now</a>
+        </div>
+    </section>
+
+    <section class="trusted-section">
+        <div class="trusted-title">POWERED BY NEXT-GEN ENGINE INTEGRATIONS</div>
+        <div class="trusted-logos">
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> GROQ AI ENGINE</div>
+            <div class="brand-badge"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent-cyan);"></i> LLAMA 3.3 70B</div>
+            <div class="brand-badge"><i class="fa-solid fa-film" style="color: var(--accent-green);"></i> LUMA ENGINE</div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="section-header">A VIDEO GENERATION API, IN THE SAME INTEGRATION</div>
+        
+        <div class="cards-carousel">
+            <div class="carousel-card">
+                <h3>Text to video</h3>
+                <p>Prompt-only video generation with the latest models — the same capability as the video generator, on a REST endpoint.</p>
+            </div>
+            <div class="carousel-card yellow-card">
+                <h3>Image to video</h3>
+                <p>Animate static images or create smooth video motion prompts with camera controls.</p>
+            </div>
+        </div>
+
+        <div class="banner-card">
+            <h2>EXPLORE OUR CLEAR, EASY TO FOLLOW DOCUMENTATION OR SPEAK WITH OUR TEAM TO DEPLOY AI MOVIE CREATOR IN YOUR ENVIRONMENT.</h2>
+            <div class="banner-btns">
+                <a href="#" class="btn-white">View documentation</a>
+                <button class="btn-contact" onclick="openModal()" style="border-color: #fff; color: #fff;">Contact us</button>
+            </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 50px;">WHAT OUR CUSTOMERS SAY</div>
+        
+        <div class="image-cards-grid">
+            <div class="media-card-green">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 12px; border: 2px solid #000;">
+                <h3>Melanie Huang</h3>
+                <div class="subtitle">Interactive Designer, WCM</div>
+                <p>"When I saw the potential of training my own models and having cinematic and creative control over generation AI systems, that's when I really started to explore what was possible."</p>
+            </div>
+
+            <div class="section-header" style="margin-top: 30px;">BUILD WHAT YOU NEED WITH OUR AI EXPERTS</div>
+
+            <div class="media-card">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop" class="media-card-img">
+                <div class="media-card-content">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;">CUSTOM MODEL SUPPORT</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Partner with us to fine-tune models or develop specialized solutions for your use case.</p>
+                </div>
+            </div>
+
+            <div class="media-card">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=600&auto=format&fit=crop" class="media-card-img">
+                <div class="media-card-content">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;">END-TO-END IMPLEMENTATION HELP</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Our experts help you design, implement, and optimize creative features, so you can ship faster with confidence.</p>
+                </div>
+            </div>
+
+            <div class="media-card">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=600&auto=format&fit=crop" class="media-card-img">
+                <div class="media-card-content">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; margin-bottom: 8px;">TAILORED API INTEGRATIONS</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Work with our team to build custom API workflows that fit your product's unique needs.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Gemini Style Response Output -->
+    <footer>
+        <div class="footer-social-row">
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-discord"></i></a>
+            <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+
+        <div class="footer-accordion-grid">
+            <div class="footer-col">
+                <h4>Create <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i></h4>
+                <ul>
+                    <li><a href="#">Text to Video Engine</a></li>
+                    <li><a href="#">Image to Motion</a></li>
+                    <li><a href="#">Cinematic Scripts</a></li>
+                    <li><a href="#">8K Scene Generator</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Industry <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i></h4>
+                <ul>
+                    <li><a href="#">Filmmakers & Directors</a></li>
+                    <li><a href="#">Game Developers</a></li>
+                    <li><a href="#">Marketing & Social</a></li>
+                    <li><a href="#">Enterprise Solutions</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>About <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i></h4>
+                <ul>
+                    <li><a href="#">Our Vision</a></li>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">API Integrations</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Business <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i></h4>
+                <ul>
+                    <li><a href="#" onclick="openModal()">Contact Sales</a></li>
+                    <li><a href="#">VIP Custom Models</a></li>
+                    <li><a href="#">Security & Compliance</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="app-store-badges">
+            <a href="#" class="store-badge-box">
+                <i class="fa-brands fa-apple"></i>
+                <div class="store-badge-text">
+                    <small>Coming Soon</small>
+                    <span>App Store</span>
+                </div>
+            </a>
+            <a href="#" class="store-badge-box">
+                <i class="fa-brands fa-google-play"></i>
+                <div class="store-badge-text">
+                    <small>Coming Soon</small>
+                    <span>Google Play</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="footer-bottom-branding">AI MOVIE CREATOR</div>
+
+        <div class="footer-legal-row">
+            <div>© 2026 AI Movie Creator. All Rights Reserved.</div>
+            <div class="footer-legal-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <div class="settings-drawer" id="settingsDrawer">
+        <div class="settings-header">
+            <h3><i class="fa-solid fa-crown" style="color: var(--accent-green);"></i> VIP Settings</h3>
+            <button class="close-drawer" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="setting-toggle-row">
+            <div>
+                <span style="font-weight: 600; font-size: 0.9rem;">Theme Mode</span>
+                <span class="setting-label" id="themeStatusLabel">Dark Mode</span>
+            </div>
+            <div class="toggle-switch" id="themeToggle" onclick="toggleTheme()"></div>
+        </div>
+
+        <div class="setting-group" style="margin-top: 15px;">
+            <label class="setting-label"><i class="fa-solid fa-microchip"></i> AI Engine Model</label>
+            <select class="setting-select" id="scriptModelSelect" onchange="saveSetting('ai_model', this.value)">
+                <option value="openai/gpt-oss-120b">OpenAI GPT-OSS 120B (Default)</option>
+                <option value="llama-3.3-70b-versatile">Groq Llama 3.3 70B (Ultra Fast)</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-language"></i> Output Language</label>
+            <select class="setting-select" id="scriptLangSelect" onchange="saveSetting('script_lang', this.value)">
+                <option value="Roman Urdu">Roman Urdu</option>
+                <option value="Urdu Script">Urdu (اردو)</option>
+                <option value="Hindi">Hindi (हिंदी)</option>
+                <option value="English">English</option>
+                <option value="Arabic">Arabic (العربية)</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-video"></i> Aspect Ratio Format</label>
+            <select class="setting-select" id="aspectRatioSelect" onchange="saveSetting('aspect_ratio', this.value)">
+                <option value="16:9 Cinematic">16:9 Cinematic (YouTube / Movie)</option>
+                <option value="9:16 Vertical">9:16 Vertical (Reels / TikTok)</option>
+                <option value="1:1 Square">1:1 Square (Instagram Post)</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-clapperboard"></i> Director Style & Tone</label>
+            <select class="setting-select" id="directorStyleSelect" onchange="saveSetting('director_style', this.value)">
+                <option value="Hollywood Blockbuster">Hollywood Blockbuster</option>
+                <option value="Bollywood Drama">Bollywood Drama</option>
+                <option value="Cyberpunk Sci-Fi">Cyberpunk Sci-Fi</option>
+                <option value="Dark Noir Thriller">Dark Noir Thriller</option>
+                <option value="Emotional Indie">Emotional Indie</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label"><i class="fa-solid fa-file-lines"></i> Script Length</label>
+            <select class="setting-select" id="scriptLengthSelect" onchange="saveSetting('script_length', this.value)">
+                <option value="Detailed Multi-Scene Story">Detailed Multi-Scene Story</option>
+                <option value="Short Teaser / Trailer">Short Teaser / Trailer</option>
+            </select>
+        </div>
+
+        <button onclick="resetSettings()" style="width: 100%; padding: 10px; margin-top: 15px; background: rgba(255, 59, 48, 0.2); border: 1px solid #ff3b30; color: #ff3b30; border-radius: 10px; font-weight: 600; cursor: pointer;">
+            <i class="fa-solid fa-rotate-left"></i> Reset All Settings
+        </button>
+    </div>
+
+    <!-- Gemini Style Result Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
             <div class="logo">AI MOVIE CREATOR</div>
@@ -228,22 +1025,25 @@
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
             
-            <div class="script-action-bar">
-                <button class="btn-script-action btn-green" onclick="copyAllScript()"><i class="fa-solid fa-copy"></i> Copy All</button>
-                <button class="btn-script-action btn-red" onclick="clearAllContent()"><i class="fa-solid fa-trash"></i> Clear All</button>
-            </div>
-
-            <div class="gemini-response-card" id="scriptResultContent">
-                Connecting with Director AI...
+            <div class="gemini-response-card">
+                <div id="scriptResultContent">Generating your script...</div>
+                
+                <!-- Compact Minimal Buttons Inside Card Footer -->
+                <div class="card-toolbar">
+                    <button class="icon-btn" onclick="copyAllScript()" title="Copy Response"><i class="fa-solid fa-copy"></i></button>
+                    <button class="icon-btn" onclick="clearAllContent()" title="Clear Conversation"><i class="fa-solid fa-trash"></i></button>
+                </div>
             </div>
         </div>
 
+        <!-- Sticky Bottom Prompt Box with Mic -->
         <div class="modal-prompt-container">
             <div class="modal-prompt-box">
+                <div class="prompt-title-luma" style="font-size: 0.9rem; margin-bottom: 6px; text-align: left;">Describe your story / next scene or chat with AI</div>
                 <div class="modal-prompt-input-row">
                     <textarea id="modalPromptInput" placeholder="Continue story, ask questions or write new scene..."></textarea>
                     <div class="input-action-buttons">
-                        <button class="btn-mic-luma" id="modalMicBtn" onclick="toggleVoiceInput('modalPromptInput', 'modalMicBtn')"><i class="fa-solid fa-microphone"></i></button>
+                        <button class="btn-mic-luma" id="modalMicBtn" onclick="toggleVoiceInput('modalPromptInput', 'modalMicBtn')" title="Voice Typing"><i class="fa-solid fa-microphone"></i></button>
                         <button class="btn-arrow-luma active" id="modalSubmitBtn" onclick="generateScript('modalPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
                     </div>
                 </div>
@@ -256,7 +1056,7 @@
             <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
             <i class="fa-brands fa-whatsapp whatsapp-icon"></i>
             <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 8px;">AI Movie Creator Support</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Connect directly on WhatsApp.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Connect with our director team directly on WhatsApp.</p>
             <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 12px;">+92 308 4048921</div>
             <a href="https://wa.me/923084048921?text=Hello%20Umar%20Bhai,%20I%20want%20to%20inquire%20about%20AI%20Movie%20Creator" target="_blank" class="btn-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
@@ -267,52 +1067,110 @@
     <script>
         function openModal() { document.getElementById('contactModal').classList.add('active'); }
         function closeModal() { document.getElementById('contactModal').classList.remove('active'); }
-        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
+        function toggleSettingsDrawer() { document.getElementById('settingsDrawer').classList.toggle('active'); }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.getElementById('themeToggle').classList.toggle('active', isLight);
+            document.getElementById('themeStatusLabel').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+            localStorage.setItem('theme_preference', isLight ? 'light' : 'dark');
+        }
+
+        function saveSetting(key, value) { localStorage.setItem(key, value); }
+
+        function resetSettings() {
+            if (confirm("Reset all settings to default?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
 
         function selectGenre(genreName) {
             const inputField = document.getElementById('userPromptInput');
             let currentText = inputField.value.trim();
-            inputField.value = currentText ? currentText + " [" + genreName + "]" : genreName + " movie idea: ";
+            if (currentText === "") {
+                inputField.value = genreName + " movie concept: ";
+            } else {
+                inputField.value = currentText + " [" + genreName + " Genre]";
+            }
             inputField.focus();
         }
 
+        // Voice Typing Functionality
         function toggleVoiceInput(textareaId, micBtnId) {
             const textarea = document.getElementById(textareaId);
             const micBtn = document.getElementById(micBtnId);
 
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Voice typing is not supported on this browser. Use Google Chrome.");
+                alert("Voice typing is not supported on your browser. Please use Chrome or Safari.");
                 return;
             }
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
+            
             recognition.lang = 'ur-PK';
             recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
 
             micBtn.classList.add('listening');
 
+            recognition.onstart = () => {
+                micBtn.innerHTML = '<i class="fa-solid fa-wave-square"></i>';
+            };
+
             recognition.onresult = (event) => {
-                textarea.value += (textarea.value ? " " : "") + event.results[0][0].transcript;
+                const speechToText = event.results[0][0].transcript;
+                textarea.value += (textarea.value ? " " : "") + speechToText;
                 textarea.focus();
             };
 
-            recognition.onend = () => { micBtn.classList.remove('listening'); };
-            recognition.onerror = () => { micBtn.classList.remove('listening'); };
+            recognition.onerror = () => {
+                alert("Voice recognition error or permission denied. Please check microphone access.");
+                micBtn.classList.remove('listening');
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+            };
+
             recognition.start();
         }
 
         function copyAllScript() {
-            navigator.clipboard.writeText(document.getElementById('scriptResultContent').innerText.trim())
-                .then(() => alert("Copied!"));
+            const textCard = document.getElementById('scriptResultContent');
+            let textToCopy = textCard.innerText.trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("Copied successfully!");
+            });
         }
 
         function clearAllContent() {
             document.getElementById('userPromptInput').value = '';
             document.getElementById('modalPromptInput').value = '';
-            document.getElementById('scriptResultContent').innerHTML = 'Cleared! Ready for new conversation.';
+            document.getElementById('scriptResultContent').innerHTML = 'Cleared! Ready for new conversation or story.';
+            document.getElementById('displayUserPrompt').innerText = '"New Concept"';
         }
 
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme_preference');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggle').classList.add('active');
+                document.getElementById('themeStatusLabel').innerText = 'Light Mode';
+            }
+            
+            if (localStorage.getItem('script_lang')) document.getElementById('scriptLangSelect').value = localStorage.getItem('script_lang');
+            if (localStorage.getItem('ai_model')) document.getElementById('scriptModelSelect').value = localStorage.getItem('ai_model');
+            if (localStorage.getItem('aspect_ratio')) document.getElementById('aspectRatioSelect').value = localStorage.getItem('aspect_ratio');
+            if (localStorage.getItem('director_style')) document.getElementById('directorStyleSelect').value = localStorage.getItem('director_style');
+            if (localStorage.getItem('script_length')) document.getElementById('scriptLengthSelect').value = localStorage.getItem('script_length');
+        });
+
+        // Gemini-Style Streaming Script Generator
         async function generateScript(inputId) {
             const inputField = document.getElementById(inputId);
             if (!inputField) return;
@@ -328,36 +1186,69 @@
             const originalIcon = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
+            const chosenLang = localStorage.getItem('script_lang') || 'Roman Urdu';
+            const chosenRatio = localStorage.getItem('aspect_ratio') || '16:9 Cinematic';
+            const chosenStyle = localStorage.getItem('director_style') || 'Hollywood Blockbuster';
+            const chosenLength = localStorage.getItem('script_length') || 'Detailed Multi-Scene Story';
+            const chosenModel = localStorage.getItem('ai_model') || 'openai/gpt-oss-120b';
+
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerHTML = `⏳ AI Director Assistant is thinking...`;
+            const resultContent = document.getElementById('scriptResultContent');
+            resultContent.innerHTML = `⏳ AI Director Assistant is thinking...`;
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
                 const response = await fetch("/api/generate", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ prompt: inputVal })
+                    body: JSON.stringify({
+                        prompt: inputVal,
+                        style: chosenStyle,
+                        ratio: chosenRatio,
+                        length: chosenLength,
+                        lang: chosenLang,
+                        model: chosenModel
+                    })
                 });
 
-                const data = await response.json();
-
                 if (!response.ok) {
-                    throw new Error(data.error || `Server error: ${response.status}`);
+                    const errData = await response.json();
+                    throw new Error(errData.error || `Server error: ${response.status}`);
                 }
 
-                if (data.script && data.script.trim() !== "") {
-                    // Render clean HTML through Marked.js (Removes **, ### symbols)
-                    document.getElementById('scriptResultContent').innerHTML = marked.parse(data.script);
-                    inputField.value = '';
+                // If Backend sends raw JSON
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
+                    if (data.script) {
+                        resultContent.innerHTML = marked.parse(data.script);
+                    }
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `❌ Empty response received.`;
+                    // Streaming Response Rendering word-by-word
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let fullText = "";
+                    resultContent.innerHTML = "";
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        const chunk = decoder.decode(value, { stream: true });
+                        fullText += chunk;
+                        resultContent.innerHTML = marked.parse(fullText);
+                    }
                 }
+
+                inputField.value = '';
+
             } catch (error) {
-                document.getElementById('scriptResultContent').innerHTML = `❌ Connection Error: ${error.message}`;
+                resultContent.innerHTML = `❌ Connection Error: ${error.message}`;
             } finally {
                 submitBtn.innerHTML = originalIcon;
             }
         }
+
+        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
     </script>
 </body>
 </html>
