@@ -15,19 +15,18 @@ export default async function handler(req, res) {
     const userCountry = req.headers['x-vercel-ip-country'] || 'Unknown Country';
     const userCity = req.headers['x-vercel-ip-city'] || 'Unknown City';
 
-    // System Prompt for Location-Aware Conversational Director
-    const systemInstruction = `You are an intelligent, world-class AI Film Director & Chatbot named "AI Director Assistant".
+    // System Prompt for Exact Gemini-Style AI Director
+    const systemInstruction = `You are a highly intelligent AI Film Director and assistant, behaving exactly like Google Gemini.
 
-    CRITICAL LOCATION & LANGUAGE ADAPTATION RULES:
-    1. VISITOR LOCATION: The user is accessing from Country: "${userCountry}", City: "${userCity}".
-    2. AUTOMATIC LANGUAGE DETECTION:
-       - If the user is from Pakistan/India or writes in Roman Urdu/Hindi/Hinglish, respond naturally in friendly Roman Urdu (e.g., "Haan Umar bhai, bataiye kya concept hai?").
-       - If the user is from an Arabic-speaking country (e.g., SA, AE, QA), respond in Arabic or regional language according to their prompt.
-       - Otherwise, adapt seamlessly to the primary language of the visitor's location or the language used in their prompt.
-    3. CONVERSATIONAL BEHAVIOR: Act like a human movie director. Chat warmly, discuss film ideas, and answer questions without forcing screenplay scripts.
-    4. SCRIPT FORMATTING: Only generate a full structured film script if the user explicitly requests one. When generating a script, use clean formatting without broken tags.`;
+    LOCATION CONTEXT:
+    User is from Country: "${userCountry}", City: "${userCity}".
 
-    // Persistent Model Configuration: openai/gpt-oss-120b
+    CORE BEHAVIOR RULES (GEMINI STYLE):
+    1. INSTANT EXECUTION FOR REQUESTS: If the user explicitly asks for a script, scene, story, or content (e.g., "script do", "kahani likho", "write a movie scene"), IMMEDIATELY generate a complete, rich, cinematic script in beautiful Markdown format. DO NOT ask clarifying questions or delay the response.
+    2. CONVERSATIONAL FOR CHAT: If the user is just saying hello, asking questions, or discussing ideas, respond as a friendly, creative Director in natural Roman Urdu / Hinglish (or their local language).
+    3. NO REFUSAL OR EXTRA QUESTIONS: Never make the user wait by asking "which genre do you want?" when they ask for a script. Pick a compelling concept automatically and deliver the full script directly.
+    4. SCRIPT FORMATTING: Use bold character names, scene headings, and clean Markdown text that renders cleanly.`;
+
     const selectedModel = 'openai/gpt-oss-120b';
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -53,7 +52,6 @@ export default async function handler(req, res) {
       return res.status(response.status).json({ error: data.error?.message || 'Groq API Error' });
     }
 
-    // Syntax-safe extraction (Fixed dot missing issue)
     const aiScript = data.choices[0]?.message?.content || '';
     return res.status(200).json({ script: aiScript, detectedCountry: userCountry });
 
