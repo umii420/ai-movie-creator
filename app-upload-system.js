@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v1.1.0-Mobile-File-Upload
+ * VERSION: v1.3.0-Only-Shorts-And-Videos
  * FILE: app-upload-system.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Mobile Storage Upload Engine Active!");
+    console.log("⚡ Titan AI Custom Upload System Active (Shorts & Videos Only)!");
 
     const systemStyle = document.createElement('style');
     systemStyle.innerHTML = `
@@ -85,12 +85,11 @@
             outline: none;
         }
 
-        /* Mobile File Picker Custom Box */
         .file-drop-zone {
             border: 2px dashed rgba(245, 158, 11, 0.5);
             background: rgba(245, 158, 11, 0.05);
             border-radius: 14px;
-            padding: 20px;
+            padding: 22px;
             text-align: center;
             cursor: pointer;
             transition: 0.2s ease;
@@ -99,12 +98,12 @@
             background: rgba(245, 158, 11, 0.15);
         }
         .file-drop-zone i {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #f59e0b;
             margin-bottom: 8px;
         }
         .file-drop-zone p {
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             color: #9ca3af;
         }
 
@@ -127,55 +126,58 @@
     `;
     document.head.appendChild(systemStyle);
 
-    function injectSystemModals() {
+    function injectUploadModal() {
         if (!document.getElementById('titanUploadModal')) {
             const uploadModal = document.createElement('div');
             uploadModal.id = 'titanUploadModal';
             uploadModal.className = 'titan-system-modal';
             uploadModal.innerHTML = `
                 <div class="titan-modal-header">
-                    <h3><i class="fa-solid fa-mobile-screen-button" style="color:#f59e0b;"></i> Mobile Video Upload</h3>
+                    <h3><i class="fa-solid fa-cloud-arrow-up" style="color:#f59e0b;"></i> Titan Studio — Video Upload</h3>
                     <button class="titan-close-btn" onclick="closeTitanUploadModal()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="upload-form-container">
                     <div class="upload-input-group">
-                        <label>Select Video File From Mobile</label>
+                        <label>Select Video File from Phone Gallery</label>
                         <div class="file-drop-zone" onclick="document.getElementById('uploadFileInput').click()">
                             <i class="fa-solid fa-folder-open"></i>
-                            <p id="fileChooseStatus">Tap to select Video / Reel from Phone Gallery</p>
+                            <p id="fileChooseStatus">Tap to select Short or Video from Gallery</p>
                         </div>
                         <input type="file" id="uploadFileInput" accept="video/*" style="display:none;" onchange="handleFileSelected(this)" />
                     </div>
 
                     <div class="upload-input-group">
-                        <label>Video Title</label>
-                        <input type="text" id="uploadTitle" placeholder="Enter video title..." />
+                        <label>Select Format Type</label>
+                        <select id="uploadCategory" onchange="updateDurationLimit(this.value)">
+                            <option value="Titan Shorts">Titan Short (1 to 2 Minutes)</option>
+                            <option value="Long Video">Full Video / Film (10 to 20 Minutes)</option>
+                        </select>
+                        <small id="durationHint" style="color: #f59e0b; display: block; margin-top: 6px; font-size: 0.78rem;">Allowed duration: 1 to 2 minutes for Shorts.</small>
                     </div>
 
                     <div class="upload-input-group">
-                        <label>Category</label>
-                        <select id="uploadCategory">
-                            <option value="Titan Shorts">Titan Shorts / Reel</option>
-                            <option value="AI Movies">AI Movies & Cinematic</option>
-                            <option value="Sufi Music">Sufi Music & Poetry</option>
-                        </select>
+                        <label>Title</label>
+                        <input type="text" id="uploadTitle" placeholder="Enter title..." />
                     </div>
 
-                    <button class="btn-publish-titan" onclick="publishMobileVideo()">
-                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload & Publish
+                    <button class="btn-publish-titan" onclick="publishTitanVideo()">
+                        <i class="fa-solid fa-circle-check"></i> Upload & Publish
                     </button>
                 </div>
             `;
             document.body.appendChild(uploadModal);
         }
-        bindButtonsFunctionality();
+        bindCreateButtons();
     }
 
-    function bindButtonsFunctionality() {
+    function bindCreateButtons() {
         const createBtns = document.querySelectorAll('.titan-nav-create, [onclick*="openAccountModal"]');
         createBtns.forEach(btn => {
             btn.removeAttribute('onclick');
-            btn.addEventListener('click', openTitanUploadModal);
+            btn.onclick = function(e) {
+                e.preventDefault();
+                openTitanUploadModal();
+            };
         });
     }
 
@@ -189,35 +191,44 @@
     window.handleFileSelected = function(input) {
         if (input.files && input.files[0]) {
             const fileName = input.files[0].name;
-            document.getElementById('fileChooseStatus').innerHTML = `Selected File: <strong style="color:#00dfd8;">${fileName}</strong>`;
+            document.getElementById('fileChooseStatus').innerHTML = `Selected: <strong style="color:#00dfd8;">${fileName}</strong>`;
         }
     };
 
-    window.publishMobileVideo = function() {
+    window.updateDurationLimit = function(category) {
+        const hint = document.getElementById('durationHint');
+        if (category === 'Titan Shorts') {
+            hint.innerText = "Allowed duration: 1 to 2 minutes for Shorts.";
+        } else {
+            hint.innerText = "Allowed duration: 10 to 20 minutes for Full Videos/Films.";
+        }
+    };
+
+    window.publishTitanVideo = function() {
         const fileInput = document.getElementById('uploadFileInput');
         const title = document.getElementById('uploadTitle').value.trim();
+        const category = document.getElementById('uploadCategory').value;
 
         if (!fileInput.files || fileInput.files.length === 0) {
-            alert("Please select a video file from your mobile storage first!");
+            alert("Please select a video file from your phone gallery first!");
             return;
         }
         if (!title) {
-            alert("Please enter a title for your video!");
+            alert("Please enter a title for your content!");
             return;
         }
 
-        alert("🎉 Mobile Video '" + title + "' selected and published successfully!");
+        alert(`🎉 Success! '${title}' (${category}) uploaded successfully!`);
         closeTitanUploadModal();
         
-        // Reset form
         fileInput.value = '';
         document.getElementById('uploadTitle').value = '';
-        document.getElementById('fileChooseStatus').innerText = "Tap to select Video / Reel from Phone Gallery";
+        document.getElementById('fileChooseStatus').innerText = "Tap to select Short or Video from Gallery";
     };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectSystemModals);
+        document.addEventListener('DOMContentLoaded', injectUploadModal);
     } else {
-        setTimeout(injectSystemModals, 300);
+        setTimeout(injectUploadModal, 300);
     }
 })();
