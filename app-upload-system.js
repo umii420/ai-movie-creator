@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v4.0.0-Ultimate-YouTube-UI-Override
+ * VERSION: v6.0.0-Non-Destructive-Overlay
  * FILE: app-upload-system.js
  * ==========================================
  */
@@ -9,30 +9,21 @@
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI YouTube-Style Master Engine Override Active!");
+    console.log("⚡ Titan AI Safe Upload System Active!");
 
-    // Inject CSS replicating the EXACT YouTube upload overlay design
-    const ytStyle = document.createElement('style');
-    ytStyle.id = "titan-yt-style-override";
-    ytStyle.innerHTML = `
-        /* Force kill any old conflicting modals */
-        #titanUploadModal, .upload-form-container, [id*="uploadModal"] {
-            display: none !important;
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* YouTube-Style Fullscreen Overlay */
-        .titan-yt-exact-overlay {
+    const safeStyle = document.createElement('style');
+    safeStyle.id = "titan-safe-yt-style";
+    safeStyle.innerHTML = `
+        /* Exact YouTube Upload Overlay Design */
+        .titan-safe-yt-overlay {
             position: fixed !important;
             top: 0 !important; left: 0 !important;
             width: 100vw !important; height: 100vh !important;
-            background: rgba(10, 10, 12, 0.92) !important;
+            background: rgba(10, 10, 12, 0.94) !important;
             background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=900&auto=format&fit=crop') !important;
             background-size: cover !important;
             background-position: center !important;
-            z-index: 9999999 !important;
+            z-index: 99999999 !important;
             display: none;
             flex-direction: column !important;
             justify-content: space-between !important;
@@ -40,9 +31,8 @@
             padding: 25px 0 35px 0 !important;
             font-family: 'Plus Jakarta Sans', sans-serif !important;
             color: #ffffff !important;
-            box-sizing: border-box !important;
         }
-        .titan-yt-exact-overlay::before {
+        .titan-safe-yt-overlay::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -50,17 +40,15 @@
             backdrop-filter: blur(14px);
             z-index: -1;
         }
-        .titan-yt-exact-overlay.active { display: flex !important; }
+        .titan-safe-yt-overlay.active { display: flex !important; }
 
-        /* Top Close Cross Button */
-        .yt-top-bar {
+        .safe-top-bar {
             width: 100%;
             padding: 0 22px;
             display: flex;
             justify-content: flex-start;
-            box-sizing: border-box;
         }
-        .yt-close-btn {
+        .safe-close-btn {
             background: rgba(255, 255, 255, 0.18) !important;
             border: none !important;
             color: #ffffff !important;
@@ -69,19 +57,17 @@
             cursor: pointer !important;
             font-size: 1.25rem !important;
             display: flex !important; align-items: center !important; justify-content: center !important;
-            transition: 0.2s;
         }
 
-        /* Center Content Box */
-        .yt-center-box {
+        .safe-center-box {
             text-align: center;
-            max-width: 340px;
+            max-width: 350px;
             padding: 0 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .yt-shorts-icon-badge {
+        .safe-icon-badge {
             width: 70px; height: 70px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -92,24 +78,22 @@
             margin-bottom: 22px;
             box-shadow: 0 0 25px rgba(0, 178, 255, 0.35);
         }
-        .yt-center-box h2 {
+        .safe-center-box h2 {
             font-size: 1.25rem !important;
             font-weight: 700 !important;
             line-height: 1.45 !important;
             color: #f3f4f6 !important;
         }
 
-        /* Bottom Action Buttons */
-        .yt-bottom-actions {
+        .safe-bottom-actions {
             width: 100%;
             max-width: 420px;
             padding: 0 24px;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            box-sizing: border-box;
         }
-        .yt-btn-white {
+        .safe-btn-white {
             background: #ffffff !important;
             color: #000000 !important;
             border: none !important;
@@ -122,8 +106,7 @@
             text-align: center !important;
             box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
         }
-
-        .yt-btn-glass {
+        .safe-btn-glass {
             background: rgba(255, 255, 255, 0.12) !important;
             color: #ffffff !important;
             border: 1px solid rgba(255, 255, 255, 0.18) !important;
@@ -136,8 +119,7 @@
             text-align: center !important;
         }
 
-        /* Bottom Mode Switcher Bar */
-        .yt-mode-switcher {
+        .safe-mode-switcher {
             display: flex;
             gap: 30px;
             align-items: center;
@@ -146,174 +128,152 @@
             color: #9ca3af;
             margin-top: 15px;
         }
-        .yt-mode-switcher span {
+        .safe-mode-switcher span {
             cursor: pointer;
             padding: 7px 18px;
             border-radius: 20px;
             transition: 0.2s;
         }
-        .yt-mode-switcher span.active {
+        .safe-mode-switcher span.active {
             color: #000000 !important;
             background: #ffffff !important;
             font-weight: 700 !important;
         }
 
-        /* Second Step Publishing Modal */
-        .titan-publish-modal {
+        /* Publishing Form Modal */
+        .titan-safe-pub-modal {
             position: fixed !important;
             top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
             background: rgba(5, 5, 8, 0.97) !important;
-            z-index: 99999999 !important;
+            z-index: 999999999 !important;
             display: none;
             flex-direction: column !important;
             padding: 25px 6% !important;
             overflow-y: auto !important;
-            box-sizing: border-box !important;
         }
-        .titan-publish-modal.active { display: flex !important; }
+        .titan-safe-pub-modal.active { display: flex !important; }
     `;
-    document.head.appendChild(ytStyle);
+    document.head.appendChild(safeStyle);
 
-    function injectExactYtUi() {
-        // Remove old element if existed
-        document.getElementById('titanYtExactOverlay')?.remove();
-        document.getElementById('titanPublishModal')?.remove();
-
-        // Create Main Overlay
-        const overlay = document.createElement('div');
-        overlay.id = 'titanYtExactOverlay';
-        overlay.className = 'titan-yt-exact-overlay';
-        overlay.innerHTML = `
-            <div class="yt-top-bar">
-                <button class="yt-close-btn" onclick="closeTitanYtOverlay()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="yt-center-box">
-                <div class="yt-shorts-icon-badge">
-                    <i class="fa-solid fa-bolt"></i>
+    function buildSafeUi() {
+        if (!document.getElementById('titanSafeOverlay')) {
+            const overlay = document.createElement('div');
+            overlay.id = 'titanSafeOverlay';
+            overlay.className = 'titan-safe-yt-overlay';
+            overlay.innerHTML = `
+                <div class="safe-top-bar">
+                    <button class="safe-close-btn" onclick="closeSafeOverlay()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <h2>To record, let Titan AI access your camera and storage</h2>
-            </div>
-
-            <div class="yt-bottom-actions">
-                <button class="yt-btn-white" onclick="document.getElementById('titanGalleryInput').click()">
-                    Add from gallery
-                </button>
-                <button class="yt-btn-glass" onclick="alert('Titan AI permissions are active.')">
-                    Open settings
-                </button>
-                <input type="file" id="titanGalleryInput" accept="video/*" style="display:none;" onchange="handleGalleryVideoSelected(this)" />
-
-                <div style="display: flex; justify-content: center; width: 100%;">
-                    <div class="yt-mode-switcher">
-                        <span id="tabVideo" onclick="switchMode('Video')">Video (10-20m)</span>
-                        <span id="tabShort" class="active" onclick="switchMode('Short')">Short (1-2m)</span>
+                <div class="safe-center-box">
+                    <div class="safe-icon-badge"><i class="fa-solid fa-bolt"></i></div>
+                    <h2>To record, let Titan AI access your camera and storage</h2>
+                </div>
+                <div class="safe-bottom-actions">
+                    <button class="safe-btn-white" onclick="document.getElementById('safeGalleryInput').click()">
+                        Add from gallery
+                    </button>
+                    <button class="safe-btn-glass" onclick="alert('Permissions are active for Titan AI.')">
+                        Open settings
+                    </button>
+                    <input type="file" id="safeGalleryInput" accept="video/*" style="display:none;" onchange="handleSafeFile(this)" />
+                    <div style="display: flex; justify-content: center; width: 100%;">
+                        <div class="safe-mode-switcher">
+                            <span id="sTabVideo" onclick="switchSafeMode('Video')">Video (10-20m)</span>
+                            <span id="sTabShort" class="active" onclick="switchSafeMode('Short')">Short (1-2m)</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
+            `;
+            document.body.appendChild(overlay);
+        }
 
-        // Create Publish Modal
-        const pubModal = document.createElement('div');
-        pubModal.id = 'titanPublishModal';
-        pubModal.className = 'titan-publish-modal';
-        pubModal.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
-                <h3 style="font-size: 1.25rem; color:#00b2ff; font-family:'Space Grotesk', sans-serif;"><i class="fa-solid fa-cloud-arrow-up"></i> Titan Creator Studio</h3>
-                <button class="yt-close-btn" style="width:36px; height:36px; font-size:1rem;" onclick="closePublishModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div style="max-width: 500px; margin: 0 auto; width: 100%;">
-                <div style="margin-bottom: 18px;">
-                    <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; font-weight: 700;">Selected File</label>
-                    <div id="fileDisplayLabel" style="padding: 12px 15px; background: #12141c; border-radius: 12px; color: #00dfd8; font-weight: 600; border: 1px solid rgba(255,255,255,0.1);">None</div>
+        if (!document.getElementById('titanSafePubModal')) {
+            const pubModal = document.createElement('div');
+            pubModal.id = 'titanSafePubModal';
+            pubModal.className = 'titan-safe-pub-modal';
+            pubModal.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+                    <h3 style="font-size: 1.25rem; color:#00b2ff;"><i class="fa-solid fa-cloud-arrow-up"></i> Titan Creator Studio</h3>
+                    <button class="safe-close-btn" style="width:36px; height:36px; font-size:1rem;" onclick="closeSafePubModal()"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div style="margin-bottom: 18px;">
-                    <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; font-weight: 700;">Content Title</label>
-                    <input type="text" id="finalUploadTitle" placeholder="Enter title for short or long video..." style="width: 100%; padding: 13px 16px; background: #12141c; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; font-size: 0.95rem;" />
+                <div style="max-width: 500px; margin: 0 auto; width: 100%;">
+                    <div style="margin-bottom: 18px;">
+                        <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; font-weight: 700;">SELECTED FILE</label>
+                        <div id="safeFileDisplay" style="padding: 12px 15px; background: #12141c; border-radius: 12px; color: #00dfd8; font-weight: 600;">None</div>
+                    </div>
+                    <div style="margin-bottom: 18px;">
+                        <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; font-weight: 700;">CONTENT TITLE</label>
+                        <input type="text" id="safeTitleInput" placeholder="Enter title..." style="width: 100%; padding: 13px 16px; background: #12141c; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none;" />
+                    </div>
+                    <div style="margin-bottom: 28px;">
+                        <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; font-weight: 700;">FORMAT TYPE</label>
+                        <select id="safeFormatSelect" style="width: 100%; padding: 13px 16px; background: #12141c; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none;">
+                            <option value="Short">Titan Short (1 to 2 Minutes)</option>
+                            <option value="Video">Full Video / Film (10 to 20 Minutes)</option>
+                        </select>
+                    </div>
+                    <button onclick="publishSafeContent()" style="width: 100%; background: linear-gradient(135deg, #00b2ff, #0072ff); color: #fff; padding: 15px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; font-size: 1.05rem;">
+                        <i class="fa-solid fa-circle-check"></i> Publish Live Now
+                    </button>
                 </div>
-                <div style="margin-bottom: 28px;">
-                    <label style="display: block; font-size: 0.8rem; color: #9ca3af; margin-bottom: 6px; text-transform: uppercase; font-weight: 700;">Format Type</label>
-                    <select id="finalUploadFormat" style="width: 100%; padding: 13px 16px; background: #12141c; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; outline: none; font-size: 0.95rem;">
-                        <option value="Short">Titan Short (1 to 2 Minutes)</option>
-                        <option value="Video">Full Video / Film (10 to 20 Minutes)</option>
-                    </select>
-                </div>
-                <button onclick="publishToTitanNetwork()" style="width: 100%; background: linear-gradient(135deg, #00b2ff, #0072ff); color: #fff; padding: 15px; border-radius: 14px; font-weight: 800; border: none; cursor: pointer; font-size: 1.05rem; box-shadow: 0 8px 25px rgba(0,178,255,0.4);">
-                    <i class="fa-solid fa-circle-check"></i> Publish Live to Verified Feed
-                </button>
-            </div>
-        `;
-        document.body.appendChild(pubModal);
+            `;
+            document.body.appendChild(pubModal);
+        }
 
-        hijackPlusButton();
-    }
-
-    // Completely hijack Plus (+) button and disable older handlers
-    function hijackPlusButton() {
-        window.openTitanUploadModal = function() {
-            document.getElementById('titanYtExactOverlay')?.classList.add('active');
-        };
-
-        document.addEventListener('click', function (e) {
-            const target = e.target.closest('.titan-nav-create, [onclick*="openAccountModal"], .fa-plus, [class*="create"]');
-            if (target) {
+        // Intercept create/plus buttons safely without breaking old JS
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.titan-nav-create, [onclick*="openAccountModal"], [class*="create"], .fa-plus');
+            if (btn) {
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
-                document.getElementById('titanYtExactOverlay')?.classList.add('active');
+                document.getElementById('titanSafeOverlay')?.classList.add('active');
                 return false;
             }
         }, true);
     }
 
-    window.closeTitanYtOverlay = function() {
-        document.getElementById('titanYtExactOverlay')?.classList.remove('active');
+    window.closeSafeOverlay = function() {
+        document.getElementById('titanSafeOverlay')?.classList.remove('active');
     };
 
-    window.switchMode = function(mode) {
-        document.getElementById('tabVideo').classList.remove('active');
-        document.getElementById('tabShort').classList.remove('active');
+    window.switchSafeMode = function(mode) {
+        document.getElementById('sTabVideo').classList.remove('active');
+        document.getElementById('sTabShort').classList.remove('active');
         if(mode === 'Video') {
-            document.getElementById('tabVideo').classList.add('active');
-            document.getElementById('finalUploadFormat').value = 'Video';
+            document.getElementById('sTabVideo').classList.add('active');
+            document.getElementById('safeFormatSelect').value = 'Video';
         } else {
-            document.getElementById('tabShort').classList.add('active');
-            document.getElementById('finalUploadFormat').value = 'Short';
+            document.getElementById('sTabShort').classList.add('active');
+            document.getElementById('safeFormatSelect').value = 'Short';
         }
     };
 
-    window.handleGalleryVideoSelected = function(input) {
+    window.handleSafeFile = function(input) {
         if (input.files && input.files[0]) {
-            const file = input.files[0];
-            document.getElementById('fileDisplayLabel').innerText = file.name;
-            closeTitanYtOverlay();
-            document.getElementById('titanPublishModal').classList.add('active');
+            document.getElementById('safeFileDisplay').innerText = input.files[0].name;
+            closeSafeOverlay();
+            document.getElementById('titanSafePubModal').classList.add('active');
         }
     };
 
-    window.closePublishModal = function() {
-        document.getElementById('titanPublishModal').classList.remove('active');
+    window.closeSafePubModal = function() {
+        document.getElementById('titanSafePubModal')?.classList.remove('active');
     };
 
-    window.publishToTitanNetwork = function() {
-        const title = document.getElementById('finalUploadTitle').value.trim();
-        const format = document.getElementById('finalUploadFormat').value;
-
-        if(!title) {
-            alert("Please enter a title for your content!");
-            return;
-        }
-
-        alert(`🎉 Success! Your ${format} ('${title}') has been uploaded and published to Titan Network.`);
-        closePublishModal();
-        document.getElementById('finalUploadTitle').value = '';
-        document.getElementById('titanGalleryInput').value = '';
+    window.publishSafeContent = function() {
+        const title = document.getElementById('safeTitleInput').value.trim();
+        const format = document.getElementById('safeFormatSelect').value;
+        if(!title) { alert("Please enter a title!"); return; }
+        alert(`🎉 Success! Your ${format} ('${title}') published successfully!`);
+        closeSafePubModal();
+        document.getElementById('safeTitleInput').value = '';
+        document.getElementById('safeGalleryInput').value = '';
     };
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', injectExactYtUi);
+        document.addEventListener('DOMContentLoaded', buildSafeUi);
     } else {
-        setTimeout(injectExactYtUi, 200);
+        setTimeout(buildSafeUi, 200);
     }
 })();
