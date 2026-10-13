@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v2.7.0-Studio-Assistant-Upload
+ * VERSION: v3.0.0-Zero-Flicker-Engine
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Studio Assistant & Upload Engine Loaded!");
+    console.log("⚡ TITAN AI Zero-Flicker Master Engine Active!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `
@@ -59,10 +59,12 @@
         body {
             background-color: var(--titan-bg) !important;
             color: var(--titan-text) !important;
-            transition: background 0.3s ease, color 0.3s ease;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        /* Header Setup */
+        /* Top Header Setup */
         .titan-top-header {
             display: flex;
             align-items: center;
@@ -83,7 +85,6 @@
         }
 
         .titan-logo-title {
-            font-family: sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
             color: var(--titan-text);
@@ -224,7 +225,7 @@
             border-color: #f59e0b;
         }
 
-        /* Movie Feed */
+        /* Video Feed Cards */
         .titan-movie-feed {
             display: flex;
             flex-direction: column;
@@ -355,7 +356,7 @@
         .titan-shorts-caption h4 { font-size: 0.95rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
         .titan-shorts-caption p { font-size: 0.85rem; opacity: 0.9; margin-bottom: 4px; }
 
-        /* Titan Studio Modal Setup */
+        /* Modal Settings */
         .titan-modal-overlay {
             position: fixed;
             top: 0;
@@ -465,7 +466,7 @@
     `;
     document.head.appendChild(titanStyle);
 
-    // 3. Inject Layout Elements into Document
+    // 3. Inject Layout Elements & Display Instantly
     function injectCustomLayout() {
         // Top Header
         if (!document.getElementById('titanTopHeader')) {
@@ -586,7 +587,14 @@
             document.body.appendChild(bottomNav);
         }
 
-        // TikTok Style Shorts Overlay
+        // Modals
+        injectModals();
+
+        // REVEAL PAGE SMOOTHLY (Zero Flicker Fix)
+        document.body.classList.add('titan-ready');
+    }
+
+    function injectModals() {
         if (!document.getElementById('titanShortsModal')) {
             const modal = document.createElement('div');
             modal.id = 'titanShortsModal';
@@ -645,7 +653,6 @@
             document.body.appendChild(modal);
         }
 
-        // Titan Studio AI Assistant Modal
         if (!document.getElementById('titanStudioModal')) {
             const studioModal = document.createElement('div');
             studioModal.id = 'titanStudioModal';
@@ -664,7 +671,6 @@
             document.body.appendChild(studioModal);
         }
 
-        // Long-form Video Upload Modal (Center Plus Button)
         if (!document.getElementById('titanUploadModal')) {
             const uploadModal = document.createElement('div');
             uploadModal.id = 'titanUploadModal';
@@ -689,36 +695,13 @@
         }
     }
 
-    // Modal Control Functions
-    window.openTitanShorts = function() {
-        const modal = document.getElementById('titanShortsModal');
-        if (modal) modal.classList.add('active');
-    };
-
-    window.closeTitanShorts = function() {
-        const modal = document.getElementById('titanShortsModal');
-        if (modal) modal.classList.remove('active');
-    };
-
-    window.openTitanStudio = function() {
-        const modal = document.getElementById('titanStudioModal');
-        if (modal) modal.classList.add('active');
-    };
-
-    window.closeTitanStudio = function() {
-        const modal = document.getElementById('titanStudioModal');
-        if (modal) modal.classList.remove('active');
-    };
-
-    window.openTitanUpload = function() {
-        const modal = document.getElementById('titanUploadModal');
-        if (modal) modal.classList.add('active');
-    };
-
-    window.closeTitanUpload = function() {
-        const modal = document.getElementById('titanUploadModal');
-        if (modal) modal.classList.remove('active');
-    };
+    // Window Modal Controls
+    window.openTitanShorts = () => document.getElementById('titanShortsModal')?.classList.add('active');
+    window.closeTitanShorts = () => document.getElementById('titanShortsModal')?.classList.remove('active');
+    window.openTitanStudio = () => document.getElementById('titanStudioModal')?.classList.add('active');
+    window.closeTitanStudio = () => document.getElementById('titanStudioModal')?.classList.remove('active');
+    window.openTitanUpload = () => document.getElementById('titanUploadModal')?.classList.add('active');
+    window.closeTitanUpload = () => document.getElementById('titanUploadModal')?.classList.remove('active');
 
     function populateMovieFeed() {
         const container = document.getElementById('titanMovieFeed');
@@ -755,6 +738,7 @@
         `).join('');
     }
 
+    // DOM Ready Trigger
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', injectCustomLayout);
     } else {
