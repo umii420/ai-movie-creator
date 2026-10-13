@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v3.5.0-Theme-Sync-Fix
+ * VERSION: v3.5.1-Theme-Sync-Shorts-Fix
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Theme Sync Engine Active!");
+    console.log("⚡ TITAN AI Theme Sync Engine & Shorts Active!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,5 90,20 90,65 50,95 10,65 10,20" fill="#090a0f" stroke="#f59e0b" stroke-width="4"/><path d="M 28 28 L 72 28 L 72 38 L 56 38 L 56 75 L 44 75 L 44 38 L 28 38 Z" fill="#f59e0b"/><circle cx="50" cy="83" r="4" fill="#00dfd8"/></svg>`;
@@ -21,7 +21,7 @@
     link.href = 'data:image/svg+xml,' + encodedSvg;
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    // 2. Comprehensive Dynamic Style Syncing
+    // 2. Comprehensive Dynamic Style Syncing + TikTok Shorts Viewer
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
         :root {
@@ -280,6 +280,106 @@
             font-size: 1.35rem;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
         }
+
+        /* TikTok / Shorts Fullscreen Viewer Overlay */
+        .tiktok-shorts-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000000;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+        }
+        .tiktok-shorts-viewer.active { display: flex; }
+
+        .shorts-top-bar {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            color: #fff;
+        }
+
+        .shorts-close-btn {
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .shorts-video-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .shorts-dummy-media {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .shorts-overlay-info {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 80px;
+            color: #fff;
+            z-index: 5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .shorts-overlay-info h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shorts-overlay-info p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .shorts-side-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: center;
+            z-index: 5;
+            color: #fff;
+        }
+
+        .shorts-action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+        .shorts-action-item span { font-size: 0.72rem; font-weight: 600; }
     `;
     document.head.appendChild(titanStyle);
 
@@ -349,7 +449,7 @@
             chips.innerHTML = `
                 <div class="titan-chip active">All</div>
                 <div class="titan-chip">AI Movies</div>
-                <div class="titan-chip" onclick="openTitanStudioGemini()">Titan Shorts</div>
+                <div class="titan-chip" onclick="openTikTokShorts()">Titan Shorts</div>
                 <div class="titan-chip">Sufi Music</div>
                 <div class="titan-chip">Sci-Fi Scripts</div>
             `;
@@ -366,7 +466,7 @@
             populateMovieFeed();
         }
 
-        // Bottom Navigation Bar
+        // Bottom Navigation Bar (Original Labeled Buttons)
         if (!document.getElementById('titanBottomNav')) {
             const bottomNav = document.createElement('div');
             bottomNav.id = 'titanBottomNav';
@@ -376,12 +476,12 @@
                     <i class="fa-solid fa-house"></i>
                     <span>Home</span>
                 </div>
-                <div class="titan-nav-item" onclick="openTitanStudioGemini()">
+                <div class="titan-nav-item" onclick="openTikTokShorts()">
                     <i class="fa-solid fa-bolt"></i>
                     <span>Titan Shorts</span>
                 </div>
                 <div class="titan-nav-item">
-                    <div class="titan-nav-create" onclick="openTitanStudioGemini()"><i class="fa-solid fa-plus"></i></div>
+                    <div class="titan-nav-create" onclick="openAccountModal()"><i class="fa-solid fa-plus"></i></div>
                 </div>
                 <div class="titan-nav-item" onclick="openTitanStudioGemini()">
                     <i class="fa-solid fa-clapperboard"></i>
@@ -393,6 +493,35 @@
                 </div>
             `;
             document.body.appendChild(bottomNav);
+        }
+
+        // TikTok Shorts Viewer Fullscreen Overlay
+        if (!document.getElementById('tiktokShortsViewer')) {
+            const shortsViewer = document.createElement('div');
+            shortsViewer.id = 'tiktokShortsViewer';
+            shortsViewer.className = 'tiktok-shorts-viewer';
+            shortsViewer.innerHTML = `
+                <div class="shorts-top-bar">
+                    <span style="font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;">Titan Shorts <i class="fa-solid fa-bolt" style="color:#f59e0b;"></i></span>
+                    <button class="shorts-close-btn" onclick="closeTikTokShorts()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="shorts-video-box">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" class="shorts-dummy-media" alt="Short Reel" />
+                    
+                    <div class="shorts-overlay-info">
+                        <h4>@Titan_Creator <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:0.85rem;"></i></h4>
+                        <p>Cyberpunk Cinematic Teaser 8K Rendered Scene #TitanAI #Reels</p>
+                    </div>
+
+                    <div class="shorts-side-actions">
+                        <div class="shorts-action-item"><i class="fa-solid fa-heart" style="color:#ef4444;"></i><span>24.5K</span></div>
+                        <div class="shorts-action-item"><i class="fa-solid fa-comment"></i><span>1,208</span></div>
+                        <div class="shorts-action-item"><i class="fa-solid fa-share-nodes"></i><span>Share</span></div>
+                        <div class="shorts-action-item" onclick="closeTikTokShorts(); openTitanStudioGemini();"><i class="fa-solid fa-wand-magic-sparkles" style="color:#f59e0b;"></i><span>Create</span></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(shortsViewer);
         }
 
         // Initialize icon state on load
@@ -416,6 +545,14 @@
             icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
     }
+
+    window.openTikTokShorts = function() {
+        document.getElementById('tiktokShortsViewer')?.classList.add('active');
+    };
+
+    window.closeTikTokShorts = function() {
+        document.getElementById('tiktokShortsViewer')?.classList.remove('active');
+    };
 
     window.openTitanStudioGemini = function() {
         const geminiModal = document.getElementById('geminiOutputModal');
