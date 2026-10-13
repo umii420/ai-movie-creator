@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v2.6.0-TikTok-Shorts-Fusion
+ * VERSION: v2.7.0-Studio-Assistant-Upload
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI TikTok Shorts Engine Loaded!");
+    console.log("⚡ TITAN AI Studio Assistant & Upload Engine Loaded!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `
@@ -62,7 +62,7 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* Custom Top Header Setup */
+        /* Header Setup */
         .titan-top-header {
             display: flex;
             align-items: center;
@@ -119,7 +119,7 @@
             border-radius: 50%;
         }
 
-        /* Instagram-style Stories/Reels Bar */
+        /* Stories Bar */
         .titan-stories-wrapper {
             padding: 12px 0;
             background: var(--titan-bg);
@@ -195,7 +195,7 @@
             white-space: nowrap;
         }
 
-        /* YouTube-style Category Chips */
+        /* Chips Bar */
         .titan-chips-scroll {
             display: flex;
             gap: 10px;
@@ -224,12 +224,13 @@
             border-color: #f59e0b;
         }
 
-        /* Video Feed Cards */
+        /* Movie Feed */
         .titan-movie-feed {
             display: flex;
             flex-direction: column;
             gap: 25px;
             padding: 15px;
+            padding-bottom: 90px;
         }
 
         .titan-feed-card {
@@ -272,7 +273,7 @@
             color: var(--titan-muted);
         }
 
-        /* TikTok Style Shorts Viewer (Hidden by default) */
+        /* TikTok Shorts Overlay */
         .titan-shorts-container {
             position: fixed;
             top: 0;
@@ -354,7 +355,73 @@
         .titan-shorts-caption h4 { font-size: 0.95rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
         .titan-shorts-caption p { font-size: 0.85rem; opacity: 0.9; margin-bottom: 4px; }
 
-        /* Bottom Navigation Bar */
+        /* Titan Studio Modal Setup */
+        .titan-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .titan-modal-overlay.active { display: flex; }
+
+        .titan-modal-card {
+            background: #0f121d;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .titan-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: #a1a1aa;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .titan-studio-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            color: #fff;
+            margin-top: 15px;
+            font-family: inherit;
+            resize: none;
+        }
+        .titan-studio-input:focus { outline: none; border-color: #f59e0b; }
+
+        .titan-btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .titan-btn-primary:hover { opacity: 0.9; }
+
+        /* Bottom Nav */
         .titan-bottom-nav {
             position: fixed;
             bottom: 0;
@@ -393,6 +460,7 @@
             justify-content: center;
             font-size: 1.3rem;
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+            cursor: pointer;
         }
     `;
     document.head.appendChild(titanStyle);
@@ -431,7 +499,7 @@
             });
         }
 
-        // Instagram-style Stories & Trending Shorts Bar
+        // Stories Bar
         const topHeader = document.getElementById('titanTopHeader');
         if (topHeader && !document.getElementById('titanStoriesWrapper')) {
             const stories = document.createElement('div');
@@ -439,7 +507,7 @@
             stories.className = 'titan-stories-wrapper';
             stories.innerHTML = `
                 <div class="titan-stories-scroll">
-                    <div class="titan-story-item" onclick="openTitanShorts()">
+                    <div class="titan-story-item" onclick="openTitanStudio()">
                         <div class="titan-story-ring titan-story-app-logo">
                             <img src="data:image/svg+xml,${encodedSvg}" class="titan-story-thumb" alt="Titan AI" />
                             <div class="titan-story-add-icon"><i class="fa-solid fa-plus"></i></div>
@@ -479,7 +547,7 @@
             storiesWrapper.parentNode.insertBefore(chips, storiesWrapper.nextSibling);
         }
 
-        // Video Feed
+        // Movie Feed
         const featuresSection = document.querySelector('.features-section');
         if (featuresSection && !document.getElementById('titanMovieFeed')) {
             const movieFeed = document.createElement('div');
@@ -504,9 +572,9 @@
                     <span>Titan Shorts</span>
                 </div>
                 <div class="titan-nav-item">
-                    <div class="titan-nav-create"><i class="fa-solid fa-plus"></i></div>
+                    <div class="titan-nav-create" onclick="openTitanUpload()"><i class="fa-solid fa-plus"></i></div>
                 </div>
-                <div class="titan-nav-item">
+                <div class="titan-nav-item" onclick="openTitanStudio()">
                     <i class="fa-solid fa-clapperboard"></i>
                     <span>Titan Studio</span>
                 </div>
@@ -518,7 +586,7 @@
             document.body.appendChild(bottomNav);
         }
 
-        // TikTok Style Shorts Fullscreen Viewer Overlay
+        // TikTok Style Shorts Overlay
         if (!document.getElementById('titanShortsModal')) {
             const modal = document.createElement('div');
             modal.id = 'titanShortsModal';
@@ -562,7 +630,7 @@
                         <span>Friends</span>
                     </div>
                     <div class="titan-nav-item">
-                        <div class="titan-nav-create"><i class="fa-solid fa-plus"></i></div>
+                        <div class="titan-nav-create" onclick="openTitanUpload()"><i class="fa-solid fa-plus"></i></div>
                     </div>
                     <div class="titan-nav-item">
                         <i class="fa-regular fa-comment-dots"></i>
@@ -576,9 +644,52 @@
             `;
             document.body.appendChild(modal);
         }
+
+        // Titan Studio AI Assistant Modal
+        if (!document.getElementById('titanStudioModal')) {
+            const studioModal = document.createElement('div');
+            studioModal.id = 'titanStudioModal';
+            studioModal.className = 'titan-modal-overlay';
+            studioModal.innerHTML = `
+                <div class="titan-modal-card">
+                    <button class="titan-modal-close" onclick="closeTitanStudio()"><i class="fa-solid fa-xmark"></i></button>
+                    <h3 style="color:#f59e0b; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Titan Studio Assistant
+                    </h3>
+                    <p style="font-size:0.85rem; color:#a1a1aa; margin-top:5px;">Apni AI movie ki script ya dialogue yahan generate karwayen:</p>
+                    <textarea class="titan-studio-input" rows="4" placeholder="Maslan: Ek sci-fi movie ki kahani Roman Urdu mein likho..."></textarea>
+                    <button class="titan-btn-primary" onclick="alert('Script Generation Engine Active!')">Generate Script & Scenes</button>
+                </div>
+            `;
+            document.body.appendChild(studioModal);
+        }
+
+        // Long-form Video Upload Modal (Center Plus Button)
+        if (!document.getElementById('titanUploadModal')) {
+            const uploadModal = document.createElement('div');
+            uploadModal.id = 'titanUploadModal';
+            uploadModal.className = 'titan-modal-overlay';
+            uploadModal.innerHTML = `
+                <div class="titan-modal-card">
+                    <button class="titan-modal-close" onclick="closeTitanUpload()"><i class="fa-solid fa-xmark"></i></button>
+                    <h3 style="color:#fff; display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-cloud-arrow-up" style="color:#f59e0b;"></i> Upload AI Movie
+                    </h3>
+                    <p style="font-size:0.85rem; color:#a1a1aa; margin-top:5px;">10 se 20 minute ki Cinematic Movie upload karein:</p>
+                    <input type="text" class="titan-studio-input" placeholder="Movie Title (e.g. Pahar Ki Awaaz)" />
+                    <textarea class="titan-studio-input" rows="2" placeholder="Movie Description & Credits..."></textarea>
+                    <div style="border: 2px dashed rgba(255,255,255,0.2); padding: 20px; text-align: center; border-radius: 10px; margin-top: 15px; cursor: pointer;">
+                        <i class="fa-solid fa-file-video" style="font-size: 2rem; color: #f59e0b;"></i>
+                        <p style="font-size: 0.8rem; margin-top: 8px; color: #ccc;">Drag & Drop or Click to Select Video File</p>
+                    </div>
+                    <button class="titan-btn-primary" onclick="alert('Movie Uploading to Titan Feed...')">Publish Movie to Feed</button>
+                </div>
+            `;
+            document.body.appendChild(uploadModal);
+        }
     }
 
-    // Global Functions for Opening/Closing TikTok Shorts View
+    // Modal Control Functions
     window.openTitanShorts = function() {
         const modal = document.getElementById('titanShortsModal');
         if (modal) modal.classList.add('active');
@@ -586,6 +697,26 @@
 
     window.closeTitanShorts = function() {
         const modal = document.getElementById('titanShortsModal');
+        if (modal) modal.classList.remove('active');
+    };
+
+    window.openTitanStudio = function() {
+        const modal = document.getElementById('titanStudioModal');
+        if (modal) modal.classList.add('active');
+    };
+
+    window.closeTitanStudio = function() {
+        const modal = document.getElementById('titanStudioModal');
+        if (modal) modal.classList.remove('active');
+    };
+
+    window.openTitanUpload = function() {
+        const modal = document.getElementById('titanUploadModal');
+        if (modal) modal.classList.add('active');
+    };
+
+    window.closeTitanUpload = function() {
+        const modal = document.getElementById('titanUploadModal');
         if (modal) modal.classList.remove('active');
     };
 
