@@ -1,18 +1,51 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Global Edition)
- * VERSION: v2.0.0-Titan-Release
+ * VERSION: v2.1.0-Titan-Icon-Release
  * FILE: app-extensions-v2.js
- * ARCHITECTURE: Dynamic UI & Feature Injector
+ * ARCHITECTURE: Dynamic UI, Favicon & Feature Injector
  * ==========================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Engine v2.0.0 Loaded Successfully!");
+    console.log("⚡ TITAN AI Engine v2.1.0 Loaded Successfully!");
 
-    // 1. Inject Titan UI Styles
+    // ----------------------------------------------------
+    // 1. Dynamic Favicon & Header Logo Injector (Titan Shield 'T')
+    // ----------------------------------------------------
+    const svgIcon = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+        <defs>
+            <linearGradient id="titanGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f59e0b" />
+                <stop offset="50%" stop-color="#d97706" />
+                <stop offset="100%" stop-color="#78350f" />
+            </linearGradient>
+            <linearGradient id="cyberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00dfd8" />
+                <stop offset="100%" stop-color="#0072ff" />
+            </linearGradient>
+        </defs>
+        <!-- Dark Shield Background -->
+        <polygon points="50,5 90,20 90,65 50,95 10,65 10,20" fill="#090a0f" stroke="url(#titanGold)" stroke-width="4"/>
+        <!-- Titan 'T' Symbol -->
+        <path d="M 28 28 L 72 28 L 72 38 L 56 38 L 56 75 L 44 75 L 44 38 L 28 38 Z" fill="url(#titanGold)"/>
+        <!-- Cyber Accent Dot -->
+        <circle cx="50" cy="83" r="4" fill="url(#cyberGlow)"/>
+    </svg>`;
+
+    const encodedSvg = encodeURIComponent(svgIcon);
+    let link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+    link.type = 'image/svg+xml';
+    link.rel = 'shortcut icon';
+    link.href = `data:image/svg+xml,${encodedSvg}`;
+    document.getElementsByTagName('head')[0].appendChild(link);
+
+    // ----------------------------------------------------
+    // 2. Inject Titan UI Styles (Reels, Feed & Logo Styling)
+    // ----------------------------------------------------
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
         /* WhatsApp Style Reels Header Section */
@@ -143,8 +176,21 @@
     `;
     document.head.appendChild(titanStyle);
 
-    // 2. Inject Dynamic Sections into existing DOM
+    // ----------------------------------------------------
+    // 3. Inject Dynamic Sections & Logo into DOM
+    // ----------------------------------------------------
     function injectTitanComponents() {
+        // Update Header Logo with Animated Golden Icon
+        const logoDiv = document.querySelector('.logo');
+        if (logoDiv) {
+            logoDiv.innerHTML = `
+                <span style="display:inline-flex; align-items:center; gap:8px;">
+                    <img src="data:image/svg+xml,${encodedSvg}" style="width:28px; height:28px; filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.6));" />
+                    <span style="font-family:var(--font-heading); font-weight:800; letter-spacing:-0.5px; color:var(--text-main);">TITAN <span style="color:var(--accent-green);">AI</span></span>
+                </span>
+            `;
+        }
+
         // Inject Reels after Hero Prompt Section
         const heroSection = document.querySelector('.hero');
         if (heroSection && !document.getElementById('titanReelsWrapper')) {
@@ -177,7 +223,9 @@
         }
     }
 
-    // 3. Mock Data Loaders
+    // ----------------------------------------------------
+    // 4. Mock Data Loaders
+    // ----------------------------------------------------
     function populateReels() {
         const container = document.getElementById('titanReelsContainer');
         if (!container) return;
