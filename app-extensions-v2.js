@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v2.5.0-DarkLight-Fix-Studio
+ * VERSION: v2.6.0-TikTok-Shorts-Fusion
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Engine v2.5 Loaded!");
+    console.log("⚡ TITAN AI TikTok Shorts Engine Loaded!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `
@@ -37,7 +37,7 @@
     link.href = `data:image/svg+xml,${encodedSvg}`;
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    // 2. Dynamic Styles Injector (Fixing White Band & Adding Dark/Light Support)
+    // 2. Dynamic Styles Injector
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
         :root {
@@ -107,9 +107,7 @@
             border-radius: 50%;
             transition: background 0.2s;
         }
-        .titan-icon-btn:hover {
-            background: var(--titan-border);
-        }
+        .titan-icon-btn:hover { background: var(--titan-border); }
 
         .titan-notif-badge {
             position: absolute;
@@ -121,7 +119,7 @@
             border-radius: 50%;
         }
 
-        /* Instagram-style Reels/Stories Bar */
+        /* Instagram-style Stories/Reels Bar */
         .titan-stories-wrapper {
             padding: 12px 0;
             background: var(--titan-bg);
@@ -274,6 +272,88 @@
             color: var(--titan-muted);
         }
 
+        /* TikTok Style Shorts Viewer (Hidden by default) */
+        .titan-shorts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+        }
+        .titan-shorts-container.active { display: flex; }
+
+        .titan-shorts-header {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 2010;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .titan-shorts-header span { opacity: 0.6; cursor: pointer; }
+        .titan-shorts-header span.active { opacity: 1; border-bottom: 2px solid #fff; padding-bottom: 2px; }
+
+        .titan-shorts-reel-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .titan-shorts-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .titan-shorts-sidebar {
+            position: absolute;
+            right: 15px;
+            bottom: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            z-index: 2020;
+            color: #fff;
+        }
+
+        .titan-shorts-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .titan-shorts-action-btn i { font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        .titan-shorts-caption {
+            position: absolute;
+            left: 15px;
+            bottom: 80px;
+            right: 80px;
+            z-index: 2020;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+        }
+        .titan-shorts-caption h4 { font-size: 0.95rem; margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+        .titan-shorts-caption p { font-size: 0.85rem; opacity: 0.9; margin-bottom: 4px; }
+
         /* Bottom Navigation Bar */
         .titan-bottom-nav {
             position: fixed;
@@ -319,7 +399,7 @@
 
     // 3. Inject Layout Elements into Document
     function injectCustomLayout() {
-        // Top Header with Dark/Light Toggle
+        // Top Header
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -330,7 +410,7 @@
                     <span class="titan-logo-title">TITAN <span style="color:#f59e0b;">AI</span></span>
                 </div>
                 <div class="titan-header-actions">
-                    <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Dark/Light Mode">
+                    <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Theme">
                         <i class="fa-solid fa-moon" id="titanThemeIcon"></i>
                     </button>
                     <button class="titan-icon-btn" title="Notifications">
@@ -344,16 +424,14 @@
             `;
             document.body.prepend(header);
 
-            // Dark/Light Mode Switcher Logic
             document.getElementById('titanThemeToggle').addEventListener('click', () => {
                 document.body.classList.toggle('titan-light-mode');
                 const isLight = document.body.classList.contains('titan-light-mode');
-                const icon = document.getElementById('titanThemeIcon');
-                icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                document.getElementById('titanThemeIcon').className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
             });
         }
 
-        // Instagram-style Stories/Reels Section
+        // Instagram-style Stories & Trending Shorts Bar
         const topHeader = document.getElementById('titanTopHeader');
         if (topHeader && !document.getElementById('titanStoriesWrapper')) {
             const stories = document.createElement('div');
@@ -361,36 +439,24 @@
             stories.className = 'titan-stories-wrapper';
             stories.innerHTML = `
                 <div class="titan-stories-scroll">
-                    <div class="titan-story-item">
+                    <div class="titan-story-item" onclick="openTitanShorts()">
                         <div class="titan-story-ring titan-story-app-logo">
                             <img src="data:image/svg+xml,${encodedSvg}" class="titan-story-thumb" alt="Titan AI" />
                             <div class="titan-story-add-icon"><i class="fa-solid fa-plus"></i></div>
                         </div>
                         <span class="titan-story-name">Titan AI</span>
                     </div>
-                    <div class="titan-story-item">
-                        <div class="titan-story-ring">
-                            <img src="https://picsum.photos/seed/reel1/200" class="titan-story-thumb" />
-                        </div>
+                    <div class="titan-story-item" onclick="openTitanShorts()">
+                        <div class="titan-story-ring"><img src="https://picsum.photos/seed/reel1/200" class="titan-story-thumb" /></div>
                         <span class="titan-story-name">Cyber Thriller</span>
                     </div>
-                    <div class="titan-story-item">
-                        <div class="titan-story-ring">
-                            <img src="https://picsum.photos/seed/reel2/200" class="titan-story-thumb" />
-                        </div>
+                    <div class="titan-story-item" onclick="openTitanShorts()">
+                        <div class="titan-story-ring"><img src="https://picsum.photos/seed/reel2/200" class="titan-story-thumb" /></div>
                         <span class="titan-story-name">Dragon Realm</span>
                     </div>
-                    <div class="titan-story-item">
-                        <div class="titan-story-ring">
-                            <img src="https://picsum.photos/seed/reel3/200" class="titan-story-thumb" />
-                        </div>
+                    <div class="titan-story-item" onclick="openTitanShorts()">
+                        <div class="titan-story-ring"><img src="https://picsum.photos/seed/reel3/200" class="titan-story-thumb" /></div>
                         <span class="titan-story-name">Sufi Music</span>
-                    </div>
-                    <div class="titan-story-item">
-                        <div class="titan-story-ring">
-                            <img src="https://picsum.photos/seed/reel4/200" class="titan-story-thumb" />
-                        </div>
-                        <span class="titan-story-name">Neon Chase</span>
                     </div>
                 </div>
             `;
@@ -406,7 +472,7 @@
             chips.innerHTML = `
                 <div class="titan-chip active">All</div>
                 <div class="titan-chip">AI Movies</div>
-                <div class="titan-chip">Titan Shorts</div>
+                <div class="titan-chip" onclick="openTitanShorts()">Titan Shorts</div>
                 <div class="titan-chip">Sufi Music</div>
                 <div class="titan-chip">Sci-Fi Scripts</div>
             `;
@@ -433,7 +499,7 @@
                     <i class="fa-solid fa-house"></i>
                     <span>Home</span>
                 </div>
-                <div class="titan-nav-item">
+                <div class="titan-nav-item" onclick="openTitanShorts()">
                     <i class="fa-solid fa-bolt"></i>
                     <span>Titan Shorts</span>
                 </div>
@@ -451,7 +517,77 @@
             `;
             document.body.appendChild(bottomNav);
         }
+
+        // TikTok Style Shorts Fullscreen Viewer Overlay
+        if (!document.getElementById('titanShortsModal')) {
+            const modal = document.createElement('div');
+            modal.id = 'titanShortsModal';
+            modal.className = 'titan-shorts-container';
+            modal.innerHTML = `
+                <div class="titan-shorts-header">
+                    <span>STEM</span>
+                    <span>Community</span>
+                    <span>Following</span>
+                    <span class="active">For You</span>
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; right: 20px; top: 2px;"></i>
+                </div>
+                <div class="titan-shorts-reel-box">
+                    <img src="https://picsum.photos/seed/tiktokreel/600/900" class="titan-shorts-video" alt="Short Reel" />
+                    
+                    <div class="titan-shorts-caption">
+                        <h4>Titan Studios <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:0.8rem;"></i></h4>
+                        <p>Tehri chaahat mein kitna fasana hua... #TitanAI #Shorts</p>
+                        <span style="font-size: 0.75rem; opacity: 0.8;"><i class="fa-solid fa-music"></i> Original Audio - Titan AI Studio</span>
+                    </div>
+
+                    <div class="titan-shorts-sidebar">
+                        <div style="position: relative;">
+                            <img src="https://picsum.photos/seed/avatar1/100" style="width:45px; height:45px; border-radius:50%; border: 2px solid #fff;" />
+                            <div style="position: absolute; bottom: -5px; left: 14px; background: #ef4444; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px;">+</div>
+                        </div>
+                        <button class="titan-shorts-action-btn"><i class="fa-solid fa-heart" style="color: #ef4444;"></i><span>9,688</span></button>
+                        <button class="titan-shorts-action-btn"><i class="fa-solid fa-comment-dots"></i><span>144</span></button>
+                        <button class="titan-shorts-action-btn"><i class="fa-solid fa-bookmark"></i><span>531</span></button>
+                        <button class="titan-shorts-action-btn"><i class="fa-solid fa-share"></i><span>175</span></button>
+                    </div>
+                </div>
+
+                <div class="titan-bottom-nav" style="background: rgba(0,0,0,0.9); border-top: 1px solid rgba(255,255,255,0.1);">
+                    <div class="titan-nav-item active" onclick="closeTitanShorts()">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Home</span>
+                    </div>
+                    <div class="titan-nav-item">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span>Friends</span>
+                    </div>
+                    <div class="titan-nav-item">
+                        <div class="titan-nav-create"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <div class="titan-nav-item">
+                        <i class="fa-regular fa-comment-dots"></i>
+                        <span>Inbox</span>
+                    </div>
+                    <div class="titan-nav-item">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
     }
+
+    // Global Functions for Opening/Closing TikTok Shorts View
+    window.openTitanShorts = function() {
+        const modal = document.getElementById('titanShortsModal');
+        if (modal) modal.classList.add('active');
+    };
+
+    window.closeTitanShorts = function() {
+        const modal = document.getElementById('titanShortsModal');
+        if (modal) modal.classList.remove('active');
+    };
 
     function populateMovieFeed() {
         const container = document.getElementById('titanMovieFeed');
@@ -475,7 +611,7 @@
         ];
 
         container.innerHTML = movies.map(m => `
-            <div class="titan-feed-card">
+            <div class="titan-feed-card" onclick="openTitanShorts()">
                 <img src="${m.thumb}" class="titan-feed-thumb" alt="${m.title}" />
                 <div class="titan-feed-meta">
                     <img src="${m.avatar}" class="titan-feed-avatar" alt="${m.channel}" />
