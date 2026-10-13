@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v2.4.0-Titan-Studio-Update
+ * VERSION: v2.5.0-DarkLight-Fix-Studio
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Studio Engine Loaded!");
+    console.log("⚡ TITAN AI Engine v2.5 Loaded!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `
@@ -37,20 +37,42 @@
     link.href = `data:image/svg+xml,${encodedSvg}`;
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    // 2. Dynamic Styles Injector
+    // 2. Dynamic Styles Injector (Fixing White Band & Adding Dark/Light Support)
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
+        :root {
+            --titan-bg: #090a0f;
+            --titan-card-bg: #12141c;
+            --titan-text: #ffffff;
+            --titan-muted: #a1a1aa;
+            --titan-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body.titan-light-mode {
+            --titan-bg: #f8fafc;
+            --titan-card-bg: #ffffff;
+            --titan-text: #0f172a;
+            --titan-muted: #64748b;
+            --titan-border: rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            background-color: var(--titan-bg) !important;
+            color: var(--titan-text) !important;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
         /* Custom Top Header Setup */
         .titan-top-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 12px 18px;
-            background: #090a0f;
+            background: var(--titan-bg);
             position: sticky;
             top: 0;
             z-index: 999;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid var(--titan-border);
         }
 
         .titan-logo-group {
@@ -64,31 +86,37 @@
             font-family: sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
-            color: #fff;
+            color: var(--titan-text);
             letter-spacing: -0.5px;
         }
 
         .titan-header-actions {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
         }
 
         .titan-icon-btn {
             background: transparent;
             border: none;
-            color: #fff;
-            font-size: 1.2rem;
+            color: var(--titan-text);
+            font-size: 1.1rem;
             cursor: pointer;
             position: relative;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .titan-icon-btn:hover {
+            background: var(--titan-border);
         }
 
         .titan-notif-badge {
             position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 8px;
-            height: 8px;
+            top: 2px;
+            right: 2px;
+            width: 7px;
+            height: 7px;
             background-color: #ef4444;
             border-radius: 50%;
         }
@@ -96,8 +124,8 @@
         /* Instagram-style Reels/Stories Bar */
         .titan-stories-wrapper {
             padding: 12px 0;
-            background: #090a0f;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--titan-bg);
+            border-bottom: 1px solid var(--titan-border);
         }
 
         .titan-stories-scroll {
@@ -130,8 +158,8 @@
         }
 
         .titan-story-app-logo {
-            background: #000;
-            border: 2px solid #000;
+            background: var(--titan-bg);
+            border: 2px solid var(--titan-bg);
         }
 
         .titan-story-add-icon {
@@ -147,7 +175,7 @@
             align-items: center;
             justify-content: center;
             font-size: 11px;
-            border: 2px solid #000;
+            border: 2px solid var(--titan-bg);
         }
 
         .titan-story-thumb {
@@ -155,13 +183,13 @@
             height: 63px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #090a0f;
+            border: 2px solid var(--titan-bg);
         }
 
         .titan-story-name {
             font-size: 0.72rem;
             margin-top: 5px;
-            color: #d4d4d8;
+            color: var(--titan-muted);
             max-width: 70px;
             text-align: center;
             overflow: hidden;
@@ -175,14 +203,16 @@
             gap: 10px;
             overflow-x: auto;
             padding: 10px 15px;
-            background: #090a0f;
+            background: var(--titan-bg);
+            border-bottom: 1px solid var(--titan-border);
             scrollbar-width: none;
         }
         .titan-chips-scroll::-webkit-scrollbar { display: none; }
 
         .titan-chip {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
+            background: var(--titan-card-bg);
+            color: var(--titan-text);
+            border: 1px solid var(--titan-border);
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -191,8 +221,9 @@
             cursor: pointer;
         }
         .titan-chip.active, .titan-chip:hover {
-            background: #fff;
+            background: #f59e0b;
             color: #000;
+            border-color: #f59e0b;
         }
 
         /* Video Feed Cards */
@@ -200,25 +231,27 @@
             display: flex;
             flex-direction: column;
             gap: 25px;
-            padding: 15px 0 80px 0;
+            padding: 15px;
         }
 
         .titan-feed-card {
-            background: transparent;
+            background: var(--titan-card-bg);
+            border: 1px solid var(--titan-border);
+            border-radius: 12px;
+            overflow: hidden;
             cursor: pointer;
         }
 
         .titan-feed-thumb {
             width: 100%;
-            height: 220px;
+            height: 200px;
             object-fit: cover;
-            border-radius: 12px;
         }
 
         .titan-feed-meta {
             display: flex;
             gap: 12px;
-            padding: 12px 5px 0;
+            padding: 12px;
         }
 
         .titan-feed-avatar {
@@ -231,14 +264,14 @@
         .titan-feed-info h3 {
             font-size: 0.95rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--titan-text);
             margin-bottom: 4px;
             line-height: 1.3;
         }
 
         .titan-feed-info p {
             font-size: 0.8rem;
-            color: #a1a1aa;
+            color: var(--titan-muted);
         }
 
         /* Bottom Navigation Bar */
@@ -247,8 +280,8 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #090a0f;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--titan-bg);
+            border-top: 1px solid var(--titan-border);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -260,14 +293,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #a1a1aa;
+            color: var(--titan-muted);
             text-decoration: none;
             font-size: 0.7rem;
             gap: 3px;
             cursor: pointer;
         }
         .titan-nav-item i { font-size: 1.2rem; }
-        .titan-nav-item.active { color: #fff; }
+        .titan-nav-item.active { color: var(--titan-text); }
 
         .titan-nav-create {
             background: linear-gradient(135deg, #f59e0b, #ef4444);
@@ -286,7 +319,7 @@
 
     // 3. Inject Layout Elements into Document
     function injectCustomLayout() {
-        // Top Header
+        // Top Header with Dark/Light Toggle
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -297,16 +330,27 @@
                     <span class="titan-logo-title">TITAN <span style="color:#f59e0b;">AI</span></span>
                 </div>
                 <div class="titan-header-actions">
-                    <button class="titan-icon-btn">
+                    <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Dark/Light Mode">
+                        <i class="fa-solid fa-moon" id="titanThemeIcon"></i>
+                    </button>
+                    <button class="titan-icon-btn" title="Notifications">
                         <i class="fa-regular fa-bell"></i>
                         <span class="titan-notif-badge"></span>
                     </button>
-                    <button class="titan-icon-btn">
+                    <button class="titan-icon-btn" title="Search">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </div>
             `;
             document.body.prepend(header);
+
+            // Dark/Light Mode Switcher Logic
+            document.getElementById('titanThemeToggle').addEventListener('click', () => {
+                document.body.classList.toggle('titan-light-mode');
+                const isLight = document.body.classList.contains('titan-light-mode');
+                const icon = document.getElementById('titanThemeIcon');
+                icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            });
         }
 
         // Instagram-style Stories/Reels Section
@@ -317,7 +361,6 @@
             stories.className = 'titan-stories-wrapper';
             stories.innerHTML = `
                 <div class="titan-stories-scroll">
-                    <!-- TITAN APP LOGO (First Circle) -->
                     <div class="titan-story-item">
                         <div class="titan-story-ring titan-story-app-logo">
                             <img src="data:image/svg+xml,${encodedSvg}" class="titan-story-thumb" alt="Titan AI" />
@@ -325,8 +368,6 @@
                         </div>
                         <span class="titan-story-name">Titan AI</span>
                     </div>
-
-                    <!-- Creator Reels Circles -->
                     <div class="titan-story-item">
                         <div class="titan-story-ring">
                             <img src="https://picsum.photos/seed/reel1/200" class="titan-story-thumb" />
@@ -382,7 +423,7 @@
             populateMovieFeed();
         }
 
-        // Bottom Navigation Bar (Updated with Titan Studio)
+        // Bottom Navigation Bar
         if (!document.getElementById('titanBottomNav')) {
             const bottomNav = document.createElement('div');
             bottomNav.id = 'titanBottomNav';
