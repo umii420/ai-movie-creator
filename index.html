@@ -8,10 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Marked.js for Clean Markdown Rendering (Fixes **, ###, ---) -->
+    <!-- Marked.js for Clean Markdown Rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
+    <!-- ⚡ Zero-Flicker Protection Style ⚡ -->
     <style>
+        body {
+            background-color: #050507 !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease-in-out;
+        }
+        body.titan-ready {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
         :root {
             --bg-black: #050507;
             --card-bg: #0d0e12;
@@ -77,15 +89,9 @@
             color: var(--text-main);
             text-transform: uppercase;
         }
-        .logo span {
-            color: var(--accent-green);
-        }
+        .logo span { color: var(--accent-green); }
 
-        .nav-btns {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .nav-btns { display: flex; gap: 10px; align-items: center; }
 
         .btn-contact {
             background: transparent;
@@ -159,9 +165,7 @@
             text-align: center;
         }
 
-        body.light-mode .prompt-title-luma {
-            color: #111827;
-        }
+        body.light-mode .prompt-title-luma { color: #111827; }
 
         .prompt-input-box-luma {
             background: #ffffff;
@@ -188,11 +192,7 @@
             font-family: var(--font-body);
         }
 
-        .input-action-buttons {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .input-action-buttons { display: flex; align-items: center; gap: 6px; }
 
         .btn-mic-luma {
             background: rgba(0,0,0,0.05);
@@ -241,12 +241,7 @@
         }
         .btn-arrow-luma:active { transform: scale(0.95); }
 
-        .genre-chips-wrapper {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        .genre-chips-wrapper { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
         .genre-chip {
             background: rgba(255, 255, 255, 0.95);
@@ -261,10 +256,7 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        body.light-mode .genre-chip {
-            background: #e5e7eb;
-            color: #111827;
-        }
+        body.light-mode .genre-chip { background: #e5e7eb; color: #111827; }
 
         .genre-chip:hover, .genre-chip.selected {
             background: var(--accent-green);
@@ -272,12 +264,7 @@
             transform: translateY(-1px);
         }
 
-        .hero-cta-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
+        .hero-cta-group { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
 
         .btn-primary {
             background: var(--accent-green);
@@ -307,13 +294,7 @@
             font-weight: 700;
         }
 
-        .trusted-logos {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
+        .trusted-logos { display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap; }
 
         .brand-badge {
             font-family: var(--font-heading);
@@ -355,9 +336,7 @@
             flex-shrink: 0;
         }
 
-        .carousel-card.yellow-card {
-            background: #ffcc00;
-        }
+        .carousel-card.yellow-card { background: #ffcc00; }
 
         .carousel-card h3 {
             font-family: var(--font-heading);
@@ -366,11 +345,7 @@
             margin-bottom: 10px;
         }
 
-        .carousel-card p {
-            font-size: 0.85rem;
-            line-height: 1.4;
-            font-weight: 500;
-        }
+        .carousel-card p { font-size: 0.85rem; line-height: 1.4; font-weight: 500; }
 
         .banner-card {
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop');
@@ -392,11 +367,7 @@
             line-height: 1.3;
         }
 
-        .banner-btns {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .banner-btns { display: flex; gap: 10px; margin-top: 15px; }
 
         .btn-white {
             background: #fff;
@@ -408,12 +379,7 @@
             text-decoration: none;
         }
 
-        .image-cards-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin-top: 30px;
-        }
+        .image-cards-grid { display: flex; flex-direction: column; gap: 25px; margin-top: 30px; }
 
         .media-card {
             background: var(--card-bg);
@@ -422,17 +388,8 @@
             overflow: hidden;
         }
 
-        .media-card-img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .media-card-content {
-            padding: 20px;
-            text-align: left;
-        }
+        .media-card-img { width: 100%; height: 240px; object-fit: cover; display: block; }
+        .media-card-content { padding: 20px; text-align: left; }
 
         .media-card-green {
             background: var(--accent-green);
@@ -448,16 +405,8 @@
             margin-bottom: 4px;
         }
 
-        .media-card-green .subtitle {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin-bottom: 12px;
-        }
-
-        .media-card-green p {
-            font-size: 0.88rem;
-            line-height: 1.4;
-        }
+        .media-card-green .subtitle { font-size: 0.8rem; opacity: 0.8; margin-bottom: 12px; }
+        .media-card-green p { font-size: 0.88rem; line-height: 1.4; }
 
         footer {
             background: var(--card-bg);
@@ -467,23 +416,9 @@
             margin-top: 60px;
         }
 
-        .footer-social-row {
-            display: flex;
-            gap: 20px;
-            font-size: 1.3rem;
-            margin-bottom: 40px;
-            color: var(--text-main);
-            justify-content: flex-start;
-        }
-
-        .footer-social-row a {
-            color: var(--text-main);
-            transition: 0.2s;
-        }
-
-        .footer-social-row a:hover {
-            color: var(--accent-green);
-        }
+        .footer-social-row { display: flex; gap: 20px; font-size: 1.3rem; margin-bottom: 40px; color: var(--text-main); justify-content: flex-start; }
+        .footer-social-row a { color: var(--text-main); transition: 0.2s; }
+        .footer-social-row a:hover { color: var(--accent-green); }
 
         .footer-accordion-grid {
             display: grid;
@@ -504,31 +439,12 @@
             align-items: center;
         }
 
-        .footer-col ul {
-            list-style: none;
-        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: 0.2s; }
+        .footer-col ul li a:hover { color: var(--text-main); }
 
-        .footer-col ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-col ul li a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
-
-        .footer-col ul li a:hover {
-            color: var(--text-main);
-        }
-
-        .app-store-badges {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
+        .app-store-badges { display: flex; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
 
         .store-badge-box {
             background: var(--store-bg);
@@ -544,14 +460,8 @@
             transition: 0.2s;
         }
 
-        .store-badge-box:hover {
-            border-color: var(--accent-green);
-        }
-
-        .store-badge-box i {
-            font-size: 1.8rem;
-            color: var(--store-text);
-        }
+        .store-badge-box:hover { border-color: var(--accent-green); }
+        .store-badge-box i { font-size: 1.8rem; color: var(--store-text); }
 
         .store-badge-text small {
             display: block;
@@ -562,11 +472,7 @@
             letter-spacing: 0.5px;
         }
 
-        .store-badge-text span {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--store-text);
-        }
+        .store-badge-text span { font-size: 0.85rem; font-weight: 700; color: var(--store-text); }
 
         .footer-bottom-branding {
             font-family: var(--font-heading);
@@ -592,21 +498,9 @@
             padding-top: 25px;
         }
 
-        .footer-legal-links {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .footer-legal-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: 0.2s;
-        }
-
-        .footer-legal-links a:hover {
-            color: var(--text-main);
-        }
+        .footer-legal-links { display: flex; gap: 20px; flex-wrap: wrap; }
+        .footer-legal-links a { color: var(--text-muted); text-decoration: none; transition: 0.2s; }
+        .footer-legal-links a:hover { color: var(--text-main); }
 
         .settings-drawer {
             position: fixed;
@@ -680,9 +574,7 @@
             position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             font-family: var(--font-gemini);
         }
-        body.light-mode .gemini-response-card {
-            background: #ffffff; color: #111827; border-color: #d1d5db;
-        }
+        body.light-mode .gemini-response-card { background: #ffffff; color: #111827; border-color: #d1d5db; }
 
         .gemini-response-card h1, .gemini-response-card h2, .gemini-response-card h3 {
             color: var(--accent-green); font-family: var(--font-heading); margin-top: 15px; margin-bottom: 10px;
@@ -690,9 +582,7 @@
         .gemini-response-card p { margin-bottom: 12px; }
         .gemini-response-card ul, .gemini-response-card ol { margin-left: 20px; margin-bottom: 12px; }
 
-        .script-action-bar {
-            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;
-        }
+        .script-action-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
 
         .btn-script-action {
             background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-glow); color: var(--text-main);
@@ -718,9 +608,7 @@
             display: flex;
             justify-content: center;
         }
-        body.light-mode .modal-prompt-container {
-            background: rgba(244, 245, 248, 0.95);
-        }
+        body.light-mode .modal-prompt-container { background: rgba(244, 245, 248, 0.95); }
 
         .modal-prompt-box {
             width: 100%;
@@ -729,9 +617,7 @@
             border-radius: 18px; padding: 12px 16px; border: 1px solid var(--border-glow);
             box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
         }
-        body.light-mode .modal-prompt-box {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98));
-        }
+        body.light-mode .modal-prompt-box { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98)); }
 
         .modal-prompt-input-row {
             background: #ffffff; border-radius: 12px; padding: 6px 12px;
@@ -1233,6 +1119,8 @@
 
         function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
     </script>
-    <script src="app-extensions-v2.js"></script>
+    
+    <!-- ⚡ Cache-Buster Master Script Link (v3.0.0) ⚡ -->
+    <script src="app-extensions-v2.js?v=3.0.0"></script>
 </body>
 </html>
