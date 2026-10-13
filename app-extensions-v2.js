@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v2.3.0-Instagram-Reels-Integration
+ * VERSION: v2.4.0-Titan-Studio-Update
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Instagram + YouTube Hybrid Engine Loaded!");
+    console.log("⚡ TITAN AI Studio Engine Loaded!");
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `
@@ -382,7 +382,7 @@
             populateMovieFeed();
         }
 
-        // Bottom Navigation Bar
+        // Bottom Navigation Bar (Updated with Titan Studio)
         if (!document.getElementById('titanBottomNav')) {
             const bottomNav = document.createElement('div');
             bottomNav.id = 'titanBottomNav';
@@ -400,8 +400,8 @@
                     <div class="titan-nav-create"><i class="fa-solid fa-plus"></i></div>
                 </div>
                 <div class="titan-nav-item">
-                    <i class="fa-solid fa-tv"></i>
-                    <span>Subscriptions</span>
+                    <i class="fa-solid fa-clapperboard"></i>
+                    <span>Titan Studio</span>
                 </div>
                 <div class="titan-nav-item">
                     <i class="fa-regular fa-user"></i>
