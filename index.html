@@ -11,19 +11,7 @@
     <!-- Marked.js for Clean Markdown Rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
-    <!-- ⚡ Zero-Flicker Protection Style ⚡ -->
     <style>
-        body {
-            background-color: #050507 !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            transition: opacity 0.2s ease-in-out;
-        }
-        body.titan-ready {
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
         :root {
             --bg-black: #050507;
             --card-bg: #0d0e12;
@@ -65,6 +53,13 @@
             overflow-x: hidden;
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        body.titan-ready {
+            visibility: visible !important;
+            opacity: 1 !important;
         }
 
         header {
@@ -239,7 +234,6 @@
             color: var(--accent-green);
             transform: scale(1.05);
         }
-        .btn-arrow-luma:active { transform: scale(0.95); }
 
         .genre-chips-wrapper { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
 
@@ -552,6 +546,7 @@
         .toggle-switch.active { background: var(--accent-green); }
         .toggle-switch.active::after { left: 23px; background: #000; }
 
+        /* Gemini Style Result Modal */
         .gemini-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-black); z-index: 2000; display: flex;
@@ -574,26 +569,15 @@
             position: relative; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             font-family: var(--font-gemini);
         }
-        body.light-mode .gemini-response-card { background: #ffffff; color: #111827; border-color: #d1d5db; }
+        body.light-mode .gemini-response-card {
+            background: #ffffff; color: #111827; border-color: #d1d5db;
+        }
 
         .gemini-response-card h1, .gemini-response-card h2, .gemini-response-card h3 {
             color: var(--accent-green); font-family: var(--font-heading); margin-top: 15px; margin-bottom: 10px;
         }
         .gemini-response-card p { margin-bottom: 12px; }
         .gemini-response-card ul, .gemini-response-card ol { margin-left: 20px; margin-bottom: 12px; }
-
-        .script-action-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-
-        .btn-script-action {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-glow); color: var(--text-main);
-            padding: 8px 16px; border-radius: 10px; font-weight: 700; font-size: 0.8rem;
-            cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
-            font-family: var(--font-body);
-        }
-        .btn-script-action:hover { border-color: var(--accent-green); color: var(--accent-green); }
-        .btn-script-action.btn-green { background: var(--accent-green); color: #000; border: none; }
-        .btn-script-action.btn-green:hover { opacity: 0.9; color: #000; }
-        .btn-script-action.btn-red { background: rgba(255, 59, 48, 0.2); border-color: #ff3b30; color: #ff3b30; }
 
         .modal-prompt-container {
             position: fixed;
@@ -608,7 +592,9 @@
             display: flex;
             justify-content: center;
         }
-        body.light-mode .modal-prompt-container { background: rgba(244, 245, 248, 0.95); }
+        body.light-mode .modal-prompt-container {
+            background: rgba(244, 245, 248, 0.95);
+        }
 
         .modal-prompt-box {
             width: 100%;
@@ -617,7 +603,9 @@
             border-radius: 18px; padding: 12px 16px; border: 1px solid var(--border-glow);
             box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
         }
-        body.light-mode .modal-prompt-box { background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98)); }
+        body.light-mode .modal-prompt-box {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(240, 242, 245, 0.98));
+        }
 
         .modal-prompt-input-row {
             background: #ffffff; border-radius: 12px; padding: 6px 12px;
@@ -667,7 +655,7 @@
         <p>Titan AI lets you generate multi-scene cinematic scripts in Roman Urdu and photorealistic 8K visuals with absolute authority.</p>
 
         <div class="prompt-container">
-            <div class="prompt-title-luma">Describe your video or chat with Titan Director</div>
+            <div class="prompt-title-luma">Describe your video or chat with Titan AI</div>
             
             <div class="prompt-input-box-luma">
                 <textarea id="userPromptInput" placeholder="A cyberpunk thriller scene or ask anything about your movie..."></textarea>
@@ -912,21 +900,15 @@
         </div>
         <div class="gemini-content-box">
             <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
-            
-            <div class="script-action-bar">
-                <button class="btn-script-action btn-green" onclick="copyAllScript()"><i class="fa-solid fa-copy"></i> Copy All</button>
-                <button class="btn-script-action btn-red" onclick="clearAllContent()"><i class="fa-solid fa-trash"></i> Clear All</button>
-            </div>
-
             <div class="gemini-response-card" id="scriptResultContent">
-                Generating your script...
+                Generating response...
             </div>
         </div>
 
         <!-- Sticky Bottom Prompt Box with Mic -->
         <div class="modal-prompt-container">
             <div class="modal-prompt-box">
-                <div class="prompt-title-luma" style="font-size: 0.9rem; margin-bottom: 6px; text-align: left;">Describe your story / next scene or chat with AI</div>
+                <div class="prompt-title-luma" style="font-size: 0.9rem; margin-bottom: 6px; text-align: left;">Describe your story / next scene or chat with Titan AI</div>
                 <div class="modal-prompt-input-row">
                     <textarea id="modalPromptInput" placeholder="Continue story, ask questions or write new scene..."></textarea>
                     <div class="input-action-buttons">
@@ -1027,21 +1009,6 @@
             recognition.start();
         }
 
-        function copyAllScript() {
-            const textCard = document.getElementById('scriptResultContent');
-            let textToCopy = textCard.innerText.trim();
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert("Copied successfully!");
-            });
-        }
-
-        function clearAllContent() {
-            document.getElementById('userPromptInput').value = '';
-            document.getElementById('modalPromptInput').value = '';
-            document.getElementById('scriptResultContent').innerHTML = 'Cleared! Ready for new conversation or story.';
-            document.getElementById('displayUserPrompt').innerText = '"New Concept"';
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme_preference');
             if (savedTheme === 'light') {
@@ -1079,7 +1046,9 @@
             const chosenModel = localStorage.getItem('ai_model') || 'llama-3.3-70b-versatile';
 
             document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            document.getElementById('scriptResultContent').innerHTML = `⏳ Titan AI Director Assistant is thinking...`;
+            
+            const resultCard = document.getElementById('scriptResultContent');
+            resultCard.innerHTML = ''; // Clear previous response
             document.getElementById('geminiOutputModal').classList.add('active');
 
             try {
@@ -1105,13 +1074,29 @@
                 }
 
                 if (data.script && data.script.trim() !== "") {
-                    document.getElementById('scriptResultContent').innerHTML = marked.parse(data.script);
+                    let text = data.script;
                     inputField.value = '';
+                    
+                    // Live Gemini-style Typewriter Streaming
+                    let charIndex = 0;
+                    resultCard.innerHTML = '';
+                    
+                    function streamText() {
+                        if (charIndex < text.length) {
+                            resultCard.innerHTML += text.charAt(charIndex);
+                            charIndex++;
+                            setTimeout(streamText, 8);
+                        } else {
+                            resultCard.innerHTML = marked.parse(text); // Final markdown formatting
+                        }
+                    }
+                    streamText();
+
                 } else {
-                    document.getElementById('scriptResultContent').innerHTML = `❌ Received empty response from server.`;
+                    resultCard.innerHTML = `❌ Received empty response from server.`;
                 }
             } catch (error) {
-                document.getElementById('scriptResultContent').innerHTML = `❌ Connection Error: ${error.message}`;
+                resultCard.innerHTML = `❌ Connection Error: ${error.message}`;
             } finally {
                 submitBtn.innerHTML = originalIcon;
             }
@@ -1119,8 +1104,6 @@
 
         function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
     </script>
-    
-    <!-- ⚡ Cache-Buster Master Script Link (v3.0.0) ⚡ -->
-    <script src="app-extensions-v2.js?v=3.0.0"></script>
+    <script src="app-extensions-v2.js?v=3.4.0"></script>
 </body>
 </html>
