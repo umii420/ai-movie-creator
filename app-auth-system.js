@@ -1,23 +1,22 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI / AI MOVIE CREATOR REAL GOOGLE AUTH SYSTEM
+ * TITAN AI MOVIE CREATOR - APP AUTH SYSTEM
  * FILE: app-auth-system.js
- * VERSION: v5.0.0 (Firebase Integrated)
  * =========================================================
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// 1. Firebase Configuration Keys
+// Firebase Configuration Keys
 const firebaseConfig = {
-    apiKey: "AIzaSyAbVtYa7D6TcGnn8_UQno0l1MEKIBjMBDA",
-    authDomain: "ai-movie-creator-e366c.firebaseapp.com",
-    projectId: "ai-movie-creator-e366c",
-    storageBucket: "ai-movie-creator-e366c.firebasestorage.app",
-    messagingSenderId: "999640101244",
-    appId: "1:999640101244:web:530e0dcc86e768747234f9",
-    measurementId: "G-QQ145DMTQ2"
+  apiKey: "AIzaSyAbVtYa7D6TcGnn8_UQno0l1MEKIBjMBDA",
+  authDomain: "ai-movie-creator-e366c.firebaseapp.com",
+  projectId: "ai-movie-creator-e366c",
+  storageBucket: "ai-movie-creator-e366c.firebasestorage.app",
+  messagingSenderId: "999640101244",
+  appId: "1:999640101244:web:530e0dcc86e768747234f9",
+  measurementId: "G-QQ145DMTQ2"
 };
 
 // Initialize Firebase
@@ -25,139 +24,51 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Inject Auth Modal Styles
-if (!document.getElementById('titan-auth-styles-v5')) {
-    const authStyle = document.createElement('style');
-    authStyle.id = 'titan-auth-styles-v5';
-    authStyle.innerHTML = `
-        .titan-auth-modal {
-            position: fixed !important;
-            top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: rgba(0, 0, 0, 0.8) !important;
-            backdrop-filter: blur(8px) !important;
-            z-index: 9999999999 !important;
-            display: none;
-            align-items: center !important;
-            justify-content: center !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
-        }
-        .titan-auth-modal.active { display: flex !important; }
+// Render Google Login Button in Header Container
+function renderLoginButton(user) {
+    const container = document.getElementById('titanLoginContainer');
+    if (!container) return;
 
-        .auth-card {
-            background: #ffffff;
-            color: #0f172a;
-            width: 90%;
-            max-width: 380px;
-            border-radius: 24px;
-            padding: 32px 24px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-            text-align: center;
-            position: relative;
-        }
-
-        .auth-close-btn {
-            position: absolute;
-            top: 16px; right: 16px;
-            background: transparent;
-            border: none;
-            font-size: 1.25rem;
-            color: #64748b;
-            cursor: pointer;
-        }
-
-        .auth-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; }
-        .auth-subtitle { font-size: 0.82rem; color: #64748b; margin-bottom: 22px; }
-
-        .btn-google-real {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 14px 16px;
-            border-radius: 14px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            background: #ffffff;
-            color: #000000;
-            border: 1px solid #cbd5e1;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .btn-google-real:hover { background: #f8fafc; }
-    `;
-    document.head.appendChild(authStyle);
-}
-
-// Build UI Modal
-function buildAuthModal() {
-    if (document.getElementById('titanAuthModal')) return;
-
-    const modalDiv = document.createElement('div');
-    modalDiv.id = 'titanAuthModal';
-    modalDiv.className = 'titan-auth-modal';
-    modalDiv.innerHTML = `
-        <div class="auth-card">
-            <button class="auth-close-btn" id="closeTitanAuthBtn">✕</button>
-            <h2 class="auth-title">Log in to Titan AI</h2>
-            <p class="auth-subtitle">Sign in with your Google account to sync profile and content.</p>
-            <button class="btn-google-real" id="titanGoogleLoginBtn">
-                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="Google">
+    if (user) {
+        container.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px; background: #1e293b; padding: 6px 14px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
+                <img src="${user.photoURL || 'https://www.svgrepo.com/show/508699/user-circle.svg'}" style="width: 26px; height: 26px; border-radius: 50%;" alt="User">
+                <span style="font-size: 0.85rem; font-weight: 600; color: #fff;">${user.displayName || 'User'}</span>
+                <button onclick="window.logoutTitanUser()" style="background: none; border: none; color: #f87171; font-weight: 700; cursor: pointer; font-size: 0.8rem; margin-left: 6px;">Logout</button>
+            </div>
+        `;
+    } else {
+        container.innerHTML = `
+            <button onclick="window.handleGoogleLogin()" style="display: flex; align-items: center; gap: 8px; background: #ffffff; color: #000000; border: none; padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.2s;">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" height="18" alt="Google">
                 Continue with Google
             </button>
-        </div>
-    `;
-    document.body.appendChild(modalDiv);
-
-    document.getElementById('closeTitanAuthBtn').addEventListener('click', () => {
-        document.getElementById('titanAuthModal')?.classList.remove('active');
-    });
-
-    document.getElementById('titanGoogleLoginBtn').addEventListener('click', handleGoogleLogin);
+        `;
+    }
 }
 
-// Open / Close Controllers
-window.openTitanAuth = function() {
-    buildAuthModal();
-    document.getElementById('titanAuthModal')?.classList.add('active');
-};
-
-// Real Firebase Google Login Handler
-async function handleGoogleLogin() {
+// Google Login Handler
+window.handleGoogleLogin = async function() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
-        const user = result.user;
-        alert(`✅ Welcome ${user.displayName}! Successfully logged in.`);
-        
-        document.getElementById('titanAuthModal')?.classList.remove('active');
-
-        // Update Header/Profile Name
-        const profileHeader = document.querySelector('.prof-header h3, h3');
-        if (profileHeader) {
-            profileHeader.innerText = user.displayName;
-        }
+        alert(`Welcome ${result.user.displayName}! Successfully logged in.`);
     } catch (error) {
         console.error("Login Error:", error);
         alert("Login failed: " + error.message);
     }
-}
+};
 
-// Track User State
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("Logged in user:", user.email);
-    } else {
-        console.log("No user signed in.");
+// Logout Handler
+window.logoutTitanUser = async function() {
+    try {
+        await signOut(auth);
+        alert("Logged out successfully.");
+    } catch (error) {
+        console.error("Logout Error:", error);
     }
-});
+};
 
-// Auto Trigger on page load
-document.addEventListener('DOMContentLoaded', () => {
-    buildAuthModal();
-    setTimeout(() => {
-        if (!auth.currentUser) {
-            window.openTitanAuth();
-        }
-    }, 1200);
+// Listen to Auth Changes
+onAuthStateChanged(auth, (user) => {
+    renderLoginButton(user);
 });
