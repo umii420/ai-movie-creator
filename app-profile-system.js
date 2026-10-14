@@ -1,19 +1,19 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI PROFILE SYSTEM (TIKTOK SIDE DRAWER FIX)
+ * PLATFORM: TITAN AI PROFILE SYSTEM (INSTANT 1-CLICK FIX)
  * FILE: app-profile-system.js
- * VERSION: v3.1.0
+ * VERSION: v3.2.0
  * =========================================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Profile Engine v3.1 (Side Drawer) Initializing...");
+    console.log("⚡ Titan AI Profile Engine v3.2 (Instant Click Fix) Active!");
 
-    // 1. Inject Styles with Right-Side Drawer Animation
+    // 1. Inject Styles with High Z-Index & Right-Side Drawer
     const profileStyle = document.createElement('style');
-    profileStyle.id = 'titan-profile-styles-v3-1';
+    profileStyle.id = 'titan-profile-styles-v3-2';
     profileStyle.innerHTML = `
         :root {
             --prof-bg: #ffffff;
@@ -37,7 +37,7 @@
             width: 100vw !important; height: 100vh !important;
             background: var(--prof-bg) !important;
             color: var(--prof-text) !important;
-            z-index: 9999999 !important;
+            z-index: 999999999 !important;
             display: none;
             flex-direction: column !important;
             overflow-y: auto !important;
@@ -94,11 +94,11 @@
             color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 4px;
         }
 
-        /* TikTok Style Right-Side Sliding Drawer */
+        /* TikTok Style Right Side Sliding Drawer */
         .titan-side-drawer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
-            z-index: 99999999; display: none; justify-content: flex-end;
+            z-index: 9999999999 !important; display: none; justify-content: flex-end;
         }
         .titan-side-drawer.active { display: flex; }
         .side-drawer-content {
@@ -108,7 +108,7 @@
             color: var(--prof-text);
             box-shadow: -5px 0 25px rgba(0,0,0,0.2);
             transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
         .titan-side-drawer.active .side-drawer-content {
             transform: translateX(0);
@@ -214,7 +214,7 @@
                 </div>
             </div>
 
-            <!-- 3. RIGHT SIDE SLIDING DRAWER (TikTok Style) -->
+            <!-- 3. RIGHT SIDE SLIDING DRAWER -->
             <div id="titanOptionsSheet" class="titan-side-drawer" onclick="if(event.target === this) closeTitanOptions();">
                 <div class="side-drawer-content">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--prof-border); padding-bottom:12px;">
@@ -263,7 +263,7 @@
                     <div class="sheet-card">
                         <div class="sheet-row" onclick="closeTitanSettings(); openTitanEditProfile();"><span><i class="fa-regular fa-user left-icon"></i> Account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                         <div class="sheet-row"><span><i class="fa-solid fa-shield-halved left-icon"></i> Security and permissions</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="icon-row sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                     </div>
 
                     <div class="sheet-label">Cache & mobile</div>
@@ -283,7 +283,7 @@
         document.body.appendChild(wrapper);
     }
 
-    // Controllers
+    // Global Controllers
     window.openTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.add('active'); };
     window.closeTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.remove('active'); };
 
@@ -312,17 +312,29 @@
         if (val) alert(`${name} updated to: ${val}`);
     };
 
-    document.addEventListener('click', function(e) {
-        const target = e.target.closest('[class*="profile"], .fa-user, #profileTab');
-        if (target && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
-            e.preventDefault();
-            openTitanMainProfile();
-        }
-    }, true);
+    // INSTANT 1-CLICK INTERCEPTOR (High Priority Listener)
+    function attachInstantClickListener() {
+        document.addEventListener('click', function(e) {
+            const profileTarget = e.target.closest('.fa-user, [class*="profile"], #profileTab, [data-tab="profile"]');
+            
+            // Check if click is on bottom navigation profile button
+            if (profileTarget && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                openTitanMainProfile();
+                return false;
+            }
+        }, true); // Capture phase enabled for immediate response
+    }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', buildProfileUI);
+        document.addEventListener('DOMContentLoaded', function() {
+            buildProfileUI();
+            attachInstantClickListener();
+        });
     } else {
         buildProfileUI();
+        attachInstantClickListener();
     }
 })();
