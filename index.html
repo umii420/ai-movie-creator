@@ -499,4 +499,107 @@
     <!-- VIP Verification Account Modal -->
     <div class="gemini-modal-overlay" id="accountModal">
         <div class="gemini-header">
-         
+            <div class="logo">TITAN <span>AI</span> VERIFICATION</div>
+            <button class="btn-contact" onclick="closeAccountModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+        </div>
+        <div class="gemini-content-box" style="text-align: center; max-width: 460px; padding-top: 35px;">
+            <div style="width: 75px; height: 75px; background: rgba(0, 178, 255, 0.15); border: 2px solid var(--verified-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; color: var(--verified-blue); font-size: 2.2rem; box-shadow: 0 0 25px rgba(0, 178, 255, 0.4);">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 style="font-family: var(--font-heading); margin-bottom: 10px;">Claim Verified Blue Tick Account</h2>
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 25px;">Activate your official creator profile to unlock verified monetization and instant daily payouts.</p>
+            <input type="text" id="userNameInput" placeholder="Enter Your Full Name" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 14px; font-size: 0.95rem; outline: none;">
+            <input type="email" id="userEmailInput" placeholder="Enter Your Email Address" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 22px; font-size: 0.95rem; outline: none;">
+            <button class="btn-vip-primary" style="width: 100%; justify-content: center;" onclick="registerUserAccount()">
+                <i class="fa-solid fa-circle-check"></i> Activate Verified Account
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function openAccountModal() { document.getElementById('accountModal').classList.add('active'); }
+        function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
+        
+        function registerUserAccount() {
+            const name = document.getElementById('userNameInput').value.trim();
+            if(!name) { alert("Please enter your name!"); return; }
+            alert("Congratulations " + name + "! Your Blue Tick Account is now verified. Monetization unlocked!");
+            closeAccountModal();
+        }
+
+        window.openTitanStudioGemini = function() {
+            const geminiModal = document.getElementById('geminiOutputModal');
+            if (geminiModal) {
+                geminiModal.classList.add('active');
+                const promptInput = document.getElementById('modalPromptInput');
+                if (promptInput) promptInput.focus();
+            }
+        };
+
+        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
+
+        async function generateScript(inputId) {
+            const inputField = document.getElementById(inputId);
+            if (!inputField) return;
+
+            let inputVal = inputField.value.trim();
+            if (inputVal === "") {
+                alert("Please enter a message or prompt first!");
+                return;
+            }
+
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+            document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
+            const resultCard = document.getElementById('scriptResultContent');
+            resultCard.innerHTML = 'Generating response...';
+            document.getElementById('geminiOutputModal').classList.add('active');
+
+            try {
+                const response = await fetch("/api/generate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        prompt: inputVal,
+                        style: "Hollywood Blockbuster",
+                        ratio: "16:9 Cinematic",
+                        length: "Detailed Multi-Scene Story",
+                        lang: "Roman Urdu",
+                        model: "llama-3.3-70b-versatile"
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || `Server error: ${response.status}`);
+
+                if (data.script && data.script.trim() !== "") {
+                    let text = data.script;
+                    inputField.value = '';
+                    
+                    let charIndex = 0;
+                    resultCard.innerHTML = '';
+                    function streamText() {
+                        if (charIndex < text.length) {
+                            resultCard.innerHTML += text.charAt(charIndex);
+                            charIndex++;
+                            setTimeout(streamText, 8);
+                        } else {
+                            resultCard.innerHTML = marked.parse(text);
+                        }
+                    }
+                    streamText();
+                } else {
+                    resultCard.innerHTML = `❌ Received empty response from server.`;
+                }
+            } catch (error) {
+                resultCard.innerHTML = `❌ Connection Error: ${error.message}`;
+            } finally {
+                submitBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+            }
+        }
+    </script>
+    <!-- Sirf YouTube Style Upload System Active -->
+    <script src="app-upload-system.js?v=5.0.0"></script>
+</body>
+</html>
