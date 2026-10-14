@@ -1,19 +1,18 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI PROFILE SYSTEM (INSTANT 1-CLICK FIX)
+ * PLATFORM: TITAN AI PROFILE SYSTEM (NATIVE ANDROID BACK FIX)
  * FILE: app-profile-system.js
- * VERSION: v3.2.0
+ * VERSION: v3.4.0
  * =========================================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Profile Engine v3.2 (Instant Click Fix) Active!");
+    console.log("⚡ Titan AI Profile Engine v3.4 (Native Back Fix) Active!");
 
-    // 1. Inject Styles with High Z-Index & Right-Side Drawer
     const profileStyle = document.createElement('style');
-    profileStyle.id = 'titan-profile-styles-v3-2';
+    profileStyle.id = 'titan-profile-styles-v3-4';
     profileStyle.innerHTML = `
         :root {
             --prof-bg: #ffffff;
@@ -129,7 +128,6 @@
     `;
     document.head.appendChild(profileStyle);
 
-    // 2. Build UI Structure
     function buildProfileUI() {
         if (document.getElementById('titanMainProfilePage')) return;
 
@@ -238,7 +236,7 @@
                     <div class="sheet-card">
                         <div class="sheet-row" onclick="if(window.openTitanStudioGemini) openTitanStudioGemini();"><span><i class="fa-solid fa-wand-magic-sparkles left-icon" style="color:#00b2ff;"></i> TikTok Studio</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                         <div class="sheet-row"><span><i class="fa-solid fa-fire left-icon" style="color:#f59e0b;"></i> Promote</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row" onclick="closeTitanOptions(); openTitanSettings();"><span><i class="fa-solid fa-gear left-icon"></i> Settings and privacy</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="sheet-row" onclick="openTitanSettings();"><span><i class="fa-solid fa-gear left-icon"></i> Settings and privacy</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                     </div>
                 </div>
             </div>
@@ -261,7 +259,7 @@
 
                     <div class="sheet-label">Account</div>
                     <div class="sheet-card">
-                        <div class="sheet-row" onclick="closeTitanSettings(); openTitanEditProfile();"><span><i class="fa-regular fa-user left-icon"></i> Account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="sheet-row" onclick="openTitanEditProfileFromSettings();"><span><i class="fa-regular fa-user left-icon"></i> Account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                         <div class="sheet-row"><span><i class="fa-solid fa-shield-halved left-icon"></i> Security and permissions</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                         <div class="sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                     </div>
@@ -281,20 +279,48 @@
             </div>
         `;
         document.body.appendChild(wrapper);
+        
+        // Push initial state so we can intercept Android back button safely
+        history.replaceState({ titanModal: 'none' }, '');
     }
 
-    // Global Controllers
-    window.openTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.add('active'); };
-    window.closeTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.remove('active'); };
+    // Window Controllers (Without pushing unnecessary browser history)
+    window.openTitanMainProfile = function() {
+        document.getElementById('titanMainProfilePage')?.classList.add('active');
+        history.pushState({ titanModal: 'profile' }, '');
+    };
+    window.closeTitanMainProfile = function() {
+        document.getElementById('titanMainProfilePage')?.classList.remove('active');
+    };
 
-    window.openTitanEditProfile = function() { document.getElementById('titanEditProfilePage')?.classList.add('active'); };
-    window.closeTitanEditProfile = function() { document.getElementById('titanEditProfilePage')?.classList.remove('active'); };
+    window.openTitanEditProfile = function() {
+        document.getElementById('titanEditProfilePage')?.classList.add('active');
+        history.pushState({ titanModal: 'editProfile' }, '');
+    };
+    window.closeTitanEditProfile = function() {
+        document.getElementById('titanEditProfilePage')?.classList.remove('active');
+    };
 
-    window.openTitanOptions = function() { document.getElementById('titanOptionsSheet')?.classList.add('active'); };
-    window.closeTitanOptions = function() { document.getElementById('titanOptionsSheet')?.classList.remove('active'); };
+    window.openTitanOptions = function() {
+        document.getElementById('titanOptionsSheet')?.classList.add('active');
+        history.pushState({ titanModal: 'options' }, '');
+    };
+    window.closeTitanOptions = function() {
+        document.getElementById('titanOptionsSheet')?.classList.remove('active');
+    };
 
-    window.openTitanSettings = function() { document.getElementById('titanSettingsPage')?.classList.add('active'); };
-    window.closeTitanSettings = function() { document.getElementById('titanSettingsPage')?.classList.remove('active'); };
+    window.openTitanSettings = function() {
+        document.getElementById('titanSettingsPage')?.classList.add('active');
+        history.pushState({ titanModal: 'settings' }, '');
+    };
+    window.closeTitanSettings = function() {
+        document.getElementById('titanSettingsPage')?.classList.remove('active');
+    };
+
+    window.openTitanEditProfileFromSettings = function() {
+        document.getElementById('titanSettingsPage')?.classList.remove('active');
+        document.getElementById('titanEditProfilePage')?.classList.add('active');
+    };
 
     window.updateProfilePhoto = function(input) {
         if (input.files && input.files[0]) {
@@ -312,12 +338,34 @@
         if (val) alert(`${name} updated to: ${val}`);
     };
 
-    // INSTANT 1-CLICK INTERCEPTOR (High Priority Listener)
+    // Android Hardware / Browser Back Button Interceptor
+    window.addEventListener('popstate', function(event) {
+        const editPage = document.getElementById('titanEditProfilePage');
+        const settingsPage = document.getElementById('titanSettingsPage');
+        const optionsSheet = document.getElementById('titanOptionsSheet');
+        const mainProfile = document.getElementById('titanMainProfilePage');
+
+        // Check which screen is currently open and close only that one layer
+        if (editPage?.classList.contains('active')) {
+            editPage.classList.remove('active');
+            history.pushState({ titanModal: 'profile' }, '');
+        } else if (settingsPage?.classList.contains('active')) {
+            settingsPage.classList.remove('active');
+            history.pushState({ titanModal: 'options' }, '');
+        } else if (optionsSheet?.classList.contains('active')) {
+            optionsSheet.classList.remove('active');
+            history.pushState({ titanModal: 'profile' }, '');
+        } else if (mainProfile?.classList.contains('active')) {
+            mainProfile.classList.remove('active');
+            history.replaceState({ titanModal: 'none' }, '');
+        }
+    });
+
+    // Instant Click Listener for Profile Tab
     function attachInstantClickListener() {
         document.addEventListener('click', function(e) {
             const profileTarget = e.target.closest('.fa-user, [class*="profile"], #profileTab, [data-tab="profile"]');
             
-            // Check if click is on bottom navigation profile button
             if (profileTarget && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -325,7 +373,7 @@
                 openTitanMainProfile();
                 return false;
             }
-        }, true); // Capture phase enabled for immediate response
+        }, true);
     }
 
     if (document.readyState === 'loading') {
