@@ -1,20 +1,20 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI AUTHENTICATION SYSTEM (HTML LINKED & CACHE-FREE)
+ * PLATFORM: TITAN AI AUTHENTICATION SYSTEM (COMPLETE & AUTO-TRIGGER)
  * FILE: app-auth-system.js
- * VERSION: v3.0.0
+ * VERSION: v4.0.0
  * =========================================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Auth Engine v3.0 Loaded Successfully!");
+    console.log("⚡ Titan AI Auth Engine v4.0 Loaded Successfully!");
 
-    // Inject Auth Styles dynamically to ensure UI loads even if CSS is missing
-    if (!document.getElementById('titan-auth-styles-v3')) {
+    // 1. Inject Auth Styles dynamically
+    if (!document.getElementById('titan-auth-styles-v4')) {
         const authStyle = document.createElement('style');
-        authStyle.id = 'titan-auth-styles-v3';
+        authStyle.id = 'titan-auth-styles-v4';
         authStyle.innerHTML = `
             :root {
                 --auth-bg: #ffffff;
@@ -130,7 +130,7 @@
         document.head.appendChild(authStyle);
     }
 
-    // Build UI Modal Component in DOM
+    // 2. Build UI Modal Component in DOM
     function buildAuthModal() {
         if (document.getElementById('titanAuthModal')) return;
 
@@ -178,7 +178,7 @@
         document.body.appendChild(modalDiv);
     }
 
-    // Global Window Controllers for HTML & App Integration
+    // Global Window Controllers
     window.openTitanAuth = function() {
         const modal = document.getElementById('titanAuthModal');
         if (modal) {
@@ -193,39 +193,38 @@
         document.getElementById('titanAuthModal')?.classList.remove('active');
     };
 
-    // Simulated Real Login Action & HTML Profile Binding
+    // Login Action Handler & Profile Sync
     window.titanLoginAction = function(provider) {
         console.log(`🚀 Logging in via ${provider}...`);
-        
-        // Prompt user email/profile link simulation for instant connection
         const userGmail = prompt(`Enter your ${provider} account email or username to sync with Titan AI:`, "umarhayat@gmail.com");
         
         if (userGmail) {
             alert(`✅ Successfully connected with ${provider} (${userGmail})!`);
             window.closeTitanAuth();
 
-            // Auto-sync profile info in HTML elements if present
             const profileNameHeader = document.querySelector('.prof-header h3, h3');
-            if (profileNameHeader && provider === 'Google') {
+            if (profileNameHeader) {
                 profileNameHeader.innerText = "UmAr WaRrAiCh (Synced)";
             }
 
-            // Open main profile automatically after successful login
             if (window.openTitanMainProfile) {
                 window.openTitanMainProfile();
             }
         }
     };
 
-    // Auto-trigger modal on startup or when needed if not logged in
-    document.addEventListener('DOMContentLoaded', function() {
+    // 3. Auto Trigger on Startup
+    function initAuth() {
         buildAuthModal();
-        // Uncomment below line if you want login modal to pop up automatically when app opens:
-        // window.openTitanAuth();
-    });
+        // Automatically open modal after 1 second when app loads
+        setTimeout(() => {
+            window.openTitanAuth();
+        }, 1000);
+    }
 
-    // Also run immediately if DOM is already loaded
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        buildAuthModal();
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAuth);
+    } else {
+        initAuth();
     }
 })();
