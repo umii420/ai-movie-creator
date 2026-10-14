@@ -1,20 +1,19 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI PROFILE SYSTEM (EXACT TIKTOK FLOW)
+ * PLATFORM: TITAN AI PROFILE SYSTEM (TIKTOK SIDE DRAWER FIX)
  * FILE: app-profile-system.js
- * AUTHOR: Umar Hayat / Titan AI
- * VERSION: v3.0.0
+ * VERSION: v3.1.0
  * =========================================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Profile Engine v3 Initializing...");
+    console.log("⚡ Titan AI Profile Engine v3.1 (Side Drawer) Initializing...");
 
-    // 1. Inject Styles
+    // 1. Inject Styles with Right-Side Drawer Animation
     const profileStyle = document.createElement('style');
-    profileStyle.id = 'titan-profile-styles-v3';
+    profileStyle.id = 'titan-profile-styles-v3-1';
     profileStyle.innerHTML = `
         :root {
             --prof-bg: #ffffff;
@@ -22,7 +21,6 @@
             --prof-text: #0f172a;
             --prof-muted: #64748b;
             --prof-border: rgba(226, 232, 240, 0.8);
-            --prof-accent: #fe2c55;
         }
 
         body.dark-mode {
@@ -33,7 +31,6 @@
             --prof-border: rgba(255, 255, 255, 0.1);
         }
 
-        /* Full Screen Pages */
         .titan-profile-page {
             position: fixed !important;
             top: 0 !important; left: 0 !important;
@@ -48,112 +45,78 @@
         }
         .titan-profile-page.active { display: flex !important; }
 
-        /* Top Bar Navigation */
         .prof-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 18px;
-            background: var(--prof-bg);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px; background: var(--prof-bg);
             position: sticky; top: 0; z-index: 10;
             border-bottom: 1px solid var(--prof-border);
         }
         .prof-header-icon {
-            background: transparent;
-            border: none;
-            font-size: 1.3rem;
-            color: var(--prof-text);
-            cursor: pointer;
-            width: 36px; height: 36px;
+            background: transparent; border: none; font-size: 1.3rem;
+            color: var(--prof-text); cursor: pointer; width: 36px; height: 36px;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* Main Profile Elements */
         .main-prof-avatar-wrap {
-            position: relative;
-            width: 96px; height: 96px;
-            margin: 15px auto 10px;
-            border-radius: 50%;
-            overflow: hidden;
+            position: relative; width: 96px; height: 96px;
+            margin: 15px auto 10px; border-radius: 50%; overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
         .main-prof-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
         .stats-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 24px;
-            margin: 16px 0;
-            text-align: center;
+            display: flex; justify-content: center; align-items: center;
+            gap: 24px; margin: 16px 0; text-align: center;
         }
         .stat-item .num { font-weight: 800; font-size: 1.15rem; color: var(--prof-text); display: block; }
         .stat-item .lbl { font-size: 0.8rem; color: var(--prof-muted); }
 
         .bio-box {
-            text-align: center;
-            padding: 0 25px;
-            font-size: 0.88rem;
-            color: var(--prof-text);
-            line-height: 1.4;
-            margin-bottom: 15px;
+            text-align: center; padding: 0 25px; font-size: 0.88rem;
+            color: var(--prof-text); line-height: 1.4; margin-bottom: 15px;
         }
         .bio-link { color: #00b2ff; text-decoration: none; word-break: break-all; }
 
-        /* Tabs Grid Icons */
         .tabs-bar {
-            display: flex;
-            justify-content: space-around;
+            display: flex; justify-content: space-around;
             border-top: 1px solid var(--prof-border);
             border-bottom: 1px solid var(--prof-border);
-            padding: 10px 0;
-            background: var(--prof-bg);
+            padding: 10px 0; background: var(--prof-bg);
         }
         .tab-btn { background: transparent; border: none; font-size: 1.2rem; color: var(--prof-muted); cursor: pointer; }
         .tab-btn.active { color: var(--prof-text); border-bottom: 2px solid var(--prof-text); padding-bottom: 4px; }
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            padding: 2px 0;
-        }
-        .grid-item {
-            aspect-ratio: 3/4;
-            background: #1e293b;
-            position: relative;
-            overflow: hidden;
-        }
+        .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px 0; }
+        .grid-item { aspect-ratio: 3/4; background: #1e293b; position: relative; overflow: hidden; }
         .grid-item img { width: 100%; height: 100%; object-fit: cover; }
         .grid-views {
-            position: absolute;
-            bottom: 6px; left: 6px;
-            font-size: 0.75rem; font-weight: 700;
-            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-            display: flex; align-items: center; gap: 4px;
+            position: absolute; bottom: 6px; left: 6px; font-size: 0.75rem; font-weight: 700;
+            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 4px;
         }
 
-        /* Slide-up Bottom Options Sheet */
-        .titan-bottom-sheet {
+        /* TikTok Style Right-Side Sliding Drawer */
+        .titan-side-drawer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            z-index: 99999999; display: none;
-            justify-content: flex-end; flex-direction: column;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+            z-index: 99999999; display: none; justify-content: flex-end;
         }
-        .titan-bottom-sheet.active { display: flex; }
-        .bottom-sheet-content {
+        .titan-side-drawer.active { display: flex; }
+        .side-drawer-content {
             background: var(--prof-bg);
-            border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 20px 20px 35px; max-height: 80vh; overflow-y: auto;
+            width: 82%; max-width: 360px; height: 100%;
+            padding: 20px 16px 40px; overflow-y: auto;
             color: var(--prof-text);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+        .titan-side-drawer.active .side-drawer-content {
+            transform: translateX(0);
         }
 
         .sheet-card {
-            background: var(--prof-card-bg);
-            border-radius: 14px;
-            border: 1px solid var(--prof-border);
-            margin-bottom: 16px;
-            overflow: hidden;
+            background: var(--prof-card-bg); border-radius: 14px;
+            border: 1px solid var(--prof-border); margin-bottom: 16px; overflow: hidden;
         }
         .sheet-row {
             display: flex; align-items: center; justify-content: space-between;
@@ -166,7 +129,7 @@
     `;
     document.head.appendChild(profileStyle);
 
-    // 2. Build UI
+    // 2. Build UI Structure
     function buildProfileUI() {
         if (document.getElementById('titanMainProfilePage')) return;
 
@@ -175,10 +138,8 @@
             <!-- 1. MAIN PROFILE PAGE -->
             <div id="titanMainProfilePage" class="titan-profile-page">
                 <div class="prof-header">
-                    <!-- Top Left Pencil Button (Opens Edit Profile) -->
                     <button class="prof-header-icon" onclick="openTitanEditProfile()"><i class="fa-solid fa-pen"></i></button>
                     <h3 style="font-size:1.05rem; font-weight:700; margin:0;">UmAr WaRrAiCh 🦅</h3>
-                    <!-- Top Right Three Lines Button (Opens Bottom Sheet Options) -->
                     <button class="prof-header-icon" onclick="openTitanOptions()"><i class="fa-solid fa-bars"></i></button>
                 </div>
 
@@ -218,7 +179,7 @@
                 </div>
             </div>
 
-            <!-- 2. EDIT PROFILE PAGE (Image #1 Design) -->
+            <!-- 2. EDIT PROFILE PAGE -->
             <div id="titanEditProfilePage" class="titan-profile-page">
                 <div class="prof-header">
                     <button class="prof-header-icon" onclick="closeTitanEditProfile()"><i class="fa-solid fa-chevron-left"></i></button>
@@ -253,11 +214,14 @@
                 </div>
             </div>
 
-            <!-- 3. BOTTOM OPTIONS SHEET (Image #2 Design) -->
-            <div id="titanOptionsSheet" class="titan-bottom-sheet" onclick="if(event.target === this) closeTitanOptions();">
-                <div class="bottom-sheet-content">
-                    <div style="width: 40px; height: 4px; background: rgba(150,150,150,0.3); border-radius: 10px; margin: 0 auto 15px;"></div>
-                    
+            <!-- 3. RIGHT SIDE SLIDING DRAWER (TikTok Style) -->
+            <div id="titanOptionsSheet" class="titan-side-drawer" onclick="if(event.target === this) closeTitanOptions();">
+                <div class="side-drawer-content">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--prof-border); padding-bottom:12px;">
+                        <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Menu</h3>
+                        <button onclick="closeTitanOptions()" style="background:transparent; border:none; font-size:1.2rem; color:var(--prof-text); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+
                     <div class="sheet-label">Assets</div>
                     <div class="sheet-card">
                         <div class="sheet-row" onclick="alert('Wallet Balance: $1,250.00 USD')"><span><i class="fa-solid fa-wallet left-icon"></i> Balance</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
@@ -279,7 +243,7 @@
                 </div>
             </div>
 
-            <!-- 4. SETTINGS AND PRIVACY PAGE (Image #3 Design) -->
+            <!-- 4. SETTINGS AND PRIVACY PAGE -->
             <div id="titanSettingsPage" class="titan-profile-page">
                 <div class="prof-header">
                     <button class="prof-header-icon" onclick="closeTitanSettings()"><i class="fa-solid fa-chevron-left"></i></button>
@@ -299,7 +263,7 @@
                     <div class="sheet-card">
                         <div class="sheet-row" onclick="closeTitanSettings(); openTitanEditProfile();"><span><i class="fa-regular fa-user left-icon"></i> Account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                         <div class="sheet-row"><span><i class="fa-solid fa-shield-halved left-icon"></i> Security and permissions</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="icon-row sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                     </div>
 
                     <div class="sheet-label">Cache & mobile</div>
@@ -319,7 +283,7 @@
         document.body.appendChild(wrapper);
     }
 
-    // Global Controllers
+    // Controllers
     window.openTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.add('active'); };
     window.closeTitanMainProfile = function() { document.getElementById('titanMainProfilePage')?.classList.remove('active'); };
 
@@ -348,10 +312,9 @@
         if (val) alert(`${name} updated to: ${val}`);
     };
 
-    // Auto Catch Profile Tab Clicks in Navigation
     document.addEventListener('click', function(e) {
         const target = e.target.closest('[class*="profile"], .fa-user, #profileTab');
-        if (target && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-bottom-sheet')) {
+        if (target && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
             e.preventDefault();
             openTitanMainProfile();
         }
