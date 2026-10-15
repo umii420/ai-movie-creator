@@ -48,13 +48,6 @@
             overflow-x: hidden;
             line-height: 1.6;
             transition: background-color 0.3s ease, color 0.3s ease;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
-        body.titan-ready {
-            visibility: visible !important;
-            opacity: 1 !important;
         }
 
         header {
@@ -90,27 +83,6 @@
         }
 
         .nav-btns { display: flex; gap: 10px; align-items: center; }
-
-        .btn-verified-nav {
-            background: linear-gradient(135deg, rgba(0, 178, 255, 0.15), rgba(0, 178, 255, 0.05));
-            color: var(--text-main);
-            border: 1px solid var(--verified-blue);
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.82rem;
-            cursor: pointer;
-            white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 0 12px rgba(0, 178, 255, 0.25);
-            transition: 0.3s ease;
-        }
-        .btn-verified-nav:hover {
-            background: var(--verified-blue);
-            color: #000;
-        }
 
         .menu-btn {
             background: transparent;
@@ -391,9 +363,7 @@
             <i class="fa-solid fa-circle-check verified-badge" title="Official Verified Network"></i>
         </div>
         <div class="nav-btns">
-            <button class="btn-verified-nav" onclick="openAccountModal()">
-                <i class="fa-solid fa-circle-check" style="color:var(--verified-blue);"></i> Get Verified Badge
-            </button>
+            <!-- Extra duplicate button removed for clean header layout -->
             <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-sliders"></i></button>
         </div>
     </header>
