@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITAN AI — Verified Elite Creator & Revenue Network</title>
+    <title>TITAN AI — Official Platform</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -20,7 +20,6 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(0, 178, 255, 0.2);
-            --header-bg: rgba(5, 5, 7, 0.95);
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
@@ -32,7 +31,6 @@
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border-glow: rgba(0, 178, 255, 0.15);
-            --header-bg: rgba(248, 250, 252, 0.95);
         }
 
         * {
@@ -50,260 +48,20 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background: var(--header-bg);
-            backdrop-filter: blur(12px);
-            position: fixed;
+        /* Container for App Extensions Feed */
+        .features-section {
             width: 100%;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border-glow);
-        }
-
-        .logo {
-            font-family: var(--font-heading);
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--text-main);
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .logo span { color: var(--accent-green); }
-
-        .verified-badge {
-            color: var(--verified-blue);
-            font-size: 1.05rem;
-            filter: drop-shadow(0 0 6px rgba(0, 178, 255, 0.6));
-        }
-
-        .nav-btns { display: flex; gap: 10px; align-items: center; }
-
-        .menu-btn {
-            background: transparent;
-            border: 1px solid var(--border-glow);
-            color: var(--text-main);
-            font-size: 1.1rem;
-            padding: 8px 12px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .hero {
-            padding: 135px 5% 40px;
-            text-align: center;
-            max-width: 950px;
+            max-width: 600px;
             margin: 0 auto;
-        }
-
-        .hero-verified-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0, 178, 255, 0.12);
-            border: 1px solid rgba(0, 178, 255, 0.4);
-            color: var(--verified-blue);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 22px;
-            box-shadow: 0 0 15px rgba(0, 178, 255, 0.2);
-        }
-
-        .hero h1 {
-            font-family: var(--font-heading);
-            font-size: clamp(2.1rem, 5.8vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.12;
-            text-transform: uppercase;
-            margin-bottom: 22px;
-            color: var(--text-main);
-        }
-        .hero h1 span {
-            background: linear-gradient(135deg, #f59e0b, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            color: var(--text-muted);
-            max-width: 750px;
-            margin: 0 auto 35px;
-            font-weight: 500;
-        }
-
-        .earning-cta-box {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin-bottom: 45px;
-        }
-
-        .btn-vip-primary {
-            background: linear-gradient(135deg, var(--verified-blue), #0072ff);
-            color: #ffffff;
-            padding: 15px 36px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 1.05rem;
-            box-shadow: 0 10px 30px rgba(0, 178, 255, 0.4);
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-        .btn-vip-primary:hover { transform: translateY(-3px); }
-
-        .btn-vip-gold {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #000000;
-            padding: 15px 36px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 1.05rem;
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35);
-            cursor: pointer;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-        }
-        .btn-vip-gold:hover { transform: translateY(-3px); }
-
-        .trust-stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            padding: 24px 30px;
-            border-radius: 24px;
-            margin-bottom: 50px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        }
-
-        .stat-item { text-align: center; }
-        .stat-item h4 {
-            font-family: var(--font-heading);
-            font-size: 1.7rem;
-            font-weight: 800;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .stat-item p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
-
-        .visual-steps-section {
-            padding: 20px 5% 40px;
-            max-width: 950px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.98rem;
-            margin-bottom: 40px;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 28px;
-        }
-
-        .step-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-            transition: 0.3s;
-        }
-        .step-card:hover { transform: translateY(-6px); border-color: var(--verified-blue); }
-
-        .step-img-box { position: relative; width: 100%; height: 195px; overflow: hidden; }
-        .step-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        .step-verified-overlay {
-            position: absolute;
-            top: 12px; right: 12px;
-            background: rgba(5, 5, 7, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid var(--verified-blue);
-            color: #ffffff;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            display: flex; align-items: center; gap: 6px;
-        }
-
-        .step-content { padding: 24px; text-align: left; }
-        .step-number {
-            display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(0, 178, 255, 0.15); color: var(--verified-blue);
-            font-weight: 800; font-size: 0.78rem; padding: 5px 12px;
-            border-radius: 14px; margin-bottom: 12px; text-transform: uppercase;
-        }
-        .step-content h3 {
-            font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
-        }
-        .step-content p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; }
-
-        footer {
-            background: var(--card-bg);
-            padding: 50px 5% 40px;
-            border-top: 1px solid var(--border-glow);
-            text-align: left;
-            margin-top: 60px;
-        }
-        .footer-bottom-branding {
-            font-family: var(--font-heading);
-            font-size: clamp(2rem, 6vw, 3.5rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--text-main) 30%, var(--text-muted) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+            padding: 0 10px;
         }
 
         /* Modal Overlays */
         .gemini-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-black); z-index: 2000; display: flex;
+            background: var(--bg-black); z-index: 20000; display: flex;
             flex-direction: column; opacity: 0; pointer-events: none;
-            transition: 0.4s ease; padding: 20px 5%; overflow-y: auto;
+            transition: 0.3s ease; padding: 20px 5%; overflow-y: auto;
         }
         .gemini-modal-overlay.active { opacity: 1; pointer-events: all; }
 
@@ -322,8 +80,8 @@
 
         .modal-prompt-container {
             position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 5%;
-            background: var(--header-bg); backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-glow); z-index: 2500; display: flex; justify-content: center;
+            background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-glow); z-index: 25000; display: flex; justify-content: center;
         }
         .modal-prompt-box {
             width: 100%; max-width: 800px;
@@ -357,110 +115,13 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            TITAN <span>AI</span> 
-            <i class="fa-solid fa-circle-check verified-badge" title="Official Verified Network"></i>
-        </div>
-        <div class="nav-btns">
-            <!-- Extra duplicate button removed for clean header layout -->
-            <button class="menu-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-sliders"></i></button>
-        </div>
-    </header>
-
-    <!-- VIP HERO SECTION -->
-    <section class="hero">
-        <div class="hero-verified-tag">
-            <i class="fa-solid fa-circle-check"></i> Verified Creator Partnership Network
-        </div>
-        <h1>CLAIM YOUR <span>BLUE TICK BADGE</span> & MONETIZE INSTANTLY</h1>
-        <p>Unlock elite creator privileges on Titan AI. Publish long-form cinematic releases and vertical reels, build an exclusive subscriber base, and generate guaranteed high-tier revenue daily.</p>
-
-        <div class="earning-cta-box">
-            <button class="btn-vip-primary" onclick="openAccountModal()">
-                <i class="fa-solid fa-circle-check"></i> Apply For Blue Tick Account
-            </button>
-            <button class="btn-vip-gold" onclick="openTitanStudioGemini()">
-                <i class="fa-solid fa-wand-magic-sparkles"></i> Launch Titan Studio
-            </button>
-        </div>
-
-        <!-- VIP Trust Metrics Banner -->
-        <div class="trust-stats-bar">
-            <div class="stat-item">
-                <h4>$250,000+ <i class="fa-solid fa-circle-check verified-badge"></i></h4>
-                <p>Distributed Revenue</p>
-            </div>
-            <div class="stat-item">
-                <h4>35,000+ <i class="fa-solid fa-user-shield" style="color:var(--verified-blue); font-size:1.2rem;"></i></h4>
-                <p>Verified Creators</p>
-            </div>
-            <div class="stat-item">
-                <h4>Instant <i class="fa-solid fa-bolt" style="color:#f59e0b; font-size:1.2rem;"></i></h4>
-                <p>Daily Cashouts</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- VISUAL VIP SETUPS -->
-    <section class="visual-steps-section">
-        <h2 class="section-title">THE VERIFIED CREATOR ADVANTAGE</h2>
-        <p class="section-subtitle">Experience high-performance digital environments built for top 1% earners.</p>
-
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-img-box">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" class="step-img" alt="High-Tech Setup" />
-                    <div class="step-verified-overlay"><i class="fa-solid fa-circle-check" style="color:var(--verified-blue);"></i> Verified Workstation</div>
-                </div>
-                <div class="step-content">
-                    <span class="step-number"><i class="fa-solid fa-microchip"></i> Tier 01 Access</span>
-                    <h3>Elite Creator Studio <i class="fa-solid fa-circle-check verified-badge"></i></h3>
-                    <p>Produce cinematic long-form films and viral scripts using high-octane automated production pipelines without technical limitations.</p>
-                </div>
-            </div>
-
-            <div class="step-card">
-                <div class="step-img-box">
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop" class="step-img" alt="Neon Computer Setup" />
-                    <div class="step-verified-overlay"><i class="fa-solid fa-circle-check" style="color:var(--verified-blue);"></i> Priority Feed</div>
-                </div>
-                <div class="step-content">
-                    <span class="step-number"><i class="fa-solid fa-bolt"></i> Tier 02 Reach</span>
-                    <h3>Verified Feed Distribution <i class="fa-solid fa-circle-check verified-badge"></i></h3>
-                    <p>Get priority placement on Titan Shorts and long-form feed. Verified profiles receive 10x higher audience engagement and view retention.</p>
-                </div>
-            </div>
-
-            <div class="step-card">
-                <div class="step-img-box">
-                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" class="step-img" alt="Secure Payout Setup" />
-                    <div class="step-verified-overlay"><i class="fa-solid fa-circle-check" style="color:var(--verified-blue);"></i> Direct Cashout</div>
-                </div>
-                <div class="step-content">
-                    <span class="step-number"><i class="fa-solid fa-wallet"></i> Tier 03 Revenue</span>
-                    <h3>Instant Daily Withdrawals <i class="fa-solid fa-circle-check verified-badge"></i></h3>
-                    <p>Monitor your real-time earnings on your private analytics dashboard and withdraw daily payouts securely into your preferred account.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section placeholder for app-extensions dynamic feed -->
+    <!-- Main Container for App Feed -->
     <div class="features-section"></div>
-
-    <footer>
-        <div class="footer-bottom-branding">TITAN AI</div>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Titan AI Verified Creator & Monetization Network. All Rights Reserved.</div>
-    </footer>
 
     <!-- Gemini Style Result Modal -->
     <div class="gemini-modal-overlay" id="geminiOutputModal">
         <div class="gemini-header">
-            <div class="logo">
-                TITAN <span>AI</span> 
-                <i class="fa-solid fa-circle-check verified-badge"></i>
-            </div>
+            <div style="font-weight: 800; font-size: 1.1rem;">TITAN <span style="color:#f59e0b;">AI</span> STUDIO</div>
             <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close</button>
         </div>
         <div class="gemini-content-box">
@@ -472,29 +133,29 @@
             <div class="modal-prompt-box">
                 <div style="font-size: 0.85rem; color: #fff; margin-bottom: 6px; font-weight: 600;">Chat with Titan AI Director Engine</div>
                 <div class="modal-prompt-input-row">
-                    <textarea id="modalPromptInput" placeholder="Write your script or ask for earning tips..."></textarea>
+                    <textarea id="modalPromptInput" placeholder="Write your script or prompt..."></textarea>
                     <button class="btn-arrow-luma" id="modalSubmitBtn" onclick="generateScript('modalPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- VIP Verification Account Modal -->
+    <!-- VIP Account Modal -->
     <div class="gemini-modal-overlay" id="accountModal">
         <div class="gemini-header">
-            <div class="logo">TITAN <span>AI</span> VERIFICATION</div>
+            <div style="font-weight: 800; font-size: 1.1rem;">TITAN <span style="color:#00b2ff;">VERIFICATION</span></div>
             <button class="btn-contact" onclick="closeAccountModal()"><i class="fa-solid fa-xmark"></i> Close</button>
         </div>
         <div class="gemini-content-box" style="text-align: center; max-width: 460px; padding-top: 35px;">
-            <div style="width: 75px; height: 75px; background: rgba(0, 178, 255, 0.15); border: 2px solid var(--verified-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; color: var(--verified-blue); font-size: 2.2rem; box-shadow: 0 0 25px rgba(0, 178, 255, 0.4);">
+            <div style="width: 75px; height: 75px; background: rgba(0, 178, 255, 0.15); border: 2px solid var(--verified-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; color: var(--verified-blue); font-size: 2.2rem;">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
             <h2 style="font-family: var(--font-heading); margin-bottom: 10px;">Claim Verified Blue Tick Account</h2>
             <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 25px;">Activate your official creator profile to unlock verified monetization and instant daily payouts.</p>
             <input type="text" id="userNameInput" placeholder="Enter Your Full Name" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 14px; font-size: 0.95rem; outline: none;">
             <input type="email" id="userEmailInput" placeholder="Enter Your Email Address" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 22px; font-size: 0.95rem; outline: none;">
-            <button class="btn-vip-primary" style="width: 100%; justify-content: center;" onclick="registerUserAccount()">
-                <i class="fa-solid fa-circle-check"></i> Activate Verified Account
+            <button onclick="registerUserAccount()" style="width: 100%; background: linear-gradient(135deg, var(--verified-blue), #0072ff); color:#fff; border:none; padding:15px; border-radius:30px; font-weight:800; cursor:pointer;">
+                Activate Verified Account
             </button>
         </div>
     </div>
@@ -503,14 +164,6 @@
         function openAccountModal() { document.getElementById('accountModal').classList.add('active'); }
         function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
         
-        function toggleSettingsDrawer() {
-            if (window.openTitanOptions) {
-                window.openTitanOptions();
-            } else if (window.openTitanMainProfile) {
-                window.openTitanMainProfile();
-            }
-        }
-
         function registerUserAccount() {
             const name = document.getElementById('userNameInput').value.trim();
             if(!name) { alert("Please enter your name!"); return; }
@@ -591,7 +244,7 @@
         }
     </script>
 
-    <!-- PERFECT ORDER OF ALL JS MODULES -->
+    <!-- LOAD CLEAN MODULAR JS FILES -->
     <script src="app-auth-system.js"></script>
     <script src="app-profile-system.js"></script>
     <script src="app-extensions-v2.js"></script>
