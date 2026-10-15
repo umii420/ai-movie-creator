@@ -72,7 +72,7 @@
         }
         .titan-logo-group { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .titan-logo-title { font-weight: 800; font-size: 1.25rem; color: var(--titan-text); letter-spacing: -0.5px; }
-        .titan-header-actions { display: flex; align-items: center; gap: 12px; }
+        .titan-header-actions { display: flex; align-items: center; gap: 16px; }
         .titan-icon-btn { background: transparent; border: none; color: var(--titan-text); font-size: 1.15rem; cursor: pointer; padding: 4px; border-radius: 50%; }
 
         /* Stories Bar */
@@ -178,7 +178,7 @@
 
     // 3. Layout Injection
     function injectOriginalLayout() {
-        // 1. Top Bar Header (With titanLoginContainer added)
+        // 1. Top Bar Header
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -189,7 +189,6 @@
                     <span class="titan-logo-title">TITAN <span style="color:#f59e0b;">AI</span></span>
                 </div>
                 <div class="titan-header-actions">
-                    <div id="titanLoginContainer"></div>
                     <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Theme">
                         <i class="fa-solid fa-moon" id="titanThemeIcon"></i>
                     </button>
