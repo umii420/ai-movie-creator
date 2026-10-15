@@ -1,14 +1,14 @@
 /**
- * TITAN AI MOVIE CREATOR - CLEAN MULTI-SOCIAL AUTH SYSTEM
+ * TITAN AI MOVIE CREATOR - TOP HEADER SIGN-UP & AUTO PROFILE AUTH
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Clean Multi-Social Auth System Initialized");
+    console.log("⚡ Titan Top-Header Auth & Profile System Initialized");
 
-    // Firebase Configuration
+    // Firebase Configuration (Apni Firebase keys yahan add karen)
     const firebaseConfig = {
         apiKey: "YOUR_FIREBASE_API_KEY",
         authDomain: "ai-movie-creator--umaralipakistan.firebaseapp.com",
@@ -59,19 +59,19 @@
                         followers: "0",
                         following: "0",
                         likes: "0",
-                        verified: false, // Strict: No blue tick
+                        verified: false,
                         joinedDate: new Date().toLocaleDateString()
                     };
 
                     localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
                     localStorage.setItem('titan_logged_in', 'true');
 
-                    updateUIForLoggedInUser(userProfile);
+                    updateHeaderToLoggedInUser(userProfile);
                     closeAccountModal();
                 } else {
                     localStorage.removeItem('titan_user_profile');
                     localStorage.setItem('titan_logged_in', 'false');
-                    renderLoginHeaderButton();
+                    renderTopHeaderSignUpButton();
                 }
             });
 
@@ -80,7 +80,46 @@
         }
     }
 
-    // Modern Multi-Social Sign-Up Modal
+    // 1. Inject Top Header Sign-Up Button Dynamically
+    function renderTopHeaderSignUpButton() {
+        const headerActions = document.querySelector('.titan-header-actions');
+        if (!headerActions) {
+            // Agar header abhi load nahi hua toh 0.5s baad dobara koshish karega
+            setTimeout(renderTopHeaderSignUpButton, 500);
+            return;
+        }
+
+        if (document.getElementById('titanTopSignUpBtn')) return;
+
+        const signUpBtn = document.createElement('button');
+        signUpBtn.id = 'titanTopSignUpBtn';
+        signUpBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Sign Up`;
+        signUpBtn.style.cssText = `
+            background: #ffffff; color: #000000; border: none;
+            padding: 6px 14px; border-radius: 20px; font-weight: 700;
+            font-size: 0.8rem; cursor: pointer; display: flex; align-items: center;
+            gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s;
+        `;
+        signUpBtn.onclick = openAccountModal;
+
+        // Theme toggle button se pehle inject kar denge taaki top par aaye
+        headerActions.prepend(signUpBtn);
+    }
+
+    // 2. Update Header when User is Logged In
+    function updateHeaderToLoggedInUser(profile) {
+        const signUpBtn = document.getElementById('titanTopSignUpBtn');
+        if (signUpBtn) {
+            signUpBtn.outerHTML = `
+                <div id="titanTopProfileChip" style="display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; cursor: pointer;" onclick="toggleSettingsDrawer()">
+                    <img src="${profile.photo}" style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover;" />
+                    <span style="font-weight: 700; font-size: 0.78rem; color: var(--titan-text, #fff);">${profile.name.split(' ')[0]}</span>
+                </div>
+            `;
+        }
+    }
+
+    // 3. Modern Multi-Social Sign-Up Modal UI
     function injectSocialAuthModal() {
         if (document.getElementById('titanAuthModal')) return;
 
@@ -88,13 +127,13 @@
         modalStyles.innerHTML = `
             .titan-auth-overlay {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-                background: rgba(0,0,0,0.82); backdrop-filter: blur(12px);
+                background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
                 z-index: 100000; display: none; align-items: center; justify-content: center;
                 padding: 20px;
             }
             .titan-auth-overlay.active { display: flex; animation: fadeIn 0.25s ease-out; }
             .titan-auth-card {
-                background: #0f1015; border: 1px solid rgba(255,255,255,0.12);
+                background: #0d0e12; border: 1px solid rgba(255,255,255,0.12);
                 width: 100%; max-width: 380px; border-radius: 24px; padding: 28px 22px;
                 text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.6); position: relative;
             }
@@ -150,6 +189,7 @@
         document.body.appendChild(modal);
     }
 
+    // Modal Controls
     window.openAccountModal = function () {
         injectSocialAuthModal();
         document.getElementById('titanAuthModal')?.classList.add('active');
@@ -159,7 +199,7 @@
         document.getElementById('titanAuthModal')?.classList.remove('active');
     };
 
-    // Trigger Google Auth Directly
+    // Trigger Google Auth Popup
     window.handleGoogleLogin = async function () {
         if (!authInstance || !googleProviderInstance) {
             await initFirebase();
@@ -172,32 +212,9 @@
         }
     };
 
-    function updateUIForLoggedInUser(profile) {
-        const container = document.getElementById('titanLoginContainer');
-        if (container) {
-            container.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); padding: 5px 12px; border-radius: 20px; cursor: pointer;" onclick="toggleSettingsDrawer()">
-                    <img src="${profile.photo}" style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover;" />
-                    <span style="font-weight: 700; font-size: 0.82rem; color: var(--titan-text, #fff);">${profile.name.split(' ')[0]}</span>
-                </div>
-            `;
-        }
-    }
-
-    function renderLoginHeaderButton() {
-        const container = document.getElementById('titanLoginContainer');
-        if (container) {
-            container.innerHTML = `
-                <button onclick="openAccountModal()" style="display: flex; align-items: center; gap: 6px; background: #ffffff; color: #000; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                    <i class="fa-solid fa-user-plus"></i> Sign Up
-                </button>
-            `;
-        }
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
         initFirebase();
         injectSocialAuthModal();
-        renderLoginHeaderButton();
+        renderTopHeaderSignUpButton();
     });
 })();
