@@ -371,6 +371,16 @@
             width: 38px; height: 38px; border-radius: 50%; display: flex;
             justify-content: center; align-items: center; cursor: pointer;
         }
+        
+        .btn-contact {
+            background: transparent;
+            border: 1px solid var(--border-glow);
+            color: var(--text-main);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -466,6 +476,9 @@
         </div>
     </section>
 
+    <!-- Features Section placeholder for app-extensions dynamic feed -->
+    <div class="features-section"></div>
+
     <footer>
         <div class="footer-bottom-branding">TITAN AI</div>
         <div style="font-size: 0.85rem; color: var(--text-muted);">© 2026 Titan AI Verified Creator & Monetization Network. All Rights Reserved.</div>
@@ -520,6 +533,14 @@
         function openAccountModal() { document.getElementById('accountModal').classList.add('active'); }
         function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
         
+        function toggleSettingsDrawer() {
+            if (window.openTitanOptions) {
+                window.openTitanOptions();
+            } else if (window.openTitanMainProfile) {
+                window.openTitanMainProfile();
+            }
+        }
+
         function registerUserAccount() {
             const name = document.getElementById('userNameInput').value.trim();
             if(!name) { alert("Please enter your name!"); return; }
@@ -599,10 +620,12 @@
             }
         }
     </script>
-    <script src="app-extensions-v2.js?v=4.5.0"></script>
-    <!-- Updated YouTube-Style Upload System Engine -->
-    <script src="app-upload-system.js?v=4.0.0"></script>
-    <script src="app-profile-system.js?v=1.0.0"></script>
+
+    <!-- PERFECT ORDER OF ALL JS MODULES -->
+    <script src="app-auth-system.js"></script>
+    <script src="app-profile-system.js"></script>
+    <script src="app-extensions-v2.js"></script>
+    <script src="app-upload-system.js"></script>
 
 </body>
 </html>
