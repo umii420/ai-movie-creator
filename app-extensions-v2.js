@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v4.1.0-Exact-Screenshot-Match
+ * VERSION: v4.2.0-Default-Light-Theme-Restored
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,16 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Screenshot-Exact Layout Active!");
+    console.log("⚡ TITAN AI Ecosystem Active with Default Light Mode!");
+
+    // Set Default to Light Mode on Fresh Load if not set
+    if (!localStorage.getItem('theme_preference')) {
+        localStorage.setItem('theme_preference', 'light');
+    }
+
+    if (localStorage.getItem('theme_preference') === 'light') {
+        document.body.classList.add('light-mode');
+    }
 
     // 1. Dynamic Favicon Injector
     const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,5 90,20 90,65 50,95 10,65 10,20" fill="#090a0f" stroke="#f59e0b" stroke-width="4"/><path d="M 28 28 L 72 28 L 72 38 L 56 38 L 56 75 L 44 75 L 44 38 L 28 38 Z" fill="#f59e0b"/><circle cx="50" cy="83" r="4" fill="#00dfd8"/></svg>`;
@@ -20,7 +29,7 @@
     link.href = 'data:image/svg+xml,' + encodedSvg;
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    // 2. Exact Styles matching Screenshots 1 & 2
+    // 2. Exact Styles Matching Screenshots with Theme Toggle Support
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
         :root {
@@ -167,7 +176,7 @@
 
     // 3. Inject Layout in EXACT Order of Screenshots
     function injectOriginalLayout() {
-        // 1. Top Bar Header (With Settings Gear)
+        // 1. Top Bar Header (With Theme Toggle Button instead of Gear)
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -178,12 +187,15 @@
                     <span class="titan-logo-title">TITAN <span style="color:#f59e0b;">AI</span></span>
                 </div>
                 <div class="titan-header-actions">
-                    <button class="titan-icon-btn" onclick="toggleSettingsDrawer()"><i class="fa-solid fa-gear"></i></button>
+                    <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Theme">
+                        <i class="fa-solid fa-moon" id="titanThemeIcon"></i>
+                    </button>
                     <button class="titan-icon-btn"><i class="fa-regular fa-bell"></i></button>
                     <button class="titan-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             `;
             document.body.prepend(header);
+            document.getElementById('titanThemeToggle').addEventListener('click', toggleThemeSync);
         }
 
         // 2. Stories Bar
@@ -346,6 +358,24 @@
                 </div>
             `;
             document.body.appendChild(shortsViewer);
+        }
+
+        updateThemeIconState();
+    }
+
+    // Dynamic Theme Switcher Function
+    function toggleThemeSync() {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('theme_preference', isLight ? 'light' : 'dark');
+        updateThemeIconState();
+    }
+
+    function updateThemeIconState() {
+        const isLight = document.body.classList.contains('light-mode');
+        const icon = document.getElementById('titanThemeIcon');
+        if (icon) {
+            icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
     }
 
