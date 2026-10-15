@@ -72,7 +72,7 @@
         }
         .titan-logo-group { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .titan-logo-title { font-weight: 800; font-size: 1.25rem; color: var(--titan-text); letter-spacing: -0.5px; }
-        .titan-header-actions { display: flex; align-items: center; gap: 16px; }
+        .titan-header-actions { display: flex; align-items: center; gap: 12px; }
         .titan-icon-btn { background: transparent; border: none; color: var(--titan-text); font-size: 1.15rem; cursor: pointer; padding: 4px; border-radius: 50%; }
 
         /* Stories Bar */
@@ -178,7 +178,7 @@
 
     // 3. Layout Injection
     function injectOriginalLayout() {
-        // 1. Top Bar Header
+        // 1. Top Bar Header (With titanLoginContainer added)
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -189,6 +189,7 @@
                     <span class="titan-logo-title">TITAN <span style="color:#f59e0b;">AI</span></span>
                 </div>
                 <div class="titan-header-actions">
+                    <div id="titanLoginContainer"></div>
                     <button class="titan-icon-btn" id="titanThemeToggle" title="Toggle Theme">
                         <i class="fa-solid fa-moon" id="titanThemeIcon"></i>
                     </button>
@@ -244,7 +245,7 @@
             storiesWrapper.after(chips);
         }
 
-        // 4. Hero Section (VIP Blue Tick & Creator Partnership)
+        // 4. Hero Section
         const chipsElem = document.getElementById('titanChipsScroll');
         if (chipsElem && !document.getElementById('titanHeroSection')) {
             const hero = document.createElement('section');
@@ -269,7 +270,7 @@
             chipsElem.after(hero);
         }
 
-        // 5. Phase 01 to Phase 04 Cards & Trust Stats Bar (Pure Titan AI Focus)
+        // 5. Phase Cards & Trust Stats
         const heroElem = document.getElementById('titanHeroSection');
         if (heroElem && !document.getElementById('titanPhaseCards')) {
             const phaseCards = document.createElement('div');
@@ -279,14 +280,14 @@
                 <div class="titan-phase-card">
                     <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 01</div>
                     <h3>Produce AI Cinematic Media <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
-                    <p>Leverage Titan AI Studio's built-in creative engine to script high-retention movies, immersive storylines, and photorealistic scene concepts effortlessly[span_0](start_span)[span_0](end_span)[span_1](start_span)[span_1](end_span).</p>
+                    <p>Leverage Titan AI Studio's built-in creative engine to script high-retention movies, immersive storylines, and photorealistic scene concepts effortlessly.</p>
                 </div>
 
                 <div class="titan-phase-card">
                     <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop" class="titan-phase-img" alt="Cinematic Production" />
                     <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 02</div>
                     <h3>Distribute & Stream <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
-                    <p>Publish long-form cinematic films or vertical short-form reels directly onto the Titan Feed ecosystem to capture massive global audience engagement[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span).</p>
+                    <p>Publish long-form cinematic films or vertical short-form reels directly onto the Titan Feed ecosystem to capture massive global audience engagement.</p>
                 </div>
 
                 <div class="titan-phase-card">
