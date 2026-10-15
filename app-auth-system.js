@@ -1,14 +1,14 @@
 /**
- * TITAN AI MOVIE CREATOR - COMPACT PROFESSIONAL AUTH SYSTEM
+ * TITAN AI MOVIE CREATOR - FORCED GATEWAY AUTH SYSTEM
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Compact Auth System Initialized");
+    console.log("⚡ Titan Forced Gateway Auth Initialized");
 
-    // Firebase Configuration (Apni Firebase keys yahan add karen)
+    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "YOUR_FIREBASE_API_KEY",
         authDomain: "ai-movie-creator--umaralipakistan.firebaseapp.com",
@@ -47,7 +47,7 @@
             authInstance = window.firebase.auth();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
 
-            // Session Sync & Profile Auto-Creation
+            // Session State Listener
             authInstance.onAuthStateChanged((user) => {
                 if (user) {
                     const userProfile = {
@@ -72,7 +72,7 @@
                     localStorage.removeItem('titan_user_profile');
                     localStorage.setItem('titan_logged_in', 'false');
                     
-                    // Show compact modal automatically on fresh load if not logged in
+                    // Forcefully open modal immediately if not logged in
                     openAccountModal();
                 }
             });
@@ -82,7 +82,7 @@
         }
     }
 
-    // Update Header Profile Icon when Logged In
+    // Update Header Profile Chip when Logged In
     function updateHeaderToLoggedInUser(profile) {
         const headerActions = document.querySelector('.titan-header-actions');
         if (!headerActions) return;
@@ -104,7 +104,7 @@
         };
     }
 
-    // Compact Professional Modal UI (Exact Screenshot Style)
+    // Forced Gateway Modal UI (No Close Button - Must Login)
     function injectSocialAuthModal() {
         if (document.getElementById('titanAuthModal')) return;
 
@@ -112,64 +112,33 @@
         modalStyles.innerHTML = `
             .titan-auth-overlay {
                 position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-                background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);
+                background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(15px);
                 z-index: 999999; display: none; align-items: center; justify-content: center;
                 padding: 16px;
             }
-            .titan-auth-overlay.active { display: flex; animation: fadeInModal 0.25s ease-out; }
+            .titan-auth-overlay.active { display: flex; animation: fadeInModal 0.3s ease-out; }
             @keyframes fadeInModal {
                 from { opacity: 0; transform: scale(0.95); }
                 to { opacity: 1; transform: scale(1); }
             }
             .titan-auth-card {
-                background: #ffffff; color: #111111;
-                width: 100%; max-width: 360px; border-radius: 24px; padding: 28px 24px;
-                text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.3); position: relative;
+                background: #0d0e12; color: #f3f4f6; border: 1px solid rgba(255,255,255,0.15);
+                width: 100%; max-width: 380px; border-radius: 24px; padding: 32px 24px;
+                text-align: center; box-shadow: 0 20px 45px rgba(0,0,0,0.7); position: relative;
             }
-            body.dark-mode .titan-auth-card, body:not(.light-mode) .titan-auth-card {
-                background: #121318; color: #f3f4f6; border: 1px solid rgba(255,255,255,0.1);
-            }
-            .titan-auth-card h2 { font-size: 1.25rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.3px; }
+            .titan-auth-card h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 6px; color: #ffffff; }
+            .titan-auth-card p { font-size: 0.82rem; color: #9ca3af; margin-bottom: 24px; line-height: 1.4; }
             
-            .btn-google-compact {
-                width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
-                padding: 12px 16px; border-radius: 14px; font-weight: 700; font-size: 0.88rem;
-                background: linear-gradient(135deg, #f59e0b, #ef4444); color: #ffffff;
-                border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(245,158,11,0.25);
-                transition: transform 0.15s, opacity 0.15s; margin-bottom: 18px;
+            .titan-social-btn {
+                width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px;
+                padding: 13px 18px; border-radius: 14px; font-weight: 700; font-size: 0.9rem;
+                border: none; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s, opacity 0.15s;
             }
-            .btn-google-compact:hover { transform: translateY(-1px); opacity: 0.95; }
-            
-            .auth-divider {
-                display: flex; align-items: center; text-align: center; color: #888;
-                font-size: 0.78rem; margin-bottom: 16px; font-weight: 600;
-            }
-            .auth-divider::before, .auth-divider::after {
-                content: ''; flex: 1; border-bottom: 1px solid rgba(150,150,150,0.3);
-            }
-            .auth-divider::before { margin-right: .75em; }
-            .auth-divider::after { margin-left: .75em; }
-
-            .auth-input {
-                width: 100%; padding: 11px 14px; border-radius: 12px;
-                border: 1px solid rgba(150,150,150,0.3); background: transparent;
-                color: inherit; font-size: 0.85rem; outline: none; margin-bottom: 10px;
-            }
-            .auth-input:focus { border-color: #f59e0b; }
-
-            .btn-continue-compact {
-                width: 100%; background: #e5e7eb; color: #374151; border: none;
-                padding: 11px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
-                cursor: not-allowed; margin-top: 6px; margin-bottom: 14px;
-            }
-            body.dark-mode .btn-continue-compact, body:not(.light-mode) .btn-continue-compact {
-                background: #1f2937; color: #9ca3af;
-            }
-
-            .auth-footer-terms {
-                font-size: 0.7rem; color: #888; line-height: 1.3; margin-top: 10px;
-            }
-            .auth-footer-terms a { color: inherit; text-decoration: underline; }
+            .titan-social-btn:hover { transform: translateY(-2px); opacity: 0.95; }
+            .btn-google { background: #ffffff; color: #000000; box-shadow: 0 4px 15px rgba(255,255,255,0.15); }
+            .btn-tiktok { background: #000000; color: #ffffff; border: 1px solid rgba(255,255,255,0.2); }
+            .btn-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #ffffff; }
+            .btn-facebook { background: #1877f2; color: #ffffff; }
         `;
         document.head.appendChild(modalStyles);
 
@@ -178,27 +147,28 @@
         modal.className = 'titan-auth-overlay';
         modal.innerHTML = `
             <div class="titan-auth-card">
-                <h2>Sign up or log in</h2>
+                <h2>Welcome to Titan AI</h2>
+                <p>Sign up to start creating original AI movies and manage your profile.</p>
 
-                <button class="btn-google-compact" onclick="handleGoogleLogin()">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="18" height="18" alt="Google">
+                <button class="titan-social-btn btn-google" onclick="handleGoogleLogin()">
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" height="20" alt="Google">
                     Continue with Google
                 </button>
 
-                <div class="auth-divider">or</div>
+                <button class="titan-social-btn btn-tiktok" onclick="handleGoogleLogin()">
+                    <i class="fa-brands fa-tiktok" style="font-size: 1.1rem; color: #00f2fe;"></i>
+                    Continue with TikTok
+                </button>
 
-                <input type="email" class="auth-input" placeholder="Email" id="titanAuthEmail" />
-                <input type="password" class="auth-input" placeholder="Password" id="titanAuthPass" />
-                
-                <div style="font-size: 0.72rem; text-align: left; color: #888; margin-bottom: 10px; padding-left: 2px;">
-                    ✓ 8 characters &nbsp; ✓ 1 letter &nbsp; ✓ 1 number
-                </div>
+                <button class="titan-social-btn btn-instagram" onclick="handleGoogleLogin()">
+                    <i class="fa-brands fa-instagram" style="font-size: 1.1rem;"></i>
+                    Continue with Instagram
+                </button>
 
-                <button class="btn-continue-compact">Continue</button>
-
-                <div class="auth-footer-terms">
-                    By proceeding you agree with <a href="#">Terms and Conditions</a> & <a href="#">Privacy Policy</a>
-                </div>
+                <button class="titan-social-btn btn-facebook" onclick="handleGoogleLogin()">
+                    <i class="fa-brands fa-facebook" style="font-size: 1.1rem;"></i>
+                    Continue with Facebook
+                </button>
             </div>
         `;
         document.body.appendChild(modal);
@@ -213,7 +183,7 @@
         document.getElementById('titanAuthModal')?.classList.remove('active');
     };
 
-    // Google Sign-In Trigger via Firebase
+    // Google Login Trigger via Firebase
     window.handleGoogleLogin = async function () {
         if (!authInstance || !googleProviderInstance) {
             await initFirebase();
