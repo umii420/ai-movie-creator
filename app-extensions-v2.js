@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v4.2.0-Default-Light-Theme-Restored
+ * VERSION: v4.4.0-Pure-Titan-AI-Mission
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -9,7 +9,7 @@
 (function () {
     'use strict';
 
-    console.log("⚡ TITAN AI Ecosystem Active with Default Light Mode!");
+    console.log("⚡ TITAN AI Pure Ecosystem Active!");
 
     // Set Default to Light Mode on Fresh Load if not set
     if (!localStorage.getItem('theme_preference')) {
@@ -29,7 +29,7 @@
     link.href = 'data:image/svg+xml,' + encodedSvg;
     document.getElementsByTagName('head')[0].appendChild(link);
 
-    // 2. Exact Styles Matching Screenshots with Theme Toggle Support
+    // 2. Exact Styles
     const titanStyle = document.createElement('style');
     titanStyle.innerHTML = `
         :root {
@@ -119,14 +119,16 @@
             background: linear-gradient(135deg, var(--verified-blue), #0072ff);
             color: #ffffff; padding: 12px 26px; border-radius: 30px; font-weight: 800;
             font-size: 0.92rem; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 178, 255, 0.25);
         }
         .btn-vip-gold {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: #000000; padding: 12px 26px; border-radius: 30px; font-weight: 800;
             font-size: 0.92rem; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
         }
 
-        /* Phase Cards (Phase 01 & Phase 02) */
+        /* Professional Phase Cards (Phase 01 to Phase 04) */
         .titan-phase-cards { display: flex; flex-direction: column; gap: 20px; padding: 10px 15px; max-width: 600px; margin: 0 auto; }
         .titan-phase-card { background: var(--titan-card-bg); border: 1px solid var(--titan-border); border-radius: 20px; padding: 22px; position: relative; }
         .titan-phase-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 223, 216, 0.15); color: #00dfd8; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 12px; }
@@ -174,9 +176,9 @@
     `;
     document.head.appendChild(titanStyle);
 
-    // 3. Inject Layout in EXACT Order of Screenshots
+    // 3. Layout Injection
     function injectOriginalLayout() {
-        // 1. Top Bar Header (With Theme Toggle Button instead of Gear)
+        // 1. Top Bar Header
         if (!document.getElementById('titanTopHeader')) {
             const header = document.createElement('div');
             header.id = 'titanTopHeader';
@@ -242,7 +244,7 @@
             storiesWrapper.after(chips);
         }
 
-        // 4. Hero Section (Blue Tick Badge)
+        // 4. Hero Section (VIP Blue Tick & Creator Partnership)
         const chipsElem = document.getElementById('titanChipsScroll');
         if (chipsElem && !document.getElementById('titanHeroSection')) {
             const hero = document.createElement('section');
@@ -250,10 +252,10 @@
             hero.className = 'titan-hero-section';
             hero.innerHTML = `
                 <div class="hero-verified-tag">
-                    <i class="fa-solid fa-circle-check"></i> Verified Creator Partnership Network
+                    <i class="fa-solid fa-circle-check"></i> Elite Verified Creator Partnership Network
                 </div>
                 <h1>CLAIM YOUR <span>BLUE TICK BADGE</span> & MONETIZE INSTANTLY</h1>
-                <p>Unlock elite creator privileges on Titan AI. Publish long-form cinematic releases and vertical reels, build an exclusive subscriber base, and generate guaranteed high-tier revenue daily.</p>
+                <p>Unlock elite creator privileges and global monetization rights on Titan AI. Build your dedicated subscriber network, publish cinematic masterpieces, and secure verified daily earnings with zero friction.</p>
 
                 <div class="earning-cta-box">
                     <button class="btn-vip-primary" onclick="openAccountModal()">
@@ -267,7 +269,7 @@
             chipsElem.after(hero);
         }
 
-        // 5. Phase 01, Phase 02 & Revenue Trust Bar
+        // 5. Phase 01 to Phase 04 Cards & Trust Stats Bar (Pure Titan AI Focus)
         const heroElem = document.getElementById('titanHeroSection');
         if (heroElem && !document.getElementById('titanPhaseCards')) {
             const phaseCards = document.createElement('div');
@@ -276,15 +278,29 @@
             phaseCards.innerHTML = `
                 <div class="titan-phase-card">
                     <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 01</div>
-                    <h3>Produce AI Media <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
-                    <p>Leverage Titan AI Studio (powered by Groq Llama 3.3 70B) to script high-retention movies and generate photorealistic scene concepts.</p>
+                    <h3>Produce AI Cinematic Media <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
+                    <p>Leverage Titan AI Studio's built-in creative engine to script high-retention movies, immersive storylines, and photorealistic scene concepts effortlessly[span_0](start_span)[span_0](end_span)[span_1](start_span)[span_1](end_span).</p>
                 </div>
 
                 <div class="titan-phase-card">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop" class="titan-phase-img" alt="Arcade Cinema" />
+                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=800&auto=format&fit=crop" class="titan-phase-img" alt="Cinematic Production" />
                     <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 02</div>
                     <h3>Distribute & Stream <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
-                    <p>Share long-form movies or vertical TikTok-style reels directly onto the Titan Feed to capture viral audience engagement.</p>
+                    <p>Publish long-form cinematic films or vertical short-form reels directly onto the Titan Feed ecosystem to capture massive global audience engagement[span_2](start_span)[span_2](end_span)[span_3](start_span)[span_3](end_span).</p>
+                </div>
+
+                <div class="titan-phase-card">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" class="titan-phase-img" alt="Audience Growth" />
+                    <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 03</div>
+                    <h3>Audience Scale & Community <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
+                    <p>Optimize your published content using automated engagement features, custom branded thumbnails, and real-time community interaction tools to grow your loyal fan base exponentially.</p>
+                </div>
+
+                <div class="titan-phase-card">
+                    <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?q=80&w=800&auto=format&fit=crop" class="titan-phase-img" alt="Global Monetization" />
+                    <div class="titan-phase-tag"><i class="fa-solid fa-circle-check"></i> PHASE 04</div>
+                    <h3>Global Monetization & Elite Payouts <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:1rem;"></i></h3>
+                    <p>Unlock verified blue tick status to activate automated high-tier revenue sharing, daily cashouts, and priority creator sponsorship opportunities worldwide.</p>
                 </div>
 
                 <div class="trust-stats-bar">
@@ -334,7 +350,7 @@
             document.body.appendChild(bottomNav);
         }
 
-        // 7. TikTok Shorts Viewer Overlay
+        // 7. Shorts Viewer Overlay
         if (!document.getElementById('tiktokShortsViewer')) {
             const shortsViewer = document.createElement('div');
             shortsViewer.id = 'tiktokShortsViewer';
