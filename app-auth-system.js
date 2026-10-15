@@ -1,14 +1,13 @@
 /**
- * TITAN AI MOVIE CREATOR - REAL GOOGLE AUTH SYSTEM
+ * TITAN AI MOVIE CREATOR - FRONT GATE GOOGLE AUTH SYSTEM
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Clean Google Auth Active!");
+    console.log("⚡ Titan Front Gate Auth System Initialized");
 
-    // فائر بیس کی اپنی کنفیگریشن یہاں رکھیں
     const firebaseConfig = {
         apiKey: "YOUR_FIREBASE_API_KEY",
         authDomain: "ai-movie-creator--umaralipakistan.firebaseapp.com",
@@ -35,6 +34,20 @@
     let authInstance = null;
     let googleProviderInstance = null;
 
+    // Check and Control Front Gate Visibility
+    function checkAuthGateState() {
+        const isLoggedIn = localStorage.getItem('titan_logged_in') === 'true';
+        const gateOverlay = document.getElementById('titanAuthGateOverlay');
+        
+        if (gateOverlay) {
+            if (!isLoggedIn) {
+                gateOverlay.style.display = 'flex'; // Show front gate if not logged in
+            } else {
+                gateOverlay.style.display = 'none'; // Hide if already logged in
+            }
+        }
+    }
+
     async function initFirebase() {
         try {
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
@@ -47,7 +60,7 @@
             authInstance = window.firebase.auth();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
 
-            // یوزر سیشن ہینڈلر
+            // Session Listener
             authInstance.onAuthStateChanged((user) => {
                 if (user) {
                     const userProfile = {
@@ -55,52 +68,62 @@
                         email: user.email,
                         photo: user.photoURL || "https://picsum.photos/200",
                         uid: user.uid,
-                        verified: true
+                        verified: true,
+                        joinedDate: new Date().toLocaleDateString()
                     };
 
                     localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
                     localStorage.setItem('titan_logged_in', 'true');
-                    console.log("✅ Google Logged In:", user.email);
+                    console.log("✅ User Logged In:", user.email);
                 } else {
                     localStorage.removeItem('titan_user_profile');
                     localStorage.setItem('titan_logged_in', 'false');
                 }
+                checkAuthGateState();
             });
 
         } catch (err) {
             console.error("❌ Firebase Auth Error:", err);
+            // Fallback: Agar firebase load na ho toh gate check chala do
+            checkAuthGateState();
         }
     }
 
-    // رئیل گوگل سائن ان فنکشن
+    // Google Login Trigger Function
     window.handleGoogleLogin = async function () {
         if (!authInstance || !googleProviderInstance) {
             await initFirebase();
         }
 
         try {
-            console.log("🔑 Opening Real Google Sign-In...");
+            console.log("🔑 Opening Google Sign-In Popup...");
             const result = await authInstance.signInWithPopup(googleProviderInstance);
             const user = result.user;
-            alert("خوش آمدید " + user.displayName + "! آپ کا گوگل اکاؤنٹ سائن ان ہو چکا ہے۔");
+            
+            // Save profile immediately
+            const userProfile = {
+                name: user.displayName || "Titan Creator",
+                email: user.email,
+                photo: user.photoURL || "https://picsum.photos/200",
+                uid: user.uid,
+                verified: true,
+                joinedDate: new Date().toLocaleDateString()
+            };
+            localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
+            localStorage.setItem('titan_logged_in', 'true');
+
+            // Hide Gate & Refresh
+            document.getElementById('titanAuthGateOverlay').style.display = 'none';
+            alert("Welcome " + user.displayName + "! Profile created successfully.");
             location.reload();
         } catch (error) {
-            console.error("❌ Google Login Error:", error);
+            console.error("❌ Google Login Failed:", error);
             alert("Google Login Error: " + error.message);
         }
     };
 
-    // لاگ آؤٹ فنکشن
-    window.handleTitanLogout = function () {
-        if (authInstance) {
-            authInstance.signOut().then(() => {
-                alert("Logged out successfully!");
-                location.reload();
-            });
-        }
-    };
-
     document.addEventListener("DOMContentLoaded", function () {
-        initFirebase();
+        checkAuthGateState(); // Pehle check karein
+        initFirebase();       // Phir firebase init karein
     });
 })();
