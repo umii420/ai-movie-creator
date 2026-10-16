@@ -1,12 +1,12 @@
 /**
- * TITAN AI - STABLE AUTH (POPUP METHOD)
+ * TITAN AI - STABLE AUTH (POPUP METHOD) + PROFILE FIX
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Auth System: Popup Version");
+    console.log("⚡ Titan Auth System: Popup + Profile Fixed");
 
     const firebaseConfig = {
         apiKey: "AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",
@@ -56,18 +56,27 @@
 
         if (!user) return;
 
+        // Clean handle from email or name
+        let handle = "@" + (user.email ? user.email.split("@")[0] : (user.displayName || "creator").toLowerCase().replace(/\s+/g, ""));
+
         const profile = {
             name: user.displayName || "Titan Creator",
             email: user.email || "",
             photo: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=00b2ff&color=fff`,
             uid: user.uid,
+            handle: handle,
+            bio: "Titan AI Creator",
+            ytLink: "",
+            followers: "0",
+            following: "0",
+            likes: "0",
             verified: true,
             joinedDate: new Date().toISOString()
         };
 
         localStorage.setItem("titan_user_profile", JSON.stringify(profile));
         localStorage.setItem("titan_logged_in", "true");
-        console.log("✅ Unlocked:", profile.name);
+        console.log("✅ Unlocked + Profile Saved:", profile.name);
     };
 
     async function initFirebase() {
