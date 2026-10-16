@@ -1,12 +1,12 @@
 /**
- * TITAN AI MOVIE CREATOR - PERMANENT AUTH GATE FIX
+ * TITAN AI MOVIE CREATOR - CLEAN AUTH SYSTEM
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Auth System: Instant Unlock Active");
+    console.log("⚡ Titan Auth System: Clean Version Loaded");
 
     const firebaseConfig = {
         apiKey: "AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",
@@ -25,8 +25,9 @@
         return new Promise((resolve, reject) => {
             const existing = document.querySelector('script[src="' + src + '"]');
             if (existing) {
-                if (existing.dataset.loaded === "true") resolve();
-                else {
+                if (existing.dataset.loaded === "true") {
+                    resolve();
+                } else {
                     existing.addEventListener("load", resolve, { once: true });
                     existing.addEventListener("error", reject, { once: true });
                 }
@@ -44,35 +45,44 @@
         });
     }
 
-    // Force Hide Gate and Clean DOM
-    window.unlockTitanApp = function (userName, userEmail) {
+    // Unlock app after successful login
+    window.unlockTitanApp = function (user) {
         const gate = document.getElementById("titanAuthGateOverlay");
         if (gate) {
             gate.style.display = "none";
-            gate.remove(); // Completely delete overlay from DOM so it never blocks scrolling or screen
+            gate.remove();
         }
 
         const userProfile = {
-            name: userName || "Titan Creator",
-            email: userEmail || "creator@titan.ai",
-            photo: "https://picsum.photos/200",
-            uid: "titan_" + Date.now(),
+            name: user.displayName || "Titan Creator",
+            email: user.email || "",
+            photo: user.photoURL || "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.displayName || "User") + "&background=00b2ff&color=fff",
+            uid: user.uid,
             verified: true,
             joinedDate: new Date().toISOString()
         };
 
         localStorage.setItem("titan_user_profile", JSON.stringify(userProfile));
         localStorage.setItem("titan_logged_in", "true");
-        console.log("✅ Titan App Unlocked Successfully!");
+        console.log("✅ Titan App Unlocked:", userProfile.name);
     };
 
-    window.checkAuthGateState = function () {
-        const isLoggedIn = localStorage.getItem("titan_logged_in") === "true";
-        if (isLoggedIn) {
-            const gate = document.getElementById("titanAuthGateOverlay");
-            if (gate) gate.remove();
+    // Show Auth Gate
+    function showAuthGate() {
+        let gate = document.getElementById("titanAuthGateOverlay");
+        if (!gate) return;
+
+        gate.style.display = "flex";
+    }
+
+    // Hide Auth Gate
+    function hideAuthGate() {
+        const gate = document.getElementById("titanAuthGateOverlay");
+        if (gate) {
+            gate.style.display = "none";
+            gate.remove();
         }
-    };
+    }
 
     async function initFirebase() {
         try {
@@ -85,63 +95,78 @@
 
             authInstance = window.firebase.auth();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
+            googleProviderInstance.setCustomParameters({
+                prompt: "select_account"
+            });
 
-            // Check Redirect Result
+            // Check if user came back from redirect
             const result = await authInstance.getRedirectResult().catch(() => null);
             if (result && result.user) {
-                window.unlockTitanApp(result.user.displayName, result.user.email);
+                window.unlockTitanApp(result.user);
                 return;
             }
 
+            // Listen for auth state changes
             authInstance.onAuthStateChanged(function (user) {
                 if (user) {
-                    window.unlockTitanApp(user.displayName, user.email);
+                    window.unlockTitanApp(user);
+                } else {
+                    // User not logged in
+                    localStorage.removeItem("titan_user_profile");
+                    localStorage.setItem("titan_logged_in", "false");
+                    showAuthGate();
                 }
             });
 
         } catch (error) {
             console.error("Firebase Init Error:", error);
+            showAuthGate();
         }
     }
 
-    // Google Login with Instant Fallback for Mobile Browsers
+    // Google Login Button
     window.handleGoogleLogin = async function () {
         try {
             if (!authInstance) await initFirebase();
-            
+
             if (authInstance && googleProviderInstance) {
-                // Try redirect
                 await authInstance.signInWithRedirect(googleProviderInstance);
             } else {
-                throw new Error("Auth not initialized");
+                alert("Authentication system is loading. Please try again in a moment.");
             }
         } catch (error) {
-            console.log("Redirect fallback triggered due to mobile restriction.");
-            // Instant Smooth Mobile Prompt Fallback so user never gets stuck
-            const email = prompt("Enter your Gmail address to launch Titan AI:");
-            if (email && email.includes("@")) {
-                const name = email.split('@')[0];
-                window.unlockTitanApp(name.charAt(0).toUpperCase() + name.slice(1), email);
-                location.reload();
-            } else {
-                // Emergency Bypass for Testing & Quick Progress
-                window.unlockTitanApp("Umar Creator", "umar@titan.ai");
-                location.reload();
-            }
+            console.error("Login Error:", error);
+            alert("Login failed. Please try again.");
         }
     };
 
+    // Logout
     window.handleTitanLogout = async function () {
-        if (authInstance) await authInstance.signOut();
-        localStorage.removeItem("titan_user_profile");
-        localStorage.setItem("titan_logged_in", "false");
-        location.reload();
+        try {
+            if (authInstance) {
+                await authInstance.signOut();
+            }
+            localStorage.removeItem("titan_user_profile");
+            localStorage.setItem("titan_logged_in", "false");
+            location.reload();
+        } catch (error) {
+            console.error("Logout Error:", error);
+            localStorage.removeItem("titan_user_profile");
+            localStorage.setItem("titan_logged_in", "false");
+            location.reload();
+        }
     };
 
+    // On page load
     document.addEventListener("DOMContentLoaded", function () {
+        // First check localStorage for faster experience
         if (localStorage.getItem("titan_logged_in") === "true") {
-            window.unlockTitanApp();
+            hideAuthGate();
+        } else {
+            showAuthGate();
         }
+
+        // Then initialize real Firebase
         initFirebase();
     });
 
