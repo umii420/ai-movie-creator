@@ -1,18 +1,18 @@
 /**
  * =========================================================
- * PLATFORM: TITAN AI PROFILE SYSTEM (NATIVE ANDROID BACK FIX)
+ * PLATFORM: TITAN AI PROFILE ENGINE (USER MANUAL SETUP)
  * FILE: app-profile-system.js
- * VERSION: v3.4.0
  * =========================================================
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Profile Engine v3.4 (Native Back Fix) Active!");
+    console.log("⚡ Titan AI Profile Engine (Manual Setup Mode) Active!");
 
+    // Insert Dynamic Profile Styles
     const profileStyle = document.createElement('style');
-    profileStyle.id = 'titan-profile-styles-v3-4';
+    profileStyle.id = 'titan-profile-styles-v5';
     profileStyle.innerHTML = `
         :root {
             --prof-bg: #ffffff;
@@ -23,11 +23,11 @@
         }
 
         body.dark-mode {
-            --prof-bg: #121212;
-            --prof-card-bg: #1e1e1e;
-            --prof-text: #f8fafc;
+            --prof-bg: #000000;
+            --prof-card-bg: #121212;
+            --prof-text: #ffffff;
             --prof-muted: #a1a1aa;
-            --prof-border: rgba(255, 255, 255, 0.1);
+            --prof-border: rgba(255, 255, 255, 0.12);
         }
 
         .titan-profile-page {
@@ -40,7 +40,7 @@
             display: none;
             flex-direction: column !important;
             overflow-y: auto !important;
-            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
         }
         .titan-profile-page.active { display: flex !important; }
 
@@ -57,61 +57,65 @@
         }
 
         .main-prof-avatar-wrap {
-            position: relative; width: 96px; height: 96px;
-            margin: 15px auto 10px; border-radius: 50%; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            position: relative; width: 100px; height: 100px;
+            margin: 18px auto 10px; border-radius: 50%; overflow: hidden;
+            border: 2px solid var(--prof-border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            background: #18181b;
         }
         .main-prof-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
 
+        .user-handle-tag {
+            text-align: center; font-size: 0.92rem; font-weight: 600;
+            color: var(--prof-muted); margin-bottom: 14px;
+        }
+
         .stats-row {
             display: flex; justify-content: center; align-items: center;
-            gap: 24px; margin: 16px 0; text-align: center;
+            gap: 28px; margin: 12px 0 18px; text-align: center;
         }
-        .stat-item .num { font-weight: 800; font-size: 1.15rem; color: var(--prof-text); display: block; }
-        .stat-item .lbl { font-size: 0.8rem; color: var(--prof-muted); }
+        .stat-item .num { font-weight: 800; font-size: 1.2rem; color: var(--prof-text); display: block; }
+        .stat-item .lbl { font-size: 0.8rem; color: var(--prof-muted); margin-top: 2px; }
 
         .bio-box {
             text-align: center; padding: 0 25px; font-size: 0.88rem;
-            color: var(--prof-text); line-height: 1.4; margin-bottom: 15px;
+            color: var(--prof-text); line-height: 1.45; margin-bottom: 18px;
         }
-        .bio-link { color: #00b2ff; text-decoration: none; word-break: break-all; }
+        .bio-link { color: #00b2ff; text-decoration: none; word-break: break-all; font-weight: 500; }
 
         .tabs-bar {
             display: flex; justify-content: space-around;
             border-top: 1px solid var(--prof-border);
             border-bottom: 1px solid var(--prof-border);
-            padding: 10px 0; background: var(--prof-bg);
+            padding: 12px 0; background: var(--prof-bg);
         }
-        .tab-btn { background: transparent; border: none; font-size: 1.2rem; color: var(--prof-muted); cursor: pointer; }
+        .tab-btn { background: transparent; border: none; font-size: 1.25rem; color: var(--prof-muted); cursor: pointer; }
         .tab-btn.active { color: var(--prof-text); border-bottom: 2px solid var(--prof-text); padding-bottom: 4px; }
 
-        .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px 0; }
-        .grid-item { aspect-ratio: 3/4; background: #1e293b; position: relative; overflow: hidden; }
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+        .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px 0; background: var(--prof-bg); }
+        .grid-item { aspect-ratio: 3/4; background: #18181b; position: relative; overflow: hidden; cursor: pointer; }
+        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
         .grid-views {
-            position: absolute; bottom: 6px; left: 6px; font-size: 0.75rem; font-weight: 700;
-            color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 4px;
+            position: absolute; bottom: 8px; left: 8px; font-size: 0.78rem; font-weight: 700;
+            color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.9); display: flex; align-items: center; gap: 4px;
         }
 
-        /* TikTok Style Right Side Sliding Drawer */
         .titan-side-drawer {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
             z-index: 9999999999 !important; display: none; justify-content: flex-end;
         }
         .titan-side-drawer.active { display: flex; }
         .side-drawer-content {
             background: var(--prof-bg);
-            width: 82%; max-width: 360px; height: 100%;
+            width: 82%; max-width: 350px; height: 100%;
             padding: 20px 16px 40px; overflow-y: auto;
             color: var(--prof-text);
-            box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+            box-shadow: -5px 0 25px rgba(0,0,0,0.3);
             transform: translateX(100%);
-            transition: transform 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+            transition: transform 0.22s ease-out;
         }
-        .titan-side-drawer.active .side-drawer-content {
-            transform: translateX(0);
-        }
+        .titan-side-drawer.active .side-drawer-content { transform: translateX(0); }
 
         .sheet-card {
             background: var(--prof-card-bg); border-radius: 14px;
@@ -128,38 +132,88 @@
     `;
     document.head.appendChild(profileStyle);
 
-    function buildProfileUI() {
+    // Get User Data from Local Storage (Manual State)
+    function getUserProfileData() {
+        try {
+            const stored = localStorage.getItem('titan_user_profile');
+            if (stored) return JSON.parse(stored);
+        } catch(e) {}
+        return {
+            name: "Set Your Name",
+            handle: "@username",
+            photo: "https://via.placeholder.com/150/18181b/ffffff?text=User",
+            bio: "Tap Edit Profile to set your bio & link",
+            ytLink: "",
+            followers: "0",
+            following: "0",
+            likes: "0"
+        };
+    }
+
+    // Save Updated Profile Data
+    function saveUserProfileData(data) {
+        localStorage.setItem('titan_user_profile', JSON.stringify(data));
+    }
+
+    // Render Uploaded Grid Videos
+    function renderVideoGrid() {
+        const grid = document.getElementById('titanProfileVideoGrid');
+        if (!grid) return;
+
+        let uploads = [];
+        try {
+            uploads = JSON.parse(localStorage.getItem('titan_user_uploads') || '[]');
+        } catch(e) {}
+
+        if (uploads.length === 0) {
+            grid.innerHTML = `<div style="grid-column: span 3; text-align: center; padding: 40px 10px; color: var(--prof-muted); font-size: 0.85rem;">No videos uploaded yet. Tap + to upload!</div>`;
+            return;
+        }
+
+        grid.innerHTML = uploads.map(vid => `
+            <div class="grid-item">
+                <img src="${vid.thumb || 'https://via.placeholder.com/300'}" alt="Video" />
+                <div class="grid-views"><i class="fa-solid fa-play"></i> ${vid.views || '0'}</div>
+            </div>
+        `).join('');
+    }
+
+    // Build DOM Elements
+    function initProfileUI() {
         if (document.getElementById('titanMainProfilePage')) return;
+        const p = getUserProfileData();
 
         const wrapper = document.createElement('div');
         wrapper.innerHTML = `
-            <!-- 1. MAIN PROFILE PAGE -->
+            <!-- MAIN PROFILE PAGE -->
             <div id="titanMainProfilePage" class="titan-profile-page">
                 <div class="prof-header">
                     <button class="prof-header-icon" onclick="openTitanEditProfile()"><i class="fa-solid fa-pen"></i></button>
-                    <h3 style="font-size:1.05rem; font-weight:700; margin:0;">UmAr WaRrAiCh 🦅</h3>
+                    <h3 id="profileDisplayName" style="font-size:1.1rem; font-weight:700; margin:0;">${p.name}</h3>
                     <button class="prof-header-icon" onclick="openTitanOptions()"><i class="fa-solid fa-bars"></i></button>
                 </div>
 
                 <div class="main-prof-avatar-wrap">
-                    <img id="mainProfileAvatar" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=300&auto=format&fit=crop" alt="Profile" />
+                    <img id="mainProfileAvatar" src="${p.photo}" alt="Profile" />
                 </div>
 
-                <div style="text-align:center; font-weight:700; font-size:0.9rem; color:var(--prof-muted);">@420educated</div>
+                <div id="profileDisplayHandle" class="user-handle-tag">${p.handle}</div>
 
                 <div class="stats-row">
-                    <div class="stat-item"><span class="num">471</span><span class="lbl">Following</span></div>
-                    <div class="stat-item"><span class="num">289</span><span class="lbl">Followers</span></div>
-                    <div class="stat-item"><span class="num">4,493</span><span class="lbl">Likes</span></div>
+                    <div class="stat-item"><span class="num" id="statFollowing">${p.following}</span><span class="lbl">Following</span></div>
+                    <div class="stat-item"><span class="num" id="statFollowers">${p.followers}</span><span class="lbl">Followers</span></div>
+                    <div class="stat-item"><span class="num" id="statLikes">${p.likes}</span><span class="lbl">Likes</span></div>
                 </div>
 
                 <div class="bio-box">
-                    <a class="bio-link" href="https://youtube.com/@umarhayatoficial" target="_blank">https://youtube.com/@umarhayatoficial?si=Xksgc9WIPVPY1o9Y</a><br>
-                    Subscribe My YouTube channel
+                    <a id="profileYtLink" class="bio-link" href="${p.ytLink || '#'}" target="_blank" style="${p.ytLink ? '' : 'display:none;'}">${p.ytLink}</a>
+                    <div id="profileBioText" style="margin-top:4px;">${p.bio}</div>
                 </div>
 
-                <div style="display:flex; justify-content:center; margin-bottom:15px;">
-                    <button onclick="if(window.openTitanStudioGemini) openTitanStudioGemini();" style="background:var(--prof-card-bg); border:1px solid var(--prof-border); color:var(--prof-text); padding:8px 20px; border-radius:20px; font-weight:600; font-size:0.85rem; cursor:pointer;"><i class="fa-solid fa-wand-magic-sparkles" style="color:#fe2c55;"></i> TikTok Studio</button>
+                <div style="display:flex; justify-content:center; margin-bottom:18px;">
+                    <button onclick="openTitanEditProfile()" style="background:var(--prof-card-bg); border:1px solid var(--prof-border); color:var(--prof-text); padding:9px 22px; border-radius:24px; font-weight:700; font-size:0.88rem; cursor:pointer;">
+                        Edit profile
+                    </button>
                 </div>
 
                 <div class="tabs-bar">
@@ -170,133 +224,95 @@
                     <button class="tab-btn"><i class="fa-regular fa-heart"></i></button>
                 </div>
 
-                <div class="video-grid">
-                    <div class="grid-item"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" /><div class="grid-views"><i class="fa-solid fa-play"></i> 239</div></div>
-                    <div class="grid-item"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" /><div class="grid-views"><i class="fa-solid fa-play"></i> 157</div></div>
-                    <div class="grid-item"><img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=300" /><div class="grid-views"><i class="fa-solid fa-play"></i> 141</div></div>
-                </div>
+                <div id="titanProfileVideoGrid" class="video-grid"></div>
             </div>
 
-            <!-- 2. EDIT PROFILE PAGE -->
+            <!-- EDIT PROFILE PAGE -->
             <div id="titanEditProfilePage" class="titan-profile-page">
                 <div class="prof-header">
                     <button class="prof-header-icon" onclick="closeTitanEditProfile()"><i class="fa-solid fa-chevron-left"></i></button>
-                    <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Edit profile</h3>
+                    <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Edit Profile</h3>
                     <div style="width:36px;"></div>
                 </div>
 
                 <div style="display:flex; flex-direction:column; align-items:center; padding:25px 0;">
                     <div class="main-prof-avatar-wrap" style="width:100px; height:100px; cursor:pointer;" onclick="document.getElementById('editAvatarInput').click()">
-                        <img id="editAvatarPreview" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=300&auto=format&fit=crop" />
+                        <img id="editAvatarPreview" src="${p.photo}" />
                     </div>
-                    <span style="color:#00b2ff; font-weight:600; font-size:0.9rem; cursor:pointer;" onclick="document.getElementById('editAvatarInput').click()">Change photo</span>
+                    <span style="color:#00b2ff; font-weight:600; font-size:0.9rem; cursor:pointer; margin-top:8px;" onclick="document.getElementById('editAvatarInput').click()">Change photo</span>
                     <input type="file" id="editAvatarInput" accept="image/*" style="display:none;" onchange="updateProfilePhoto(this)" />
                 </div>
 
                 <div style="padding:0 16px;">
                     <div class="sheet-card">
-                        <div class="sheet-row" onclick="editField('Name')"><span style="color:var(--prof-muted);">Name</span><span><strong>UmAr WaRrAiCh 🦅</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
-                        <div class="sheet-row" onclick="editField('Username')"><span style="color:var(--prof-muted);">Username</span><span><strong>420educated</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
-                        <div class="sheet-row" onclick="alert('Profile link copied!')"><span style="color:var(--prof-muted);">Profile Link</span><span>tiktok.com/@420ed... <i class="fa-regular fa-copy"></i></span></div>
-                    </div>
-
-                    <div class="sheet-label">Basic info</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="editField('Bio')"><span style="color:var(--prof-muted);">Bio</span><span style="font-size:0.8rem; max-width:60%; text-align:right;">https://youtube.com/@umarhayatoficial... <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
-                    </div>
-
-                    <div class="sheet-label">Others</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="alert('Launching My AI Self...')"><span style="color:var(--prof-muted);">AI self</span><span><strong>My AI Self</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
+                        <div class="sheet-row" onclick="editField('Name')"><span style="color:var(--prof-muted);">Name</span><span id="editNameVal"><strong>${p.name}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
+                        <div class="sheet-row" onclick="editField('Handle')"><span style="color:var(--prof-muted);">Handle</span><span id="editHandleVal"><strong>${p.handle}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
+                        <div class="sheet-row" onclick="editField('Bio')"><span style="color:var(--prof-muted);">Bio</span><span id="editBioVal"><strong>${p.bio}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
+                        <div class="sheet-row" onclick="editField('YouTube Link')"><span style="color:var(--prof-muted);">YouTube Link</span><span id="editYtVal"><strong>${p.ytLink || 'Add Link'}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></span></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. RIGHT SIDE SLIDING DRAWER -->
+            <!-- OPTIONS MENU DRAWER -->
             <div id="titanOptionsSheet" class="titan-side-drawer" onclick="if(event.target === this) closeTitanOptions();">
                 <div class="side-drawer-content">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid var(--prof-border); padding-bottom:12px;">
-                        <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Menu</h3>
+                        <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Settings & Menu</h3>
                         <button onclick="closeTitanOptions()" style="background:transparent; border:none; font-size:1.2rem; color:var(--prof-text); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
                     </div>
 
-                    <div class="sheet-label">Assets</div>
+                    <div class="sheet-label">Account Options</div>
                     <div class="sheet-card">
-                        <div class="sheet-row" onclick="alert('Wallet Balance: $1,250.00 USD')"><span><i class="fa-solid fa-wallet left-icon"></i> Balance</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-
-                    <div class="sheet-label">Personal tools</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row"><span><i class="fa-regular fa-clock left-icon"></i> Activity centre</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-cloud-arrow-down left-icon"></i> Offline videos</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-qrcode left-icon"></i> Your QR code</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-
-                    <div class="sheet-label">Creation & business tools</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="if(window.openTitanStudioGemini) openTitanStudioGemini();"><span><i class="fa-solid fa-wand-magic-sparkles left-icon" style="color:#00b2ff;"></i> TikTok Studio</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-fire left-icon" style="color:#f59e0b;"></i> Promote</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row" onclick="openTitanSettings();"><span><i class="fa-solid fa-gear left-icon"></i> Settings and privacy</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. SETTINGS AND PRIVACY PAGE -->
-            <div id="titanSettingsPage" class="titan-profile-page">
-                <div class="prof-header">
-                    <button class="prof-header-icon" onclick="closeTitanSettings()"><i class="fa-solid fa-chevron-left"></i></button>
-                    <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Settings and privacy</h3>
-                    <div style="width:36px;"></div>
-                </div>
-
-                <div style="padding:10px 16px;">
-                    <div class="sheet-label">Activity</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row"><span><i class="fa-regular fa-window-restore left-icon"></i> Manage posts</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-sliders left-icon"></i> Content preferences</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-regular fa-bell left-icon"></i> Notifications</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-
-                    <div class="sheet-label">Account</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="openTitanEditProfileFromSettings();"><span><i class="fa-regular fa-user left-icon"></i> Account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-shield-halved left-icon"></i> Security and permissions</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-
-                    <div class="sheet-label">Cache & mobile</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="alert('Space freed up successfully!')"><span><i class="fa-regular fa-trash-can left-icon"></i> Free up space</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row"><span><i class="fa-solid fa-leaf left-icon"></i> Data Saver</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                    </div>
-
-                    <div class="sheet-label">Login</div>
-                    <div class="sheet-card">
-                        <div class="sheet-row" onclick="alert('Switched Account')"><span><i class="fa-solid fa-arrows-rotate left-icon"></i> Switch account</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
-                        <div class="sheet-row" onclick="alert('Logged Out')"><span style="color:#ef4444;"><i class="fa-solid fa-right-from-bracket left-icon" style="color:#ef4444;"></i> Log out</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="sheet-row" onclick="openTitanEditProfile(); closeTitanOptions();"><span><i class="fa-solid fa-user-pen left-icon" style="color:#00b2ff;"></i> Edit Profile</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
+                        <div class="sheet-row" onclick="alert('Wallet Balance: $0.00')"><span><i class="fa-solid fa-wallet left-icon" style="color:#22c55e;"></i> Balance</span><i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i></div>
                     </div>
                 </div>
             </div>
         `;
         document.body.appendChild(wrapper);
-        
-        // Push initial state so we can intercept Android back button safely
-        history.replaceState({ titanModal: 'none' }, '');
+        renderVideoGrid();
     }
 
-    // Window Controllers (Without pushing unnecessary browser history)
+    // Global Window Functions
     window.openTitanMainProfile = function() {
+        const p = getUserProfileData();
+        
+        document.getElementById('profileDisplayName').innerText = p.name;
+        document.getElementById('profileDisplayHandle').innerText = p.handle;
+        document.getElementById('mainProfileAvatar').src = p.photo;
+        document.getElementById('profileBioText').innerText = p.bio;
+
+        const ytEl = document.getElementById('profileYtLink');
+        if (ytEl) {
+            if (p.ytLink) {
+                ytEl.href = p.ytLink;
+                ytEl.innerText = p.ytLink;
+                ytEl.style.display = 'inline-block';
+            } else {
+                ytEl.style.display = 'none';
+            }
+        }
+
+        renderVideoGrid();
         document.getElementById('titanMainProfilePage')?.classList.add('active');
         history.pushState({ titanModal: 'profile' }, '');
     };
+
     window.closeTitanMainProfile = function() {
         document.getElementById('titanMainProfilePage')?.classList.remove('active');
     };
 
     window.openTitanEditProfile = function() {
+        const p = getUserProfileData();
+        document.getElementById('editNameVal').innerHTML = `<strong>${p.name}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i>`;
+        document.getElementById('editHandleVal').innerHTML = `<strong>${p.handle}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i>`;
+        document.getElementById('editBioVal').innerHTML = `<strong>${p.bio}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i>`;
+        document.getElementById('editYtVal').innerHTML = `<strong>${p.ytLink || 'Add Link'}</strong> <i class="fa-solid fa-chevron-right" style="color:#94a3b8;"></i>`;
+        
         document.getElementById('titanEditProfilePage')?.classList.add('active');
         history.pushState({ titanModal: 'editProfile' }, '');
     };
+
     window.closeTitanEditProfile = function() {
         document.getElementById('titanEditProfilePage')?.classList.remove('active');
     };
@@ -305,84 +321,61 @@
         document.getElementById('titanOptionsSheet')?.classList.add('active');
         history.pushState({ titanModal: 'options' }, '');
     };
+
     window.closeTitanOptions = function() {
         document.getElementById('titanOptionsSheet')?.classList.remove('active');
-    };
-
-    window.openTitanSettings = function() {
-        document.getElementById('titanSettingsPage')?.classList.add('active');
-        history.pushState({ titanModal: 'settings' }, '');
-    };
-    window.closeTitanSettings = function() {
-        document.getElementById('titanSettingsPage')?.classList.remove('active');
-    };
-
-    window.openTitanEditProfileFromSettings = function() {
-        document.getElementById('titanSettingsPage')?.classList.remove('active');
-        document.getElementById('titanEditProfilePage')?.classList.add('active');
     };
 
     window.updateProfilePhoto = function(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('mainProfileAvatar').src = e.target.result;
-                document.getElementById('editAvatarPreview').src = e.target.result;
+                const imgUrl = e.target.result;
+                document.getElementById('mainProfileAvatar').src = imgUrl;
+                document.getElementById('editAvatarPreview').src = imgUrl;
+                
+                let p = getUserProfileData();
+                p.photo = imgUrl;
+                saveUserProfileData(p);
             };
             reader.readAsDataURL(input.files[0]);
         }
     };
 
-    window.editField = function(name) {
-        const val = prompt(`Enter new ${name}:`);
-        if (val) alert(`${name} updated to: ${val}`);
+    window.editField = function(fieldName) {
+        let p = getUserProfileData();
+        let currentValue = "";
+        if (fieldName === 'Name') currentValue = p.name;
+        if (fieldName === 'Handle') currentValue = p.handle;
+        if (fieldName === 'Bio') currentValue = p.bio;
+        if (fieldName === 'YouTube Link') currentValue = p.ytLink;
+
+        const val = prompt(`Enter ${fieldName}:`, currentValue);
+        if (val !== null && val.trim() !== "") {
+            if (fieldName === 'Name') p.name = val.trim();
+            if (fieldName === 'Handle') p.handle = val.trim().startsWith('@') ? val.trim() : '@' + val.trim();
+            if (fieldName === 'Bio') p.bio = val.trim();
+            if (fieldName === 'YouTube Link') p.ytLink = val.trim();
+
+            saveUserProfileData(p);
+            window.openTitanMainProfile();
+            window.openTitanEditProfile();
+        }
     };
 
-    // Android Hardware / Browser Back Button Interceptor
-    window.addEventListener('popstate', function(event) {
-        const editPage = document.getElementById('titanEditProfilePage');
-        const settingsPage = document.getElementById('titanSettingsPage');
-        const optionsSheet = document.getElementById('titanOptionsSheet');
-        const mainProfile = document.getElementById('titanMainProfilePage');
-
-        // Check which screen is currently open and close only that one layer
-        if (editPage?.classList.contains('active')) {
-            editPage.classList.remove('active');
-            history.pushState({ titanModal: 'profile' }, '');
-        } else if (settingsPage?.classList.contains('active')) {
-            settingsPage.classList.remove('active');
-            history.pushState({ titanModal: 'options' }, '');
-        } else if (optionsSheet?.classList.contains('active')) {
-            optionsSheet.classList.remove('active');
-            history.pushState({ titanModal: 'profile' }, '');
-        } else if (mainProfile?.classList.contains('active')) {
-            mainProfile.classList.remove('active');
-            history.replaceState({ titanModal: 'none' }, '');
+    // Global Click Handler for Profile Navigation
+    document.addEventListener('click', function(e) {
+        const profileBtn = e.target.closest('.fa-user, [class*="profile"], #profileTab, [data-tab="profile"]');
+        if (profileBtn && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
+            e.preventDefault();
+            e.stopPropagation();
+            openTitanMainProfile();
         }
-    });
-
-    // Instant Click Listener for Profile Tab
-    function attachInstantClickListener() {
-        document.addEventListener('click', function(e) {
-            const profileTarget = e.target.closest('.fa-user, [class*="profile"], #profileTab, [data-tab="profile"]');
-            
-            if (profileTarget && !e.target.closest('.titan-profile-page') && !e.target.closest('.titan-side-drawer')) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                openTitanMainProfile();
-                return false;
-            }
-        }, true);
-    }
+    }, true);
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            buildProfileUI();
-            attachInstantClickListener();
-        });
+        document.addEventListener('DOMContentLoaded', initProfileUI);
     } else {
-        buildProfileUI();
-        attachInstantClickListener();
+        initProfileUI();
     }
 })();
