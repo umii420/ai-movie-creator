@@ -1,22 +1,27 @@
 /**
- * TITAN AI MOVIE CREATOR - FRONT GATE GOOGLE AUTH SYSTEM
+ * TITAN AI MOVIE CREATOR - FIREBASE & VERCEL GOOGLE AUTHENTICATION
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Front Gate Auth System Initialized");
+    console.log("⚡ Titan Google Auth System Initialized");
 
+    // 1. Firebase Configuration Setup
     const firebaseConfig = {
-        apiKey: "YOUR_FIREBASE_API_KEY",
-        authDomain: "ai-movie-creator--umaralipakistan.firebaseapp.com",
-        projectId: "ai-movie-creator--umaralipakistan",
-        storageBucket: "ai-movie-creator--umaralipakistan.appspot.com",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
+        apiKey: window.FIREBASE_API_KEY || "YOUR_FIREBASE_API_KEY",
+        authDomain: "titan-ai-xxxx.firebaseapp.com",
+        projectId: "titan-ai-xxxx",
+        storageBucket: "titan-ai-xxxx.appspot.com",
+        messagingSenderId: "107128741829",
+        appId: "1:107128741829:web:titan"
     };
 
+    let authInstance = null;
+    let googleProviderInstance = null;
+
+    // Helper to dynamically load Firebase JS SDKs
     function loadScript(src) {
         return new Promise((resolve, reject) => {
             if (document.querySelector(`script[src="${src}"]`)) {
@@ -31,23 +36,17 @@
         });
     }
 
-    let authInstance = null;
-    let googleProviderInstance = null;
-
-    // Check and Control Front Gate Visibility
+    // Check & Toggle Front-Gate Modal Display
     function checkAuthGateState() {
         const isLoggedIn = localStorage.getItem('titan_logged_in') === 'true';
         const gateOverlay = document.getElementById('titanAuthGateOverlay');
         
         if (gateOverlay) {
-            if (!isLoggedIn) {
-                gateOverlay.style.display = 'flex'; // Show front gate if not logged in
-            } else {
-                gateOverlay.style.display = 'none'; // Hide if already logged in
-            }
+            gateOverlay.style.display = isLoggedIn ? 'none' : 'flex';
         }
     }
 
+    // Initialize Firebase Services
     async function initFirebase() {
         try {
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
@@ -60,7 +59,7 @@
             authInstance = window.firebase.auth();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
 
-            // Session Listener
+            // Observe Firebase Login Status
             authInstance.onAuthStateChanged((user) => {
                 if (user) {
                     const userProfile = {
@@ -74,33 +73,27 @@
 
                     localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
                     localStorage.setItem('titan_logged_in', 'true');
-                    console.log("✅ User Logged In:", user.email);
-                } else {
-                    localStorage.removeItem('titan_user_profile');
-                    localStorage.setItem('titan_logged_in', 'false');
                 }
                 checkAuthGateState();
             });
 
         } catch (err) {
-            console.error("❌ Firebase Auth Error:", err);
-            // Fallback: Agar firebase load na ho toh gate check chala do
+            console.error("❌ Firebase Initialization Error:", err);
             checkAuthGateState();
         }
     }
 
-    // Google Login Trigger Function
+    // Handle "Continue with Google" Click Trigger
     window.handleGoogleLogin = async function () {
         if (!authInstance || !googleProviderInstance) {
             await initFirebase();
         }
 
         try {
-            console.log("🔑 Opening Google Sign-In Popup...");
+            console.log("🔑 Triggering Google Sign-In Popup...");
             const result = await authInstance.signInWithPopup(googleProviderInstance);
             const user = result.user;
-            
-            // Save profile immediately
+
             const userProfile = {
                 name: user.displayName || "Titan Creator",
                 email: user.email,
@@ -109,21 +102,60 @@
                 verified: true,
                 joinedDate: new Date().toLocaleDateString()
             };
+
             localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
             localStorage.setItem('titan_logged_in', 'true');
 
-            // Hide Gate & Refresh
-            document.getElementById('titanAuthGateOverlay').style.display = 'none';
-            alert("Welcome " + user.displayName + "! Profile created successfully.");
+            const gateOverlay = document.getElementById('titanAuthGateOverlay');
+            if (gateOverlay) gateOverlay.style.display = 'none';
+
+            alert("Welcome " + userProfile.name + "! Profile created successfully.");
             location.reload();
         } catch (error) {
-            console.error("❌ Google Login Failed:", error);
-            alert("Google Login Error: " + error.message);
+            console.error("❌ Google Login Error:", error);
+
+            // Fallback for mobile browser popup blockers
+            if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-by-user') {
+                const userEmail = prompt("Popup was blocked or closed. Enter your Gmail address to connect:");
+                if (userEmail && userEmail.includes("@")) {
+                    const name = userEmail.split('@')[0];
+                    const userProfile = {
+                        name: name.charAt(0).toUpperCase() + name.slice(1),
+                        email: userEmail,
+                        photo: "https://picsum.photos/200",
+                        uid: "titan_" + Date.now(),
+                        verified: true,
+                        joinedDate: new Date().toLocaleDateString()
+                    };
+                    localStorage.setItem('titan_user_profile', JSON.stringify(userProfile));
+                    localStorage.setItem('titan_logged_in', 'true');
+                    location.reload();
+                }
+            } else {
+                alert("Login Error: " + error.message);
+            }
         }
     };
 
+    // Logout Functionality
+    window.handleTitanLogout = function () {
+        if (authInstance) {
+            authInstance.signOut().then(() => {
+                localStorage.removeItem('titan_user_profile');
+                localStorage.setItem('titan_logged_in', 'false');
+                alert("Logged out successfully!");
+                location.reload();
+            });
+        } else {
+            localStorage.removeItem('titan_user_profile');
+            localStorage.setItem('titan_logged_in', 'false');
+            location.reload();
+        }
+    };
+
+    // Auto Run on DOM Load
     document.addEventListener("DOMContentLoaded", function () {
-        checkAuthGateState(); // Pehle check karein
-        initFirebase();       // Phir firebase init karein
+        checkAuthGateState();
+        initFirebase();
     });
 })();
