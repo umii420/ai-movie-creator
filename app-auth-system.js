@@ -1,12 +1,12 @@
 /**
- * TITAN AI - STABLE AUTH SYSTEM
+ * TITAN AI - STABLE AUTH (POPUP METHOD)
  * FILE: app-auth-system.js
  */
 
 (function () {
     'use strict';
 
-    console.log("⚡ Titan Auth System: Stable Version");
+    console.log("⚡ Titan Auth System: Popup Version");
 
     const firebaseConfig = {
         apiKey: "AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",
@@ -67,7 +67,7 @@
 
         localStorage.setItem("titan_user_profile", JSON.stringify(profile));
         localStorage.setItem("titan_logged_in", "true");
-        console.log("✅ Unlocked successfully:", profile.name);
+        console.log("✅ Unlocked:", profile.name);
     };
 
     async function initFirebase() {
@@ -81,16 +81,10 @@
 
             authInstance = window.firebase.auth();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
-            googleProviderInstance.setCustomParameters({ prompt: "select_account" });
+            googleProviderInstance.setCustomParameters({
+                prompt: "select_account"
+            });
 
-            // Important: Check redirect result first
-            const result = await authInstance.getRedirectResult().catch(() => null);
-            if (result && result.user) {
-                window.unlockTitanApp(result.user);
-                return;
-            }
-
-            // Auth state listener
             authInstance.onAuthStateChanged((user) => {
                 if (user) {
                     window.unlockTitanApp(user);
@@ -117,11 +111,26 @@
                 btn.disabled = true;
             }
 
-            await authInstance.signInWithRedirect(googleProviderInstance);
+            const result = await authInstance.signInWithPopup(googleProviderInstance);
+            
+            if (result && result.user) {
+                window.unlockTitanApp(result.user);
+            }
+
         } catch (error) {
             console.error("Login Error:", error);
-            alert("Login failed. Please try again.");
-            location.reload();
+            
+            if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+                try {
+                    await authInstance.signInWithRedirect(googleProviderInstance);
+                } catch (err2) {
+                    alert("Login failed. Please allow popups or try again.");
+                    location.reload();
+                }
+            } else {
+                alert("Login failed: " + (error.message || "Unknown error"));
+                location.reload();
+            }
         }
     };
 
@@ -134,7 +143,6 @@
         location.reload();
     };
 
-    // Page Load
     document.addEventListener("DOMContentLoaded", () => {
         if (localStorage.getItem("titan_logged_in") === "true") {
             hideGate();
