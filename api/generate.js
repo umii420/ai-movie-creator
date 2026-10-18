@@ -34,8 +34,8 @@ export default async function handler(req, res) {
       messages.push({ role: 'user', content: prompt || 'Create a cinematic scene' });
     }
 
-    // Select suitable Groq Model (Vision vs High-Speed Text Model)
-    const selectedModel = imageBase64 ? 'llama-3.2-11b-vision-preview' : 'llama-3.3-70b-versatile';
+    // Select suitable Groq Model (Working Models on Groq API)
+    const selectedModel = imageBase64 ? 'llama-3.2-11b-vision-preview' : 'llama3-70b-8192';
 
     // Call Groq API
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
