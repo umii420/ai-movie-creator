@@ -1,441 +1,1149 @@
-/**
- * =========================================================
- * TITAN AI PROFILE + SETTINGS + VIDEO PLAYER
- * FILE: app-profile-system.js
- * =========================================================
- */
+/* ==========================================================
+   TITAN AI — PROFILE, EDIT PROFILE, SETTINGS & VIDEO PLAYER
+   File: app-profile-system.js
+   Google Login / Groq AI Script Generator: NOT MODIFIED
+   ========================================================== */
 
 (function () {
-    'use strict';
+  "use strict";
 
-    console.log("⚡ Titan AI Profile + Video Player System Active");
+  if (window.__TITAN_PROFILE_SYSTEM_V8__) return;
+  window.__TITAN_PROFILE_SYSTEM_V8__ = true;
 
-    // Styles
-    const style = document.createElement('style');
-    style.id = 'titan-profile-styles-v7';
-    style.innerHTML = `
-        :root {
-            --prof-bg: #ffffff;
-            --prof-card-bg: #f8fafc;
-            --prof-text: #0f172a;
-            --prof-muted: #64748b;
-            --prof-border: rgba(226, 232, 240, 0.8);
-        }
-        body.dark-mode, body:not(.light-mode) {
-            --prof-bg: #000000;
-            --prof-card-bg: #121212;
-            --prof-text: #ffffff;
-            --prof-muted: #a1a1aa;
-            --prof-border: rgba(255, 255, 255, 0.12);
-        }
+  const PROFILE_KEY = "titan_user_profile";
+  const UPLOADS_KEY = "titan_user_uploads";
+  const STYLE_ID = "titan-profile-styles-v8";
 
-        .titan-profile-page {
-            position: fixed !important;
-            top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: var(--prof-bg) !important;
-            color: var(--prof-text) !important;
-            z-index: 999999999 !important;
-            display: none;
-            flex-direction: column !important;
-            overflow-y: auto !important;
-            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
-        }
-        .titan-profile-page.active { display: flex !important; }
+  let activeTab = "videos";
+  let currentPlayerUrl = "";
 
-        .prof-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 18px; background: var(--prof-bg);
-            position: sticky; top: 0; z-index: 10;
-            border-bottom: 1px solid var(--prof-border);
-        }
-        .prof-header-icon {
-            background: transparent; border: none; font-size: 1.3rem;
-            color: var(--prof-text); cursor: pointer; width: 36px; height: 36px;
-            display: flex; align-items: center; justify-content: center;
-        }
+  function $(selector, root = document) {
+    return root.querySelector(selector);
+  }
 
-        .main-prof-avatar-wrap {
-            position: relative; width: 100px; height: 100px;
-            margin: 18px auto 10px; border-radius: 50%; overflow: hidden;
-            border: 2px solid var(--prof-border);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
-            background: #18181b;
-        }
-        .main-prof-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  function escapeHTML(value) {
+    return String(value == null ? "" : value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
-        .user-handle-tag {
-            text-align: center; font-size: 0.92rem; font-weight: 600;
-            color: var(--prof-muted); margin-bottom: 14px;
-        }
+  function safeURL(value) {
+    try {
+      const url = new URL(String(value || ""), window.location.href);
 
-        .stats-row {
-            display: flex; justify-content: center; align-items: center;
-            gap: 28px; margin: 12px 0 18px; text-align: center;
-        }
-        .stat-item .num { font-weight: 800; font-size: 1.2rem; color: var(--prof-text); display: block; }
-        .stat-item .lbl { font-size: 0.8rem; color: var(--prof-muted); margin-top: 2px; }
+      if (
+        url.protocol === "https:" ||
+        url.protocol === "http:" ||
+        url.protocol === "blob:"
+      ) {
+        return url.href;
+      }
+    } catch (_) {}
 
-        .bio-box {
-            text-align: center; padding: 0 25px; font-size: 0.88rem;
-            color: var(--prof-text); line-height: 1.45; margin-bottom: 18px;
-        }
-        .bio-link { color: #00b2ff; text-decoration: none; word-break: break-all; font-weight: 500; }
+    return "";
+  }
 
-        .tabs-bar {
-            display: flex; justify-content: space-around;
-            border-top: 1px solid var(--prof-border);
-            border-bottom: 1px solid var(--prof-border);
-            padding: 12px 0; background: var(--prof-bg);
-        }
-        .tab-btn { background: transparent; border: none; font-size: 1.25rem; color: var(--prof-muted); cursor: pointer; }
-        .tab-btn.active { color: var(--prof-text); border-bottom: 2px solid var(--prof-text); padding-bottom: 4px; }
+  function readJSON(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch (error) {
+      console.warn("TITAN storage read error:", key, error);
+      return fallback;
+    }
+  }
 
-        .video-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 2px; 
-            padding: 2px 0; 
-            background: var(--prof-bg); 
-        }
-        .grid-item { 
-            aspect-ratio: 3/4; 
-            background: #18181b; 
-            position: relative; 
-            overflow: hidden; 
-            cursor: pointer; 
-        }
-        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+  function getUserProfileData() {
+    const saved = readJSON(PROFILE_KEY, {});
 
-        /* Side Drawer */
-        .titan-side-drawer {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            z-index: 9999999999 !important; display: none; justify-content: flex-end;
-        }
-        .titan-side-drawer.active { display: flex; }
-        .side-drawer-content {
-            background: var(--prof-bg);
-            width: 85%; max-width: 360px; height: 100%;
-            padding: 20px 0 40px; overflow-y: auto;
-            color: var(--prof-text);
-            box-shadow: -5px 0 25px rgba(0,0,0,0.3);
-        }
+    const profile =
+      saved && typeof saved === "object" && !Array.isArray(saved)
+        ? saved
+        : {};
 
-        .sheet-section-title {
-            font-size: 0.75rem; font-weight: 700; color: var(--prof-muted);
-            text-transform: uppercase; padding: 16px 20px 8px; letter-spacing: 0.5px;
-        }
-        .sheet-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 20px; cursor: pointer; font-size: 0.95rem; font-weight: 500;
-            border-bottom: 1px solid var(--prof-border);
-        }
-        .sheet-row:active { background: rgba(0,0,0,0.05); }
-        .sheet-row i.left-icon { width: 26px; font-size: 1.15rem; margin-right: 12px; }
-        .sheet-row .right-arrow { color: var(--prof-muted); font-size: 0.85rem; }
+    return {
+      ...profile,
+      name: profile.name || profile.displayName || "TITAN Creator",
+      handle: profile.handle || "@titancreator",
+      bio: profile.bio || "",
+      photoURL: profile.photoURL || profile.photo || "",
+      ytLink: profile.ytLink || "",
+      followers: Number(profile.followers) || 0,
+      following: Number(profile.following) || 0,
+      likes: Number(profile.likes) || 0
+    };
+  }
 
-        /* Settings Page */
-        .titan-settings-page {
-            position: fixed !important;
-            top: 0 !important; left: 0 !important;
-            width: 100vw !important; height: 100vh !important;
-            background: var(--prof-bg) !important;
-            color: var(--prof-text) !important;
-            z-index: 9999999999 !important;
-            display: none;
-            flex-direction: column !important;
-            overflow-y: auto !important;
-        }
-        .titan-settings-page.active { display: flex !important; }
+  function saveUserProfileData(changes) {
+    const oldProfile = readJSON(PROFILE_KEY, {});
+    const profile =
+      oldProfile && typeof oldProfile === "object" ? oldProfile : {};
 
-        .settings-header {
-            display: flex; align-items: center; gap: 15px;
-            padding: 14px 16px; border-bottom: 1px solid var(--prof-border);
-            position: sticky; top: 0; background: var(--prof-bg); z-index: 5;
-        }
-        .settings-header h2 { font-size: 1.15rem; font-weight: 700; margin: 0; }
+    const updated = { ...profile, ...changes };
 
-        .settings-section-title {
-            font-size: 0.78rem; font-weight: 700; color: var(--prof-muted);
-            text-transform: uppercase; padding: 18px 16px 8px; letter-spacing: 0.4px;
-        }
-        .settings-row {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 16px; cursor: pointer; font-size: 0.95rem;
-            border-bottom: 1px solid var(--prof-border);
-        }
-        .settings-row:active { background: rgba(0,0,0,0.04); }
-        .settings-row .left { display: flex; align-items: center; gap: 14px; }
-        .settings-row i { font-size: 1.15rem; width: 24px; text-align: center; }
-        .settings-row .arrow { color: var(--prof-muted); font-size: 0.85rem; }
+    try {
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
+      return true;
+    } catch (error) {
+      console.error("TITAN profile save error:", error);
+      alert("Profile save nahi hua. Browser storage check karein.");
+      return false;
+    }
+  }
+
+  function getUploads() {
+    const uploads = readJSON(UPLOADS_KEY, []);
+    return Array.isArray(uploads) ? uploads : [];
+  }
+
+  function formatNumber(value) {
+    const n = Number(value) || 0;
+
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+    if (n >= 1000) return (n / 1000).toFixed(1) + "K";
+
+    return String(n);
+  }
+
+  function getInitials(name) {
+    return String(name || "T")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(part => part.charAt(0))
+      .join("")
+      .toUpperCase();
+  }
+
+  /* ---------------------- CSS ---------------------- */
+
+  function installStyles() {
+    if ($("#" + STYLE_ID)) return;
+
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+
+    style.textContent = `
+      .titan-profile-overlay,
+      .titan-player-overlay,
+      .titan-edit-overlay,
+      .titan-settings-overlay {
+        position:fixed;
+        inset:0;
+        z-index:99990;
+        display:none;
+        overflow-y:auto;
+        background:rgba(3,4,8,.96);
+        color:#f5f5f7;
+        font-family:Inter,Arial,sans-serif;
+        -webkit-overflow-scrolling:touch;
+      }
+
+      .titan-profile-overlay.titan-visible,
+      .titan-player-overlay.titan-visible,
+      .titan-edit-overlay.titan-visible,
+      .titan-settings-overlay.titan-visible {
+        display:block;
+      }
+
+      .titan-profile-shell,
+      .titan-settings-shell {
+        width:min(100%,760px);
+        margin:0 auto;
+        padding:20px 16px 100px;
+      }
+
+      .titan-topbar {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:24px;
+      }
+
+      .titan-topbar h2 {
+        flex:1;
+        margin:0;
+        font-size:20px;
+      }
+
+      .titan-icon-button {
+        width:42px;
+        height:42px;
+        border:1px solid #30313a;
+        border-radius:50%;
+        background:#14151b;
+        color:#fff;
+        font-size:19px;
+        cursor:pointer;
+      }
+
+      .titan-profile-heading {
+        display:flex;
+        align-items:center;
+        gap:18px;
+        margin-bottom:20px;
+      }
+
+      .titan-avatar {
+        width:94px;
+        height:94px;
+        flex-shrink:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        overflow:hidden;
+        border-radius:50%;
+        background:#22242c;
+        border:2px solid #f59e0b;
+        color:#f59e0b;
+        font-size:25px;
+        font-weight:800;
+      }
+
+      .titan-avatar img {
+        width:100%;
+        height:100%;
+        object-fit:cover;
+      }
+
+      .titan-profile-numbers {
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+        margin:20px 0;
+      }
+
+      .titan-profile-number {
+        flex:1;
+        text-align:center;
+        padding:12px 4px;
+        border-radius:12px;
+        background:#121319;
+      }
+
+      .titan-profile-number strong {
+        display:block;
+        font-size:18px;
+      }
+
+      .titan-profile-number span {
+        display:block;
+        margin-top:4px;
+        color:#a1a1aa;
+        font-size:12px;
+      }
+
+      .titan-profile-bio {
+        color:#d4d4d8;
+        line-height:1.6;
+        white-space:pre-wrap;
+        overflow-wrap:anywhere;
+      }
+
+      .titan-profile-link {
+        display:inline-block;
+        margin-top:8px;
+        color:#38bdf8;
+        overflow-wrap:anywhere;
+      }
+
+      .titan-profile-actions {
+        display:flex;
+        gap:10px;
+        margin:18px 0 24px;
+      }
+
+      .titan-btn {
+        flex:1;
+        min-height:42px;
+        padding:10px 14px;
+        border:0;
+        border-radius:10px;
+        background:#f59e0b;
+        color:#111;
+        font-weight:750;
+        cursor:pointer;
+      }
+
+      .titan-btn.secondary {
+        background:#20212a;
+        color:#fff;
+        border:1px solid #353640;
+      }
+
+      .titan-profile-tabs {
+        display:flex;
+        border-bottom:1px solid #292a32;
+        margin-bottom:16px;
+      }
+
+      .titan-profile-tab {
+        flex:1;
+        padding:14px 6px;
+        background:none;
+        color:#a1a1aa;
+        border:0;
+        border-bottom:2px solid transparent;
+        cursor:pointer;
+      }
+
+      .titan-profile-tab.active {
+        color:#f59e0b;
+        border-bottom-color:#f59e0b;
+      }
+
+      .titan-video-grid {
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:5px;
+      }
+
+      .titan-video-card {
+        position:relative;
+        min-width:0;
+        aspect-ratio:9/13;
+        overflow:hidden;
+        border:0;
+        border-radius:6px;
+        background:#181920;
+        color:#fff;
+        padding:0;
+        text-align:left;
+        cursor:pointer;
+      }
+
+      .titan-video-card img,
+      .titan-video-card video {
+        width:100%;
+        height:100%;
+        display:block;
+        object-fit:cover;
+      }
+
+      .titan-video-card .titan-video-title {
+        position:absolute;
+        right:0;
+        bottom:0;
+        left:0;
+        padding:26px 7px 8px;
+        background:linear-gradient(transparent,rgba(0,0,0,.9));
+        font-size:12px;
+        overflow-wrap:anywhere;
+      }
+
+      .titan-empty-state {
+        grid-column:1/-1;
+        padding:42px 15px;
+        text-align:center;
+        color:#a1a1aa;
+      }
+
+      .titan-form-group {
+        margin-bottom:16px;
+      }
+
+      .titan-form-group label {
+        display:block;
+        margin-bottom:7px;
+        color:#d4d4d8;
+        font-size:13px;
+      }
+
+      .titan-form-group input,
+      .titan-form-group textarea {
+        width:100%;
+        box-sizing:border-box;
+        padding:12px;
+        border:1px solid #383944;
+        border-radius:10px;
+        background:#111218;
+        color:#fff;
+        font:inherit;
+        outline:none;
+      }
+
+      .titan-form-group textarea {
+        min-height:100px;
+        resize:vertical;
+      }
+
+      .titan-settings-row {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        width:100%;
+        padding:16px 4px;
+        border:0;
+        border-bottom:1px solid #282932;
+        background:transparent;
+        color:#f5f5f7;
+        text-align:left;
+        font-size:15px;
+        cursor:pointer;
+      }
+
+      .titan-settings-row span:first-child {
+        width:26px;
+        color:#f59e0b;
+        text-align:center;
+      }
+
+      .titan-settings-row .titan-row-arrow {
+        margin-left:auto;
+        color:#777985;
+      }
+
+      .titan-player-content {
+        min-height:100%;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        padding:18px;
+        box-sizing:border-box;
+      }
+
+      .titan-player-video {
+        width:min(100%,900px);
+        max-height:75vh;
+        background:#000;
+        border-radius:12px;
+      }
+
+      .titan-player-title {
+        width:min(100%,900px);
+        overflow-wrap:anywhere;
+        margin-top:14px;
+      }
+
+      .titan-small-note {
+        margin:10px 0 18px;
+        color:#a1a1aa;
+        font-size:12px;
+        line-height:1.5;
+      }
+
+      @media(max-width:480px) {
+        .titan-profile-heading { gap:12px; }
+        .titan-avatar { width:76px; height:76px; }
+        .titan-profile-shell,
+        .titan-settings-shell { padding:16px 12px 90px; }
+      }
     `;
+
     document.head.appendChild(style);
+  }
 
-    // Get Profile Data
-    function getUserProfileData() {
-        try {
-            const stored = localStorage.getItem('titan_user_profile');
-            if (stored) return JSON.parse(stored);
-        } catch (e) {}
-        return {
-            name: "Titan Creator",
-            handle: "@creator",
-            photo: "https://ui-avatars.com/api/?name=User&background=00b2ff&color=fff",
-            bio: "Titan AI Creator",
-            ytLink: "",
-            followers: "0",
-            following: "0",
-            likes: "0"
+  /* ---------------------- Overlay creation ---------------------- */
+
+  function createOverlay(id, className) {
+    let overlay = $("#" + id);
+
+    if (!overlay) {
+      overlay = document.createElement("div");
+      overlay.id = id;
+      overlay.className = className;
+      document.body.appendChild(overlay);
+    }
+
+    return overlay;
+  }
+
+  function closeAllTitanOverlays() {
+    document
+      .querySelectorAll(
+        ".titan-profile-overlay,.titan-player-overlay," +
+        ".titan-edit-overlay,.titan-settings-overlay"
+      )
+      .forEach(el => el.classList.remove("titan-visible"));
+  }
+
+  function closeTitanProfile() {
+    const el = $("#titanProfileOverlay");
+    if (el) el.classList.remove("titan-visible");
+  }
+
+  window.closeTitanProfile = closeTitanProfile;
+
+  /* ---------------------- Profile page ---------------------- */
+
+  function renderVideoGrid() {
+    const grid = $("#titanProfileVideoGrid");
+    if (!grid) return;
+
+    grid.replaceChildren();
+
+    const uploads = getUploads();
+
+    if (activeTab !== "videos") {
+      const empty = document.createElement("div");
+      empty.className = "titan-empty-state";
+      empty.textContent =
+        activeTab === "likes"
+          ? "Liked videos ka section abhi available nahi hai."
+          : "Saved videos ka section abhi available nahi hai.";
+
+      grid.appendChild(empty);
+      return;
+    }
+
+    if (!uploads.length) {
+      const empty = document.createElement("div");
+      empty.className = "titan-empty-state";
+      empty.innerHTML =
+        '<div style="font-size:35px;margin-bottom:12px">▣</div>' +
+        "<strong>Abhi koi video upload nahi hui</strong>" +
+        '<p style="font-size:13px">Plus button se apni pehli video upload karein.</p>';
+
+      grid.appendChild(empty);
+      return;
+    }
+
+    uploads.slice().reverse().forEach((vid, index) => {
+      if (!vid || !vid.url) return;
+
+      const url = safeURL(vid.url);
+      if (!url) return;
+
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "titan-video-card";
+
+      const thumbUrl = safeURL(vid.thumb || vid.url);
+      const isVideo = /\.(mp4|webm|ogg|mov)(?:$|[?#])/i.test(url);
+
+      if (thumbUrl && !isVideo) {
+        const img = document.createElement("img");
+        img.src = thumbUrl;
+        img.alt = String(vid.title || "TITAN video");
+        img.loading = "lazy";
+        img.onerror = function () {
+          this.style.display = "none";
         };
+        card.appendChild(img);
+      } else {
+        const placeholder = document.createElement("div");
+        placeholder.style.cssText =
+          "height:100%;display:flex;align-items:center;" +
+          "justify-content:center;font-size:34px;color:#f59e0b";
+        placeholder.textContent = "▶";
+        card.appendChild(placeholder);
+      }
+
+      const title = document.createElement("span");
+      title.className = "titan-video-title";
+      title.textContent = vid.title || "Titan Video";
+      card.appendChild(title);
+
+      card.addEventListener("click", () => {
+        playTitanVideo(url, vid.title || "Titan Video");
+      });
+
+      grid.appendChild(card);
+    });
+
+    if (!grid.children.length) {
+      const empty = document.createElement("div");
+      empty.className = "titan-empty-state";
+      empty.textContent = "Koi playable video nahi mili.";
+      grid.appendChild(empty);
     }
+  }
 
-    // Render Video Grid
-    function renderVideoGrid() {
-        const grid = document.getElementById('titanProfileVideoGrid');
-        if (!grid) return;
+  function renderProfile() {
+    const overlay = createOverlay(
+      "titanProfileOverlay",
+      "titan-profile-overlay"
+    );
 
-        let uploads = [];
-        try {
-            uploads = JSON.parse(localStorage.getItem('titan_user_uploads') || '[]');
-        } catch (e) {}
+    const p = getUserProfileData();
+    const avatar = safeURL(p.photoURL);
+    const yt = safeURL(p.ytLink);
 
-        if (uploads.length === 0) {
-            grid.innerHTML = `<div style="grid-column: span 3; text-align: center; padding: 50px 15px; color: var(--prof-muted); font-size: 0.9rem;">No videos uploaded yet.<br>Tap + to upload!</div>`;
-            return;
-        }
+    overlay.replaceChildren();
 
-        grid.innerHTML = uploads.map((vid) => `
-            <div class="grid-item" onclick="playTitanVideo('\( {vid.url}', \` \){(vid.title || 'Titan Video').replace(/`/g, '')}\`)">
-                <img src="${vid.thumb || vid.url}" 
-                     alt="Video" 
-                     style="width:100%; height:100%; object-fit:cover;"
-                     onerror="this.src='https://via.placeholder.com/300x400/111111/ffffff?text=Video'" />
-                <div style="position:absolute; bottom:6px; left:6px; background:rgba(0,0,0,0.65); color:#fff; font-size:0.7rem; padding:2px 7px; border-radius:4px;">
-                    <i class="fa-solid fa-play"></i>
-                </div>
-            </div>
-        `).join('');
-    }
+    const shell = document.createElement("div");
+    shell.className = "titan-profile-shell";
 
-    // Build UI
-    function initProfileUI() {
-        if (document.getElementById('titanMainProfilePage')) return;
-        const p = getUserProfileData();
+    shell.innerHTML = `
+      <div class="titan-topbar">
+        <button class="titan-icon-button" id="titanProfileBack" aria-label="Close">←</button>
+        <h2>Creator Profile</h2>
+        <button class="titan-icon-button" id="titanProfileMenu" aria-label="Settings">⋮</button>
+      </div>
 
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `
-            <!-- MAIN PROFILE PAGE -->
-            <div id="titanMainProfilePage" class="titan-profile-page">
-                <div class="prof-header">
-                    <button class="prof-header-icon" onclick="openTitanEditProfile()"><i class="fa-solid fa-pen"></i></button>
-                    <h3 id="profileDisplayName" style="font-size:1.1rem; font-weight:700; margin:0;">${p.name}</h3>
-                    <button class="prof-header-icon" onclick="openTitanOptions()"><i class="fa-solid fa-bars"></i></button>
-                </div>
+      <div class="titan-profile-heading">
+        <div class="titan-avatar" id="titanProfileAvatar">
+          ${avatar ? `<img src="${escapeHTML(avatar)}" alt="Profile photo">` : escapeHTML(getInitials(p.name))}
+        </div>
+        <div style="min-width:0;flex:1">
+          <h2 id="titanProfileName" style="margin:0 0 5px;overflow-wrap:anywhere">
+            ${escapeHTML(p.name)}
+          </h2>
+          <div id="titanProfileHandle" style="color:#a1a1aa;overflow-wrap:anywhere">
+            ${escapeHTML(p.handle)}
+          </div>
+        </div>
+      </div>
 
-                <div class="main-prof-avatar-wrap">
-                    <img id="mainProfileAvatar" src="${p.photo}" alt="Profile" />
-                </div>
+      <div class="titan-profile-numbers">
+        <div class="titan-profile-number">
+          <strong>${formatNumber(getUploads().length)}</strong>
+          <span>Videos</span>
+        </div>
+        <div class="titan-profile-number">
+          <strong>${formatNumber(p.followers)}</strong>
+          <span>Followers</span>
+        </div>
+        <div class="titan-profile-number">
+          <strong>${formatNumber(p.following)}</strong>
+          <span>Following</span>
+        </div>
+      </div>
 
-                <div id="profileDisplayHandle" class="user-handle-tag">${p.handle || '@creator'}</div>
+      <div class="titan-profile-bio" id="titanProfileBio">${escapeHTML(p.bio || "Apni bio add karein.")}</div>
 
-                <div class="stats-row">
-                    <div class="stat-item"><span class="num" id="statFollowing">${p.following || '0'}</span><span class="lbl">Following</span></div>
-                    <div class="stat-item"><span class="num" id="statFollowers">${p.followers || '0'}</span><span class="lbl">Followers</span></div>
-                    <div class="stat-item"><span class="num" id="statLikes">${p.likes || '0'}</span><span class="lbl">Likes</span></div>
-                </div>
+      <a
+        id="titanProfileYoutube"
+        class="titan-profile-link"
+        href="${yt ? escapeHTML(yt) : "#"}"
+        target="_blank"
+        rel="noopener noreferrer"
+        ${yt ? "" : "hidden"}
+      >▶ YouTube Channel</a>
 
-                <div class="bio-box">
-                    <a id="profileYtLink" class="bio-link" href="\( {p.ytLink || '#'}" target="_blank" style=" \){p.ytLink ? '' : 'display:none;'}">${p.ytLink || ''}</a>
-                    <div id="profileBioText" style="margin-top:4px;">${p.bio || 'Titan AI Creator'}</div>
-                </div>
+      <div class="titan-profile-actions">
+        <button class="titan-btn" id="titanEditProfileButton">Edit Profile</button>
+        <button class="titan-btn secondary" id="titanShareProfileButton">Share Profile</button>
+      </div>
 
-                <div style="display:flex; justify-content:center; margin-bottom:18px;">
-                    <button onclick="openTitanEditProfile()" style="background:var(--prof-card-bg); border:1px solid var(--prof-border); color:var(--prof-text); padding:9px 22px; border-radius:24px; font-weight:700; font-size:0.88rem; cursor:pointer;">
-                        Edit profile
-                    </button>
-                </div>
+      <div class="titan-profile-tabs">
+        <button class="titan-profile-tab active" data-tab="videos">▦ Videos</button>
+        <button class="titan-profile-tab" data-tab="likes">♡ Likes</button>
+        <button class="titan-profile-tab" data-tab="saved">▣ Saved</button>
+      </div>
 
-                <div class="tabs-bar">
-                    <button class="tab-btn active"><i class="fa-solid fa-bars-staggered"></i></button>
-                    <button class="tab-btn"><i class="fa-solid fa-lock"></i></button>
-                    <button class="tab-btn"><i class="fa-regular fa-bookmark"></i></button>
-                    <button class="tab-btn"><i class="fa-regular fa-heart"></i></button>
-                </div>
+      <div class="titan-video-grid" id="titanProfileVideoGrid"></div>
+    `;
 
-                <div id="titanProfileVideoGrid" class="video-grid"></div>
-            </div>
+    overlay.appendChild(shell);
 
-            <!-- SIDE MENU -->
-            <div id="titanOptionsSheet" class="titan-side-drawer" onclick="if(event.target === this) closeTitanOptions();">
-                <div class="side-drawer-content">
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding: 0 20px 15px; border-bottom:1px solid var(--prof-border);">
-                        <h3 style="font-size:1.1rem; font-weight:700; margin:0;">Settings & Menu</h3>
-                        <button onclick="closeTitanOptions()" style="background:transparent; border:none; font-size:1.3rem; color:var(--prof-text); cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
+    $("#titanProfileBack", shell).addEventListener("click", closeTitanProfile);
 
-                    <div class="sheet-section-title">Account Options</div>
-                    <div class="sheet-row" onclick="openTitanEditProfile(); closeTitanOptions();">
-                        <span><i class="fa-solid fa-user-pen left-icon"></i> Edit Profile</span>
-                        <i class="fa-solid fa-chevron-right right-arrow"></i>
-                    </div>
-                    <div class="sheet-row">
-                        <span><i class="fa-solid fa-wallet left-icon"></i> Balance</span>
-                        <i class="fa-solid fa-chevron-right right-arrow"></i>
-                    </div>
+    $("#titanProfileMenu", shell).addEventListener("click", openTitanSettings);
 
-                    <div class="sheet-section-title">Creator Tools</div>
-                    <div class="sheet-row">
-                        <span><i class="fa-solid fa-clapperboard left-icon"></i> Titan Studio</span>
-                        <i class="fa-solid fa-chevron-right right-arrow"></i>
-                    </div>
-                    <div class="sheet-row">
-                        <span><i class="fa-solid fa-chart-line left-icon"></i> Analytics</span>
-                        <i class="fa-solid fa-chevron-right right-arrow"></i>
-                    </div>
+    $("#titanEditProfileButton", shell).addEventListener(
+      "click",
+      openTitanEditProfile
+    );
 
-                    <div class="sheet-section-title">Settings</div>
-                    <div class="sheet-row" onclick="openTitanSettings(); closeTitanOptions();">
-                        <span><i class="fa-solid fa-gear left-icon"></i> Settings and privacy</span>
-                        <i class="fa-solid fa-chevron-right right-arrow"></i>
-                    </div>
-                </div>
-            </div>
+    $("#titanShareProfileButton", shell).addEventListener(
+      "click",
+      shareTitanProfile
+    );
 
-            <!-- FULL SETTINGS PAGE -->
-            <div id="titanSettingsPage" class="titan-settings-page">
-                <div class="settings-header">
-                    <button class="prof-header-icon" onclick="closeTitanSettings()"><i class="fa-solid fa-arrow-left"></i></button>
-                    <h2>Settings and privacy</h2>
-                </div>
+    shell.querySelectorAll("[data-tab]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeTab = button.dataset.tab;
 
-                <div class="settings-section-title">Account</div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-user"></i> Account</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-shield-halved"></i> Security and permissions</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-share-nodes"></i> Share profile</div><i class="fa-solid fa-chevron-right arrow"></i></div>
+        shell.querySelectorAll("[data-tab]").forEach(tab => {
+          tab.classList.toggle("active", tab === button);
+        });
 
-                <div class="settings-section-title">Content & Display</div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-moon"></i> Display</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-language"></i> Language</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-bell"></i> Notifications</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-
-                <div class="settings-section-title">Support & About</div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-circle-question"></i> Help Centre</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-                <div class="settings-row"><div class="left"><i class="fa-solid fa-file-lines"></i> Terms and policies</div><i class="fa-solid fa-chevron-right arrow"></i></div>
-
-                <div class="settings-section-title">Login</div>
-                <div class="settings-row" onclick="handleTitanLogout()">
-                    <div class="left" style="color:#ef4444;"><i class="fa-solid fa-right-from-bracket"></i> Log out</div>
-                    <i class="fa-solid fa-chevron-right arrow"></i>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(wrapper);
         renderVideoGrid();
-    }
+      });
+    });
 
-    // Open / Close Functions
-    window.openTitanProfile = function () {
-        initProfileUI();
-        const page = document.getElementById('titanMainProfilePage');
-        if (page) {
-            page.classList.add('active');
-            renderVideoGrid();
-        }
-    };
+    renderVideoGrid();
+  }
 
-    window.closeTitanProfile = function () {
-        const page = document.getElementById('titanMainProfilePage');
-        if (page) page.classList.remove('active');
-    };
+  function openTitanProfile() {
+    closeAllTitanOverlays();
+    renderProfile();
+    $("#titanProfileOverlay").classList.add("titan-visible");
+  }
 
-    window.openTitanOptions = function () {
-        document.getElementById('titanOptionsSheet')?.classList.add('active');
-    };
+  window.openTitanProfile = openTitanProfile;
+  window.openProfilePage = openTitanProfile;
 
-    window.closeTitanOptions = function () {
-        document.getElementById('titanOptionsSheet')?.classList.remove('active');
-    };
+  /* ---------------------- Edit profile ---------------------- */
 
-    window.openTitanSettings = function () {
-        document.getElementById('titanSettingsPage')?.classList.add('active');
-    };
+  function openTitanEditProfile() {
+    const p = getUserProfileData();
 
-    window.closeTitanSettings = function () {
-        document.getElementById('titanSettingsPage')?.classList.remove('active');
-    };
+    const overlay = createOverlay(
+      "titanEditOverlay",
+      "titan-edit-overlay"
+    );
 
-    window.openTitanEditProfile = function () {
-        alert("Edit Profile feature coming soon.");
-    };
+    overlay.replaceChildren();
 
-    // ========== VIDEO PLAYER ==========
-    window.playTitanVideo = function(url, title) {
-        const oldPlayer = document.getElementById('titanVideoPlayer');
-        if (oldPlayer) oldPlayer.remove();
+    const shell = document.createElement("div");
+    shell.className = "titan-profile-shell";
 
-        const player = document.createElement('div');
-        player.id = 'titanVideoPlayer';
-        player.style.cssText = `
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 99999999999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        `;
+    shell.innerHTML = `
+      <div class="titan-topbar">
+        <button class="titan-icon-button" id="titanEditCancel">←</button>
+        <h2>Edit Profile</h2>
+      </div>
 
-        player.innerHTML = `
-            <div style="position:absolute; top:0; left:0; right:0; padding:15px 18px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index:10;">
-                <div style="color:#fff; font-weight:600; font-size:0.95rem; max-width:75%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                    ${title || 'Titan Video'}
-                </div>
-                <button onclick="document.getElementById('titanVideoPlayer').remove()" 
-                    style="background:rgba(255,255,255,0.2); border:none; color:#fff; width:38px; height:38px; border-radius:50%; font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <video 
-                src="${url}" 
-                controls 
-                autoplay 
-                playsinline 
-                style="width:100%; max-height:85vh; background:#000;">
-            </video>
-        `;
+      <form id="titanEditProfileForm">
+        <div class="titan-form-group">
+          <label for="titanEditName">Display Name</label>
+          <input id="titanEditName" maxlength="60" value="${escapeHTML(p.name)}" required>
+        </div>
 
-        document.body.appendChild(player);
-    };
+        <div class="titan-form-group">
+          <label for="titanEditHandle">Username</label>
+          <input id="titanEditHandle" maxlength="30" value="${escapeHTML(String(p.handle).replace(/^@/, ""))}" required>
+        </div>
 
-    // ========== PROFILE BUTTON FIX ==========
-    document.addEventListener('click', function (e) {
-        const target = e.target.closest('.titan-nav-item, [class*="nav"], [class*="profile"]');
-        
-        if (!target) return;
+        <div class="titan-form-group">
+          <label for="titanEditBio">Bio</label>
+          <textarea id="titanEditBio" maxlength="300" placeholder="Apne baare mein likhein">${escapeHTML(p.bio)}</textarea>
+        </div>
 
-        const text = (target.textContent || '').toLowerCase();
-        const hasUserIcon = target.querySelector('.fa-user, .fa-user-circle, .fa-regular.fa-user, .fa-solid.fa-user');
+        <div class="titan-form-group">
+          <label for="titanEditPhoto">Profile Photo URL (optional)</label>
+          <input id="titanEditPhoto" type="url" value="${escapeHTML(p.photoURL || "")}" placeholder="https://...">
+        </div>
 
-        if (text.includes('profile') || hasUserIcon) {
-            e.preventDefault();
-            e.stopPropagation();
-            openTitanProfile();
-        }
-    }, true);
+        <div class="titan-form-group">
+          <label for="titanEditYoutube">YouTube Channel URL (optional)</label>
+          <input id="titanEditYoutube" type="url" value="${escapeHTML(p.ytLink || "")}" placeholder="https://www.youtube.com/@...">
+        </div>
 
-    // Extra safety
-    window.openProfilePage = function() {
+        <p class="titan-small-note">
+          Changes is browser mein save hongi. Profile photo ke liye publicly accessible image URL dein.
+        </p>
+
+        <button class="titan-btn" type="submit">Save Changes</button>
+      </form>
+    `;
+
+    overlay.appendChild(shell);
+    closeAllTitanOverlays();
+    overlay.classList.add("titan-visible");
+
+    $("#titanEditCancel", shell).addEventListener("click", () => {
+      overlay.classList.remove("titan-visible");
+      openTitanProfile();
+    });
+
+    $("#titanEditProfileForm", shell).addEventListener("submit", event => {
+      event.preventDefault();
+
+      const name = $("#titanEditName", shell).value.trim();
+      let handle = $("#titanEditHandle", shell).value.trim();
+      const bio = $("#titanEditBio", shell).value.trim();
+      const photoURL = $("#titanEditPhoto", shell).value.trim();
+      const ytLink = $("#titanEditYoutube", shell).value.trim();
+
+      if (!name || !handle) {
+        alert("Name aur username zaroor likhein.");
+        return;
+      }
+
+      handle = "@" + handle.replace(/^@+/, "").replace(/\s+/g, "");
+
+      if (photoURL && !safeURL(photoURL)) {
+        alert("Profile photo ke liye valid HTTP/HTTPS URL dein.");
+        return;
+      }
+
+      if (ytLink && !safeURL(ytLink)) {
+        alert("YouTube link valid nahi hai.");
+        return;
+      }
+
+      const saved = saveUserProfileData({
+        name,
+        displayName: name,
+        handle,
+        bio,
+        photoURL,
+        ytLink
+      });
+
+      if (saved) {
+        overlay.classList.remove("titan-visible");
+        activeTab = "videos";
         openTitanProfile();
+      }
+    });
+  }
+
+  window.openTitanEditProfile = openTitanEditProfile;
+
+  /* ---------------------- Video player ---------------------- */
+
+  function playTitanVideo(url, title) {
+    const safe = safeURL(url);
+
+    if (!safe) {
+      alert("Video URL valid nahi hai.");
+      return;
+    }
+
+    const overlay = createOverlay(
+      "titanPlayerOverlay",
+      "titan-player-overlay"
+    );
+
+    currentPlayerUrl = safe;
+    overlay.replaceChildren();
+
+    const content = document.createElement("div");
+    content.className = "titan-player-content";
+
+    const topbar = document.createElement("div");
+    topbar.style.cssText =
+      "width:100%;max-width:900px;display:flex;justify-content:flex-end";
+
+    const close = document.createElement("button");
+    close.className = "titan-icon-button";
+    close.textContent = "✕";
+    close.setAttribute("aria-label", "Close video");
+    close.addEventListener("click", closeTitanVideo);
+
+    topbar.appendChild(close);
+
+    const video = document.createElement("video");
+    video.className = "titan-player-video";
+    video.src = safe;
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+
+    const heading = document.createElement("h3");
+    heading.className = "titan-player-title";
+    heading.textContent = title || "TITAN Video";
+
+    content.append(topbar, video, heading);
+    overlay.appendChild(content);
+
+    closeAllTitanOverlays();
+    overlay.classList.add("titan-visible");
+
+    const playPromise = video.play();
+
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {
+        // Mobile browsers may require the user to press Play.
+      });
+    }
+  }
+
+  function closeTitanVideo() {
+    const overlay = $("#titanPlayerOverlay");
+
+    if (overlay) {
+      const video = $("video", overlay);
+
+      if (video) {
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+      }
+
+      overlay.classList.remove("titan-visible");
+    }
+
+    currentPlayerUrl = "";
+  }
+
+  window.playTitanVideo = playTitanVideo;
+  window.closeTitanVideo = closeTitanVideo;
+
+  /* ---------------------- Share profile ---------------------- */
+
+  async function shareTitanProfile() {
+    const p = getUserProfileData();
+    const shareData = {
+      title: p.name + " | TITAN AI",
+      text: "Check out " + p.name + " on TITAN AI.",
+      url: window.location.href
     };
 
-    // Init
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initProfileUI);
-    } else {
-        initProfileUI();
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(shareData.url);
+        alert("Profile link copy ho gaya.");
+        return;
+      }
+
+      prompt("Profile link copy karein:", shareData.url);
+    } catch (error) {
+      if (error && error.name !== "AbortError") {
+        prompt("Profile link copy karein:", shareData.url);
+      }
     }
+  }
+
+  /* ---------------------- Settings ---------------------- */
+
+  function openTitanSettings() {
+    const overlay = createOverlay(
+      "titanSettingsOverlay",
+      "titan-settings-overlay"
+    );
+
+    overlay.replaceChildren();
+
+    const shell = document.createElement("div");
+    shell.className = "titan-settings-shell";
+
+    shell.innerHTML = `
+      <div class="titan-topbar">
+        <button class="titan-icon-button" id="titanSettingsBack">←</button>
+        <h2>Settings & Privacy</h2>
+      </div>
+
+      <button class="titan-settings-row" data-action="account">
+        <span>♙</span><span>Account</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="security">
+        <span>🔒</span><span>Security & Login</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="display">
+        <span>◐</span><span>Display / Theme</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="language">
+        <span>文</span><span>Language preference</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="notifications">
+        <span>♧</span><span>Notifications preference</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="share">
+        <span>↗</span><span>Share profile</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="help">
+        <span>?</span><span>Help Centre</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="terms">
+        <span>≡</span><span>Terms & Privacy</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <button class="titan-settings-row" data-action="logout" style="color:#fb7185">
+        <span style="color:#fb7185">⇥</span><span>Log out</span><span class="titan-row-arrow">›</span>
+      </button>
+
+      <p class="titan-small-note">
+        Note: Kuch settings abhi sirf is browser mein preference save karti hain.
+        Real account security, notifications aur privacy backend se configure hoti hain.
+      </p>
+    `;
+
+    overlay.appendChild(shell);
+
+    closeAllTitanOverlays();
+    overlay.classList.add("titan-visible");
+
+    $("#titanSettingsBack", shell).addEventListener("click", () => {
+      overlay.classList.remove("titan-visible");
+      openTitanProfile();
+    });
+
+    shell.querySelectorAll("[data-action]").forEach(button => {
+      button.addEventListener("click", () => {
+        handleSettingsAction(button.dataset.action);
+      });
+    });
+  }
+
+  window.openTitanSettings = openTitanSettings;
+
+  function handleSettingsAction(action) {
+    switch (action) {
+      case "account": {
+        const p = getUserProfileData();
+        alert(
+          "Account information\n\nName: " + p.name +
+          "\nUsername: " + p.handle +
+          "\nEmail: " + (p.email || "Available nahi") +
+          "\n\nAccount details aap Edit Profile se update kar sakte hain."
+        );
+        break;
+      }
+
+      case "security":
+        alert(
+          "Google Login aapke existing authentication system se handle hota hai. " +
+          "Password ya security details yahan store na karein."
+        );
+        break;
+
+      case "display": {
+        const currentlyDark = document.body.classList.contains("light-mode");
+        document.body.classList.toggle("light-mode", !currentlyDark);
+
+        try {
+          localStorage.setItem(
+            "theme_preference",
+            currentlyDark ? "dark" : "light"
+          );
+        } catch (_) {}
+
+        alert(
+          "Theme preference change kar di gayi. Agar app ka doosra theme system " +
+          "active hai to uski setting bhi update karni hogi."
+        );
+        break;
+      }
+
+      case "language": {
+        const current = localStorage.getItem("titan_language") || "Roman Urdu";
+        const chosen = prompt(
+          "Language preference likhein: English, Urdu, ya Roman Urdu",
+          current
+        );
+
+        if (chosen && chosen.trim()) {
+          localStorage.setItem("titan_language", chosen.trim());
+          alert("Language preference save ho gayi. App ki tamam text abhi automatically translate nahi hogi.");
+        }
+        break;
+      }
+
+      case "notifications": {
+        const current = localStorage.getItem("titan_notifications") !== "off";
+        const next = !current;
+
+        localStorage.setItem("titan_notifications", next ? "on" : "off");
+
+        alert(
+          next
+            ? "Local notification preference ON hai."
+            : "Local notification preference OFF hai." +
+              "\nYeh setting abhi browser preference hai, real push notifications nahi."
+        );
+        break;
+      }
+
+      case "share":
+        shareTitanProfile();
+        break;
+
+      case "help":
+        alert(
+          "TITAN AI Help\n\nProfile edit karne ke liye Edit Profile use karein. " +
+          "Videos upload karne ke liye app ka Plus button use karein. " +
+          "Agar upload fail ho, Cloudinary configuration check karni hogi."
+        );
+        break;
+
+      case "terms":
+        alert(
+          "Terms & Privacy\n\nYeh menu placeholder hai. Public launch se pehle " +
+          "apni real Terms of Service aur Privacy Policy pages add karein."
+        );
+        break;
+
+      case "logout":
+        if (confirm("Kya aap logout karna chahte hain?")) {
+          if (typeof window.handleTitanLogout === "function") {
+            window.handleTitanLogout();
+          } else if (typeof window.titanLogout === "function") {
+            window.titanLogout();
+          } else {
+            alert("Logout function existing auth file mein available nahi mila. Google Login code ko change nahi kiya gaya.");
+          }
+        }
+        break;
+
+      default:
+        alert("Yeh option abhi available nahi hai.");
+    }
+  }
+
+  /* ---------------------- Optional navigation helpers ---------------------- */
+
+  window.openTitanBalance = function () {
+    alert("Balance feature abhi backend se connected nahi hai.");
+  };
+
+  window.openTitanAnalytics = function () {
+    alert("Real analytics ke liye views aur engagement ka backend tracking system chahiye.");
+  };
+
+  window.openTitanStudio = function () {
+    if (typeof window.openTitanStudioGemini === "function") {
+      window.openTitanStudioGemini();
+      return;
+    }
+
+    alert("Titan Studio ka existing function is page par nahi mila.");
+  };
+
+  /* ---------------------- Safe keyboard / backdrop close ---------------------- */
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      closeTitanVideo();
+      closeTitanProfile();
+
+      [
+        "titanEditOverlay",
+        "titanSettingsOverlay"
+      ].forEach(id => {
+        const el = $("#" + id);
+        if (el) el.classList.remove("titan-visible");
+      });
+    }
+  });
+
+  document.addEventListener("click", event => {
+    const overlay = event.target;
+
+    if (
+      overlay &&
+      overlay.classList &&
+      overlay.classList.contains("titan-profile-overlay")
+    ) {
+      closeTitanProfile();
+    }
+
+    if (
+      overlay &&
+      overlay.classList &&
+      overlay.classList.contains("titan-player-overlay")
+    ) {
+      closeTitanVideo();
+    }
+  });
+
+  /* ---------------------- Initialization ---------------------- */
+
+  function initTitanProfileSystem() {
+    installStyles();
+
+    // Do not auto-open the profile; preserve the existing home screen.
+    console.log("TITAN AI Profile System V8 ready.");
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      initTitanProfileSystem,
+      { once: true }
+    );
+  } else {
+    initTitanProfileSystem();
+  }
 
 })();
