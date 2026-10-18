@@ -1,6 +1,6 @@
 /**
  * =========================================================
- * TITAN AI PROFILE + SETTINGS SYSTEM (TikTok Style)
+ * TITAN AI PROFILE + SETTINGS + VIDEO PLAYER
  * FILE: app-profile-system.js
  * =========================================================
  */
@@ -8,11 +8,11 @@
 (function () {
     'use strict';
 
-    console.log("⚡ Titan AI Profile + Settings System Active");
+    console.log("⚡ Titan AI Profile + Video Player System Active");
 
     // Styles
     const style = document.createElement('style');
-    style.id = 'titan-profile-styles-v6';
+    style.id = 'titan-profile-styles-v7';
     style.innerHTML = `
         :root {
             --prof-bg: #ffffff;
@@ -91,9 +91,21 @@
         .tab-btn { background: transparent; border: none; font-size: 1.25rem; color: var(--prof-muted); cursor: pointer; }
         .tab-btn.active { color: var(--prof-text); border-bottom: 2px solid var(--prof-text); padding-bottom: 4px; }
 
-        .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 2px 0; background: var(--prof-bg); }
-        .grid-item { aspect-ratio: 3/4; background: #18181b; position: relative; overflow: hidden; cursor: pointer; }
-        .grid-item img, .grid-item video { width: 100%; height: 100%; object-fit: cover; }
+        .video-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 2px; 
+            padding: 2px 0; 
+            background: var(--prof-bg); 
+        }
+        .grid-item { 
+            aspect-ratio: 3/4; 
+            background: #18181b; 
+            position: relative; 
+            overflow: hidden; 
+            cursor: pointer; 
+        }
+        .grid-item img { width: 100%; height: 100%; object-fit: cover; }
 
         /* Side Drawer */
         .titan-side-drawer {
@@ -157,7 +169,6 @@
         .settings-row .left { display: flex; align-items: center; gap: 14px; }
         .settings-row i { font-size: 1.15rem; width: 24px; text-align: center; }
         .settings-row .arrow { color: var(--prof-muted); font-size: 0.85rem; }
-        .settings-row .value { color: var(--prof-muted); font-size: 0.88rem; margin-right: 8px; }
     `;
     document.head.appendChild(style);
 
@@ -179,10 +190,6 @@
         };
     }
 
-    function saveUserProfileData(data) {
-        localStorage.setItem('titan_user_profile', JSON.stringify(data));
-    }
-
     // Render Video Grid
     function renderVideoGrid() {
         const grid = document.getElementById('titanProfileVideoGrid');
@@ -198,9 +205,15 @@
             return;
         }
 
-        grid.innerHTML = uploads.map(vid => `
-            <div class="grid-item">
-                <img src="${vid.thumb || 'https://via.placeholder.com/300'}" alt="Video" />
+        grid.innerHTML = uploads.map((vid) => `
+            <div class="grid-item" onclick="playTitanVideo('\( {vid.url}', \` \){(vid.title || 'Titan Video').replace(/`/g, '')}\`)">
+                <img src="${vid.thumb || vid.url}" 
+                     alt="Video" 
+                     style="width:100%; height:100%; object-fit:cover;"
+                     onerror="this.src='https://via.placeholder.com/300x400/111111/ffffff?text=Video'" />
+                <div style="position:absolute; bottom:6px; left:6px; background:rgba(0,0,0,0.65); color:#fff; font-size:0.7rem; padding:2px 7px; border-radius:4px;">
+                    <i class="fa-solid fa-play"></i>
+                </div>
             </div>
         `).join('');
     }
@@ -254,7 +267,7 @@
                 <div id="titanProfileVideoGrid" class="video-grid"></div>
             </div>
 
-            <!-- SIDE MENU (TikTok Style) -->
+            <!-- SIDE MENU -->
             <div id="titanOptionsSheet" class="titan-side-drawer" onclick="if(event.target === this) closeTitanOptions();">
                 <div class="side-drawer-content">
                     <div style="display:flex; justify-content:space-between; align-items:center; padding: 0 20px 15px; border-bottom:1px solid var(--prof-border);">
@@ -351,12 +364,53 @@
     };
 
     window.openTitanEditProfile = function () {
-        alert("Edit Profile feature coming soon. Profile data is already saved from Google login.");
+        alert("Edit Profile feature coming soon.");
+    };
+
+    // ========== VIDEO PLAYER ==========
+    window.playTitanVideo = function(url, title) {
+        const oldPlayer = document.getElementById('titanVideoPlayer');
+        if (oldPlayer) oldPlayer.remove();
+
+        const player = document.createElement('div');
+        player.id = 'titanVideoPlayer';
+        player.style.cssText = `
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 99999999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        `;
+
+        player.innerHTML = `
+            <div style="position:absolute; top:0; left:0; right:0; padding:15px 18px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); z-index:10;">
+                <div style="color:#fff; font-weight:600; font-size:0.95rem; max-width:75%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                    ${title || 'Titan Video'}
+                </div>
+                <button onclick="document.getElementById('titanVideoPlayer').remove()" 
+                    style="background:rgba(255,255,255,0.2); border:none; color:#fff; width:38px; height:38px; border-radius:50%; font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <video 
+                src="${url}" 
+                controls 
+                autoplay 
+                playsinline 
+                style="width:100%; max-height:85vh; background:#000;">
+            </video>
+        `;
+
+        document.body.appendChild(player);
     };
 
     // Hook into bottom nav Profile button
     document.addEventListener('click', function (e) {
-        const target = e.target.closest('.titan-nav-item, [class*="profile"]');
+        const target = e.target.closest('.titan-nav-item');
         if (target && (target.textContent.toLowerCase().includes('profile') || target.querySelector('.fa-user'))) {
             e.preventDefault();
             openTitanProfile();
