@@ -1,7 +1,7 @@
 /**
  * ==========================================
  * PLATFORM: TITAN AI (Hybrid Ecosystem)
- * VERSION: v4.4.0-Pure-Titan-AI-Mission
+ * VERSION: v4.4.1 - Profile Button Fixed
  * FILE: app-extensions-v2.js
  * ==========================================
  */
@@ -128,7 +128,7 @@
             box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
         }
 
-        /* Professional Phase Cards (Phase 01 to Phase 04) */
+        /* Professional Phase Cards */
         .titan-phase-cards { display: flex; flex-direction: column; gap: 20px; padding: 10px 15px; max-width: 600px; margin: 0 auto; }
         .titan-phase-card { background: var(--titan-card-bg); border: 1px solid var(--titan-border); border-radius: 20px; padding: 22px; position: relative; }
         .titan-phase-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0, 223, 216, 0.15); color: #00dfd8; padding: 4px 12px; border-radius: 20px; font-weight: 800; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 12px; }
@@ -269,7 +269,7 @@
             chipsElem.after(hero);
         }
 
-        // 5. Phase Cards & Trust Stats
+        // 5. Phase Cards
         const heroElem = document.getElementById('titanHeroSection');
         if (heroElem && !document.getElementById('titanPhaseCards')) {
             const phaseCards = document.createElement('div');
@@ -321,7 +321,7 @@
             heroElem.after(phaseCards);
         }
 
-        // 6. Bottom Navigation Bar
+        // 6. Bottom Navigation Bar (PROFILE BUTTON FIXED)
         if (!document.getElementById('titanBottomNav')) {
             const bottomNav = document.createElement('div');
             bottomNav.id = 'titanBottomNav';
@@ -336,13 +336,13 @@
                     <span>Titan Shorts</span>
                 </div>
                 <div class="titan-nav-item">
-                    <div class="titan-nav-create" onclick="openAccountModal()"><i class="fa-solid fa-plus"></i></div>
+                    <div class="titan-nav-create"><i class="fa-solid fa-plus"></i></div>
                 </div>
                 <div class="titan-nav-item" onclick="openTitanStudioGemini()">
                     <i class="fa-solid fa-clapperboard"></i>
                     <span>Titan Studio</span>
                 </div>
-                <div class="titan-nav-item" onclick="toggleSettingsDrawer()">
+                <div class="titan-nav-item" onclick="openTitanProfile()">
                     <i class="fa-regular fa-user"></i>
                     <span>Profile</span>
                 </div>
@@ -363,56 +363,47 @@
                 <div class="shorts-video-box">
                     <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" class="shorts-dummy-media" alt="Short Reel" />
                     <div class="shorts-overlay-info">
-                        <h4>@Titan_Creator <i class="fa-solid fa-circle-check" style="color:#00dfd8; font-size:0.85rem;"></i></h4>
-                        <p>Cyberpunk Cinematic Teaser #TitanAI #Reels</p>
+                        <div style="font-weight:700; margin-bottom:6px;">@TitanCreator</div>
+                        <div style="font-size:0.9rem;">Amazing AI generated short 🔥</div>
                     </div>
                     <div class="shorts-side-actions">
-                        <div class="shorts-action-item"><i class="fa-solid fa-heart" style="color:#ef4444;"></i><span>24.5K</span></div>
-                        <div class="shorts-action-item"><i class="fa-solid fa-comment"></i><span>1,208</span></div>
-                        <div class="shorts-action-item"><i class="fa-solid fa-share-nodes"></i><span>Share</span></div>
+                        <div class="shorts-action-item"><i class="fa-solid fa-heart"></i><span>24.5K</span></div>
+                        <div class="shorts-action-item"><i class="fa-solid fa-comment"></i><span>1.2K</span></div>
+                        <div class="shorts-action-item"><i class="fa-solid fa-share"></i><span>Share</span></div>
                     </div>
                 </div>
             `;
             document.body.appendChild(shortsViewer);
         }
-
-        updateThemeIconState();
     }
 
-    // Dynamic Theme Switcher Function
+    // Theme Toggle
     function toggleThemeSync() {
         document.body.classList.toggle('light-mode');
         const isLight = document.body.classList.contains('light-mode');
         localStorage.setItem('theme_preference', isLight ? 'light' : 'dark');
-        updateThemeIconState();
-    }
-
-    function updateThemeIconState() {
-        const isLight = document.body.classList.contains('light-mode');
         const icon = document.getElementById('titanThemeIcon');
         if (icon) {
             icon.className = isLight ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
     }
 
-    window.openTikTokShorts = function() { document.getElementById('tiktokShortsViewer')?.classList.add('active'); };
-    window.closeTikTokShorts = function() { document.getElementById('tiktokShortsViewer')?.classList.remove('active'); };
-    window.openTitanStudioGemini = function() {
-        const geminiModal = document.getElementById('geminiOutputModal');
-        if (geminiModal) {
-            geminiModal.classList.add('active');
-            const promptInput = document.getElementById('modalPromptInput');
-            if (promptInput) promptInput.focus();
-        }
-    };
-    window.toggleSettingsDrawer = function() {
-        if (window.openTitanOptions) window.openTitanOptions();
-        else if (window.openTitanMainProfile) window.openTitanMainProfile();
+    // Shorts Functions
+    window.openTikTokShorts = function () {
+        const viewer = document.getElementById('tiktokShortsViewer');
+        if (viewer) viewer.classList.add('active');
     };
 
+    window.closeTikTokShorts = function () {
+        const viewer = document.getElementById('tiktokShortsViewer');
+        if (viewer) viewer.classList.remove('active');
+    };
+
+    // Init
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', injectOriginalLayout);
     } else {
         injectOriginalLayout();
     }
+
 })();
