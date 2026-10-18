@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -8,12 +7,10 @@ export default async function handler(req, res) {
     const { prompt, imageBase64, lang, category } = req.body;
     const apiKey = process.env.GROQ_API_KEY;
 
-    // Check if Groq API Key is available
     if (!apiKey) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not configured on Vercel.' });
     }
 
-    // System Instruction for Groq Director Engine
     const systemInstruction = `You are an AI Film Director. 
     Analyze the provided input (and image if uploaded). 
     If an image is uploaded, examine its visual elements (characters, background, emotions, color tone) and write a highly creative movie scene or script based on it in ${lang || 'Roman Urdu'}. 
@@ -21,7 +18,6 @@ export default async function handler(req, res) {
 
     let messages = [{ role: 'system', content: systemInstruction }];
 
-    // Handle Vision Input (Image + Text) vs Text Input
     if (imageBase64) {
       messages.push({
         role: 'user',
@@ -34,10 +30,9 @@ export default async function handler(req, res) {
       messages.push({ role: 'user', content: prompt || 'Create a cinematic scene' });
     }
 
-    // Select suitable Groq Model (Working Models on Groq API)
-    const selectedModel = imageBase64 ? 'llama-3.2-11b-vision-preview' : 'llama3-70b-8192';
+    // Vision model vs OpenAI GPT-OSS 120B on Groq
+    const selectedModel = imageBase64 ? 'llama-3.2-11b-vision-preview' : 'openai/gpt-oss-120b';
 
-    // Call Groq API
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -55,24 +50,18 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || 'Groq Vision API Error' });
+      return res.status(response.status).json({ error: data.error?.message || 'Groq API Error' });
     }
 
-    // Extract Script written by Groq AI
     const aiScript = data.choices[0]?.message?.content || '';
 
-    // ------------------------------------------------------------------
-    // SAFE POLLINATIONS VIDEO URL GENERATION
-    // ------------------------------------------------------------------
+    // Pollinations AI Video URL
     const videoWidth = category === 'Titan Shorts' ? 576 : 1024;
     const videoHeight = category === 'Titan Shorts' ? 1024 : 576;
     const seed = Math.floor(Math.random() * 999999);
-    
-    // Clean prompt for video generation engine
     const cleanVideoPrompt = encodeURIComponent(prompt || 'Cinematic movie scene, high quality, 4k');
     const generatedVideoUrl = `https://image.pollinations.ai/prompt/${cleanVideoPrompt}?width=${videoWidth}&height=${videoHeight}&seed=${seed}&model=video&nologo=true`;
 
-    // Return both Groq AI Script and Pollinations Video Link
     return res.status(200).json({ 
       script: aiScript,
       videoUrl: generatedVideoUrl 
