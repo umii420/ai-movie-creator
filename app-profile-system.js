@@ -259,7 +259,6 @@
                 <div class="tabs-bar">
                     <button class="tab-btn active"><i class="fa-solid fa-bars-staggered"></i></button>
                     <button class="tab-btn"><i class="fa-solid fa-lock"></i></button>
-                    <button class="tab-btn"><i class="fa-solid fa-rotate"></i></button>
                     <button class="tab-btn"><i class="fa-regular fa-bookmark"></i></button>
                     <button class="tab-btn"><i class="fa-regular fa-heart"></i></button>
                 </div>
@@ -338,8 +337,11 @@
     // Open / Close Functions
     window.openTitanProfile = function () {
         initProfileUI();
-        document.getElementById('titanMainProfilePage').classList.add('active');
-        renderVideoGrid();
+        const page = document.getElementById('titanMainProfilePage');
+        if (page) {
+            page.classList.add('active');
+            renderVideoGrid();
+        }
     };
 
     window.closeTitanProfile = function () {
@@ -408,14 +410,26 @@
         document.body.appendChild(player);
     };
 
-    // Hook into bottom nav Profile button
+    // ========== PROFILE BUTTON FIX ==========
     document.addEventListener('click', function (e) {
-        const target = e.target.closest('.titan-nav-item');
-        if (target && (target.textContent.toLowerCase().includes('profile') || target.querySelector('.fa-user'))) {
+        const target = e.target.closest('.titan-nav-item, [class*="nav"], [class*="profile"]');
+        
+        if (!target) return;
+
+        const text = (target.textContent || '').toLowerCase();
+        const hasUserIcon = target.querySelector('.fa-user, .fa-user-circle, .fa-regular.fa-user, .fa-solid.fa-user');
+
+        if (text.includes('profile') || hasUserIcon) {
             e.preventDefault();
+            e.stopPropagation();
             openTitanProfile();
         }
     }, true);
+
+    // Extra safety
+    window.openProfilePage = function() {
+        openTitanProfile();
+    };
 
     // Init
     if (document.readyState === 'loading') {
