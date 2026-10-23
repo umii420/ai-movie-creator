@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>TITAN AI — Official Platform</title>
+    <meta name="theme-color" content="#050507">
+    <meta name="description" content="TITAN AI — Create AI movies, write scripts, and share your creativity.">
+
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- Marked.js for Clean Markdown Rendering -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Markdown Rendering -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+
     <style>
         :root {
             --bg-black: #050507;
@@ -20,6 +32,7 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --border-glow: rgba(0, 178, 255, 0.2);
+
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
@@ -40,15 +53,31 @@
             font-family: var(--font-body);
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background-color: var(--bg-black);
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease;
         }
 
-        /* Container for App Extensions Feed */
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Main app feed container */
         .features-section {
             width: 100%;
             max-width: 600px;
@@ -56,52 +85,170 @@
             padding: 0 10px;
         }
 
-        /* Modal Overlays */
+        /* AI Studio result modal */
         .gemini-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-black); z-index: 20000; display: flex;
-            flex-direction: column; opacity: 0; pointer-events: none;
-            transition: 0.3s ease; padding: 20px 5%; overflow-y: auto;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            background: var(--bg-black);
+            z-index: 20000;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition:
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+            padding: 20px 5%;
+            overflow-y: auto;
+            overscroll-behavior: contain;
         }
-        .gemini-modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .gemini-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
 
         .gemini-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 15px; border-bottom: 1px solid var(--border-glow); margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-glow);
+            margin-bottom: 15px;
         }
-        .gemini-content-box { width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-gemini); padding-bottom: 120px; }
-        .gemini-prompt-display { font-size: 1.2rem; font-weight: 600; color: var(--text-main); margin-bottom: 15px; }
-        
+
+        .gemini-content-box {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: var(--font-gemini);
+            padding-bottom: 120px;
+        }
+
+        .gemini-prompt-display {
+            overflow-wrap: anywhere;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 15px;
+        }
+
         .gemini-response-card {
-            background: var(--card-bg); border: 1px solid var(--border-glow);
-            border-radius: 16px; padding: 25px 30px; line-height: 1.7; font-size: 1rem; color: var(--text-main);
-            margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 25px 30px;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow-wrap: anywhere;
+        }
+
+        .gemini-response-card h1,
+        .gemini-response-card h2,
+        .gemini-response-card h3 {
+            font-family: var(--font-heading);
+            margin: 20px 0 10px;
+        }
+
+        .gemini-response-card p {
+            margin: 10px 0;
+        }
+
+        .gemini-response-card ul,
+        .gemini-response-card ol {
+            padding-left: 24px;
+            margin: 12px 0;
+        }
+
+        .gemini-response-card pre {
+            overflow-x: auto;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .gemini-response-card img {
+            max-width: 100%;
+            height: auto;
         }
 
         .modal-prompt-container {
-            position: fixed; bottom: 0; left: 0; width: 100%; padding: 15px 5%;
-            background: rgba(5, 5, 7, 0.95); backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-glow); z-index: 25000; display: flex; justify-content: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background: rgba(5, 5, 7, 0.96);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--border-glow);
+            z-index: 25000;
+            display: flex;
+            justify-content: center;
         }
+
         .modal-prompt-box {
-            width: 100%; max-width: 800px;
-            background: linear-gradient(180deg, rgba(30, 32, 40, 0.95), rgba(15, 16, 22, 0.98));
-            border-radius: 18px; padding: 12px 16px; border: 1px solid var(--border-glow);
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(
+                180deg,
+                rgba(30, 32, 40, 0.95),
+                rgba(15, 16, 22, 0.98)
+            );
+            border-radius: 18px;
+            padding: 12px 16px;
+            border: 1px solid var(--border-glow);
         }
+
         .modal-prompt-input-row {
-            background: #ffffff; border-radius: 12px; padding: 6px 12px;
-            display: flex; align-items: center; gap: 10px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .modal-prompt-input-row textarea {
-            flex-grow: 1; border: none; outline: none; background: transparent;
-            font-size: 0.9rem; color: #111; resize: none; height: 38px;
+            flex-grow: 1;
+            min-width: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.9rem;
+            color: #111111;
+            resize: vertical;
+            min-height: 38px;
+            max-height: 120px;
         }
+
         .btn-arrow-luma {
-            background: #000; color: var(--accent-green); border: none;
-            width: 38px; height: 38px; border-radius: 50%; display: flex;
-            justify-content: center; align-items: center; cursor: pointer;
+            flex-shrink: 0;
+            background: #000000;
+            color: var(--accent-green);
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
         }
-        
+
+        .btn-arrow-luma:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
         .btn-contact {
             background: transparent;
             border: 1px solid var(--border-glow);
@@ -110,25 +257,31 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.85rem;
+            white-space: nowrap;
         }
 
-        /* ---------------------------------------------------- */
-        /* FORCED FRONT GOOGLE LOGIN GATE MODAL STYLES         */
-        /* ---------------------------------------------------- */
+        .btn-contact:hover {
+            border-color: var(--accent-green);
+        }
+
+        /* Google Login Gate */
         #titanAuthGateOverlay {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
+            height: 100dvh;
             background: rgba(5, 5, 7, 0.96);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             z-index: 999999;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
             transition: opacity 0.3s ease;
         }
+
         .titan-gate-card {
             background: var(--card-bg);
             border: 1px solid var(--border-glow);
@@ -136,9 +289,10 @@
             border-radius: 28px;
             text-align: center;
             max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
+
         .titan-gate-icon {
             width: 70px;
             height: 70px;
@@ -148,10 +302,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px auto;
+            margin: 0 auto 20px;
             color: var(--accent-green);
             font-size: 2rem;
         }
+
         .titan-gate-card h2 {
             color: var(--text-main);
             font-family: var(--font-heading);
@@ -159,12 +314,14 @@
             font-weight: 800;
             margin-bottom: 10px;
         }
+
         .titan-gate-card p {
             color: var(--text-muted);
             font-size: 0.92rem;
             margin-bottom: 28px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
+
         .btn-google-gate {
             background: #ffffff;
             color: #000000;
@@ -179,120 +336,300 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
+
         .btn-google-gate:hover {
             transform: scale(1.02);
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-google-gate:focus-visible,
+        .btn-contact:focus-visible,
+        .btn-arrow-luma:focus-visible {
+            outline: 2px solid var(--accent-green);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 480px) {
+            .gemini-modal-overlay {
+                padding: 14px 12px;
+            }
+
+            .gemini-response-card {
+                padding: 18px 16px;
+                font-size: 0.95rem;
+            }
+
+            .gemini-content-box {
+                padding-bottom: 140px;
+            }
+
+            .modal-prompt-container {
+                padding: 10px 12px;
+            }
+
+            .modal-prompt-box {
+                padding: 10px;
+            }
+
+            .titan-gate-card {
+                padding: 32px 20px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- FRONT-GATE GOOGLE AUTH MODAL (Reload hote hi samne aayega) -->
+    <!-- Google Login Gate -->
     <div id="titanAuthGateOverlay" style="display: none;">
         <div class="titan-gate-card">
+
             <div class="titan-gate-icon">
                 <i class="fa-solid fa-clapperboard"></i>
             </div>
-            <h2>Welcome to Titan AI</h2>
-            <p>Sign in with your official Google account to create AI movies, save your progress, and build your creator profile.</p>
-            <button onclick="handleGoogleLogin()" class="btn-google-gate">
-                <i class="fa-brands fa-google" style="color: #ea4335; font-size: 1.25rem;"></i> Continue with Google
+
+            <h2>Welcome to TITAN AI</h2>
+
+            <p>
+                Sign in with your Google account to create AI movies,
+                save your progress, and build your creator profile.
+            </p>
+
+            <button
+                type="button"
+                onclick="handleGoogleLogin()"
+                class="btn-google-gate"
+            >
+                <i
+                    class="fa-brands fa-google"
+                    style="color: #ea4335; font-size: 1.25rem;"
+                ></i>
+
+                Continue with Google
             </button>
+
         </div>
     </div>
 
-    <!-- Main Container for App Feed -->
+    <!-- Main App Feed -->
     <div class="features-section"></div>
 
-    <!-- Gemini Style Result Modal -->
-    <div class="gemini-modal-overlay" id="geminiOutputModal">
+    <!-- TITAN AI Script Result Modal -->
+    <div
+        class="gemini-modal-overlay"
+        id="geminiOutputModal"
+        role="dialog"
+        aria-modal="true"
+        aria-label="TITAN AI Studio"
+    >
+
         <div class="gemini-header">
-            <div style="font-weight: 800; font-size: 1.1rem;">TITAN <span style="color:#f59e0b;">AI</span> STUDIO</div>
-            <button class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+
+            <div style="font-weight: 800; font-size: 1.1rem;">
+                TITAN
+                <span style="color: #f59e0b;">AI</span>
+                STUDIO
+            </div>
+
+            <button
+                type="button"
+                class="btn-contact"
+                onclick="closeGeminiModal()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+                Close
+            </button>
+
         </div>
+
         <div class="gemini-content-box">
-            <div class="gemini-prompt-display" id="displayUserPrompt">"Prompt"</div>
-            <div class="gemini-response-card" id="scriptResultContent">Generating response...</div>
+
+            <div
+                class="gemini-prompt-display"
+                id="displayUserPrompt"
+            >
+                Your prompt will appear here.
+            </div>
+
+            <div
+                class="gemini-response-card"
+                id="scriptResultContent"
+                aria-live="polite"
+            >
+                Enter a prompt to generate your script.
+            </div>
+
         </div>
 
         <div class="modal-prompt-container">
+
             <div class="modal-prompt-box">
-                <div style="font-size: 0.85rem; color: #fff; margin-bottom: 6px; font-weight: 600;">Chat with Titan AI Director Engine</div>
-                <div class="modal-prompt-input-row">
-                    <textarea id="modalPromptInput" placeholder="Write your script or prompt..."></textarea>
-                    <button class="btn-arrow-luma" id="modalSubmitBtn" onclick="generateScript('modalPromptInput')"><i class="fa-solid fa-arrow-up"></i></button>
+
+                <div
+                    style="font-size: 0.85rem; color: #fff; margin-bottom: 6px; font-weight: 600;"
+                >
+                    Chat with TITAN AI Director Engine
                 </div>
+
+                <div class="modal-prompt-input-row">
+
+                    <textarea
+                        id="modalPromptInput"
+                        placeholder="Write your script or prompt..."
+                        aria-label="Enter your script prompt"
+                    ></textarea>
+
+                    <button
+                        type="button"
+                        class="btn-arrow-luma"
+                        id="modalSubmitBtn"
+                        onclick="generateScript('modalPromptInput')"
+                        aria-label="Generate script"
+                    >
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- VIP Account Modal -->
-    <div class="gemini-modal-overlay" id="accountModal">
-        <div class="gemini-header">
-            <div style="font-weight: 800; font-size: 1.1rem;">TITAN <span style="color:#00b2ff;">VERIFICATION</span></div>
-            <button class="btn-contact" onclick="closeAccountModal()"><i class="fa-solid fa-xmark"></i> Close</button>
-        </div>
-        <div class="gemini-content-box" style="text-align: center; max-width: 460px; padding-top: 35px;">
-            <div style="width: 75px; height: 75px; background: rgba(0, 178, 255, 0.15); border: 2px solid var(--verified-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; color: var(--verified-blue); font-size: 2.2rem;">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            <h2 style="font-family: var(--font-heading); margin-bottom: 10px;">Claim Verified Blue Tick Account</h2>
-            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 25px;">Activate your official creator profile to unlock verified monetization and instant daily payouts.</p>
-            <input type="text" id="userNameInput" placeholder="Enter Your Full Name" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 14px; font-size: 0.95rem; outline: none;">
-            <input type="email" id="userEmailInput" placeholder="Enter Your Email Address" style="width: 100%; padding: 13px 18px; border-radius: 14px; border: 1px solid var(--border-glow); background: var(--card-bg); color: var(--text-main); margin-bottom: 22px; font-size: 0.95rem; outline: none;">
-            <button onclick="registerUserAccount()" style="width: 100%; background: linear-gradient(135deg, var(--verified-blue), #0072ff); color:#fff; border:none; padding:15px; border-radius:30px; font-weight:800; cursor:pointer;">
-                Activate Verified Account
-            </button>
-        </div>
-    </div>
+    <!--
+        Fake Blue Tick and Monetization Modal Removed.
+
+        Compatibility functions are retained below so that older
+        JavaScript files calling openAccountModal() do not crash.
+
+        These functions do not verify accounts or activate payments.
+    -->
 
     <script>
-        function openAccountModal() { document.getElementById('accountModal').classList.add('active'); }
-        function closeAccountModal() { document.getElementById('accountModal').classList.remove('active'); }
-        
-        function registerUserAccount() {
-            const name = document.getElementById('userNameInput').value.trim();
-            if(!name) { alert("Please enter your name!"); return; }
-            alert("Congratulations " + name + "! Your Blue Tick Account is now verified. Monetization unlocked!");
-            closeAccountModal();
-        }
+        /* -------------------------------------------------------
+           LEGACY ACCOUNT BUTTON COMPATIBILITY
+           No fake verification or monetization activation.
+        ------------------------------------------------------- */
 
-        window.openTitanStudioGemini = function() {
-            const geminiModal = document.getElementById('geminiOutputModal');
-            if (geminiModal) {
-                geminiModal.classList.add('active');
-                const promptInput = document.getElementById('modalPromptInput');
-                if (promptInput) promptInput.focus();
-            }
-        };
-
-        function closeGeminiModal() { document.getElementById('geminiOutputModal').classList.remove('active'); }
-
-        async function generateScript(inputId) {
-            const inputField = document.getElementById(inputId);
-            if (!inputField) return;
-
-            let inputVal = inputField.value.trim();
-            if (inputVal === "") {
-                alert("Please enter a message or prompt first!");
+        window.openAccountModal = function () {
+            if (typeof window.openTitanProfile === "function") {
+                window.openTitanProfile();
                 return;
             }
 
-            const submitBtn = document.getElementById('modalSubmitBtn');
+            if (typeof window.openProfilePage === "function") {
+                window.openProfilePage();
+                return;
+            }
+
+            console.info("TITAN AI: Profile is not available yet.");
+        };
+
+        window.closeAccountModal = function () {
+            /* The old fake account modal has been removed. */
+        };
+
+        window.registerUserAccount = function () {
+            alert(
+                "TITAN AI: Account verification and monetization " +
+                "are not available through this button."
+            );
+        };
+
+
+        /* -------------------------------------------------------
+           TITAN AI STUDIO
+           Existing /api/generate endpoint and Groq model retained.
+        ------------------------------------------------------- */
+
+        window.openTitanStudioGemini = function () {
+            const modal = document.getElementById("geminiOutputModal");
+
+            if (!modal) return;
+
+            modal.classList.add("active");
+
+            const promptInput = document.getElementById("modalPromptInput");
+
+            if (promptInput) {
+                setTimeout(function () {
+                    promptInput.focus();
+                }, 100);
+            }
+        };
+
+
+        window.closeGeminiModal = function () {
+            const modal = document.getElementById("geminiOutputModal");
+
+            if (modal) {
+                modal.classList.remove("active");
+            }
+        };
+
+
+        /* -------------------------------------------------------
+           SCRIPT GENERATOR
+           API endpoint, model, language and request structure kept.
+        ------------------------------------------------------- */
+
+        window.generateScript = async function (inputId) {
+            const inputField = document.getElementById(inputId);
+
+            if (!inputField) {
+                console.error("TITAN AI: Prompt input not found:", inputId);
+                return;
+            }
+
+            const inputVal = inputField.value.trim();
+
+            if (!inputVal) {
+                alert("Please enter a message or prompt first!");
+                inputField.focus();
+                return;
+            }
+
+            const submitBtn = document.getElementById("modalSubmitBtn");
+            const promptDisplay = document.getElementById("displayUserPrompt");
+            const resultCard = document.getElementById("scriptResultContent");
+            const modal = document.getElementById("geminiOutputModal");
+
+            if (!submitBtn || !promptDisplay || !resultCard || !modal) {
+                console.error("TITAN AI: Script generator elements are missing.");
+                alert("The Studio interface could not be loaded. Please reload the page.");
+                return;
+            }
+
+            if (submitBtn.disabled) return;
+
+            submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-            document.getElementById('displayUserPrompt').innerText = '"' + inputVal + '"';
-            const resultCard = document.getElementById('scriptResultContent');
-            resultCard.innerHTML = 'Generating response...';
-            document.getElementById('geminiOutputModal').classList.add('active');
+            promptDisplay.textContent = '"' + inputVal + '"';
+            resultCard.textContent = "Generating your script...";
+            modal.classList.add("active");
 
             try {
                 const response = await fetch("/api/generate", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify({
                         prompt: inputVal,
                         style: "Hollywood Blockbuster",
@@ -303,37 +640,100 @@
                     })
                 });
 
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.error || `Server error: ${response.status}`);
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch (parseError) {
+                    throw new Error(
+                        "The server returned an invalid response. Please try again."
+                    );
+                }
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || "Server error: " + response.status
+                    );
+                }
 
                 if (data.script && data.script.trim() !== "") {
-                    let text = data.script;
-                    inputField.value = '';
-                    
-                    let charIndex = 0;
-                    resultCard.innerHTML = '';
-                    function streamText() {
-                        if (charIndex < text.length) {
-                            resultCard.innerHTML += text.charAt(charIndex);
-                            charIndex++;
-                            setTimeout(streamText, 8);
-                        } else {
-                            resultCard.innerHTML = marked.parse(text);
-                        }
+                    const scriptText = data.script;
+
+                    inputField.value = "";
+
+                    /*
+                     * Display plain text safely while generating.
+                     * Render Markdown after generation finishes.
+                     */
+                    resultCard.textContent = scriptText;
+
+                    if (
+                        window.marked &&
+                        typeof window.marked.parse === "function"
+                    ) {
+                        resultCard.innerHTML = window.marked.parse(scriptText);
                     }
-                    streamText();
+
                 } else {
-                    resultCard.innerHTML = `❌ Received empty response from server.`;
+                    resultCard.textContent =
+                        "The server returned an empty response. Please try again.";
                 }
+
             } catch (error) {
-                resultCard.innerHTML = `❌ Connection Error: ${error.message}`;
+                console.error("TITAN AI script generation error:", error);
+
+                resultCard.textContent =
+                    "Connection Error: " +
+                    (error.message || "Unable to generate the script.") +
+                    "\n\nPlease check your internet connection and try again.";
+
             } finally {
+                submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
             }
-        }
+        };
+
+
+        /* -------------------------------------------------------
+           KEYBOARD SUPPORT
+        ------------------------------------------------------- */
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                const modal = document.getElementById("geminiOutputModal");
+
+                if (modal && modal.classList.contains("active")) {
+                    window.closeGeminiModal();
+                }
+            }
+
+            /*
+             * Ctrl+Enter or Cmd+Enter submits the prompt.
+             */
+            if (
+                (event.ctrlKey || event.metaKey) &&
+                event.key === "Enter"
+            ) {
+                const modal = document.getElementById("geminiOutputModal");
+
+                if (modal && modal.classList.contains("active")) {
+                    const promptInput = document.getElementById("modalPromptInput");
+
+                    if (
+                        promptInput &&
+                        document.activeElement === promptInput
+                    ) {
+                        event.preventDefault();
+                        window.generateScript("modalPromptInput");
+                    }
+                }
+            }
+        });
     </script>
 
-    <!-- LOAD CLEAN MODULAR JS FILES -->
+
+    <!-- EXISTING MODULAR APP FILES — PRESERVED -->
+
     <script src="app-auth-system.js"></script>
     <script src="app-profile-system.js"></script>
     <script src="app-extensions-v2.js"></script>
