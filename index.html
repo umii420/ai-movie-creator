@@ -27,23 +27,17 @@
         :root {
             --bg-black: #050507;
             --card-bg: #0d0e12;
-            --accent-green: #f59e0b;
+            --accent-gold: #f59e0b;
+            --accent-gold-light: #fbbf24;
             --verified-blue: #00b2ff;
-            --text-main: #f3f4f6;
+            --text-main: #f8fafc;
             --text-muted: #9ca3af;
-            --border-glow: rgba(0, 178, 255, 0.2);
+            --border-glow: rgba(245, 158, 11, 0.25);
+            --border-soft: rgba(255, 255, 255, 0.08);
 
             --font-heading: 'Space Grotesk', sans-serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
             --font-gemini: 'Inter', sans-serif;
-        }
-
-        body.light-mode {
-            --bg-black: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-glow: rgba(0, 178, 255, 0.15);
         }
 
         * {
@@ -58,13 +52,17 @@
         }
 
         body {
-            background-color: var(--bg-black);
+            background-color: var(--bg-black) !important;
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
-            transition:
-                background-color 0.3s ease,
-                color 0.3s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Light mode force disable for pure dark theme */
+        body.light-mode {
+            background-color: var(--bg-black) !important;
+            color: var(--text-main);
         }
 
         button,
@@ -99,9 +97,7 @@
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition:
-                opacity 0.25s ease,
-                visibility 0.25s ease;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
             padding: 20px 5%;
             overflow-y: auto;
             overscroll-behavior: contain;
@@ -233,7 +229,7 @@
         .btn-arrow-luma {
             flex-shrink: 0;
             background: #000000;
-            color: var(--accent-green);
+            color: var(--accent-gold);
             border: none;
             width: 38px;
             height: 38px;
@@ -261,7 +257,7 @@
         }
 
         .btn-contact:hover {
-            border-color: var(--accent-green);
+            border-color: var(--accent-gold);
         }
 
         /* Google Login Gate */
@@ -297,13 +293,13 @@
             width: 70px;
             height: 70px;
             background: rgba(245, 158, 11, 0.15);
-            border: 2px solid var(--accent-green);
+            border: 2px solid var(--accent-gold);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            color: var(--accent-green);
+            color: var(--accent-gold);
             font-size: 2rem;
         }
 
@@ -337,9 +333,7 @@
             justify-content: center;
             gap: 12px;
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .btn-google-gate:hover {
@@ -350,7 +344,7 @@
         .btn-google-gate:focus-visible,
         .btn-contact:focus-visible,
         .btn-arrow-luma:focus-visible {
-            outline: 2px solid var(--accent-green);
+            outline: 2px solid var(--accent-gold);
             outline-offset: 3px;
         }
 
@@ -661,10 +655,6 @@
 
                     inputField.value = "";
 
-                    /*
-                     * Display plain text safely while generating.
-                     * Render Markdown after generation finishes.
-                     */
                     resultCard.textContent = scriptText;
 
                     if (
@@ -686,58 +676,18 @@
                     "Connection Error: " +
                     (error.message || "Unable to generate the script.") +
                     "\n\nPlease check your internet connection and try again.";
-
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
             }
         };
-
-
-        /* -------------------------------------------------------
-           KEYBOARD SUPPORT
-        ------------------------------------------------------- */
-
-        document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape") {
-                const modal = document.getElementById("geminiOutputModal");
-
-                if (modal && modal.classList.contains("active")) {
-                    window.closeGeminiModal();
-                }
-            }
-
-            /*
-             * Ctrl+Enter or Cmd+Enter submits the prompt.
-             */
-            if (
-                (event.ctrlKey || event.metaKey) &&
-                event.key === "Enter"
-            ) {
-                const modal = document.getElementById("geminiOutputModal");
-
-                if (modal && modal.classList.contains("active")) {
-                    const promptInput = document.getElementById("modalPromptInput");
-
-                    if (
-                        promptInput &&
-                        document.activeElement === promptInput
-                    ) {
-                        event.preventDefault();
-                        window.generateScript("modalPromptInput");
-                    }
-                }
-            }
-        });
     </script>
 
-
-    <!-- EXISTING MODULAR APP FILES — PRESERVED -->
-
+    <!-- Load other systems -->
     <script src="app-auth-system.js"></script>
     <script src="app-profile-system.js"></script>
-    <script src="app-extensions-v2.js"></script>
     <script src="app-upload-system.js"></script>
+    <script src="app-extensions-v2.js"></script>
 
 </body>
 </html>
