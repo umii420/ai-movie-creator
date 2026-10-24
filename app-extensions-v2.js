@@ -1,16 +1,16 @@
 /**
  * PLATFORM: TITAN AI
- * VERSION: v4.7.0 - Premium Dark Theme + Hex Logo + Better Nav
+ * VERSION: v4.8.0 - YouTube Style Feed (No Hero Card)
  * FILE: app-extensions-v2.js
  */
 
 (function () {
   "use strict";
 
-  if (window.__TITAN_EXTENSIONS_V47__) return;
-  window.__TITAN_EXTENSIONS_V47__ = true;
+  if (window.__TITAN_EXTENSIONS_V48__) return;
+  window.__TITAN_EXTENSIONS_V48__ = true;
 
-  console.log("⚡ TITAN AI Ecosystem Active! v4.7");
+  console.log("⚡ TITAN AI Ecosystem Active! v4.8 - YouTube Style");
 
   const UPLOADS_KEY = "titan_user_uploads";
   const THEME_KEY = "theme_preference";
@@ -33,9 +33,7 @@
       if (url.protocol === "https:" || url.protocol === "http:") {
         return url.href;
       }
-    } catch (error) {
-      console.warn("Invalid media URL:", error);
-    }
+    } catch (error) {}
     return "";
   }
 
@@ -91,10 +89,10 @@
 
   /* CSS */
   function injectStyles() {
-    if ($("#titan-v47-styles")) return;
+    if ($("#titan-v48-styles")) return;
 
     const style = document.createElement("style");
-    style.id = "titan-v47-styles";
+    style.id = "titan-v48-styles";
 
     style.textContent = `
       :root {
@@ -126,8 +124,7 @@
         box-sizing: border-box;
       }
 
-      #titan-extension-home *,
-      #titan-shorts-viewer * {
+      #titan-extension-home * {
         box-sizing: border-box;
       }
 
@@ -137,7 +134,7 @@
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
       }
 
       .titan-v46-brand {
@@ -147,13 +144,13 @@
       }
 
       .titan-logo-svg {
-        width: 38px;
-        height: 38px;
+        width: 36px;
+        height: 36px;
         flex-shrink: 0;
       }
 
       .titan-brand-text {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 900;
         letter-spacing: -0.5px;
         color: #f8fafc;
@@ -183,85 +180,12 @@
         font-size: 16px;
       }
 
-      /* HERO */
-      .titan-v46-hero {
-        padding: 26px 20px;
-        margin-bottom: 22px;
-        border: 1px solid var(--titan-border);
-        border-radius: 22px;
-        background: radial-gradient(circle at 85% 15%, rgba(245,158,11,.18), transparent 40%), var(--titan-card);
-      }
-
-      .titan-v46-badge {
-        display: inline-flex;
-        gap: 8px;
-        align-items: center;
-        padding: 7px 14px;
-        border-radius: 30px;
-        border: 1px solid rgba(245,158,11,.4);
-        color: var(--titan-gold);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.8px;
-        background: rgba(245,158,11,.08);
-      }
-
-      .titan-v46-hero h1 {
-        margin: 16px 0 10px;
-        font-size: clamp(24px, 6vw, 32px);
-        line-height: 1.2;
-        font-weight: 900;
-        letter-spacing: -0.8px;
-      }
-
-      .titan-v46-hero h1 span {
-        color: var(--titan-gold);
-      }
-
-      .titan-v46-hero p {
-        color: var(--titan-muted);
-        line-height: 1.65;
-        font-size: 14.5px;
-      }
-
-      .titan-v46-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 11px;
-        margin-top: 20px;
-      }
-
-      .titan-v46-button {
-        min-height: 48px;
-        padding: 12px 18px;
-        border-radius: 14px;
-        font-weight: 800;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        font-size: 15px;
-      }
-
-      .titan-v46-button-primary {
-        background: var(--titan-gold);
-        color: #111;
-        border: none;
-      }
-
-      .titan-v46-button-secondary {
-        background: transparent;
-        color: var(--titan-text);
-        border: 1px solid var(--titan-border);
-      }
-
       /* CHIPS */
       .titan-v46-chips {
         display: flex;
         gap: 8px;
         overflow-x: auto;
-        padding: 4px 0 14px;
+        padding: 4px 0 16px;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -285,7 +209,7 @@
 
       /* SECTIONS */
       .titan-v46-section {
-        margin: 26px 0;
+        margin: 24px 0;
       }
 
       .titan-v46-section-heading {
@@ -299,6 +223,9 @@
         margin: 0;
         font-size: 17px;
         font-weight: 900;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
 
       .titan-v46-muted {
@@ -306,20 +233,18 @@
         font-size: 13px;
       }
 
-      /* CARDS */
-      .titan-v46-grid,
-      .titan-video-feed-grid {
+      /* CARDS GRID */
+      .titan-v46-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
       }
 
-      .titan-v46-card,
       .titan-video-card {
         min-width: 0;
         overflow: hidden;
         border: 1px solid var(--titan-border);
-        border-radius: 16px;
+        border-radius: 14px;
         background: var(--titan-card);
       }
 
@@ -354,13 +279,14 @@
       }
 
       .titan-v46-card-info {
-        padding: 11px;
+        padding: 10px;
       }
 
       .titan-v46-card-info h3 {
-        margin: 0 0 5px;
+        margin: 0 0 4px;
         font-size: 13.5px;
         line-height: 1.35;
+        font-weight: 600;
       }
 
       .titan-v46-card-info p {
@@ -371,65 +297,14 @@
 
       .titan-v46-empty {
         grid-column: 1 / -1;
-        padding: 28px 18px;
+        padding: 30px 18px;
         text-align: center;
         color: var(--titan-muted);
         border: 1px dashed var(--titan-border);
-        border-radius: 16px;
+        border-radius: 14px;
       }
 
-      /* SHORTS */
-      #titan-shorts-viewer {
-        display: none;
-        position: relative;
-        margin: 20px auto;
-        max-width: 480px;
-        background: #000;
-        border-radius: 20px;
-        overflow: hidden;
-      }
-
-      #titan-shorts-viewer.active {
-        display: block;
-      }
-
-      .titan-v46-short {
-        position: relative;
-        min-height: 400px;
-        background: #000;
-      }
-
-      .titan-v46-short video {
-        display: block;
-        width: 100%;
-        max-height: 75vh;
-        object-fit: contain;
-        background: #000;
-      }
-
-      .titan-v46-short-info {
-        padding: 14px;
-        color: #fff;
-      }
-
-      .titan-v46-short-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-
-      .titan-v46-short-actions button {
-        min-height: 40px;
-        padding: 8px 12px;
-        border: 1px solid rgba(255,255,255,.22);
-        border-radius: 12px;
-        background: rgba(255,255,255,.08);
-        color: #fff;
-        cursor: pointer;
-      }
-
-      /* BOTTOM NAV - Mockup Style */
+      /* BOTTOM NAV */
       .titan-v46-bottom-nav {
         position: fixed;
         bottom: 0;
@@ -459,7 +334,6 @@
         color: var(--titan-muted);
         font-size: 11px;
         cursor: pointer;
-        position: relative;
       }
 
       .titan-v46-nav-item i {
@@ -490,13 +364,6 @@
 
       .titan-v46-nav-item.center-btn span {
         display: none;
-      }
-
-      @media (max-width: 420px) {
-        .titan-v46-grid {
-          grid-template-columns: 1fr 1fr;
-          gap: 10px;
-        }
       }
     `;
 
@@ -552,38 +419,35 @@
   window.playTitanVideo = openVideo;
   window.closeTitanVideo = closeVideo;
 
-  /* FEED */
-  function renderLongVideos() {
-    const grid = $("#titan-v46-video-grid");
+  /* RENDER VIDEOS */
+  function renderVideoGrid(containerId, videos) {
+    const grid = $(containerId);
     if (!grid) return;
-
-    const videos = readUploads().filter((item) => isLongVideo(item) && !item.draft);
 
     if (!videos.length) {
       grid.innerHTML = `
         <div class="titan-v46-empty">
-          <i class="fa-solid fa-film" style="font-size:28px;margin-bottom:12px"></i>
-          <h3 style="margin:0 0 8px">Abhi koi video nahi</h3>
-          <p style="margin:0">Plus button se apni pehli video upload karein.</p>
+          <i class="fa-solid fa-film" style="font-size:28px;margin-bottom:10px"></i>
+          <div>Abhi koi video nahi</div>
         </div>
       `;
       return;
     }
 
     grid.innerHTML = videos.map((item) => {
-      const title = safeText(item.title || "Untitled Video");
+      const title = safeText(item.title || "Untitled");
       const videoURL = safeMediaURL(item.url);
       const thumbURL = safeMediaURL(item.thumb || item.thumbnail || item.thumbnailUrl);
       const views = formatViews(item.views);
 
-      let thumbnailMarkup = thumbURL
+      const thumb = thumbURL
         ? `<img class="titan-v46-thumb" src="\( {safeText(thumbURL)}" alt=" \){title}" loading="lazy">`
-        : `<div style="width:100%;height:100%;display:grid;place-items:center;color:#f59e0b;font-size:36px;background:linear-gradient(135deg,#171717,#292018);"><i class="fa-solid fa-film"></i></div>`;
+        : `<div style="width:100%;height:100%;display:grid;place-items:center;color:#f59e0b;font-size:32px;background:#171717;"><i class="fa-solid fa-film"></i></div>`;
 
       return `
         <article class="titan-video-card">
-          <div class="titan-v46-thumb-wrap" data-titan-play="\( {safeText(videoURL)}" data-titan-title=" \){title}" role="button" tabindex="0">
-            ${thumbnailMarkup}
+          <div class="titan-v46-thumb-wrap" data-titan-play="\( {safeText(videoURL)}" data-titan-title=" \){title}">
+            ${thumb}
             <div class="titan-v46-play"><i class="fa-solid fa-play"></i></div>
           </div>
           <div class="titan-v46-card-info">
@@ -595,71 +459,47 @@
     }).join("");
   }
 
-  function renderShorts() {
-    const viewer = $("#titan-shorts-viewer");
-    if (!viewer) return;
+  function renderAllFeeds() {
+    const allVideos = readUploads().filter((item) => isLongVideo(item) && !item.draft);
 
-    const shorts = readUploads().filter((item) => isShort(item) && !item.draft);
+    // Trending (first 4)
+    renderVideoGrid("#titan-trending-grid", allVideos.slice(0, 4));
 
-    if (!shorts.length) {
-      viewer.innerHTML = `
-        <div class="titan-v46-empty">
-          <i class="fa-solid fa-mobile-screen-button" style="font-size:28px"></i>
-          <h3>Koi Short abhi upload nahi hui</h3>
-          <p>Plus par tap karke apni Short upload karein.</p>
-        </div>
-      `;
-      return;
-    }
+    // Recommended (next 4)
+    renderVideoGrid("#titan-recommended-grid", allVideos.slice(4, 8));
 
-    viewer.innerHTML = shorts.map((item) => {
-      const url = safeMediaURL(item.url);
-      const title = safeText(item.title || "Titan Short");
-      if (!url) return "";
-      return `
-        <article class="titan-v46-short">
-          <video controls playsinline preload="metadata">
-            <source src="${safeText(url)}">
-          </video>
-          <div class="titan-v46-short-info">
-            <strong>${title}</strong>
-          </div>
-        </article>
-      `;
-    }).join("");
+    // Latest
+    renderVideoGrid("#titan-v46-video-grid", allVideos);
   }
 
-  window.titanRefreshVideoFeeds = function () {
-    renderLongVideos();
-    renderShorts();
-  };
+  window.titanRefreshVideoFeeds = renderAllFeeds;
 
   /* NAVIGATION */
   function openStudio() {
     if (typeof window.openTitanStudioGemini === "function") {
       window.openTitanStudioGemini();
-      return;
+    } else {
+      alert("Titan Studio abhi available nahi hai.");
     }
-    alert("Titan Studio function nahi mila.");
   }
 
   function openProfile() {
     if (typeof window.openTitanProfile === "function") {
       window.openTitanProfile();
-      return;
+    } else {
+      alert("Profile system abhi load nahi hua.");
     }
-    alert("Profile system abhi load nahi hua.");
   }
 
   window.titanOpenUpload = function () {
     if (typeof window.openTitanCreatorCenter === "function") {
       window.openTitanCreatorCenter();
-      return;
+    } else {
+      alert("Upload system load nahi hua.");
     }
-    alert("Upload system load nahi hua.");
   };
 
-  /* HOME LAYOUT */
+  /* HOME LAYOUT - YouTube Style (No Hero) */
   function ensureHomeLayout() {
     if ($("#titan-extension-home")) return;
 
@@ -686,152 +526,3 @@
                   <feMergeNode in="coloredBlur"/>
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
-              </filter>
-            </defs>
-            <polygon points="50,5 91,28 91,72 50,95 9,72 9,28" stroke="url(#titanGold)" stroke-width="5.5" fill="none" filter="url(#glow)"/>
-            <polygon points="50,14 82,32 82,68 50,86 18,68 18,32" stroke="url(#titanBlue)" stroke-width="1.8" fill="none" opacity="0.75"/>
-            <text x="50" y="65" text-anchor="middle" font-size="40" font-weight="900" fill="url(#titanGold)" font-family="Arial Black, sans-serif" filter="url(#glow)">T</text>
-          </svg>
-          <div class="titan-brand-text">TITAN <span>AI</span></div>
-        </div>
-
-        <div class="titan-v46-header-actions">
-          <button class="titan-v46-icon-button" type="button" data-titan-theme>
-            <i class="fa-solid fa-moon"></i>
-          </button>
-          <button class="titan-v46-icon-button" type="button" data-titan-search>
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </div>
-      </header>
-
-      <section class="titan-v46-hero">
-        <div class="titan-v46-badge">
-          <i class="fa-solid fa-film"></i>
-          TITAN AI CREATOR STUDIO
-        </div>
-        <h1>CREATE YOUR<br><span>CINEMATIC WORLD</span></h1>
-        <p>Apne ideas ko stories, cinematic videos aur creative projects mein badlein.</p>
-        <div class="titan-v46-actions">
-          <button type="button" class="titan-v46-button titan-v46-button-primary" data-titan-open-studio>
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            Launch Titan Studio
-          </button>
-          <button type="button" class="titan-v46-button titan-v46-button-secondary" data-titan-open-upload>
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            Upload Video
-          </button>
-        </div>
-      </section>
-
-      <div class="titan-v46-chips">
-        <button class="titan-v46-chip active" type="button" data-titan-category="all">All</button>
-        <button class="titan-v46-chip" type="button" data-titan-category="video">AI Movies</button>
-        <button class="titan-v46-chip" type="button" data-titan-category="short">Titan Shorts</button>
-        <button class="titan-v46-chip" type="button" data-titan-category="music">Sufi Music</button>
-      </div>
-
-      <section class="titan-v46-section" id="titan-v46-long-section">
-        <div class="titan-v46-section-heading">
-          <h2><i class="fa-solid fa-film" style="color:var(--titan-gold)"></i> Latest Videos</h2>
-          <span class="titan-v46-muted">TITAN FEED</span>
-        </div>
-        <div id="titan-v46-video-grid" class="titan-v46-grid titan-video-feed-grid"></div>
-      </section>
-
-      <section class="titan-v46-section" id="titan-v46-shorts-section">
-        <div class="titan-v46-section-heading">
-          <h2><i class="fa-solid fa-mobile-screen-button" style="color:var(--titan-gold)"></i> Titan Shorts</h2>
-        </div>
-        <div id="titan-shorts-viewer"></div>
-      </section>
-
-      <nav class="titan-v46-bottom-nav">
-        <button type="button" class="titan-v46-nav-item active" data-titan-nav="home">
-          <i class="fa-solid fa-house"></i>
-          <span>Home</span>
-        </button>
-        <button type="button" class="titan-v46-nav-item" data-titan-nav="shorts">
-          <i class="fa-solid fa-bolt"></i>
-          <span>Shorts</span>
-        </button>
-        <button type="button" class="titan-v46-nav-item center-btn" data-titan-nav="plus">
-          <div class="plus-circle"><i class="fa-solid fa-plus"></i></div>
-        </button>
-        <button type="button" class="titan-v46-nav-item" data-titan-nav="studio">
-          <i class="fa-solid fa-clapperboard"></i>
-          <span>Studio</span>
-        </button>
-        <button type="button" class="titan-v46-nav-item" data-titan-nav="profile">
-          <i class="fa-solid fa-user"></i>
-          <span>Profile</span>
-        </button>
-      </nav>
-    `;
-
-    const target = $("#homePage, #home-page, main, #app") || document.body;
-    target.appendChild(home);
-  }
-
-  /* CLICK HANDLERS */
-  document.addEventListener("click", async (event) => {
-    if (event.target.closest("[data-titan-theme]")) {
-      toggleTheme();
-      return;
-    }
-
-    const playTarget = event.target.closest("[data-titan-play]");
-    if (playTarget) {
-      openVideo(playTarget.getAttribute("data-titan-play"), playTarget.getAttribute("data-titan-title"));
-      return;
-    }
-
-    if (event.target.closest("[data-titan-open-studio]")) {
-      openStudio();
-      return;
-    }
-
-    if (event.target.closest("[data-titan-open-upload]")) {
-      window.titanOpenUpload();
-      return;
-    }
-
-    const navButton = event.target.closest("[data-titan-nav]");
-    if (navButton) {
-      const nav = navButton.getAttribute("data-titan-nav");
-      document.querySelectorAll("[data-titan-nav]").forEach((btn) => {
-        btn.classList.toggle("active", btn === navButton);
-      });
-
-      if (nav === "home") $("#titan-v46-long-section")?.scrollIntoView({ behavior: "smooth" });
-      if (nav === "shorts") $("#titan-v46-shorts-section")?.scrollIntoView({ behavior: "smooth" });
-      if (nav === "plus") window.titanOpenUpload();
-      if (nav === "studio") openStudio();
-      if (nav === "profile") openProfile();
-      return;
-    }
-
-    const categoryButton = event.target.closest("[data-titan-category]");
-    if (categoryButton) {
-      document.querySelectorAll("[data-titan-category]").forEach((btn) => {
-        btn.classList.toggle("active", btn === categoryButton);
-      });
-    }
-  });
-
-  /* INIT */
-  function initTitanExtensions() {
-    applyTheme();
-    injectStyles();
-    ensureHomeLayout();
-    window.titanRefreshVideoFeeds();
-    console.log("✅ TITAN AI v4.7.0 initialized with Hex Logo + Premium Nav");
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initTitanExtensions, { once: true });
-  } else {
-    initTitanExtensions();
-  }
-
-})();
