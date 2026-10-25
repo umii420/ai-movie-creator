@@ -1,695 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="TITAN AI — discover videos, watch Shorts, upload content, and create AI movies.">
+  <title>TITAN AI — Official Platform</title>
 
-    <title>TITAN AI — Official Platform</title>
-    <meta name="theme-color" content="#050507">
-    <meta name="description" content="TITAN AI — Create AI movies, write scripts, and share your creativity.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- Font Awesome Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #08090d;
+      --surface: #101116;
+      --surface-2: #171920;
+      --surface-3: #20232c;
+      --text: #f7f8fb;
+      --muted: #9ba0ad;
+      --gold: #f5b42a;
+      --gold-2: #ffd36b;
+      --line: rgba(255,255,255,.09);
+      --blue: #48b9ff;
+      --radius: 18px;
+      --nav-height: 72px;
+      --font-body: "Plus Jakarta Sans", sans-serif;
+      --font-heading: "Space Grotesk", sans-serif;
+    }
 
-    <!-- Google Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&family=Space+Grotesk:wght@500;700&family=Inter:wght@300;400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- Markdown Rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <style>
-        :root {
-            --bg-black: #050507;
-            --card-bg: #0d0e12;
-            --accent-gold: #f59e0b;
-            --accent-gold-light: #fbbf24;
-            --verified-blue: #00b2ff;
-            --text-main: #f8fafc;
-            --text-muted: #9ca3af;
-            --border-glow: rgba(245, 158, 11, 0.25);
-            --border-soft: rgba(255, 255, 255, 0.08);
-
-            --font-heading: 'Space Grotesk', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-            --font-gemini: 'Inter', sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: var(--font-body);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-black) !important;
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Light mode force disable for pure dark theme */
-        body.light-mode {
-            background-color: var(--bg-black) !important;
-            color: var(--text-main);
-        }
-
-        button,
-        input,
-        textarea {
-            font: inherit;
-        }
-
-        button {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Main app feed container */
-        .features-section {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 10px;
-        }
-
-        /* AI Studio result modal */
-        .gemini-modal-overlay {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            background: var(--bg-black);
-            z-index: 20000;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-            padding: 20px 5%;
-            overflow-y: auto;
-            overscroll-behavior: contain;
-        }
-
-        .gemini-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .gemini-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-glow);
-            margin-bottom: 15px;
-        }
-
-        .gemini-content-box {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            font-family: var(--font-gemini);
-            padding-bottom: 120px;
-        }
-
-        .gemini-prompt-display {
-            overflow-wrap: anywhere;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 15px;
-        }
-
-        .gemini-response-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            padding: 25px 30px;
-            line-height: 1.7;
-            font-size: 1rem;
-            color: var(--text-main);
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow-wrap: anywhere;
-        }
-
-        .gemini-response-card h1,
-        .gemini-response-card h2,
-        .gemini-response-card h3 {
-            font-family: var(--font-heading);
-            margin: 20px 0 10px;
-        }
-
-        .gemini-response-card p {
-            margin: 10px 0;
-        }
-
-        .gemini-response-card ul,
-        .gemini-response-card ol {
-            padding-left: 24px;
-            margin: 12px 0;
-        }
-
-        .gemini-response-card pre {
-            overflow-x: auto;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-        }
-
-        .gemini-response-card img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .modal-prompt-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 5%;
-            background: rgba(5, 5, 7, 0.96);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-top: 1px solid var(--border-glow);
-            z-index: 25000;
-            display: flex;
-            justify-content: center;
-        }
-
-        .modal-prompt-box {
-            width: 100%;
-            max-width: 800px;
-            background: linear-gradient(
-                180deg,
-                rgba(30, 32, 40, 0.95),
-                rgba(15, 16, 22, 0.98)
-            );
-            border-radius: 18px;
-            padding: 12px 16px;
-            border: 1px solid var(--border-glow);
-        }
-
-        .modal-prompt-input-row {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 6px 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .modal-prompt-input-row textarea {
-            flex-grow: 1;
-            min-width: 0;
-            border: none;
-            outline: none;
-            background: transparent;
-            font-size: 0.9rem;
-            color: #111111;
-            resize: vertical;
-            min-height: 38px;
-            max-height: 120px;
-        }
-
-        .btn-arrow-luma {
-            flex-shrink: 0;
-            background: #000000;
-            color: var(--accent-gold);
-            border: none;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .btn-arrow-luma:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        .btn-contact {
-            background: transparent;
-            border: 1px solid var(--border-glow);
-            color: var(--text-main);
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            white-space: nowrap;
-        }
-
-        .btn-contact:hover {
-            border-color: var(--accent-gold);
-        }
-
-        /* Google Login Gate */
-        #titanAuthGateOverlay {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh;
-            background: rgba(5, 5, 7, 0.96);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            transition: opacity 0.3s ease;
-        }
-
-        .titan-gate-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            padding: 40px 28px;
-            border-radius: 28px;
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .titan-gate-icon {
-            width: 70px;
-            height: 70px;
-            background: rgba(245, 158, 11, 0.15);
-            border: 2px solid var(--accent-gold);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: var(--accent-gold);
-            font-size: 2rem;
-        }
-
-        .titan-gate-card h2 {
-            color: var(--text-main);
-            font-family: var(--font-heading);
-            font-size: 1.7rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .titan-gate-card p {
-            color: var(--text-muted);
-            font-size: 0.92rem;
-            margin-bottom: 28px;
-            line-height: 1.6;
-        }
-
-        .btn-google-gate {
-            background: #ffffff;
-            color: #000000;
-            width: 100%;
-            padding: 15px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.98rem;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-google-gate:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 25px rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-google-gate:focus-visible,
-        .btn-contact:focus-visible,
-        .btn-arrow-luma:focus-visible {
-            outline: 2px solid var(--accent-gold);
-            outline-offset: 3px;
-        }
-
-        @media (max-width: 480px) {
-            .gemini-modal-overlay {
-                padding: 14px 12px;
-            }
-
-            .gemini-response-card {
-                padding: 18px 16px;
-                font-size: 0.95rem;
-            }
-
-            .gemini-content-box {
-                padding-bottom: 140px;
-            }
-
-            .modal-prompt-container {
-                padding: 10px 12px;
-            }
-
-            .modal-prompt-box {
-                padding: 10px;
-            }
-
-            .titan-gate-card {
-                padding: 32px 20px;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                scroll-behavior: auto !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body {
+      margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+      font-family: var(--font-body); line-height: 1.5; overflow-x: hidden;
+    }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--gold); outline-offset: 3px;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    .app-header {
+      position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; gap: 22px;
+      min-height: 76px; padding: 12px clamp(14px, 3vw, 34px);
+      background: rgba(8,9,13,.88); border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; border: 0; background: none; cursor: pointer; padding: 0; }
+    .brand-mark {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px;
+      color: #151006; font-size: 20px; background: linear-gradient(135deg, var(--gold-2), #e18a00);
+      box-shadow: 0 6px 24px rgba(245,180,42,.18);
+    }
+    .brand-name { font: 700 1.16rem var(--font-heading); letter-spacing: -.04em; white-space: nowrap; }
+    .brand-name span { color: var(--gold); }
+    .search-wrap { position: relative; flex: 1; max-width: 720px; margin: 0 auto; }
+    .search-wrap i { position: absolute; top: 50%; left: 17px; transform: translateY(-50%); color: var(--muted); }
+    .search-input {
+      width: 100%; height: 46px; border-radius: 999px; border: 1px solid var(--line);
+      padding: 0 20px 0 46px; background: #12141a; color: var(--text); outline: none;
+    }
+    .search-input:focus { border-color: rgba(245,180,42,.6); }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .icon-button {
+      display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+      background: transparent; border: 1px solid transparent; color: #d9dce5; cursor: pointer;
+    }
+    .icon-button:hover { background: var(--surface-2); border-color: var(--line); }
+    .avatar-button { border: 1px solid rgba(245,180,42,.55); background: #252016; color: var(--gold); }
+    .page-layout { display: grid; grid-template-columns: 224px minmax(0,1fr); gap: 26px; max-width: 1800px; margin: 0 auto; padding: 24px clamp(14px, 2.5vw, 34px) 110px; }
+    .sidebar { position: sticky; top: 100px; align-self: start; display: flex; flex-direction: column; gap: 6px; max-height: calc(100vh - 120px); overflow-y: auto; padding-right: 8px; }
+    .side-link {
+      width: 100%; display: flex; align-items: center; gap: 14px; min-height: 46px; padding: 0 15px;
+      border: 1px solid transparent; border-radius: 13px; background: transparent; color: #c3c6d0;
+      text-align: left; cursor: pointer; font-weight: 600;
+    }
+    .side-link i { width: 20px; text-align: center; font-size: 17px; }
+    .side-link:hover, .side-link.active { background: var(--surface-2); color: var(--text); }
+    .side-link.active { border-color: rgba(245,180,42,.19); }
+    .side-link.active i { color: var(--gold); }
+    .side-divider { height: 1px; background: var(--line); margin: 13px 8px; }
+    .sidebar-label { color: var(--muted); font-size: .72rem; font-weight: 800; letter-spacing: .12em; padding: 0 15px 7px; text-transform: uppercase; }
+    .main-content { min-width: 0; }
+    .hero {
+      position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0,1.2fr) minmax(200px,.8fr);
+      align-items: center; gap: 22px; min-height: 230px; padding: clamp(22px,4vw,42px);
+      border: 1px solid rgba(245,180,42,.18); border-radius: 26px;
+      background: radial-gradient(ellipse at 85% 15%, rgba(245,180,42,.18), transparent 38%),
+                  linear-gradient(125deg, #17181e, #101116 55%, #18140e);
+      margin-bottom: 28px;
+    }
+    .hero::after { content: ""; position: absolute; width: 280px; height: 280px; right: 4%; top: -150px; border: 1px solid rgba(245,180,42,.16); border-radius: 50%; box-shadow: 0 0 0 28px rgba(245,180,42,.025), 0 0 0 58px rgba(245,180,42,.02); pointer-events: none; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--gold-2); font-size: .74rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 12px var(--gold); }
+    .hero h1 { font: 700 clamp(1.8rem,3.4vw,3rem)/1.08 var(--font-heading); letter-spacing: -.055em; margin: 13px 0 12px; max-width: 700px; }
+    .hero h1 span { color: var(--gold); }
+    .hero p { color: #b6bac5; max-width: 600px; margin: 0 0 22px; font-size: .94rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .primary-button, .secondary-button {
+      min-height: 43px; display: inline-flex; justify-content: center; align-items: center; gap: 9px;
+      border-radius: 12px; padding: 0 17px; font-weight: 800; cursor: pointer; border: 1px solid transparent;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .primary-button { background: linear-gradient(135deg, var(--gold-2), #e9a10b); color: #171107; }
+    .primary-button:hover, .secondary-button:hover { transform: translateY(-2px); }
+    .secondary-button { background: rgba(255,255,255,.045); color: var(--text); border-color: var(--line); }
+    .hero-art { position: relative; z-index: 1; min-height: 150px; display: grid; place-items: center; }
+    .hero-art-orb { display: grid; place-items: center; width: clamp(110px,15vw,165px); aspect-ratio: 1; border-radius: 35%; transform: rotate(-8deg); border: 1px solid rgba(255,211,107,.45); background: linear-gradient(145deg, rgba(245,180,42,.2), rgba(245,180,42,.025)); box-shadow: 0 0 70px rgba(245,180,42,.11), inset 0 0 30px rgba(245,180,42,.06); }
+    .hero-art-orb i { transform: rotate(8deg); font-size: clamp(42px,6vw,70px); color: var(--gold-2); }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 12px; margin: 30px 0 15px; }
+    .section-heading h2 { font: 700 clamp(1.18rem,2vw,1.55rem) var(--font-heading); margin: 0; letter-spacing: -.035em; }
+    .section-heading p { color: var(--muted); margin: 5px 0 0; font-size: .84rem; }
+    .text-button { border: 0; background: transparent; color: var(--gold-2); cursor: pointer; font-weight: 800; white-space: nowrap; padding: 8px 0 4px 8px; }
+    .category-row { display: flex; gap: 9px; overflow-x: auto; padding: 2px 1px 12px; scrollbar-width: none; }
+    .category-row::-webkit-scrollbar { display: none; }
+    .category-chip { border: 1px solid var(--line); background: var(--surface-2); color: #c5c8d1; border-radius: 999px; padding: 9px 15px; font-size: .82rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .category-chip:hover, .category-chip.active { color: #171107; border-color: transparent; background: var(--gold); }
+    .video-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 25px 17px; }
+    .video-card { min-width: 0; cursor: pointer; }
+    .video-thumb {
+      position: relative; isolation: isolate; overflow: hidden; aspect-ratio: 16/9; border-radius: 17px;
+      background: linear-gradient(135deg, #222733, #11131a); border: 1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12); transition: transform .22s ease, border-color .22s ease;
+    }
+    .video-card:hover .video-thumb { transform: translateY(-3px); border-color: rgba(245,180,42,.34); }
+    .thumb-art { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+    .thumb-art::before, .thumb-art::after { content: ""; position: absolute; border-radius: 50%; filter: blur(1px); }
+    .thumb-art::before { width: 62%; aspect-ratio: 1; right: -8%; top: -25%; background: var(--orb,rgba(245,180,42,.26)); box-shadow: 0 0 65px var(--orb,rgba(245,180,42,.16)); }
+    .thumb-art::after { width: 75%; height: 60%; left: -18%; bottom: -36%; background: var(--orb2,rgba(60,117,190,.23)); filter: blur(20px); }
+    .thumb-icon { position: relative; z-index: 1; display: grid; place-items: center; width: 66px; height: 66px; border-radius: 22px; color: rgba(255,255,255,.9); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.17); backdrop-filter: blur(8px); font-size: 27px; }
+    .thumb-label { position: absolute; left: 13px; top: 12px; z-index: 2; color: rgba(255,255,255,.9); font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .duration-badge { position: absolute; z-index: 2; right: 9px; bottom: 9px; padding: 4px 7px; border-radius: 6px; color: white; background: rgba(0,0,0,.78); font-size: .7rem; font-weight: 800; }
+    .video-info { display: grid; grid-template-columns: 38px minmax(0,1fr) 25px; gap: 10px; padding-top: 12px; }
+    .creator-avatar { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#343947,#191b22); border: 1px solid var(--line); color: var(--gold-2); font-size: 14px; }
+    .video-title { margin: 0 0 5px; font-size: .91rem; font-weight: 800; line-height: 1.42; letter-spacing: -.015em; }
+    .video-meta { color: var(--muted); font-size: .76rem; line-height: 1.6; }
+    .more-button { background: none; border: 0; color: var(--muted); cursor: pointer; height: 30px; border-radius: 50%; }
+    .empty-state { display: none; text-align: center; padding: 45px 20px; color: var(--muted); border: 1px dashed var(--line); border-radius: var(--radius); }
+    .empty-state i { color: var(--gold); font-size: 28px; margin-bottom: 12px; }
+    .studio-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+    .studio-card { position: relative; overflow: hidden; min-height: 155px; padding: 20px; border: 1px solid var(--line); border-radius: 19px; text-align: left; background: linear-gradient(145deg,#171920,#101116); cursor: pointer; }
+    .studio-card:hover { border-color: rgba(245,180,42,.45); background: linear-gradient(145deg,#201d17,#101116); }
+    .studio-card-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: rgba(245,180,42,.12); color: var(--gold); font-size: 18px; margin-bottom: 16px; }
+    .studio-card h3 { font: 700 1rem var(--font-heading); margin: 0 0 6px; }
+    .studio-card p { color: var(--muted); font-size: .78rem; margin: 0; line-height: 1.55; }
+    .note { color: var(--muted); font-size: .77rem; margin-top: 14px; }
+    .page-view { display: none; }
+    .page-view.active { display: block; }
+    .page-title { font: 700 clamp(1.6rem,3vw,2.2rem) var(--font-heading); margin: 2px 0 6px; letter-spacing: -.045em; }
+    .page-subtitle { color: var(--muted); margin: 0 0 24px; }
+    .feature-panel { border: 1px solid var(--line); border-radius: 22px; background: var(--surface); padding: clamp(20px,4vw,32px); }
+    .upload-options { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+    .upload-option { min-height: 180px; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left; gap: 15px; padding: 22px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface-2); cursor: pointer; }
+    .upload-option:hover { border-color: rgba(245,180,42,.45); }
+    .upload-option i { font-size: 25px; color: var(--gold); }
+    .upload-option h3 { margin: 0 0 5px; font: 700 1.05rem var(--font-heading); }
+    .upload-option p { margin: 0; color: var(--muted); font-size: .83rem; }
+    .mobile-nav {
+      display: none; position: fixed; z-index: 1500; bottom: 0; left: 0; right: 0;
+      padding: 7px 6px calc(7px + env(safe-area-inset-bottom)); min-height: calc(var(--nav-height) + env(safe-area-inset-bottom));
+      background: rgba(12,13,18,.94); border-top: 1px solid var(--line);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      grid-template-columns: repeat(5,minmax(0,1fr));
+    }
+    .mobile-nav button { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; min-width: 0; border: 0; background: transparent; color: #9297a5; cursor: pointer; font-size: .64rem; font-weight: 700; }
+    .mobile-nav button i { font-size: 18px; }
+    .mobile-nav button.active { color: var(--gold-2); }
+    .mobile-nav button.upload-nav i { display: grid; place-items: center; width: 36px; height: 29px; border-radius: 10px; color: #171107; background: var(--gold); font-size: 15px; }
+    .mobile-nav button.movie-nav i { color: var(--gold); }
+    .app-footer { padding: 30px 0 0; color: #737887; font-size: .75rem; }
+    .toast { position: fixed; z-index: 30000; bottom: calc(var(--nav-height) + 20px); left: 50%; transform: translate(-50%, 15px); opacity: 0; pointer-events: none; background: #242731; color: var(--text); border: 1px solid var(--line); padding: 11px 16px; border-radius: 12px; box-shadow: 0 12px 35px rgba(0,0,0,.35); font-size: .84rem; transition: .2s ease; max-width: calc(100vw - 28px); text-align: center; }
+    .toast.show { opacity: 1; transform: translate(-50%,0); }
+    .gemini-modal-overlay {
+      position: fixed; inset: 0; z-index: 20000; display: flex; flex-direction: column;
+      padding: 20px 5%; background: rgba(8,9,13,.98); overflow-y: auto; overscroll-behavior: contain;
+      opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .22s ease, visibility .22s ease;
+    }
+    .gemini-modal-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
+    .gemini-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 15px; border-bottom: 1px solid rgba(245,180,42,.25); margin-bottom: 15px; }
+    .gemini-content-box { width: 100%; max-width: 850px; margin: 0 auto; padding-bottom: 145px; }
+    .gemini-prompt-display { overflow-wrap: anywhere; font-size: 1.15rem; font-weight: 700; margin-bottom: 15px; }
+    .gemini-response-card { background: var(--surface); border: 1px solid rgba(245,180,42,.2); border-radius: 17px; padding: 24px; line-height: 1.75; margin-bottom: 20px; overflow-wrap: anywhere; }
+    .gemini-response-card h1,.gemini-response-card h2,.gemini-response-card h3 { font-family: var(--font-heading); margin: 20px 0 10px; }
+    .gemini-response-card p { margin: 10px 0; }
+    .gemini-response-card ul,.gemini-response-card ol { padding-left: 24px; }
+    .gemini-response-card pre { overflow-x: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .gemini-response-card img { max-width: 100%; height: auto; }
+    .modal-prompt-container { position: fixed; bottom: 0; left: 0; width: 100%; padding: 14px 5% calc(14px + env(safe-area-inset-bottom)); background: rgba(8,9,13,.96); backdrop-filter: blur(15px); border-top: 1px solid rgba(245,180,42,.2); z-index: 25000; display: flex; justify-content: center; }
+    .modal-prompt-box { width: 100%; max-width: 850px; background: #15171e; border-radius: 17px; padding: 12px; border: 1px solid rgba(245,180,42,.2); }
+    .modal-prompt-input-row { background: #f8fafc; color: #111; border-radius: 12px; padding: 6px 9px 6px 12px; display: flex; align-items: center; gap: 10px; }
+    .modal-prompt-input-row textarea { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; color: #111; resize: vertical; min-height: 38px; max-height: 120px; }
+    .btn-arrow-luma { flex-shrink: 0; background: #08090d; color: var(--gold); border: 0; width: 39px; height: 39px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; }
+    .btn-contact { background: transparent; border: 1px solid rgba(245,180,42,.25); color: var(--text); padding: 7px 14px; border-radius: 20px; cursor: pointer; font-size: .85rem; white-space: nowrap; }
+    #titanAuthGateOverlay { position: fixed; inset: 0; z-index: 999999; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(8,9,13,.97); backdrop-filter: blur(20px); }
+    .titan-gate-card { background: var(--surface); border: 1px solid rgba(245,180,42,.25); padding: 36px 25px; border-radius: 25px; text-align: center; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,.5); }
+    .titan-gate-icon { width: 68px; height: 68px; display: grid; place-items: center; margin: 0 auto 20px; border-radius: 22px; color: var(--gold); background: rgba(245,180,42,.12); font-size: 27px; }
+    .titan-gate-card h2 { font: 700 1.65rem var(--font-heading); margin: 0 0 10px; }
+    .titan-gate-card p { color: var(--muted); font-size: .9rem; margin: 0 0 24px; }
+    .btn-google-gate { width: 100%; padding: 14px; border-radius: 999px; color: #111; background: #fff; border: 0; cursor: pointer; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    @media (min-width: 1500px) { .video-grid { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+    @media (max-width: 1100px) { .page-layout { grid-template-columns: 190px minmax(0,1fr); gap: 18px; } .video-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .hero { grid-template-columns: minmax(0,1fr) 180px; } }
+    @media (max-width: 760px) {
+      :root { --nav-height: 64px; }
+      .app-header { min-height: 64px; padding: 9px 13px; gap: 10px; }
+      .brand-mark { width: 37px; height: 37px; border-radius: 12px; font-size: 17px; }
+      .brand-name { font-size: 1rem; }
+      .search-wrap { max-width: none; }
+      .search-input { height: 40px; padding-left: 37px; padding-right: 12px; font-size: .84rem; }
+      .search-wrap i { left: 13px; font-size: 13px; }
+      .header-actions { gap: 2px; }
+      .header-actions .desktop-only { display: none; }
+      .icon-button { width: 36px; height: 36px; }
+      .page-layout { display: block; padding: 15px 13px 95px; }
+      .sidebar { display: none; }
+      .mobile-nav { display: grid; }
+      .hero { grid-template-columns: minmax(0,1fr) 90px; gap: 6px; min-height: 190px; padding: 21px 17px; border-radius: 21px; margin-bottom: 24px; }
+      .hero-art { min-height: 90px; }
+      .hero-art-orb { width: 86px; border-radius: 27px; }
+      .hero-art-orb i { font-size: 37px; }
+      .hero h1 { font-size: clamp(1.55rem,6vw,2.15rem); }
+      .hero p { font-size: .81rem; margin-bottom: 16px; }
+      .primary-button,.secondary-button { min-height: 39px; padding: 0 12px; font-size: .78rem; border-radius: 10px; }
+      .section-heading { margin-top: 25px; }
+      .video-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 11px; }
+      .video-thumb { border-radius: 13px; }
+      .video-info { grid-template-columns: 31px minmax(0,1fr); gap: 8px; padding-top: 9px; }
+      .creator-avatar { width: 31px; height: 31px; font-size: 12px; }
+      .video-title { font-size: .79rem; }
+      .video-meta { font-size: .68rem; }
+      .more-button { display: none; }
+      .studio-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+      .studio-card { padding: 15px; min-height: 150px; }
+      .studio-card h3 { font-size: .88rem; }
+      .studio-card p { font-size: .74rem; }
+      .upload-options { grid-template-columns: 1fr; }
+      .app-footer { padding-bottom: 12px; }
+      .gemini-modal-overlay { padding: 13px 12px; }
+      .gemini-response-card { padding: 18px 15px; font-size: .92rem; }
+      .modal-prompt-container { padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 380px) {
+      .brand-name { font-size: .88rem; }
+      .header-actions .avatar-button { display: none; }
+      .video-grid { gap: 17px 9px; }
+      .thumb-icon { width: 49px; height: 49px; border-radius: 16px; font-size: 21px; }
+      .mobile-nav button { font-size: .58rem; }
+      .mobile-nav button i { font-size: 16px; }
+      .hero { grid-template-columns: minmax(0,1fr) 65px; }
+      .hero-art-orb { width: 63px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
 </head>
-
 <body>
+  <!-- Header -->
+  <header class="app-header">
+    <button class="brand" type="button" data-titan-nav="home" aria-label="TITAN AI Home">
+      <span class="brand-mark"><i class="fa-solid fa-play"></i></span>
+      <span class="brand-name">TITAN <span>AI</span></span>
+    </button>
 
-    <!-- Google Login Gate -->
-    <div id="titanAuthGateOverlay" style="display: none;">
-        <div class="titan-gate-card">
+    <form class="search-wrap" id="titanSearchForm" role="search">
+      <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+      <input class="search-input" id="titanSearchInput" type="search" placeholder="Search videos, creators..." aria-label="Search videos and creators">
+    </form>
 
-            <div class="titan-gate-icon">
-                <i class="fa-solid fa-clapperboard"></i>
-            </div>
-
-            <h2>Welcome to TITAN AI</h2>
-
-            <p>
-                Sign in with your Google account to create AI movies,
-                save your progress, and build your creator profile.
-            </p>
-
-            <button
-                type="button"
-                onclick="handleGoogleLogin()"
-                class="btn-google-gate"
-            >
-                <i
-                    class="fa-brands fa-google"
-                    style="color: #ea4335; font-size: 1.25rem;"
-                ></i>
-
-                Continue with Google
-            </button>
-
-        </div>
+    <div class="header-actions">
+      <button class="icon-button desktop-only" type="button" id="titanNotificationsButton" aria-label="Notifications" title="Notifications">
+        <i class="fa-regular fa-bell"></i>
+      </button>
+      <button class="icon-button avatar-button" type="button" data-titan-nav="profile" aria-label="Open profile" title="Profile">
+        <i class="fa-regular fa-user"></i>
+      </button>
     </div>
+  </header>
 
-    <!-- Main App Feed -->
-    <div class="features-section"></div>
+  <!-- Keep this compatibility mount for existing TITAN scripts. -->
+  <div class="features-section" id="titanLegacyFeaturesMount"></div>
 
-    <!-- TITAN AI Script Result Modal -->
-    <div
-        class="gemini-modal-overlay"
-        id="geminiOutputModal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="TITAN AI Studio"
-    >
+  <div class="page-layout">
+    <aside class="sidebar" aria-label="Main navigation">
+      <button class="side-link active" type="button" data-titan-nav="home"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="side-link" type="button" data-titan-nav="shorts"><i class="fa-solid fa-clapperboard"></i> Shorts</button>
+      <button class="side-link" type="button" data-titan-nav="upload"><i class="fa-solid fa-cloud-arrow-up"></i> Upload</button>
+      <button class="side-link" type="button" data-titan-nav="movie"><i class="fa-solid fa-wand-magic-sparkles"></i> TITAN Movie Creator</button>
+      <button class="side-link" type="button" data-titan-nav="profile"><i class="fa-regular fa-circle-user"></i> Profile</button>
+      <div class="side-divider"></div>
+      <div class="sidebar-label">Your space</div>
+      <button class="side-link" type="button" data-titan-nav="library"><i class="fa-solid fa-photo-film"></i> Your videos</button>
+      <button class="side-link" type="button" data-titan-nav="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+    </aside>
 
-        <div class="gemini-header">
-
-            <div style="font-weight: 800; font-size: 1.1rem;">
-                TITAN
-                <span style="color: #f59e0b;">AI</span>
-                STUDIO
+    <main class="main-content">
+      <!-- Home -->
+      <section class="page-view active" id="titanHomeView" aria-labelledby="titanHeroTitle">
+        <section class="hero">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-dot"></span> Your world. Your stories.</div>
+            <h1>Watch what moves you.<br><span>Create what inspires.</span></h1>
+            <p>Discover videos, explore Shorts, and bring your next movie idea to life with TITAN AI.</p>
+            <div class="hero-actions">
+              <button class="primary-button" type="button" data-titan-nav="movie"><i class="fa-solid fa-wand-magic-sparkles"></i> Create a movie</button>
+              <button class="secondary-button" type="button" data-titan-nav="shorts"><i class="fa-solid fa-play"></i> Explore Shorts</button>
             </div>
+          </div>
+          <div class="hero-art" aria-hidden="true"><div class="hero-art-orb"><i class="fa-solid fa-film"></i></div></div>
+        </section>
 
-            <button
-                type="button"
-                class="btn-contact"
-                onclick="closeGeminiModal()"
-            >
-                <i class="fa-solid fa-xmark"></i>
-                Close
-            </button>
-
+        <div class="category-row" id="titanCategoryRow" aria-label="Video categories">
+          <button class="category-chip active" type="button" data-category="all">All</button>
+          <button class="category-chip" type="button" data-category="movies">Movies</button>
+          <button class="category-chip" type="button" data-category="music">Music</button>
+          <button class="category-chip" type="button" data-category="gaming">Gaming</button>
+          <button class="category-chip" type="button" data-category="animation">Animation</button>
+          <button class="category-chip" type="button" data-category="education">Education</button>
+          <button class="category-chip" type="button" data-category="travel">Travel</button>
+          <button class="category-chip" type="button" data-category="shorts">Shorts</button>
         </div>
 
-        <div class="gemini-content-box">
-
-            <div
-                class="gemini-prompt-display"
-                id="displayUserPrompt"
-            >
-                Your prompt will appear here.
-            </div>
-
-            <div
-                class="gemini-response-card"
-                id="scriptResultContent"
-                aria-live="polite"
-            >
-                Enter a prompt to generate your script.
-            </div>
-
+        <div class="section-heading">
+          <div><h2>Explore videos</h2><p>Fresh ideas and stories, all in one place.</p></div>
+          <button class="text-button" type="button" data-titan-nav="library">Your videos <i class="fa-solid fa-arrow-right"></i></button>
         </div>
 
-        <div class="modal-prompt-container">
-
-            <div class="modal-prompt-box">
-
-                <div
-                    style="font-size: 0.85rem; color: #fff; margin-bottom: 6px; font-weight: 600;"
-                >
-                    Chat with TITAN AI Director Engine
-                </div>
-
-                <div class="modal-prompt-input-row">
-
-                    <textarea
-                        id="modalPromptInput"
-                        placeholder="Write your script or prompt..."
-                        aria-label="Enter your script prompt"
-                    ></textarea>
-
-                    <button
-                        type="button"
-                        class="btn-arrow-luma"
-                        id="modalSubmitBtn"
-                        onclick="generateScript('modalPromptInput')"
-                        aria-label="Generate script"
-                    >
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </button>
-
-                </div>
-
-            </div>
-
+        <!-- Visual starter cards only. Real shared video data will be connected later. -->
+        <div class="video-grid" id="titanVideoGrid">
+          <article class="video-card" data-category="movies" data-search="cinematic worlds movie filmmaking">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(245,180,42,.32);--orb2:rgba(125,65,200,.3);background:linear-gradient(135deg,#332a28,#17141d 65%,#0e1017)"><span class="thumb-label">Cinematic</span><span class="thumb-icon"><i class="fa-solid fa-film"></i></span></div><span class="duration-badge">16:9</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-clapperboard"></i></div><div><h3 class="video-title">Your next cinematic world starts here</h3><div class="video-meta">TITAN AI Studio<br>Explore movie creation</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
+          <article class="video-card" data-category="music" data-search="music sound visual story">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(66,150,255,.32);--orb2:rgba(196,64,130,.3);background:linear-gradient(135deg,#18263b,#17131e 70%,#0e1017)"><span class="thumb-label">Music</span><span class="thumb-icon"><i class="fa-solid fa-wave-square"></i></span></div><span class="duration-badge">Audio</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-music"></i></div><div><h3 class="video-title">Turn a feeling into a visual story</h3><div class="video-meta">Creative inspiration<br>Music & mood</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
+          <article class="video-card" data-category="animation" data-search="animation fantasy dragon worlds">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(74,205,157,.27);--orb2:rgba(68,92,220,.3);background:linear-gradient(135deg,#172d2a,#151728 70%,#0e1017)"><span class="thumb-label">Fantasy</span><span class="thumb-icon"><i class="fa-solid fa-dragon"></i></span></div><span class="duration-badge">Story</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-dragon"></i></div><div><h3 class="video-title">Imagine worlds beyond the ordinary</h3><div class="video-meta">Story ideas<br>Fantasy & animation</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
+          <article class="video-card" data-category="gaming" data-search="gaming action digital worlds">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(176,92,255,.3);--orb2:rgba(51,200,220,.24);background:linear-gradient(135deg,#28203d,#141a2a 70%,#0e1017)"><span class="thumb-label">Gaming</span><span class="thumb-icon"><i class="fa-solid fa-gamepad"></i></span></div><span class="duration-badge">Play</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-gamepad"></i></div><div><h3 class="video-title">Explore bold ideas and digital worlds</h3><div class="video-meta">Creator picks<br>Gaming & action</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
+          <article class="video-card" data-category="education" data-search="learn create filmmaking education">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(255,178,72,.25);--orb2:rgba(58,164,176,.25);background:linear-gradient(135deg,#30261d,#152329 70%,#0e1017)"><span class="thumb-label">Learn</span><span class="thumb-icon"><i class="fa-solid fa-lightbulb"></i></span></div><span class="duration-badge">Guide</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-lightbulb"></i></div><div><h3 class="video-title">Build your next creative skill</h3><div class="video-meta">Learning ideas<br>Creator education</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
+          <article class="video-card" data-category="travel" data-search="travel landscapes journeys inspiration">
+            <div class="video-thumb"><div class="thumb-art" style="--orb:rgba(255,128,76,.28);--orb2:rgba(54,150,160,.25);background:linear-gradient(135deg,#33241f,#13242b 70%,#0e1017)"><span class="thumb-label">Explore</span><span class="thumb-icon"><i class="fa-solid fa-mountain-sun"></i></span></div><span class="duration-badge">Journey</span></div>
+            <div class="video-info"><div class="creator-avatar"><i class="fa-solid fa-compass"></i></div><div><h3 class="video-title">Find inspiration in new places</h3><div class="video-meta">Travel ideas<br>Places & journeys</div></div><button class="more-button" type="button" aria-label="More options"><i class="fa-solid fa-ellipsis-vertical"></i></button></div>
+          </article>
         </div>
+        <div class="empty-state" id="titanNoResults"><i class="fa-solid fa-magnifying-glass"></i><div>No matching cards found.</div><small>Try another search or category.</small></div>
+        <div class="app-footer">TITAN AI · Watch, create, and share. <span style="float:right">Preview cards · Real video feed connects later</span></div>
+      </section>
 
+      <!-- Shorts landing view: existing shorts player can render/connect here later. -->
+      <section class="page-view" id="titanShortsView">
+        <h1 class="page-title">Shorts</h1>
+        <p class="page-subtitle">Quick stories, creative moments, and vertical video.</p>
+        <div class="feature-panel">
+          <div class="studio-card-icon"><i class="fa-solid fa-clapperboard"></i></div>
+          <h2 style="font-family:var(--font-heading);margin:0 0 8px">Your Shorts experience</h2>
+          <p style="color:var(--muted);margin:0 0 18px">This page is the navigation landing area. The actual Shorts feed depends on your existing <code>app-shorts-player.js</code> system.</p>
+          <button class="primary-button" type="button" data-titan-action="shorts"><i class="fa-solid fa-play"></i> Open Shorts player</button>
+        </div>
+      </section>
+
+      <!-- Upload landing view -->
+      <section class="page-view" id="titanUploadView">
+        <h1 class="page-title">Upload</h1>
+        <p class="page-subtitle">Choose what you want to share with the TITAN AI community.</p>
+        <div class="upload-options">
+          <button class="upload-option" type="button" data-titan-action="upload-short">
+            <i class="fa-solid fa-mobile-screen-button"></i><div><h3>Upload a Short</h3><p>Vertical videos for quick, full-screen viewing.</p></div><span class="text-button">Continue <i class="fa-solid fa-arrow-right"></i></span>
+          </button>
+          <button class="upload-option" type="button" data-titan-action="upload-long">
+            <i class="fa-solid fa-photo-film"></i><div><h3>Upload a long video</h3><p>Movies, episodes, tutorials, and full-length videos.</p></div><span class="text-button">Continue <i class="fa-solid fa-arrow-right"></i></span>
+          </button>
+        </div>
+        <p class="note">Upload actions will use your existing upload system if it exposes a compatible button or function. Shared storage/backend will be connected in a later stage.</p>
+      </section>
+
+      <!-- Separate TITAN Movie Creator -->
+      <section class="page-view" id="titanMovieView">
+        <h1 class="page-title">TITAN Movie Creator</h1>
+        <p class="page-subtitle">Start with a story. Shape it into a movie, scene by scene.</p>
+        <div class="studio-grid">
+          <button class="studio-card" type="button" data-titan-action="script">
+            <span class="studio-card-icon"><i class="fa-solid fa-pen-nib"></i></span><h3>AI Script Writer</h3><p>Write movie ideas, stories, scenes, and dialogue.</p>
+          </button>
+          <button class="studio-card" type="button" data-titan-action="scenes">
+            <span class="studio-card-icon"><i class="fa-solid fa-film"></i></span><h3>Scene Planner</h3><p>Organize a story into cinematic scenes and shots.</p>
+          </button>
+          <button class="studio-card" type="button" data-titan-action="images">
+            <span class="studio-card-icon"><i class="fa-regular fa-images"></i></span><h3>AI Image Studio</h3><p>Prepare scene prompts for visual generation.</p>
+          </button>
+          <button class="studio-card" type="button" data-titan-action="voice">
+            <span class="studio-card-icon"><i class="fa-solid fa-microphone-lines"></i></span><h3>Voice & Sound</h3><p>Plan narration, dialogue, and sound direction.</p>
+          </button>
+          <button class="studio-card" type="button" data-titan-action="video">
+            <span class="studio-card-icon"><i class="fa-solid fa-clapperboard"></i></span><h3>AI Video Studio</h3><p>Movie-video generation can be connected when a provider is ready.</p>
+          </button>
+          <button class="studio-card" type="button" data-titan-action="projects">
+            <span class="studio-card-icon"><i class="fa-solid fa-folder-open"></i></span><h3>My Projects</h3><p>Open project management when available in the current app.</p>
+          </button>
+        </div>
+        <p class="note">Script writing uses the existing <code>/api/generate</code> endpoint and model settings. Image/video generation is not claimed to work until its API/provider is connected and tested.</p>
+        <div style="margin-top:18px"><button class="primary-button" type="button" data-titan-action="script"><i class="fa-solid fa-wand-magic-sparkles"></i> Start writing a script</button></div>
+      </section>
+
+      <!-- Profile landing view -->
+      <section class="page-view" id="titanProfileView">
+        <h1 class="page-title">Your profile</h1>
+        <p class="page-subtitle">Your creator space on TITAN AI.</p>
+        <div class="feature-panel" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div class="creator-avatar" style="width:66px;height:66px;font-size:25px"><i class="fa-regular fa-user"></i></div>
+          <div style="flex:1;min-width:180px"><h2 style="font-family:var(--font-heading);margin:0 0 4px">Creator profile</h2><p style="color:var(--muted);margin:0;font-size:.86rem">Profile details will be supplied by your existing profile system.</p></div>
+          <button class="secondary-button" type="button" data-titan-action="profile"><i class="fa-regular fa-pen-to-square"></i> Open profile</button>
+        </div>
+      </section>
+
+      <!-- Library landing view -->
+      <section class="page-view" id="titanLibraryView">
+        <h1 class="page-title">Your videos</h1>
+        <p class="page-subtitle">Manage the videos associated with your creator profile.</p>
+        <div class="feature-panel"><i class="fa-solid fa-photo-film" style="font-size:28px;color:var(--gold)"></i><h2 style="font-family:var(--font-heading)">Your library</h2><p style="color:var(--muted)">The existing upload/profile system must supply your real uploaded video records. This page does not invent saved videos.</p><button class="secondary-button" type="button" data-titan-action="library">Open video library</button></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Mobile navigation requested by the user -->
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <button class="active" type="button" data-titan-nav="home"><i class="fa-solid fa-house"></i><span>Home</span></button>
+    <button type="button" data-titan-nav="shorts"><i class="fa-solid fa-clapperboard"></i><span>Shorts</span></button>
+    <button class="upload-nav" type="button" data-titan-nav="upload"><i class="fa-solid fa-plus"></i><span>Upload</span></button>
+    <button class="movie-nav" type="button" data-titan-nav="movie"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Movie Creator</span></button>
+    <button type="button" data-titan-nav="profile"><i class="fa-regular fa-user"></i><span>Profile</span></button>
+  </nav>
+
+  <div class="toast" id="titanToast" role="status" aria-live="polite"></div>
+
+  <!-- Existing Google Login Gate retained -->
+  <div id="titanAuthGateOverlay">
+    <div class="titan-gate-card">
+      <div class="titan-gate-icon"><i class="fa-solid fa-clapperboard"></i></div>
+      <h2>Welcome to TITAN AI</h2>
+      <p>Sign in with your Google account to create AI movies, save your progress, and build your creator profile.</p>
+      <button type="button" onclick="handleGoogleLogin()" class="btn-google-gate"><i class="fa-brands fa-google" style="color:#ea4335;font-size:1.2rem"></i> Continue with Google</button>
     </div>
+  </div>
 
-    <!--
-        Fake Blue Tick and Monetization Modal Removed.
+  <!-- Existing AI Studio result modal and prompt flow retained -->
+  <div class="gemini-modal-overlay" id="geminiOutputModal" role="dialog" aria-modal="true" aria-label="TITAN AI Studio" aria-hidden="true">
+    <div class="gemini-header">
+      <div style="font-weight:800;font-size:1.1rem;font-family:var(--font-heading)">TITAN <span style="color:var(--gold)">AI</span> STUDIO</div>
+      <button type="button" class="btn-contact" onclick="closeGeminiModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+    </div>
+    <div class="gemini-content-box">
+      <div class="gemini-prompt-display" id="displayUserPrompt">Your prompt will appear here.</div>
+      <div class="gemini-response-card" id="scriptResultContent" aria-live="polite">Enter a prompt to generate your script.</div>
+    </div>
+    <div class="modal-prompt-container">
+      <div class="modal-prompt-box">
+        <div style="font-size:.85rem;color:#fff;margin-bottom:7px;font-weight:700">Chat with TITAN AI Director Engine</div>
+        <div class="modal-prompt-input-row">
+          <textarea id="modalPromptInput" placeholder="Write your movie idea or script prompt..." aria-label="Enter your script prompt"></textarea>
+          <button type="button" class="btn-arrow-luma" id="modalSubmitBtn" onclick="generateScript('modalPromptInput')" aria-label="Generate script"><i class="fa-solid fa-arrow-up"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        Compatibility functions are retained below so that older
-        JavaScript files calling openAccountModal() do not crash.
+  <script>
+    /* Legacy account compatibility; no fake verification/payment is performed. */
+    window.openAccountModal = function () {
+      if (typeof window.openTitanProfile === "function") return window.openTitanProfile();
+      if (typeof window.openProfilePage === "function") return window.openProfilePage();
+      titanNavigate("profile");
+    };
+    window.closeAccountModal = function () {};
+    window.registerUserAccount = function () {
+      titanToast("Account verification and monetization are not enabled by this button.");
+    };
 
-        These functions do not verify accounts or activate payments.
-    -->
+    window.openTitanStudioGemini = function () {
+      const modal = document.getElementById("geminiOutputModal");
+      if (!modal) return;
+      modal.classList.add("active");
+      modal.setAttribute("aria-hidden", "false");
+      setTimeout(() => document.getElementById("modalPromptInput")?.focus(), 100);
+    };
+    window.closeGeminiModal = function () {
+      const modal = document.getElementById("geminiOutputModal");
+      if (modal) {
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+      }
+    };
 
-    <script>
-        /* -------------------------------------------------------
-           LEGACY ACCOUNT BUTTON COMPATIBILITY
-           No fake verification or monetization activation.
-        ------------------------------------------------------- */
+    /* Existing API endpoint, Groq model, language and request fields preserved. */
+    window.generateScript = async function (inputId) {
+      const inputField = document.getElementById(inputId);
+      if (!inputField) { console.error("TITAN AI: Prompt input not found:", inputId); return; }
+      const inputVal = inputField.value.trim();
+      if (!inputVal) { titanToast("Please enter a movie idea or prompt first."); inputField.focus(); return; }
 
-        window.openAccountModal = function () {
-            if (typeof window.openTitanProfile === "function") {
-                window.openTitanProfile();
-                return;
-            }
+      const submitBtn = document.getElementById("modalSubmitBtn");
+      const promptDisplay = document.getElementById("displayUserPrompt");
+      const resultCard = document.getElementById("scriptResultContent");
+      const modal = document.getElementById("geminiOutputModal");
+      if (!submitBtn || !promptDisplay || !resultCard || !modal) {
+        console.error("TITAN AI: Script generator elements are missing.");
+        titanToast("Studio interface could not load. Please reload the page.");
+        return;
+      }
+      if (submitBtn.disabled) return;
 
-            if (typeof window.openProfilePage === "function") {
-                window.openProfilePage();
-                return;
-            }
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+      promptDisplay.textContent = '"' + inputVal + '"';
+      resultCard.textContent = "Generating your script...";
+      modal.classList.add("active");
+      modal.setAttribute("aria-hidden", "false");
 
-            console.info("TITAN AI: Profile is not available yet.");
-        };
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: inputVal,
+            style: "Hollywood Blockbuster",
+            ratio: "16:9 Cinematic",
+            length: "Detailed Multi-Scene Story",
+            lang: "Roman Urdu",
+            model: "llama-3.3-70b-versatile"
+          })
+        });
 
-        window.closeAccountModal = function () {
-            /* The old fake account modal has been removed. */
-        };
+        let data;
+        try { data = await response.json(); }
+        catch (_) { throw new Error("The server returned an invalid response. Please try again."); }
+        if (!response.ok) throw new Error(data.error || "Server error: " + response.status);
 
-        window.registerUserAccount = function () {
-            alert(
-                "TITAN AI: Account verification and monetization " +
-                "are not available through this button."
-            );
-        };
+        if (data.script && data.script.trim() !== "") {
+          const scriptText = data.script;
+          inputField.value = "";
+          if (window.marked && typeof window.marked.parse === "function") {
+            /* Markdown output is rendered as HTML. API output should be treated as untrusted. */
+            resultCard.innerHTML = window.marked.parse(scriptText, { breaks: true });
+          } else {
+            resultCard.textContent = scriptText;
+          }
+        } else {
+          resultCard.textContent = "The server returned an empty response. Please try again.";
+        }
+      } catch (error) {
+        console.error("TITAN AI script generation error:", error);
+        resultCard.textContent = "Connection Error: " + (error.message || "Unable to generate the script.") +
+          "\n\nPlease check your internet connection and try again.";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+      }
+    };
 
+    function titanToast(message) {
+      const toast = document.getElementById("titanToast");
+      if (!toast) { console.info(message); return; }
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(window.__titanToastTimer);
+      window.__titanToastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+    window.titanToast = titanToast;
 
-        /* -------------------------------------------------------
-           TITAN AI STUDIO
-           Existing /api/generate endpoint and Groq model retained.
-        ------------------------------------------------------- */
+    const titanViews = {
+      home: "titanHomeView",
+      shorts: "titanShortsView",
+      upload: "titanUploadView",
+      movie: "titanMovieView",
+      profile: "titanProfileView",
+      library: "titanLibraryView"
+    };
 
-        window.openTitanStudioGemini = function () {
-            const modal = document.getElementById("geminiOutputModal");
+    function titanNavigate(target) {
+      if (target === "settings") {
+        if (window.TITANSettings && typeof window.TITANSettings.open === "function") {
+          window.TITANSettings.open();
+        } else {
+          titanToast("Settings system is not ready yet. Check app-settings.js.");
+        }
+        return;
+      }
 
-            if (!modal) return;
+      if (target === "movie") {
+        document.querySelectorAll(".page-view").forEach(view => view.classList.remove("active"));
+        document.getElementById(titanViews.movie)?.classList.add("active");
+        updateTitanNav("movie");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
 
-            modal.classList.add("active");
+      const viewId = titanViews[target];
+      if (!viewId) return;
+      document.querySelectorAll(".page-view").forEach(view => view.classList.remove("active"));
+      document.getElementById(viewId)?.classList.add("active");
+      updateTitanNav(target);
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
-            const promptInput = document.getElementById("modalPromptInput");
+      if (target === "shorts") tryExistingAction("shorts", false);
+      if (target === "upload") {
+        /* Show the upload landing page first; action buttons call existing upload system. */
+      }
+      if (target === "profile") tryExistingAction("profile", false);
+      if (target === "library") tryExistingAction("library", false);
+    }
+    window.titanNavigate = titanNavigate;
 
-            if (promptInput) {
-                setTimeout(function () {
-                    promptInput.focus();
-                }, 100);
-            }
-        };
+    function updateTitanNav(target) {
+      document.querySelectorAll("[data-titan-nav]").forEach(button => {
+        const active = button.getAttribute("data-titan-nav") === target;
+        button.classList.toggle("active", active);
+        if (button.closest(".mobile-nav")) {
+          if (active) button.setAttribute("aria-current", "page");
+          else button.removeAttribute("aria-current");
+        }
+      });
+    }
 
+    function tryExistingAction(action, notify = true) {
+      const candidates = {
+        shorts: ["openTitanShorts", "openShortsPlayer", "openShortsPage", "showShorts", "openTitanShortsPlayer"],
+        "upload-short": ["openShortUpload", "openUploadModal", "openTitanUpload", "openUploadPage", "showUploadModal"],
+        "upload-long": ["openLongVideoUpload", "openUploadModal", "openTitanUpload", "openUploadPage", "showUploadModal"],
+        profile: ["openTitanProfile", "openProfilePage", "openProfileModal"],
+        library: ["openMyVideos", "openVideoLibrary", "openMyUploads"],
+        scenes: ["openSceneCreator", "openTitanSceneCreator"],
+        images: ["openTitanImageStudio", "openImageGenerator", "openImageStudio"],
+        voice: ["openVoiceStudio", "openTitanVoiceStudio"],
+        video: ["openTitanVideoStudio", "openVideoGenerator"],
+        projects: ["openMyProjects", "openTitanProjects"]
+      };
+      const names = candidates[action] || [];
+      for (const name of names) {
+        if (typeof window[name] === "function") {
+          try { window[name](); return true; }
+          catch (error) { console.error("TITAN AI action failed:", name, error); }
+        }
+      }
+      if (notify) titanToast("This feature needs to be connected to its existing system in the next step.");
+      return false;
+    }
 
-        window.closeGeminiModal = function () {
-            const modal = document.getElementById("geminiOutputModal");
+    document.addEventListener("click", event => {
+      const navButton = event.target.closest("[data-titan-nav]");
+      if (navButton) {
+        event.preventDefault();
+        titanNavigate(navButton.getAttribute("data-titan-nav"));
+        return;
+      }
 
-            if (modal) {
-                modal.classList.remove("active");
-            }
-        };
+      const actionButton = event.target.closest("[data-titan-action]");
+      if (actionButton) {
+        event.preventDefault();
+        const action = actionButton.getAttribute("data-titan-action");
+        if (action === "script") {
+          window.openTitanStudioGemini();
+          return;
+        }
+        if (action === "scenes") {
+          window.openTitanStudioGemini();
+          const input = document.getElementById("modalPromptInput");
+          if (input) input.value = "Turn my movie idea into a numbered scene-by-scene plan with location, action, dialogue, camera direction, and visual prompt.";
+          return;
+        }
+        if (action === "images") {
+          if (!tryExistingAction("images", false)) titanToast("AI image generation is not connected in this index file yet.");
+          return;
+        }
+        if (action === "voice" || action === "video" || action === "projects" || action === "profile" || action === "library") {
+          if (!tryExistingAction(action, false)) titanToast("This feature will be connected when we check its JavaScript file.");
+          return;
+        }
+        if (action === "shorts") {
+          if (!tryExistingAction("shorts", false)) titanToast("Shorts player connection will be checked with app-shorts-player.js.");
+          return;
+        }
+        if (action === "upload-short" || action === "upload-long") {
+          if (!tryExistingAction(action, false)) titanToast("Upload connection will be checked with app-upload-system.js.");
+        }
+      }
+    });
 
+    document.getElementById("titanSearchForm")?.addEventListener("submit", event => event.preventDefault());
+    document.getElementById("titanSearchInput")?.addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll("#titanVideoGrid .video-card").forEach(card => {
+        const searchable = ((card.dataset.search || "") + " " + (card.innerText || "")).toLowerCase();
+        const match = searchable.includes(query);
+        card.style.display = match ? "" : "none";
+        if (match) visible++;
+      });
+      const empty = document.getElementById("titanNoResults");
+      if (empty) empty.style.display = visible ? "none" : "block";
+    });
+    document.getElementById("titanCategoryRow")?.addEventListener("click", event => {
+      const chip = event.target.closest("[data-category]");
+      if (!chip) return;
+      document.querySelectorAll(".category-chip").forEach(item => item.classList.toggle("active", item === chip));
+      const category = chip.dataset.category;
+      let visible = 0;
+      document.querySelectorAll("#titanVideoGrid .video-card").forEach(card => {
+        const match = category === "all" || card.dataset.category === category;
+        card.style.display = match ? "" : "none";
+        if (match) visible++;
+      });
+      const empty = document.getElementById("titanNoResults");
+      if (empty) empty.style.display = visible ? "none" : "block";
+      const search = document.getElementById("titanSearchInput");
+      if (search) search.value = "";
+    });
+    document.getElementById("titanNotificationsButton")?.addEventListener("click", () => titanToast("Notifications will be connected with the account system later."));
 
-        /* -------------------------------------------------------
-           SCRIPT GENERATOR
-           API endpoint, model, language and request structure kept.
-        ------------------------------------------------------- */
+    /* Load the existing app files. Their APIs are intentionally not replaced here. */
+  </script>
 
-        window.generateScript = async function (inputId) {
-            const inputField = document.getElementById(inputId);
-
-            if (!inputField) {
-                console.error("TITAN AI: Prompt input not found:", inputId);
-                return;
-            }
-
-            const inputVal = inputField.value.trim();
-
-            if (!inputVal) {
-                alert("Please enter a message or prompt first!");
-                inputField.focus();
-                return;
-            }
-
-            const submitBtn = document.getElementById("modalSubmitBtn");
-            const promptDisplay = document.getElementById("displayUserPrompt");
-            const resultCard = document.getElementById("scriptResultContent");
-            const modal = document.getElementById("geminiOutputModal");
-
-            if (!submitBtn || !promptDisplay || !resultCard || !modal) {
-                console.error("TITAN AI: Script generator elements are missing.");
-                alert("The Studio interface could not be loaded. Please reload the page.");
-                return;
-            }
-
-            if (submitBtn.disabled) return;
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-            promptDisplay.textContent = '"' + inputVal + '"';
-            resultCard.textContent = "Generating your script...";
-            modal.classList.add("active");
-
-            try {
-                const response = await fetch("/api/generate", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        prompt: inputVal,
-                        style: "Hollywood Blockbuster",
-                        ratio: "16:9 Cinematic",
-                        length: "Detailed Multi-Scene Story",
-                        lang: "Roman Urdu",
-                        model: "llama-3.3-70b-versatile"
-                    })
-                });
-
-                let data;
-
-                try {
-                    data = await response.json();
-                } catch (parseError) {
-                    throw new Error(
-                        "The server returned an invalid response. Please try again."
-                    );
-                }
-
-                if (!response.ok) {
-                    throw new Error(
-                        data.error || "Server error: " + response.status
-                    );
-                }
-
-                if (data.script && data.script.trim() !== "") {
-                    const scriptText = data.script;
-
-                    inputField.value = "";
-
-                    resultCard.textContent = scriptText;
-
-                    if (
-                        window.marked &&
-                        typeof window.marked.parse === "function"
-                    ) {
-                        resultCard.innerHTML = window.marked.parse(scriptText);
-                    }
-
-                } else {
-                    resultCard.textContent =
-                        "The server returned an empty response. Please try again.";
-                }
-
-            } catch (error) {
-                console.error("TITAN AI script generation error:", error);
-
-                resultCard.textContent =
-                    "Connection Error: " +
-                    (error.message || "Unable to generate the script.") +
-                    "\n\nPlease check your internet connection and try again.";
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-            }
-        };
-    </script>
-
-    <!-- Load other systems -->
-    <script src="app-auth-system.js"></script>
-    <script src="app-profile-system.js"></script>
-    <script src="app-upload-system.js"></script>
-    <script src="app-extensions-v2.js"></script>
-<script src="app-shorts-player.js"></script>
-    <script src="app-long-video-player.js"></script>
-    <script src="app-settings.js"></script>
+  <script src="app-auth-system.js"></script>
+  <script src="app-profile-system.js"></script>
+  <script src="app-upload-system.js"></script>
+  <script src="app-extensions-v2.js"></script>
+  <script src="app-shorts-player.js"></script>
+  <script src="app-long-video-player.js"></script>
+  <script src="app-settings.js"></script>
 </body>
 </html>
