@@ -1,508 +1,1096 @@
-/**
- * PLATFORM: TITAN AI
- * VERSION: v5.1.0 - Creator Video Feed
- * FILE: app-extensions-v2.js
- */
+/* ==========================================================
+   TITAN AI — EXTENSIONS V2
+   VERSION 6.0 — MODERN EDITION
+
+   Features:
+   - Modern video feed integration
+   - YouTube-style video cards
+   - TikTok-style Shorts grid
+   - Search and category filters
+   - Responsive video player
+   - Upload integration
+   - Duplicate homepage protection
+
+   IMPORTANT:
+   - Does not create a second homepage.
+   - Does not replace Google Login.
+   - Does not modify the AI Script Generator API.
+   ========================================================== */
 
 (function () {
   "use strict";
 
-  if (window.__TITAN_EXTENSIONS_V51__) return;
-  window.__TITAN_EXTENSIONS_V51__ = true;
+  if (window.__TITAN_EXTENSIONS_V60__) return;
+  window.__TITAN_EXTENSIONS_V60__ = true;
 
-  const UPLOADS_KEY = "titan_user_uploads";
-  const THEME_KEY = "theme_preference";
-  const $ = (s, r = document) => r.querySelector(s);
+  const TITAN = {
+    version: "6.0.0",
 
-  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;",
-    '"': "&quot;", "'": "&#39;"
-  })[c]);
+    storageKeys: [
+      "titan_user_uploads",
+      "titan_uploads",
+      "titanVideos",
+      "titan_videos",
+      "user_uploads"
+    ],
 
-  function mediaURL(value) {
+    uploads: [],
+    activeCategory: "all",
+    searchQuery: ""
+  };
+
+  /* =========================
+     SAFE DATA HELPERS
+  ========================= */
+
+  function parseJSON(value) {
     try {
-      const u = new URL(String(value || ""), location.href);
-      return ["https:", "http:"].includes(u.protocol) ? u.href : "";
-    } catch (_) {
-      return "";
+      return JSON.parse(value);
+    } catch (error) {
+      return null;
     }
   }
 
-  function uploads() {
-    try {
-      const v = JSON.parse(localStorage.getItem(UPLOADS_KEY) || "[]");
-      return Array.isArray(v) ? v.filter(x => x && !x.draft) : [];
-    } catch (_) {
-      return [];
+  function getString(object, keys) {
+    for (const key of keys) {
+      const value = object && object[key];
+
+      if (
+        typeof value === "string" &&
+        value.trim() !== ""
+      ) {
+        return value.trim();
+      }
     }
+
+    return "";
   }
 
-  function isShort(v) {
-    return ["short", "shorts", "titan short"].includes(
-      String(v.type || "").toLowerCase()
+  function escapeHTML(value) {
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]
     );
   }
 
-  function isLong(v) {
-    return ["video", "long video", "long"].includes(
-      String(v.type || "video").toLowerCase()
+  /* =========================
+     UPLOAD DATA
+  ========================= */
+
+  function normalizeVideo(item, index) {
+    if (!item || typeof item !== "object") {
+      return null;
+    }
+
+    const url = getString(item, [
+      "url",
+      "videoUrl",
+      "videoURL",
+      "src",
+      "fileUrl",
+      "fileURL",
+      "mediaUrl",
+      "mediaURL",
+      "video",
+      "dataUrl",
+      "blobUrl"
+    ]);
+
+    const thumbnail = getString(item, [
+      "thumbnail",
+      "thumbnailUrl",
+      "thumbnailURL",
+      "thumb",
+      "poster",
+      "cover",
+      "coverUrl",
+      "image",
+      "imageUrl"
+    ]);
+
+    const title =
+      getString(item, [
+        "title",
+        "name",
+        "videoTitle",
+        "caption"
+      ]) || "Untitled Video";
+
+    const type = getString(item, [
+      "type",
+      "videoType",
+      "format",
+      "contentType"
+    ]).toLowerCase();
+
+    const ratio = Number(
+      item.aspectRatio || item.ratio || 0
+    );
+
+    const isShort =
+      item.isShort === true ||
+      item.short === true ||
+      type.includes("short") ||
+      type.includes("vertical") ||
+      (ratio > 0 && ratio < 0.9);
+
+    if (!url && !thumbnail) {
+      return null;
+    }
+
+    return {
+      id: String(
+        item.id ||
+        item.videoId ||
+        item._id ||
+        "titan-video-" + index
+      ),
+
+      title,
+      url,
+      thumbnail,
+      isShort,
+
+      creator:
+        getString(item, [
+          "creator",
+          "username",
+          "userName",
+          "author",
+          "channelName"
+        ]) || "TITAN Creator",
+
+      category:
+        getString(item, [
+          "category",
+          "genre",
+          "tag"
+        ]).toLowerCase() || "all",
+
+      views: Number(
+        item.views || item.viewCount || 0
+      ),
+
+      created:
+        item.createdAt ||
+        item.uploadedAt ||
+        item.timestamp ||
+        item.date ||
+        "",
+
+      original: item
+    };
+  }
+
+  function loadUploads() {
+    const videos = new Map();
+
+    TITAN.storageKeys.forEach(key => {
+      let raw;
+
+      try {
+        raw = localStorage.getItem(key);
+      } catch (error) {
+        return;
+      }
+
+      if (!raw) return;
+
+      const parsed = parseJSON(raw);
+
+      let records = [];
+
+      if (Array.isArray(parsed)) {
+        records = parsed;
+      } else if (
+        parsed &&
+        Array.isArray(parsed.uploads)
+      ) {
+        records = parsed.uploads;
+      } else if (
+        parsed &&
+        Array.isArray(parsed.videos)
+      ) {
+        records = parsed.videos;
+      } else if (
+        parsed &&
+        Array.isArray(parsed.items)
+      ) {
+        records = parsed.items;
+      }
+
+      records.forEach((item, index) => {
+        const video = normalizeVideo(item, index);
+
+        if (video) {
+          videos.set(video.id, video);
+        }
+      });
+    });
+
+    TITAN.uploads = Array.from(
+      videos.values()
+    ).sort((a, b) => {
+      const first = Date.parse(a.created) || 0;
+      const second = Date.parse(b.created) || 0;
+
+      return second - first;
+    });
+
+    return TITAN.uploads;
+  }
+
+  /* =========================
+     MODERN NOTIFICATION
+  ========================= */
+
+  function showNotice(message) {
+    let notice = document.getElementById(
+      "titanExtensionNotice"
+    );
+
+    if (!notice) {
+      notice = document.createElement("div");
+
+      notice.id = "titanExtensionNotice";
+
+      notice.style.cssText = `
+        position: fixed;
+        z-index: 999999;
+        left: 50%;
+        bottom: 90px;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 30px);
+        padding: 13px 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(245,180,42,.35);
+        background: #171920;
+        color: #ffffff;
+        font: 600 13px system-ui;
+        box-shadow: 0 12px 40px rgba(0,0,0,.4);
+      `;
+
+      document.body.appendChild(notice);
+    }
+
+    notice.textContent = message;
+    notice.hidden = false;
+
+    clearTimeout(notice._timer);
+
+    notice._timer = setTimeout(() => {
+      notice.hidden = true;
+    }, 2800);
+  }
+
+  /* =========================
+     DISPLAY HELPERS
+  ========================= */
+
+  function formatViews(number) {
+    number = Number(number) || 0;
+
+    if (number >= 1000000) {
+      return (
+        (number / 1000000)
+          .toFixed(1)
+          .replace(/\.0$/, "") +
+        "M views"
+      );
+    }
+
+    if (number >= 1000) {
+      return (
+        (number / 1000)
+          .toFixed(1)
+          .replace(/\.0$/, "") +
+        "K views"
+      );
+    }
+
+    return number + (
+      number === 1 ? " view" : " views"
     );
   }
 
-  function views(v) {
-    const n = Math.max(0, Number(v) || 0);
-    if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
-    if (n >= 1e3) return (n / 1e3).toFixed(1) + "K";
-    return String(n);
+  function timeAgo(dateValue) {
+    const timestamp = Date.parse(dateValue);
+
+    if (!timestamp) {
+      return "Recently uploaded";
+    }
+
+    const seconds = Math.max(
+      0,
+      Math.floor(
+        (Date.now() - timestamp) / 1000
+      )
+    );
+
+    if (seconds < 60) {
+      return "Just now";
+    }
+
+    if (seconds < 3600) {
+      return Math.floor(seconds / 60) + "m ago";
+    }
+
+    if (seconds < 86400) {
+      return Math.floor(seconds / 3600) + "h ago";
+    }
+
+    if (seconds < 604800) {
+      return Math.floor(seconds / 86400) + "d ago";
+    }
+
+    return new Date(timestamp).toLocaleDateString();
   }
 
-  function timeAgo(value) {
-    if (!value) return "TITAN AI";
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return "TITAN AI";
+  console.info(
+    "[TITAN AI] Extension V2 Part 1 loaded."
+  );
 
-    const mins = Math.floor((Date.now() - d.getTime()) / 60000);
-    if (mins < 1) return "Just now";
-    if (mins < 60) return mins + " min ago";
-    if (mins < 1440) return Math.floor(mins / 60) + " hours ago";
-    if (mins < 43200) return Math.floor(mins / 1440) + " days ago";
-    return d.toLocaleDateString();
-  }
+  /*
+   * Part 2 will add:
+   * - Premium video cards
+   * - Shorts cards
+   * - Responsive video player
+   */
+   /* =========================
+     PREMIUM EXTENSION STYLES
+  ========================= */
 
-  function theme() {
-    try {
-      const light = localStorage.getItem(THEME_KEY) === "light";
-      document.body.classList.toggle("light-mode", light);
-    } catch (_) {}
-  }
+  function addTitanStyles() {
+    if (document.getElementById("titanV2ModernStyles")) {
+      return;
+    }
 
-  function toggleTheme() {
-    const light = document.body.classList.contains("light-mode");
-    try {
-      localStorage.setItem(THEME_KEY, light ? "dark" : "light");
-    } catch (_) {}
-    document.body.classList.toggle("light-mode", !light);
-  }
+    const style = document.createElement("style");
+    style.id = "titanV2ModernStyles";
 
-  function styles() {
-    if ($("#titan-v51-style")) return;
+    style.textContent = `
+      .titan-v2-card {
+        position: relative;
+        overflow: hidden;
+        min-width: 0;
+        border-radius: 17px;
+        background: #151720;
+        border: 1px solid rgba(255,255,255,.08);
+        transition: transform .2s ease,
+                    border-color .2s ease,
+                    box-shadow .2s ease;
+        cursor: pointer;
+      }
 
-    const s = document.createElement("style");
-    s.id = "titan-v51-style";
-    s.textContent = `
-      :root {
-        --titan-gold:#f59e0b;
-        --titan-bg:#050507;
-        --titan-card:#0d0e12;
-        --titan-text:#f8fafc;
-        --titan-muted:#9ca3af;
-        --titan-border:rgba(255,255,255,.09);
+      .titan-v2-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(245,180,42,.45);
+        box-shadow: 0 12px 30px rgba(0,0,0,.22);
       }
-      body.light-mode {
-        --titan-bg:#f8fafc;
-        --titan-card:#fff;
-        --titan-text:#111827;
-        --titan-muted:#64748b;
-        --titan-border:rgba(0,0,0,.1);
+
+      .titan-v2-thumbnail {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 75% 20%, #75511d55, transparent 40%),
+          linear-gradient(135deg,#252936,#101116);
       }
-      #titan-extension-home {
-        max-width:720px;width:100%;margin:0 auto;
-        padding:12px 12px 110px;box-sizing:border-box;
-        color:var(--titan-text);
+
+      .titan-v2-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
-      #titan-extension-home * {box-sizing:border-box}
-      #titan-extension-home [hidden] {display:none!important}
-      .titan-header {
-        display:flex;align-items:center;justify-content:space-between;
-        gap:10px;margin-bottom:16px;
+
+      .titan-v2-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: #ffd36b;
+        background: rgba(8,9,13,.85);
+        border: 1px solid rgba(255,255,255,.22);
+        opacity: 0;
+        transition: opacity .2s ease;
       }
-      .titan-brand {display:flex;align-items:center;gap:9px}
-      .titan-logo-svg {width:38px;height:38px;flex-shrink:0}
-      .titan-brand-text {font-size:19px;font-weight:900;color:var(--titan-text)}
-      .titan-brand-text span {color:var(--titan-gold)}
-      .titan-header-actions {display:flex;gap:8px}
-      .titan-icon-btn {
-        width:40px;height:40px;border-radius:50%;
-        border:1px solid var(--titan-border);
-        background:var(--titan-card);color:var(--titan-text);
-        display:flex;align-items:center;justify-content:center;cursor:pointer;
+
+      .titan-v2-card:hover .titan-v2-play {
+        opacity: 1;
       }
-      .titan-chips {
-        display:flex;gap:8px;overflow-x:auto;padding-bottom:14px;
-        scrollbar-width:none;
+
+      .titan-v2-badge {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        padding: 5px 9px;
+        border-radius: 7px;
+        background: rgba(12,13,18,.82);
+        color: #ffd36b;
+        font: 700 10px system-ui;
+        letter-spacing: .5px;
       }
-      .titan-chips::-webkit-scrollbar {display:none}
-      .titan-chip {
-        flex-shrink:0;padding:9px 15px;border-radius:25px;
-        border:1px solid var(--titan-border);
-        background:var(--titan-card);color:var(--titan-text);
-        font-size:13px;font-weight:600;cursor:pointer;
+
+      .titan-v2-card-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 13px;
       }
-      .titan-chip.active {background:var(--titan-gold);color:#111;border-color:var(--titan-gold)}
-      .titan-section {margin:22px 0}
-      .titan-section-title {
-        display:flex;align-items:center;justify-content:space-between;
-        gap:8px;margin-bottom:12px;font-size:16px;font-weight:800;
+
+      .titan-v2-avatar {
+        width: 37px;
+        height: 37px;
+        flex-shrink: 0;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg,#f5b42a,#a96b12);
+        color: #171717;
+        font-size: 14px;
       }
-      .titan-section-title span {font-size:11px;color:var(--titan-muted);font-weight:500}
-      .titan-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-      .titan-card {
-        min-width:0;background:var(--titan-card);
-        border:1px solid var(--titan-border);border-radius:13px;overflow:hidden;
+
+      .titan-v2-details {
+        flex: 1;
+        min-width: 0;
       }
-      .titan-thumb {
-        position:relative;aspect-ratio:16/9;background:#191919;
-        cursor:pointer;overflow:hidden;
+
+      .titan-v2-title {
+        margin: 0 0 7px;
+        color: #f7f7f9;
+        font: 700 14px/1.45 system-ui,sans-serif;
+        overflow-wrap: anywhere;
       }
-      .titan-thumb img {width:100%;height:100%;object-fit:cover;display:block}
-      .titan-placeholder {
-        width:100%;height:100%;display:flex;align-items:center;
-        justify-content:center;color:var(--titan-gold);font-size:30px;
+
+      .titan-v2-meta {
+        color: #9da3b1;
+        font: 400 11px/1.7 system-ui,sans-serif;
       }
-      .titan-play {
-        position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-        width:42px;height:42px;border-radius:50%;background:#000b;color:#fff;
-        display:flex;align-items:center;justify-content:center;pointer-events:none;
+
+      .titan-v2-shorts-grid {
+        display: grid;
+        grid-template-columns: repeat(4,minmax(0,1fr));
+        gap: 14px;
+        margin-top: 18px;
       }
-      .titan-card-info {padding:10px}
-      .titan-card-info h3 {
-        margin:0 0 6px;font-size:13px;line-height:1.4;
-        font-weight:700;overflow-wrap:anywhere;color:var(--titan-text);
+
+      .titan-v2-short-card {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 9 / 16;
+        min-width: 0;
+        padding: 0;
+        border: 1px solid rgba(255,255,255,.1);
+        border-radius: 17px;
+        background: #171923;
+        cursor: pointer;
+        text-align: left;
       }
-      .titan-card-info p {margin:0;color:var(--titan-muted);font-size:11px;line-height:1.5}
-      .titan-empty {
-        grid-column:1/-1;text-align:center;padding:28px 12px;
-        color:var(--titan-muted);border:1px dashed var(--titan-border);
-        border-radius:13px;font-size:13px;
+
+      .titan-v2-short-card img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
-      .titan-bottom-nav {
-        position:fixed;bottom:0;left:0;right:0;z-index:999;
-        display:flex;justify-content:space-around;align-items:center;
-        padding:8px 5px 18px;background:var(--titan-card);
-        border-top:1px solid var(--titan-border);
+
+      .titan-v2-short-card::after {
+        content: "";
+        position: absolute;
+        inset: 35% 0 0;
+        background: linear-gradient(transparent,rgba(0,0,0,.85));
       }
-      .titan-nav-item {
-        flex:1;min-height:50px;display:flex;flex-direction:column;
-        align-items:center;justify-content:center;gap:3px;
-        background:none;border:0;color:var(--titan-muted);
-        font-size:11px;cursor:pointer;
+
+      .titan-v2-short-title {
+        position: absolute;
+        z-index: 2;
+        bottom: 12px;
+        left: 11px;
+        right: 11px;
+        color: white;
+        font: 700 12px/1.45 system-ui;
+        overflow-wrap: anywhere;
       }
-      .titan-nav-item i {font-size:20px}
-      .titan-nav-item.active {color:var(--titan-gold)}
-      .titan-nav-item.center {position:relative;top:-7px}
-      .titan-plus {
-        width:49px;height:49px;border-radius:50%;
-        background:var(--titan-gold);color:#111;
-        display:flex;align-items:center;justify-content:center;font-size:23px;
+
+      .titan-v2-empty {
+        grid-column: 1 / -1;
+        padding: 28px 18px;
+        border: 1px dashed rgba(255,255,255,.16);
+        border-radius: 16px;
+        text-align: center;
+        color: #9da3b1;
       }
-      #titan-player-modal {
-        position:fixed;inset:0;z-index:99999;background:#000f;
-        display:none;align-items:center;justify-content:center;padding:15px;
+
+      .titan-v2-player-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 999990;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        background: rgba(3,4,7,.94);
+        backdrop-filter: blur(14px);
       }
-      .titan-player-box {width:100%;max-width:900px;position:relative;background:#111;border-radius:12px;overflow:hidden}
-      .titan-player-close {
-        position:absolute;right:9px;top:9px;z-index:2;width:40px;height:40px;
-        border:0;border-radius:50%;background:#333;color:#fff;font-size:22px;cursor:pointer;
+
+      .titan-v2-player-shell {
+        width: min(1050px,100%);
+        overflow: hidden;
+        border: 1px solid rgba(245,180,42,.28);
+        border-radius: 19px;
+        background: #101117;
+        box-shadow: 0 25px 90px rgba(0,0,0,.6);
       }
-      .titan-player-video {display:block;width:100%;max-height:75vh;background:#000}
-      .titan-player-title {padding:12px;color:#fff;font-weight:600;overflow-wrap:anywhere}
-      @media(max-width:360px) {
-        #titan-extension-home {padding-left:8px;padding-right:8px}
-        .titan-grid {gap:8px}
-        .titan-card-info {padding:8px}
+
+      .titan-v2-player-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 16px;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+      }
+
+      .titan-v2-player-heading {
+        color: #fff;
+        font: 700 15px system-ui;
+        overflow-wrap: anywhere;
+      }
+
+      .titan-v2-player-close {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.13);
+        background: #ffffff08;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .titan-v2-player-video {
+        display: block;
+        width: 100%;
+        max-height: 76vh;
+        aspect-ratio: 16 / 9;
+        object-fit: contain;
+        background: #000;
+      }
+
+      .titan-v2-player-footer {
+        padding: 13px 16px;
+        color: #aab0bd;
+        font: 12px/1.7 system-ui;
+      }
+
+      @media(max-width:760px) {
+        .titan-v2-shorts-grid {
+          grid-template-columns: repeat(2,minmax(0,1fr));
+          gap: 10px;
+        }
+
+        .titan-v2-player-overlay {
+          padding: 7px;
+        }
+
+        .titan-v2-player-shell {
+          border-radius: 13px;
+        }
+
+        .titan-v2-player-video {
+          max-height: 72vh;
+        }
+      }
+
+      @media(prefers-reduced-motion:reduce) {
+        .titan-v2-card,
+        .titan-v2-play {
+          transition: none;
+        }
       }
     `;
-    document.head.appendChild(s);
+
+    document.head.appendChild(style);
   }
 
-  function player(url, title) {
-    const src = mediaURL(url);
-    if (!src) return alert("Video URL valid nahi hai.");
+  /* =========================
+     VIDEO PLAYER
+  ========================= */
 
-    let modal = $("#titan-player-modal");
-    if (!modal) {
-      modal = document.createElement("div");
-      modal.id = "titan-player-modal";
-      modal.innerHTML = `
-        <div class="titan-player-box">
-          <button class="titan-player-close" id="titan-player-close">×</button>
-          <video id="titan-player" class="titan-player-video" controls playsinline preload="metadata"></video>
-          <div id="titan-player-title" class="titan-player-title"></div>
-        </div>`;
-      document.body.appendChild(modal);
+  function closeTitanPlayer() {
+    const overlay = document.getElementById(
+      "titanV2PlayerOverlay"
+    );
 
-      modal.addEventListener("click", e => {
-        if (e.target === modal || e.target.id === "titan-player-close") closePlayer();
-      });
-    }
+    if (!overlay) return;
 
-    const video = $("#titan-player");
-    video.src = src;
-    $("#titan-player-title").textContent = title || "TITAN AI Video";
-    modal.style.display = "flex";
-    document.body.style.overflow = "hidden";
-    video.play().catch(() => {});
-  }
+    const video = overlay.querySelector("video");
 
-  function closePlayer() {
-    const modal = $("#titan-player-modal");
-    const video = $("#titan-player");
     if (video) {
       video.pause();
       video.removeAttribute("src");
+
+      video.querySelectorAll("source").forEach(source => {
+        source.removeAttribute("src");
+      });
+
       video.load();
     }
-    if (modal) modal.style.display = "none";
+
+    overlay.remove();
     document.body.style.overflow = "";
+    document.removeEventListener(
+      "keydown",
+      titanPlayerEscape
+    );
   }
 
-  window.playTitanFeedVideo = player;
-  window.closeTitanFeedVideo = closePlayer;
+  function titanPlayerEscape(event) {
+    if (event.key === "Escape") {
+      closeTitanPlayer();
+    }
+  }
 
-  function renderGrid(selector, list) {
-    const grid = $(selector);
-    if (!grid) return;
+  function playTitanVideo(videoData) {
+    if (!videoData || !videoData.url) {
+      showNotice(
+        "Is video ka playable URL nahi mila. Upload system check karna hoga."
+      );
+      return;
+    }
 
-    const valid = (Array.isArray(list) ? list : []).filter(v =>
-      v && mediaURL(v.url)
+    closeTitanPlayer();
+
+    const overlay = document.createElement("div");
+
+    overlay.id = "titanV2PlayerOverlay";
+    overlay.className = "titan-v2-player-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", videoData.title);
+
+    overlay.innerHTML = `
+      <div class="titan-v2-player-shell">
+
+        <div class="titan-v2-player-header">
+          <div class="titan-v2-player-heading">
+            ${escapeHTML(videoData.title)}
+          </div>
+
+          <button
+            type="button"
+            class="titan-v2-player-close"
+            data-titan-v2-close
+            aria-label="Close video player"
+          >
+            ✕
+          </button>
+        </div>
+
+        <video
+          class="titan-v2-player-video"
+          controls
+          playsinline
+          preload="metadata"
+          ${videoData.thumbnail
+            ? `poster="${escapeHTML(videoData.thumbnail)}"`
+            : ""}
+        >
+          <source src="${escapeHTML(videoData.url)}">
+          Your browser does not support video playback.
+        </video>
+
+        <div class="titan-v2-player-footer">
+          ${escapeHTML(videoData.creator)}
+          · ${escapeHTML(formatViews(videoData.views))}
+          · ${escapeHTML(timeAgo(videoData.created))}
+        </div>
+
+      </div>
+    `;
+
+    overlay.addEventListener("click", event => {
+      if (
+        event.target === overlay ||
+        event.target.closest("[data-titan-v2-close]")
+      ) {
+        closeTitanPlayer();
+      }
+    });
+
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+
+    document.addEventListener(
+      "keydown",
+      titanPlayerEscape
     );
 
-    if (!valid.length) {
-      grid.innerHTML = `<div class="titan-empty">Abhi koi video nahi hai.</div>`;
-      return;
+    const media = overlay.querySelector("video");
+    const result = media.play();
+
+    if (result && typeof result.catch === "function") {
+      result.catch(() => {
+        // Mobile browsers may require the user to press Play.
+      });
     }
-
-    grid.innerHTML = valid.map(v => {
-      const title = esc(v.title || "Untitled Video");
-      const url = esc(mediaURL(v.url));
-      const thumb = mediaURL(v.thumb || v.thumbnail || v.thumbnailUrl);
-      const image = thumb
-        ? `<img src="${esc(thumb)}" alt="${title}" loading="lazy"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-           <div class="titan-placeholder" style="display:none"><i class="fa-solid fa-film"></i></div>`
-        : `<div class="titan-placeholder"><i class="fa-solid fa-film"></i></div>`;
-
-      return `
-        <article class="titan-card">
-          <div class="titan-thumb" data-play="${url}" data-title="${title}" role="button" tabindex="0">
-            ${image}
-            <div class="titan-play"><i class="fa-solid fa-play"></i></div>
-          </div>
-          <div class="titan-card-info">
-            <h3>${title}</h3>
-            <p><i class="fa-regular fa-eye"></i> ${views(v.views)} views · ${esc(timeAgo(v.createdAt))}</p>
-          </div>
-        </article>`;
-    }).join("");
   }
 
-  function refreshFeeds() {
-    const all = uploads();
-    const long = all.filter(isLong);
-    const shorts = all.filter(isShort);
+  window.closeTitanFeedVideo = closeTitanPlayer;
 
-    long.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-    shorts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  /* =========================
+     VIDEO CARD BUILDER
+  ========================= */
 
-    renderGrid("#titan-trending", long.slice(0, 4));
-    renderGrid("#titan-recommended", long.slice(4, 8));
-    renderGrid("#titan-latest", long);
-    renderGrid("#titan-shorts-grid", shorts);
-  }
+  function createTitanVideoCard(video) {
+    const card = document.createElement("article");
 
-  window.titanRefreshVideoFeeds = refreshFeeds;
+    card.className = "titan-v2-card";
+    card.dataset.titanVideoId = video.id;
+    card.dataset.category = video.category;
+    card.dataset.search = (
+      video.title + " " +
+      video.creator + " " +
+      video.category
+    ).toLowerCase();
 
-  function createHome() {
-    const old = $("#titan-extension-home");
-    if (old) old.remove();
+    const thumbnail = video.thumbnail
+      ? `<img
+           src="${escapeHTML(video.thumbnail)}"
+           alt=""
+           loading="lazy"
+         >`
+      : "";
 
-    const home = document.createElement("section");
-    home.id = "titan-extension-home";
+    card.innerHTML = `
+      <div class="titan-v2-thumbnail">
+        ${thumbnail}
 
-    home.innerHTML = `
-      <header class="titan-header">
-        <div class="titan-brand">
-          <svg class="titan-logo-svg" viewBox="0 0 100 100" fill="none">
-            <defs><linearGradient id="titan-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/>
-            </linearGradient></defs>
-            <polygon points="50,6 90,28 90,72 50,94 10,72 10,28" stroke="url(#titan-gold)" stroke-width="6"/>
-            <text x="50" y="64" text-anchor="middle" font-size="38" font-weight="900" fill="url(#titan-gold)" font-family="Arial Black,Arial">T</text>
-          </svg>
-          <div class="titan-brand-text">TITAN <span>AI</span></div>
-        </div>
-        <div class="titan-header-actions">
-          <button class="titan-icon-btn" data-theme aria-label="Theme"><i class="fa-solid fa-moon"></i></button>
-          <button class="titan-icon-btn" data-search aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
-        </div>
-      </header>
+        <span class="titan-v2-badge">
+          ${video.isShort ? "TITAN SHORT" : "CREATOR VIDEO"}
+        </span>
 
-      <div class="titan-chips">
-        <button class="titan-chip active" data-filter="all">All</button>
-        <button class="titan-chip" data-filter="movies">AI Movies</button>
-        <button class="titan-chip" data-filter="shorts">Shorts</button>
-        <button class="titan-chip" data-filter="gaming">Gaming</button>
-        <button class="titan-chip" data-filter="music">Music</button>
+        <span class="titan-v2-play">▶</span>
       </div>
 
-      <section class="titan-section" data-feed-section="long">
-        <div class="titan-section-title"><div><i class="fa-solid fa-fire" style="color:var(--titan-gold)"></i> Trending Now</div><span>POPULAR</span></div>
-        <div class="titan-grid" id="titan-trending"></div>
-      </section>
+      <div class="titan-v2-card-info">
 
-      <section class="titan-section" data-feed-section="long">
-        <div class="titan-section-title"><div><i class="fa-solid fa-star" style="color:var(--titan-gold)"></i> Recommended For You</div><span>FOR YOU</span></div>
-        <div class="titan-grid" id="titan-recommended"></div>
-      </section>
+        <div class="titan-v2-avatar">T</div>
 
-      <section class="titan-section" data-feed-section="long">
-        <div class="titan-section-title"><div><i class="fa-solid fa-users" style="color:var(--titan-gold)"></i> Latest from Creators</div><span>NEW</span></div>
-        <div class="titan-grid" id="titan-latest"></div>
-      </section>
+        <div class="titan-v2-details">
+          <h3 class="titan-v2-title">
+            ${escapeHTML(video.title)}
+          </h3>
 
-      <section class="titan-section" data-feed-section="shorts" id="titan-shorts-section" hidden>
-        <div class="titan-section-title"><div><i class="fa-solid fa-bolt" style="color:var(--titan-gold)"></i> TITAN Shorts</div><span>SHORT VIDEOS</span></div>
-        <div class="titan-grid" id="titan-shorts-grid"></div>
-      </section>
+          <div class="titan-v2-meta">
+            ${escapeHTML(video.creator)}<br>
+            ${escapeHTML(formatViews(video.views))}
+            · ${escapeHTML(timeAgo(video.created))}
+          </div>
+        </div>
 
-      <nav class="titan-bottom-nav">
-        <button class="titan-nav-item active" data-nav="home"><i class="fa-solid fa-house"></i><span>Home</span></button>
-        <button class="titan-nav-item" data-nav="shorts"><i class="fa-solid fa-bolt"></i><span>Shorts</span></button>
-        <button class="titan-nav-item center" data-nav="plus"><div class="titan-plus"><i class="fa-solid fa-plus"></i></div></button>
-        <button class="titan-nav-item" data-nav="studio"><i class="fa-solid fa-clapperboard"></i><span>Studio</span></button>
-        <button class="titan-nav-item" data-nav="profile"><i class="fa-solid fa-user"></i><span>Profile</span></button>
-      </nav>`;
+      </div>
+    `;
 
-    (document.querySelector(".features-section") || document.body).appendChild(home);
-  }
-
-  function showFeed(filter) {
-    const shortsOnly = filter === "shorts";
-
-    document.querySelectorAll("#titan-extension-home [data-feed-section]").forEach(section => {
-      section.hidden = shortsOnly
-        ? section.getAttribute("data-feed-section") !== "shorts"
-        : section.getAttribute("data-feed-section") === "shorts";
+    card.addEventListener("click", () => {
+      playTitanVideo(video);
     });
 
-    document.querySelectorAll("#titan-extension-home [data-filter]").forEach(button => {
-      button.classList.toggle("active", button.getAttribute("data-filter") === filter);
+    return card;
+  }
+
+  console.info(
+    "[TITAN AI] Extension V2 Part 2 loaded."
+  );
+
+  /*
+   * Part 3 will add:
+   * - Connection to the updated index.html
+   * - Home feed rendering
+   * - Shorts feed rendering
+   * - Search and category integration
+   * - Upload refresh events
+   * - Final initialization  /* =========================
+     HOME FEED INTEGRATION
+  ========================= */
+
+  function renderHomeFeed() {
+    const grid = document.getElementById("titanVideoGrid");
+
+    if (!grid) {
+      console.warn(
+        "[TITAN AI] #titanVideoGrid nahi mila. index.html ke actual grid ID ko verify karna hoga."
+      );
+      return;
+    }
+
+    grid.querySelectorAll("[data-titan-v2-card]").forEach(card => {
+      card.remove();
+    });
+
+    const videos = TITAN.uploads.filter(video => !video.isShort);
+
+    videos.forEach(video => {
+      const card = createTitanVideoCard(video);
+      card.dataset.titanV2Card = "true";
+      grid.appendChild(card);
+    });
+
+    applyHomeFilters();
+  }
+
+  /* =========================
+     SHORTS FEED INTEGRATION
+  ========================= */
+
+  function renderShortsFeed() {
+    const shortsView = document.getElementById("titanShortsView");
+
+    if (!shortsView) return;
+
+    let grid = document.getElementById("titanV2ShortsGrid");
+
+    if (!grid) {
+      grid = document.createElement("div");
+      grid.id = "titanV2ShortsGrid";
+      grid.className = "titan-v2-shorts-grid";
+
+      const panel = shortsView.querySelector(".feature-panel");
+
+      if (panel) {
+        panel.insertAdjacentElement("afterend", grid);
+      } else {
+        shortsView.appendChild(grid);
+      }
+    }
+
+    grid.replaceChildren();
+
+    const shorts = TITAN.uploads.filter(video => video.isShort);
+
+    if (!shorts.length) {
+      const empty = document.createElement("div");
+      empty.className = "titan-v2-empty";
+
+      empty.innerHTML = `
+        <div style="font-size:32px;margin-bottom:10px">🎬</div>
+        <h3 style="color:#fff;margin:0 0 8px">
+          Your Shorts Start Here
+        </h3>
+        <p style="margin:0">
+          Upload a vertical video to build your TITAN Shorts feed.
+        </p>
+      `;
+
+      grid.appendChild(empty);
+      return;
+    }
+
+    shorts.forEach(video => {
+      const card = document.createElement("button");
+
+      card.type = "button";
+      card.className = "titan-v2-short-card";
+      card.setAttribute("aria-label", "Play " + video.title);
+
+      card.innerHTML = `
+        ${
+          video.thumbnail
+            ? `<img src="${escapeHTML(video.thumbnail)}" alt="" loading="lazy">`
+            : `<span style="
+                position:absolute;
+                inset:0;
+                display:grid;
+                place-items:center;
+                color:#ffd36b;
+                font-size:34px;
+                background:linear-gradient(135deg,#252936,#101116)
+              ">▶</span>`
+        }
+
+        <span class="titan-v2-short-title">
+          ${escapeHTML(video.title)}
+        </span>
+      `;
+
+      card.addEventListener("click", () => {
+        playTitanVideo(video);
+      });
+
+      grid.appendChild(card);
     });
   }
 
-  document.addEventListener("click", function (e) {
-    const target = e.target instanceof Element ? e.target : null;
-    if (!target) return;
+  /* =========================
+     SEARCH & CATEGORY FILTERS
+  ========================= */
 
-    if (target.closest("[data-theme]")) {
-      toggleTheme();
-      return;
-    }
+  function applyHomeFilters() {
+    const grid = document.getElementById("titanVideoGrid");
 
-    const playButton = target.closest("[data-play]");
-    if (playButton) {
-      player(playButton.getAttribute("data-play"), playButton.getAttribute("data-title"));
-      return;
-    }
+    if (!grid) return;
 
-    const filterButton = target.closest("[data-filter]");
-    if (filterButton) {
-      showFeed(filterButton.getAttribute("data-filter"));
-      refreshFeeds();
-      return;
-    }
+    const cards = grid.querySelectorAll(".titan-v2-card");
 
-    if (target.closest("[data-search]")) {
-      const q = prompt("Video ka naam likhein:");
-      if (q && q.trim()) {
-        const found = uploads().filter(v =>
-          String(v.title || "").toLowerCase().includes(q.trim().toLowerCase())
+    cards.forEach(card => {
+      const category = (
+        card.dataset.category || "all"
+      ).toLowerCase();
+
+      const searchText = (
+        card.dataset.search || ""
+      ).toLowerCase();
+
+      const categoryMatch =
+        TITAN.activeCategory === "all" ||
+        category === TITAN.activeCategory ||
+        (
+          TITAN.activeCategory === "movies" &&
+          /movie|film|cinema/.test(searchText)
         );
-        renderGrid("#titan-trending", found.filter(isLong));
-        renderGrid("#titan-recommended", []);
-        renderGrid("#titan-latest", found.filter(isShort));
-        showFeed("all");
-      }
-      return;
+
+      const searchMatch =
+        !TITAN.searchQuery ||
+        searchText.includes(TITAN.searchQuery);
+
+      card.style.display =
+        categoryMatch && searchMatch ? "" : "none";
+    });
+  }
+
+  function connectSearch() {
+    const searchInput = document.getElementById("titanSearchInput");
+
+    if (searchInput) {
+      searchInput.addEventListener("input", () => {
+        TITAN.searchQuery = searchInput.value
+          .trim()
+          .toLowerCase();
+
+        applyHomeFilters();
+      });
     }
 
-    const navButton = target.closest("[data-nav]");
-    if (!navButton) return;
+    const categoryRow = document.getElementById("titanCategoryRow");
 
-    const nav = navButton.getAttribute("data-nav");
+    if (categoryRow) {
+      categoryRow.addEventListener("click", event => {
+        const chip = event.target.closest("[data-category]");
 
-    document.querySelectorAll("#titan-extension-home [data-nav]").forEach(button => {
-      button.classList.toggle("active", button === navButton);
+        if (!chip) return;
+
+        TITAN.activeCategory = (
+          chip.dataset.category || "all"
+        ).toLowerCase();
+
+        categoryRow.querySelectorAll(".category-chip").forEach(item => {
+          item.classList.toggle("active", item === chip);
+        });
+
+        applyHomeFilters();
+      });
+    }
+  }
+
+  /* =========================
+     REFRESH UPLOADS
+  ========================= */
+
+  function refreshTitanExtension() {
+    loadUploads();
+    renderHomeFeed();
+    renderShortsFeed();
+  }
+
+  window.titanRefreshVideoFeeds = refreshTitanExtension;
+
+  window.titanExtensionsV2 = {
+    version: TITAN.version,
+
+    refresh: refreshTitanExtension,
+
+    getUploads: function () {
+      return TITAN.uploads.slice();
+    },
+
+    playVideoById: function (id) {
+      const video = TITAN.uploads.find(item => item.id === String(id));
+
+      if (video) {
+        playTitanVideo(video);
+      } else {
+        showNotice("Video nahi mili.");
+      }
+    },
+
+    closePlayer: closeTitanPlayer
+  };
+
+  /* =========================
+     APP EVENTS
+  ========================= */
+
+  function connectUploadEvents() {
+    [
+      "titan:uploads-updated",
+      "titan:upload-complete",
+      "titan:video-uploaded",
+      "titan:videos-updated"
+    ].forEach(eventName => {
+      window.addEventListener(eventName, refreshTitanExtension);
     });
 
-    if (nav === "home") {
-      showFeed("all");
-      refreshFeeds();
-    }
-
-    if (nav === "shorts") {
-      refreshFeeds();
-      showFeed("shorts");
-    }
-
-    if (nav === "plus") {
-      if (typeof window.titanOpenUpload === "function") {
-        window.titanOpenUpload();
-      } else if (typeof window.openTitanCreatorCenter === "function") {
-        window.openTitanCreatorCenter();
-      } else if (typeof window.openTitanUploadStudio === "function") {
-        window.openTitanUploadStudio();
-      } else {
-        alert("Upload system abhi ready nahi hai.");
+    window.addEventListener("storage", event => {
+      if (
+        !event.key ||
+        TITAN.storageKeys.includes(event.key)
+      ) {
+        refreshTitanExtension();
       }
-    }
+    });
+  }
 
-    if (nav === "studio") {
-      if (typeof window.openTitanStudioGemini === "function") {
-        window.openTitanStudioGemini();
-      } else {
-        alert("Studio abhi ready nahi hai.");
-      }
-    }
+  /* =========================
+     START EXTENSION
+  ========================= */
 
-    if (nav === "profile") {
-      if (typeof window.openTitanProfile === "function") {
-        window.openTitanProfile();
-      } else if (typeof window.openProfilePage === "function") {
-        window.openProfilePage();
-      } else {
-        alert("Profile abhi ready nahi hai.");
-      }
-    }
-  });
+  function initTitanExtension() {
+    addTitanStyles();
+    connectSearch();
+    connectUploadEvents();
+    refreshTitanExtension();
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    if (!(e.target instanceof Element)) return;
-
-    const card = e.target.closest(".titan-thumb[data-play]");
-    if (!card) return;
-
-    e.preventDefault();
-    player(card.getAttribute("data-play"), card.getAttribute("data-title"));
-  });
-
-  function init() {
-    try {
-      theme();
-      styles();
-      createHome();
-      refreshFeeds();
-      window.addEventListener("titan:uploads-updated", refreshFeeds);
-      console.log("TITAN AI v5.1.0 ready");
-    } catch (error) {
-      console.error("TITAN AI init error:", error);
-    }
+    console.info(
+      "[TITAN AI] Extensions V2 " +
+      TITAN.version +
+      " initialized."
+    );
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener(
+      "DOMContentLoaded",
+      initTitanExtension,
+      { once: true }
+    );
   } else {
-    init();
+    initTitanExtension();
   }
+
 })();
+   */
+ 
