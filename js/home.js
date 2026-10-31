@@ -38,7 +38,7 @@
                 const matchesCategory = activeCategory === "all" || category === activeCategory;
                 const matchesSearch = !query || searchableText.includes(query);
                 const visible = matchesCategory && matchesSearch;
-                card.hidden = !visible;
+                card.style.display = visible ? "" : "none";
                 if (visible) visibleCount += 1;
             });
 
