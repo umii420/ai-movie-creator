@@ -45,6 +45,9 @@
             // Load Home Page
             app.innerHTML = homeContent.innerHTML;
 
+            // Initialize interactions after dynamic Home markup is mounted.
+            window.initTitanHome?.();
+
             // Load page CSS
             const cssFiles = page.querySelectorAll(
                 'link[rel="stylesheet"]'
