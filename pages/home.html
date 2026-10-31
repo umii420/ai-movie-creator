@@ -4,356 +4,469 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#08090d">
-  <meta name="description" content="TITAN AI — Watch, create, and inspire.">
   <title>TITAN AI — Watch, Create, Inspire</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="/css/style.css">
 
-  <style>
-    /* HOME PAGE ONLY — global design tokens come from /css/style.css */
-    .home-wrap { padding-bottom: 96px; }
-    .home-header-actions { display:flex; align-items:center; gap:10px; }
-    .home-search {
-      display:flex; align-items:center; gap:10px; width:min(270px, 30vw);
-      min-height:42px; padding:0 14px; border:1px solid var(--titan-border);
-      border-radius:var(--titan-radius-pill); background:rgba(255,255,255,.035);
-      color:var(--titan-muted);
-    }
-    .home-search input { width:100%; border:0; outline:0; background:transparent; color:var(--titan-text); }
-    .home-search input::placeholder { color:var(--titan-muted); }
-    .home-hero {
-      position:relative; isolation:isolate; overflow:hidden; min-height:390px;
-      display:flex; align-items:center; padding:clamp(28px,6vw,68px);
-      border:1px solid rgba(164,119,255,.24); border-radius:30px;
-      background:
-        radial-gradient(circle at 78% 48%, rgba(164,119,255,.30), transparent 27%),
-        radial-gradient(circle at 90% 12%, rgba(233,196,106,.16), transparent 25%),
-        linear-gradient(115deg,#151321 0%,#11121d 55%,#171126 100%);
-      box-shadow:var(--titan-shadow-md);
-    }
-    .home-hero::before {
-      content:""; position:absolute; z-index:-1; width:340px; height:340px;
-      right:8%; top:50%; transform:translateY(-50%); border-radius:50%;
-      border:1px solid rgba(233,196,106,.22);
-      box-shadow:0 0 0 28px rgba(164,119,255,.035),0 0 0 58px rgba(233,196,106,.025),0 0 90px rgba(149,102,255,.2);
-    }
-    .home-hero::after {
-      content:"✦"; position:absolute; right:19%; top:24%; color:var(--titan-gold);
-      font-size:clamp(5rem,12vw,9rem); opacity:.8; text-shadow:0 0 45px rgba(233,196,106,.45);
-    }
-    .home-hero-content { max-width:620px; }
-    .home-eyebrow {
-      display:inline-flex; align-items:center; gap:8px; margin-bottom:18px;
-      color:var(--titan-gold); font-size:.76rem; font-weight:800; letter-spacing:.16em;
-      text-transform:uppercase;
-    }
-    .home-hero h1 { max-width:600px; font-size:clamp(2.5rem,6vw,5rem); }
-    .home-hero p { max-width:510px; margin-top:18px; font-size:1rem; line-height:1.8; }
-    .home-hero-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
-    .home-hero-note { margin-top:18px; color:var(--titan-muted); font-size:.78rem; }
-    .home-short-row { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:14px; }
-    .home-short {
-      position:relative; overflow:hidden; aspect-ratio:9/14; min-height:170px;
-      display:flex; align-items:flex-end; padding:14px; border:1px solid var(--titan-border);
-      border-radius:20px; background:
-        linear-gradient(180deg,transparent 35%,rgba(0,0,0,.88)),
-        var(--short-bg,linear-gradient(145deg,#30214d,#171b2b));
-      transition:transform var(--titan-transition),border-color var(--titan-transition);
-    }
-    .home-short:hover { transform:translateY(-4px); border-color:rgba(233,196,106,.5); }
-    .home-short-icon {
-      position:absolute; top:13px; left:13px; width:34px; height:34px;
-      display:grid; place-items:center; border:1px solid rgba(255,255,255,.2);
-      border-radius:50%; background:rgba(0,0,0,.3); color:#fff;
-    }
-    .home-short strong { display:block; font-size:.88rem; line-height:1.35; }
-    .home-short small { display:block; margin-top:4px; color:rgba(255,255,255,.7); font-size:.7rem; }
-    .home-video-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
-    .home-video-thumb {
-      position:relative; aspect-ratio:16/9; overflow:hidden; display:grid; place-items:center;
-      border-radius:17px; background:
-        radial-gradient(circle at 70% 30%,rgba(164,119,255,.55),transparent 28%),
-        linear-gradient(135deg,#28213d,#111723 65%,#3a2b24);
-    }
-    .home-video-thumb.variant-two { background:radial-gradient(circle at 25% 25%,rgba(233,196,106,.35),transparent 30%),linear-gradient(135deg,#28202a,#151b2c 60%,#35284d); }
-    .home-video-thumb.variant-three { background:radial-gradient(circle at 75% 35%,rgba(70,170,190,.32),transparent 30%),linear-gradient(135deg,#142b35,#171725 65%,#38284b); }
-    .home-video-thumb.variant-four { background:radial-gradient(circle at 50% 30%,rgba(233,196,106,.3),transparent 30%),linear-gradient(135deg,#302b20,#191a25 65%,#452b36); }
-    .home-video-thumb.variant-five { background:radial-gradient(circle at 25% 35%,rgba(149,102,255,.42),transparent 30%),linear-gradient(135deg,#25203d,#151724 65%,#263a3b); }
-    .home-video-thumb.variant-six { background:radial-gradient(circle at 75% 35%,rgba(233,196,106,.28),transparent 30%),linear-gradient(135deg,#332338,#171723 65%,#29344a); }
-    .home-play {
-      width:52px; height:52px; display:grid; place-items:center; padding-left:3px;
-      border:1px solid rgba(255,255,255,.42); border-radius:50%;
-      background:rgba(8,9,13,.48); color:#fff; font-size:1.05rem;
-      backdrop-filter:blur(8px);
-    }
-    .home-duration {
-      position:absolute; right:10px; bottom:10px; padding:4px 7px;
-      border-radius:6px; background:rgba(0,0,0,.75); color:#fff; font-size:.7rem;
-    }
-    .home-video-info { display:flex; gap:11px; padding-top:13px; }
-    .home-video-info h3 { font-family:var(--titan-font-body); font-size:.92rem; letter-spacing:-.02em; line-height:1.4; }
-    .home-video-info p { margin-top:5px; font-size:.76rem; }
-    .home-creator-card { display:flex; align-items:center; gap:13px; padding:16px; }
-    .home-creator-card h3 { font-family:var(--titan-font-body); font-size:.9rem; letter-spacing:0; }
-    .home-creator-card p { margin-top:3px; font-size:.75rem; }
-    .home-studio-banner {
-      display:flex; align-items:center; justify-content:space-between; gap:24px;
-      padding:clamp(22px,4vw,36px); border:1px solid rgba(149,102,255,.28);
-      border-radius:24px; background:
-        radial-gradient(circle at 85% 50%,rgba(149,102,255,.22),transparent 30%),
-        linear-gradient(110deg,#171321,#111520);
-    }
-    .home-studio-copy { max-width:650px; }
-    .home-studio-copy p { margin-top:10px; line-height:1.75; }
-    .home-studio-icon {
-      width:76px; height:76px; flex:0 0 auto; display:grid; place-items:center;
-      border:1px solid rgba(233,196,106,.3); border-radius:22px;
-      background:var(--titan-gold-soft); color:var(--titan-gold); font-size:2rem;
-    }
-    .home-footer {
-      display:flex; justify-content:space-between; gap:18px; padding:28px 0 8px;
-      border-top:1px solid var(--titan-border); color:var(--titan-muted); font-size:.76rem;
-    }
-    @media(max-width:1000px) {
-      .home-short-row { grid-template-columns:repeat(3,minmax(0,1fr)); }
-      .home-video-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    }
-    @media(max-width:700px) {
-      .home-search { display:none; }
-      .home-hero { min-height:430px; align-items:flex-start; padding:30px 22px; }
-      .home-hero::before { width:220px; height:220px; right:-55px; top:75%; }
-      .home-hero::after { right:12%; top:55%; font-size:5rem; }
-      .home-hero-content { position:relative; z-index:1; }
-      .home-hero p { max-width:95%; font-size:.9rem; }
-      .home-short-row { grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
-      .home-short { min-height:145px; padding:10px; border-radius:15px; }
-      .home-short strong { font-size:.75rem; }
-      .home-short small { font-size:.65rem; }
-      .home-video-grid { grid-template-columns:1fr; gap:22px; }
-      .home-studio-banner { align-items:flex-start; }
-      .home-studio-icon { width:54px; height:54px; border-radius:16px; font-size:1.4rem; }
-      .home-footer { flex-direction:column; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/home.css">
 </head>
 
 <body>
-  <div id="titan-app">
-    <header class="titan-header">
-      <div class="titan-header-inner">
-        <a class="titan-brand" href="/pages/home.html" aria-label="TITAN AI Home">
-          <span class="titan-brand-mark"><i class="fa-solid fa-crown"></i></span>
-          <span>TITAN<span class="titan-gold-text"> AI</span></span>
+<div id="titan-app">
+
+  <!-- HEADER -->
+  <header class="titan-header home-header">
+    <div class="titan-header-inner">
+
+      <a class="titan-brand" href="/pages/home.html">
+        <span class="titan-brand-mark">
+          <i class="fa-solid fa-crown"></i>
+        </span>
+        <span>TITAN<span class="titan-gold-text"> AI</span></span>
+      </a>
+
+      <nav class="titan-nav titan-nav-desktop">
+        <a class="titan-nav-link is-active" href="/pages/home.html">
+          <i class="fa-solid fa-house"></i> Home
         </a>
 
-        <nav class="titan-nav titan-nav-desktop" aria-label="Main navigation">
-          <a class="titan-nav-link is-active" href="/pages/home.html"><i class="fa-solid fa-house"></i> Home</a>
-          <a class="titan-nav-link" href="/pages/shorts.html"><i class="fa-solid fa-bolt"></i> Shorts</a>
-          <a class="titan-nav-link" href="/pages/videos.html"><i class="fa-solid fa-circle-play"></i> Videos</a>
-          <a class="titan-nav-link" href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Studio</a>
-        </nav>
+        <a class="titan-nav-link" href="/pages/shorts.html">
+          <i class="fa-solid fa-bolt"></i> Shorts
+        </a>
 
-        <div class="home-header-actions">
-          <label class="home-search" aria-label="Search TITAN AI">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="search" placeholder="Search videos and creators">
-          </label>
-          <a class="titan-btn titan-btn-primary titan-btn-sm" href="/pages/creator.html">
-            <i class="fa-solid fa-plus"></i><span>Create</span>
+        <a class="titan-nav-link" href="/pages/studio.html">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Studio
+        </a>
+      </nav>
+
+      <div class="home-header-actions">
+        <label class="home-search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="search" placeholder="Search videos and creators">
+        </label>
+
+        <button class="titan-btn titan-btn-primary home-create-btn" type="button" data-open-upload>
+          <i class="fa-solid fa-plus"></i>
+          <span>Create</span>
+        </button>
+
+        <a class="titan-btn titan-btn-icon" href="/pages/profile.html">
+          <i class="fa-regular fa-user"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <main class="titan-container home-wrap">
+
+    <!-- HERO -->
+    <section class="home-hero">
+
+      <div class="home-hero-copy">
+
+        <span class="home-eyebrow">
+          <i class="fa-solid fa-sparkles"></i>
+          A universe of entertainment & creation
+        </span>
+
+        <h1>
+          Your world.<br>
+          <span class="titan-gradient-text">Your stories.</span><br>
+          On TITAN AI.
+        </h1>
+
+        <p>
+          Watch full-length videos, discover quick Shorts,
+          and turn your imagination into cinematic stories
+          with AI tools.
+        </p>
+
+        <div class="home-hero-actions">
+          <a class="titan-btn titan-btn-primary" href="#featured-videos">
+            <i class="fa-solid fa-play"></i>
+            Explore Videos
           </a>
-          <a class="titan-btn titan-btn-icon" href="/pages/profile.html" aria-label="Profile">
-            <i class="fa-regular fa-user"></i>
+
+          <a class="titan-btn titan-btn-outline" href="/pages/studio.html">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            Create with AI
           </a>
+        </div>
+
+        <div class="home-hero-proof">
+          <i class="fa-solid fa-circle-check"></i>
+          Watch • Create • Inspire
+        </div>
+
+      </div>
+
+      <div class="home-hero-art">
+        <div class="hero-orbit hero-orbit-one"></div>
+        <div class="hero-orbit hero-orbit-two"></div>
+
+        <div class="hero-art-core">
+          <i class="fa-solid fa-play"></i>
+        </div>
+
+        <span class="hero-float hero-float-top">
+          <i class="fa-solid fa-film"></i> Stories
+        </span>
+
+        <span class="hero-float hero-float-bottom">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Studio
+        </span>
+      </div>
+
+    </section>
+
+
+    <!-- LONG VIDEOS -->
+    <section class="home-section" id="featured-videos">
+
+      <div class="home-section-heading">
+        <div>
+          <span class="home-kicker">
+            <i class="fa-solid fa-clapperboard"></i>
+            Sit back and enjoy
+          </span>
+
+          <h2>Featured <span class="titan-gold-text">Videos</span></h2>
+
+          <p>Long-form videos, films, music and creator stories.</p>
+        </div>
+
+        <span class="home-section-tag">LONG FORM</span>
+      </div>
+
+      <div class="home-featured-layout">
+
+        <a class="home-featured-main" href="#featured-video">
+          <div class="home-featured-image">
+            <span class="home-featured-play">
+              <i class="fa-solid fa-play"></i>
+            </span>
+
+            <span class="home-duration">18:42</span>
+            <span class="home-image-label">TITAN ORIGINAL</span>
+          </div>
+
+          <div class="home-featured-caption">
+            <span class="titan-avatar">T</span>
+
+            <div>
+              <h3>The Art of Cinematic Storytelling</h3>
+              <p>TITAN Originals · Featured collection</p>
+            </div>
+          </div>
+        </a>
+
+        <div class="home-featured-side">
+
+          <a class="home-side-video" href="#music-video">
+            <span class="home-side-thumb side-thumb-music">
+              <i class="fa-solid fa-play"></i>
+              <small>12:16</small>
+            </span>
+
+            <span>
+              <strong>Music, Mood & Creative Energy</strong>
+              <small>Music Studio · Music</small>
+            </span>
+          </a>
+
+          <a class="home-side-video" href="#ai-video">
+            <span class="home-side-thumb side-thumb-ai">
+              <i class="fa-solid fa-play"></i>
+              <small>24:05</small>
+            </span>
+
+            <span>
+              <strong>Inside the Future of AI Creativity</strong>
+              <small>Next Vision · Technology</small>
+            </span>
+          </a>
+
+          <a class="home-side-video" href="#travel-video">
+            <span class="home-side-thumb side-thumb-travel">
+              <i class="fa-solid fa-play"></i>
+              <small>32:38</small>
+            </span>
+
+            <span>
+              <strong>Beautiful Places Around the World</strong>
+              <small>World Lens · Travel</small>
+            </span>
+          </a>
+
         </div>
       </div>
-    </header>
+    </section>
 
-    <main class="titan-container home-wrap">
-      <section class="titan-page" aria-labelledby="hero-title">
-        <div class="home-hero">
-          <div class="home-hero-content">
-            <div class="home-eyebrow"><i class="fa-solid fa-sparkles"></i> The next era of creativity</div>
-            <h1 id="hero-title">Watch. Create.<br><span class="titan-gradient-text">Inspire the world.</span></h1>
-            <p>Discover videos, explore short-form stories, and bring your imagination to life with AI-powered creative tools — all in one place.</p>
-            <div class="home-hero-actions">
-              <a class="titan-btn titan-btn-primary" href="/pages/videos.html"><i class="fa-solid fa-play"></i> Explore Videos</a>
-              <a class="titan-btn titan-btn-outline" href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i> Create with AI</a>
-            </div>
-            <div class="home-hero-note"><i class="fa-solid fa-circle-check titan-gold-text"></i> One platform. Endless creativity.</div>
-          </div>
+
+    <!-- SHORTS -->
+    <section class="home-section">
+
+      <div class="home-section-heading">
+        <div>
+          <span class="home-kicker">
+            <i class="fa-solid fa-bolt"></i>
+            Quick moments
+          </span>
+
+          <h2>TITAN <span class="titan-purple-text">Shorts</span></h2>
+          <p>Fresh ideas and short stories worth watching.</p>
         </div>
 
-        <section class="titan-section" aria-labelledby="shorts-title">
-          <div class="titan-section-header">
+        <a class="titan-btn titan-btn-outline titan-btn-sm" href="/pages/shorts.html">
+          Explore Shorts <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="home-shorts-row">
+
+        <a class="home-short-tile short-one" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>Cinematic Stories</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+        <a class="home-short-tile short-two" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>Travel Moments</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+        <a class="home-short-tile short-three" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>Music & Art</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+        <a class="home-short-tile short-four" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>AI Creations</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+        <a class="home-short-tile short-five" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>Gaming</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+        <a class="home-short-tile short-six" href="/pages/shorts.html">
+          <span class="short-play"><i class="fa-solid fa-play"></i></span>
+          <span class="short-tile-caption">
+            <strong>Discover More</strong>
+            <small>Shorts</small>
+          </span>
+        </a>
+
+      </div>
+    </section>
+
+
+    <!-- RECOMMENDED LONG VIDEOS -->
+    <section class="home-section">
+
+      <div class="home-section-heading">
+        <div>
+          <span class="home-kicker">
+            <i class="fa-solid fa-compass"></i>
+            Picked for discovery
+          </span>
+
+          <h2>Recommended <span class="titan-gold-text">for you</span></h2>
+          <p>More full-length videos from across the TITAN universe.</p>
+        </div>
+      </div>
+
+      <div class="home-video-grid">
+
+        <article class="home-video-card">
+          <a class="home-video-thumb rec-one" href="#creator-film">
+            <span class="home-thumb-play"><i class="fa-solid fa-play"></i></span>
+            <span class="home-duration">09:51</span>
+          </a>
+
+          <div class="home-video-meta">
+            <span class="titan-avatar">C</span>
             <div>
-              <div class="home-eyebrow"><i class="fa-solid fa-bolt"></i> Quick entertainment</div>
-              <h2 id="shorts-title">TITAN <span class="titan-purple-text">Shorts</span></h2>
-              <p>Short stories, fresh ideas, and moments worth sharing.</p>
+              <h3>How Creators Turn Ideas into Films</h3>
+              <p>Creator Hub · Film</p>
             </div>
-            <a class="titan-btn titan-btn-outline titan-btn-sm" href="/pages/shorts.html">Explore Shorts <i class="fa-solid fa-arrow-right"></i></a>
           </div>
+        </article>
 
-          <div class="home-short-row">
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#51336f,#171a2d 70%,#9b6847)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>Cinematic Stories</strong><small>Explore shorts</small></span>
-            </a>
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#254c5b,#171a2d 70%,#7e5b43)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>Travel Moments</strong><small>Explore shorts</small></span>
-            </a>
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#704b36,#171a2d 70%,#46366c)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>Music & Art</strong><small>Explore shorts</small></span>
-            </a>
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#4c3b79,#171a2d 70%,#31545a)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>AI Creations</strong><small>Explore shorts</small></span>
-            </a>
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#6a344b,#171a2d 70%,#3b4771)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>Gaming</strong><small>Explore shorts</small></span>
-            </a>
-            <a class="home-short" href="/pages/shorts.html" style="--short-bg:linear-gradient(145deg,#66532b,#171a2d 70%,#4b356e)">
-              <span class="home-short-icon"><i class="fa-solid fa-play"></i></span>
-              <span><strong>Discover More</strong><small>Explore shorts</small></span>
-            </a>
-          </div>
-        </section>
+        <article class="home-video-card">
+          <a class="home-video-thumb rec-two" href="#fantasy-film">
+            <span class="home-thumb-play"><i class="fa-solid fa-play"></i></span>
+            <span class="home-duration">21:12</span>
+          </a>
 
-        <section class="titan-section" aria-labelledby="videos-title">
-          <div class="titan-section-header">
+          <div class="home-video-meta">
+            <span class="titan-avatar">F</span>
             <div>
-              <div class="home-eyebrow"><i class="fa-solid fa-fire"></i> Explore the feed</div>
-              <h2 id="videos-title">Trending <span class="titan-gold-text">Videos</span></h2>
-              <p>Discover featured content from the TITAN community.</p>
+              <h3>Fantasy Worlds Made with Imagination</h3>
+              <p>Frame Forge · AI Creations</p>
             </div>
-            <a class="titan-btn titan-btn-outline titan-btn-sm" href="/pages/videos.html">View all <i class="fa-solid fa-arrow-right"></i></a>
           </div>
+        </article>
 
-          <div class="home-video-grid">
-            <article class="home-video-card">
-              <a class="home-video-thumb" href="/pages/videos.html" aria-label="Open featured cinematic video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">08:24</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">T</span>
-                <div><h3>The Art of Cinematic Storytelling</h3><p>TITAN Originals · Featured video</p></div>
-              </div>
-            </article>
+        <article class="home-video-card">
+          <a class="home-video-thumb rec-three" href="#world-film">
+            <span class="home-thumb-play"><i class="fa-solid fa-play"></i></span>
+            <span class="home-duration">14:27</span>
+          </a>
 
-            <article class="home-video-card">
-              <a class="home-video-thumb variant-two" href="/pages/videos.html" aria-label="Open featured music video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">04:16</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">M</span>
-                <div><h3>Music, Mood & Creative Energy</h3><p>Music Studio · Featured video</p></div>
-              </div>
-            </article>
-
-            <article class="home-video-card">
-              <a class="home-video-thumb variant-three" href="/pages/videos.html" aria-label="Open featured technology video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">12:05</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">N</span>
-                <div><h3>Inside the Future of AI Creativity</h3><p>Next Vision · Featured video</p></div>
-              </div>
-            </article>
-
-            <article class="home-video-card">
-              <a class="home-video-thumb variant-four" href="/pages/videos.html" aria-label="Open featured travel video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">06:38</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">W</span>
-                <div><h3>Beautiful Places Around the World</h3><p>World Lens · Featured video</p></div>
-              </div>
-            </article>
-
-            <article class="home-video-card">
-              <a class="home-video-thumb variant-five" href="/pages/videos.html" aria-label="Open featured creator video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">09:51</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">C</span>
-                <div><h3>How Creators Turn Ideas into Films</h3><p>Creator Hub · Featured video</p></div>
-              </div>
-            </article>
-
-            <article class="home-video-card">
-              <a class="home-video-thumb variant-six" href="/pages/videos.html" aria-label="Open featured fantasy video">
-                <span class="home-play"><i class="fa-solid fa-play"></i></span><span class="home-duration">07:12</span>
-              </a>
-              <div class="home-video-info">
-                <span class="titan-avatar">F</span>
-                <div><h3>Fantasy Worlds Made with Imagination</h3><p>Frame Forge · Featured video</p></div>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="titan-section" aria-labelledby="studio-title">
-          <div class="home-studio-banner">
-            <div class="home-studio-copy">
-              <div class="home-eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> Your imagination, amplified</div>
-              <h2 id="studio-title">Create your next story with <span class="titan-purple-text">AI Studio</span></h2>
-              <p>Shape an idea into a script, plan your scenes, and prepare cinematic prompts for your next creative project.</p>
-              <div class="home-hero-actions">
-                <a class="titan-btn titan-btn-primary" href="/pages/studio.html">Open AI Studio <i class="fa-solid fa-arrow-right"></i></a>
-                <a class="titan-btn titan-btn-outline" href="/pages/creator.html">Creator Center</a>
-              </div>
-            </div>
-            <div class="home-studio-icon" aria-hidden="true"><i class="fa-solid fa-clapperboard"></i></div>
-          </div>
-        </section>
-
-        <section class="titan-section" aria-labelledby="creators-title">
-          <div class="titan-section-header">
+          <div class="home-video-meta">
+            <span class="titan-avatar">W</span>
             <div>
-              <div class="home-eyebrow"><i class="fa-solid fa-users"></i> Community</div>
-              <h2 id="creators-title">Creator <span class="titan-gold-text">Spotlight</span></h2>
-              <p>Meet the creative voices of the TITAN community.</p>
+              <h3>Explore the Wonders of Our World</h3>
+              <p>World Lens · Travel</p>
             </div>
           </div>
-          <div class="titan-grid titan-grid-3">
-            <article class="titan-card home-creator-card">
-              <span class="titan-avatar">A</span>
-              <div><h3>Artist One</h3><p>Film & storytelling</p></div>
-              <span class="titan-badge titan-badge-gold">Creator</span>
-            </article>
-            <article class="titan-card home-creator-card">
-              <span class="titan-avatar">M</span>
-              <div><h3>Music Maker</h3><p>Music & sound</p></div>
-              <span class="titan-badge titan-badge-purple">Artist</span>
-            </article>
-            <article class="titan-card home-creator-card">
-              <span class="titan-avatar">V</span>
-              <div><h3>Vision Studio</h3><p>AI & digital art</p></div>
-              <span class="titan-badge">Creator</span>
-            </article>
-          </div>
-        </section>
+        </article>
 
-        <footer class="home-footer">
-          <span>© 2026 TITAN AI. Watch, Create, Inspire.</span>
-          <span>Built for creativity and community.</span>
-        </footer>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <nav class="titan-bottom-nav" aria-label="Mobile navigation">
-      <a class="is-active" href="/pages/home.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
-      <a href="/pages/shorts.html"><i class="fa-solid fa-bolt"></i><span>Shorts</span></a>
-      <a href="/pages/videos.html"><i class="fa-solid fa-circle-play"></i><span>Videos</span></a>
-      <a href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Studio</span></a>
-      <a href="/pages/profile.html"><i class="fa-regular fa-user"></i><span>Profile</span></a>
-    </nav>
+
+    <!-- AI STUDIO BANNER -->
+    <section class="home-studio-banner">
+
+      <div>
+        <span class="home-kicker">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Create something unforgettable
+        </span>
+
+        <h2>Bring your next big idea to life.</h2>
+
+        <p>
+          Write a story, plan scenes and build your next cinematic
+          project with TITAN AI Studio.
+        </p>
+
+        <a class="titan-btn titan-btn-primary" href="/pages/studio.html">
+          Open AI Studio <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="home-studio-symbol">
+        <i class="fa-solid fa-clapperboard"></i>
+      </div>
+
+    </section>
+
+    <footer class="home-footer">
+      <span>© 2026 TITAN AI</span>
+      <span>Watch • Create • Inspire</span>
+    </footer>
+
+  </main>
+
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="titan-bottom-nav home-bottom-nav">
+
+    <a class="is-active" href="/pages/home.html">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </a>
+
+    <a href="/pages/shorts.html">
+      <i class="fa-solid fa-bolt"></i>
+      <span>Shorts</span>
+    </a>
+
+    <button class="bottom-upload-button" type="button" data-open-upload>
+      <i class="fa-solid fa-plus"></i>
+      <span>Upload</span>
+    </button>
+
+    <a href="/pages/studio.html">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+      <span>Studio</span>
+    </a>
+
+    <a href="/pages/profile.html">
+      <i class="fa-regular fa-user"></i>
+      <span>Profile</span>
+    </a>
+
+  </nav>
+
+
+  <!-- UPLOAD MENU -->
+  <div class="upload-modal" id="upload-modal" aria-hidden="true">
+
+    <button class="upload-modal-backdrop" type="button" data-close-upload></button>
+
+    <section class="upload-modal-panel">
+
+      <div class="upload-modal-head">
+        <div>
+          <span class="home-kicker">SHARE WITH THE WORLD</span>
+          <h2>What would you like to upload?</h2>
+        </div>
+
+        <button class="titan-btn titan-btn-icon" type="button" data-close-upload>
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <a class="upload-choice" href="/pages/creator.html?type=short">
+        <span class="upload-choice-icon">
+          <i class="fa-solid fa-bolt"></i>
+        </span>
+
+        <span>
+          <strong>Upload a Short</strong>
+          <small>Vertical videos for quick viewing</small>
+        </span>
+
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+
+      <a class="upload-choice" href="/pages/creator.html?type=long">
+        <span class="upload-choice-icon upload-choice-gold">
+          <i class="fa-solid fa-film"></i>
+        </span>
+
+        <span>
+          <strong>Upload a Long Video</strong>
+          <small>Full videos, films and episodes</small>
+        </span>
+
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+
+      <p class="upload-modal-note">
+        Upload tools will be connected in the Creator Center.
+      </p>
+
+    </section>
   </div>
+
+</div>
 </body>
 </html>
