@@ -1050,3 +1050,13 @@
     }
 
 }
+
+
+/* Home interaction feedback */
+.refresh-button.is-refreshing i {
+    animation: titan-home-spin 0.65s linear;
+}
+
+@keyframes titan-home-spin {
+    to { transform: rotate(360deg); }
+}
