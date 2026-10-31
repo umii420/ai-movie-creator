@@ -1,7 +1,7 @@
-/* =========================================
-   TITAN AI — PREMIUM HOME PAGE
-   Midnight Black • Royal Gold • Neon Purple
-========================================= */
+/* ==================================================
+   TITAN AI — PREMIUM HOME PAGE 2026
+   MIDNIGHT BLACK | ROYAL GOLD | NEON PURPLE
+================================================== */
 
 :root {
     --home-bg: #08090d;
@@ -14,9 +14,26 @@
     --home-border: rgba(255,255,255,0.08);
 }
 
-/* =========================================
-   HOME LAYOUT
-========================================= */
+/* ================= GLOBAL HOME ================= */
+
+#titan-app {
+    min-height: 100vh;
+    background: var(--home-bg);
+}
+
+.home-main {
+    width: 100%;
+    max-width: 1450px;
+    margin: auto;
+    padding: 0 5% 115px;
+    color: var(--home-text);
+}
+
+.home-main img {
+    max-width: 100%;
+}
+
+/* ================= HEADER ================= */
 
 .home-header {
     width: 100%;
@@ -31,17 +48,6 @@
     position: relative;
     z-index: 20;
 }
-
-.home-main {
-    width: 100%;
-    max-width: 1450px;
-    margin: auto;
-    padding: 0 5% 110px;
-}
-
-/* =========================================
-   HEADER BRAND
-========================================= */
 
 .header-brand {
     display: flex;
@@ -84,10 +90,6 @@
     margin-top: 3px;
 }
 
-/* =========================================
-   DESKTOP NAV
-========================================= */
-
 .desktop-nav {
     display: flex;
     align-items: center;
@@ -120,9 +122,7 @@
     text-decoration: none;
 }
 
-/* =========================================
-   SEARCH BAR
-========================================= */
+/* ================= SEARCH ================= */
 
 .home-search-section {
     padding: 28px 0 17px;
@@ -180,9 +180,7 @@
     cursor: pointer;
 }
 
-/* =========================================
-   CATEGORY CATALOG
-========================================= */
+/* ================= CATEGORIES ================= */
 
 .category-section {
     width: 100%;
@@ -234,9 +232,7 @@
     font-size: 12px;
 }
 
-/* =========================================
-   HOME SECTIONS
-========================================= */
+/* ================= SECTION HEADINGS ================= */
 
 .home-section {
     width: 100%;
@@ -284,9 +280,7 @@
     margin-left: 5px;
 }
 
-/* =========================================
-   FEATURED VIDEOS
-========================================= */
+/* ================= FEATURED VIDEOS ================= */
 
 .featured-grid {
     display: grid;
@@ -439,9 +433,7 @@
     padding: 5px;
 }
 
-/* =========================================
-   TITAN SHORTS
-========================================= */
+/* ================= TITAN SHORTS ================= */
 
 .shorts-heading {
     display: flex;
@@ -531,9 +523,7 @@
     font-size: 10px;
 }
 
-/* =========================================
-   RECOMMENDED VIDEOS
-========================================= */
+/* ================= RECOMMENDED VIDEOS ================= */
 
 .recommended-grid {
     display: grid;
@@ -559,9 +549,7 @@
     cursor: pointer;
 }
 
-/* =========================================
-   AI STUDIO BANNER
-========================================= */
+/* ================= AI STUDIO BANNER ================= */
 
 .ai-studio-banner {
     position: relative;
@@ -675,23 +663,90 @@
     box-shadow: 0 0 45px rgba(149,102,255,0.35);
 }
 
-/* =========================================
-   UPLOAD MENU
-========================================= */
+/* ================= CENTER UPLOAD BUTTON ================= */
+
+.titan-bottom-nav {
+    position: fixed;
+    z-index: 90;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    min-height: 76px;
+    display: none;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+    background: rgba(13,13,20,0.97);
+    border-top: 1px solid var(--home-border);
+    backdrop-filter: blur(18px);
+}
+
+.bottom-nav-item {
+    min-width: 53px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #858594;
+    font-size: 10px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.bottom-nav-item i {
+    font-size: 18px;
+}
+
+.bottom-nav-item.active,
+.bottom-nav-item:hover {
+    color: var(--home-gold);
+}
+
+/* Upload menu is a direct child of titan-app.
+   Position it above the center of the bottom nav. */
 
 .upload-menu {
     position: fixed;
-    z-index: 100;
-    right: 25px;
-    bottom: 90px;
+    z-index: 110;
+    left: 50%;
+    bottom: calc(17px + env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    margin: 0;
 }
 
 .upload-trigger {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    cursor: pointer;
+    border: 2px solid #b99cff;
+    border-radius: 18px;
+    background: linear-gradient(135deg,#9566ff,#6335cf);
+    color: white;
+    font-size: 25px;
+    box-shadow:
+        0 0 12px rgba(149,102,255,.65),
+        0 0 28px rgba(149,102,255,.35);
+    transition: .25s;
+}
+
+.upload-trigger::-webkit-details-marker {
     display: none;
 }
 
+.upload-menu[open] .upload-trigger {
+    transform: rotate(45deg);
+}
+
 .upload-options {
-    width: 290px;
+    position: absolute;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(290px,85vw);
     padding: 16px;
     background: #171722;
     border: 1px solid rgba(149,102,255,0.3);
@@ -768,64 +823,21 @@
     font-size: 11px;
 }
 
-/* =========================================
-   BOTTOM NAVIGATION
-========================================= */
+/* ================= DESKTOP ================= */
 
-.titan-bottom-nav {
-    position: fixed;
-    z-index: 90;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    min-height: 68px;
-    display: none;
-    align-items: center;
-    justify-content: space-around;
-    padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
-    background: rgba(13,13,20,0.97);
-    border-top: 1px solid var(--home-border);
-    backdrop-filter: blur(18px);
+@media (min-width: 701px) {
+
+    .titan-bottom-nav {
+        display: none;
+    }
+
+    .upload-menu {
+        display: none;
+    }
+
 }
 
-.bottom-nav-item {
-    min-width: 53px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    color: #858594;
-    font-size: 10px;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.bottom-nav-item i {
-    font-size: 18px;
-}
-
-.bottom-nav-item.active,
-.bottom-nav-item:hover {
-    color: var(--home-gold);
-}
-
-.bottom-upload-space {
-    width: 50px;
-    height: 42px;
-}
-
-.bottom-nav-label {
-    position: absolute;
-    left: 50%;
-    bottom: 7px;
-    transform: translateX(-50%);
-    color: #858594;
-    font-size: 10px;
-}
-
-/* =========================================
-   RESPONSIVE — TABLETS
-========================================= */
+/* ================= TABLETS ================= */
 
 @media (max-width: 900px) {
 
@@ -845,9 +857,7 @@
 
 }
 
-/* =========================================
-   RESPONSIVE — MOBILE
-========================================= */
+/* ================= MOBILE ================= */
 
 @media (max-width: 700px) {
 
@@ -875,7 +885,7 @@
     }
 
     .home-main {
-        padding: 0 4% 110px;
+        padding: 0 4% 125px;
     }
 
     .home-search-section {
@@ -994,22 +1004,12 @@
     }
 
     .upload-menu {
-        right: auto;
-        left: 50%;
-        bottom: 83px;
-        transform: translateX(-50%);
-    }
-
-    .upload-menu[open] .upload-options {
         display: block;
-        margin-bottom: 10px;
     }
 
 }
 
-/* =========================================
-   SMALL MOBILE
-========================================= */
+/* ================= SMALL MOBILE ================= */
 
 @media (max-width: 380px) {
 
