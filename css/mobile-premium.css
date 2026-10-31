@@ -1,0 +1,115 @@
+/* TITAN AI — premium phone-first layout, aligned to the supplied five-screen reference.
+   This is an additive page layer; existing app logic and API files are untouched. */
+
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  html, body { width:100%; min-width:320px; overflow-x:hidden; }
+  #titan-app { width:100%; min-height:100vh; overflow-x:clip; }
+  #app-content { width:100%; max-width:none; margin:0; }
+  .home-header {
+    min-height:64px; height:auto; padding:10px 16px;
+    display:flex; gap:10px; background:rgba(7,7,13,.97);
+    border-bottom:1px solid rgba(255,255,255,.10);
+    position:sticky; top:0; z-index:100;
+  }
+  .header-brand { gap:9px; }
+  .brand-crown {
+    width:38px; height:38px; border-radius:12px;
+    color:#ffe08a; background:linear-gradient(145deg,rgba(246,199,92,.22),rgba(149,102,255,.12));
+    border:1px solid rgba(246,199,92,.42); box-shadow:0 0 18px rgba(246,199,92,.12);
+  }
+  .brand-text h1 {font-size:19px; letter-spacing:-.7px;}
+  .brand-text h1 span {color:#b38aff;}
+  .brand-text small {font-size:7px; letter-spacing:1.45px;}
+  .desktop-nav {display:none !important;}
+  .header-profile {width:38px;height:38px;background:#151521;border-color:rgba(255,255,255,.12);}
+  .titan-platform-strip {display:none !important;}
+
+  .home-main {width:100%; max-width:none; margin:0; padding:0 16px 112px;}
+  .home-search-section {padding:17px 0 13px;}
+  .home-search-box {
+    max-width:none; height:48px; gap:10px; padding:0 12px;
+    border-radius:14px; background:#12121e;
+    border:1px solid rgba(149,102,255,.38);
+    box-shadow:0 5px 18px rgba(0,0,0,.22);
+  }
+  .home-search-box>i {font-size:15px;}
+  .home-search-box input {font-size:12px;}
+  .home-search-box button {width:33px;height:33px;border-radius:10px;}
+
+  .category-section {padding:0 0 23px; overflow:visible;}
+  .category-list {gap:8px; overflow-x:auto; padding:3px 0 7px; scroll-snap-type:x proximity;}
+  .category-chip {padding:8px 13px; font-size:11px; border-radius:22px; scroll-snap-align:start;}
+  .category-chip.active {background:linear-gradient(135deg,#ffdf82,#f2bd4f);}
+
+  .home-section {margin:0 0 29px;}
+  .section-heading {margin-bottom:13px; gap:8px;}
+  .section-heading h2 {font-size:19px; letter-spacing:-.45px; margin:3px 0 4px;}
+  .section-heading p {font-size:10px; line-height:1.45;}
+  .section-eyebrow {font-size:8px; letter-spacing:1.8px;}
+  .see-all-link {font-size:10px; white-space:nowrap;}
+
+  /* One cinematic hero card, like the reference Home screen. */
+  .featured-grid {display:grid;grid-template-columns:minmax(0,1fr);gap:8px;}
+  .featured-thumbnail {aspect-ratio:16/9;border-radius:14px;}
+  .featured-thumbnail img {object-fit:cover;}
+  .featured-badge {top:9px;left:9px;padding:6px 9px;font-size:8px;border-radius:7px;}
+  .video-duration {right:8px;bottom:8px;font-size:9px;}
+  .play-button {opacity:1;width:42px;height:42px;font-size:13px;}
+  .video-info {gap:9px;padding:9px 2px 2px;}
+  .creator-avatar {width:34px;height:34px;font-size:11px;}
+  .video-details h3 {font-size:12px;line-height:1.35;}
+  .video-details p,.video-details span {font-size:9px;margin-bottom:3px;}
+
+  /* Shorts become a horizontal swipe rail, not a two-column grid. */
+  .shorts-heading {gap:9px;}
+  .shorts-icon {width:36px;height:36px;border-radius:11px;font-size:16px;}
+  .shorts-grid {
+    display:grid; grid-auto-flow:column; grid-auto-columns:31%;
+    grid-template-columns:none; gap:10px; overflow-x:auto;
+    padding:0 1px 8px; scroll-snap-type:x mandatory;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch;
+  }
+  .shorts-grid::-webkit-scrollbar {display:none;}
+  .short-card {min-width:0;scroll-snap-align:start;}
+  .short-thumbnail {aspect-ratio:9/14;border-radius:11px;}
+  .short-play {opacity:1;width:31px;height:31px;font-size:10px;}
+  .short-card h3 {font-size:10px;margin:7px 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .short-card>span {font-size:9px;}
+
+  /* Recommended content uses compact two-up cards as shown in the mockup. */
+  .recommended-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px;}
+  .recommended-thumbnail {aspect-ratio:16/10;border-radius:11px;}
+  .recommended-card .video-info {padding:7px 0 0;gap:7px;}
+  .recommended-card .creator-avatar {width:27px;height:27px;font-size:9px;}
+  .recommended-card .video-details h3 {font-size:10px;line-height:1.3;}
+  .recommended-card .video-details p,.recommended-card .video-details span {font-size:8px;}
+
+  .ai-studio-banner {min-height:190px;margin:25px 0 10px;padding:20px 16px;border-radius:16px;}
+  .studio-content h2 {font-size:22px;margin:10px 0;}
+  .studio-content p {font-size:9px;}
+  .studio-visual {width:76px;height:76px;}
+  .orbit-one {width:60px;height:60px;}
+  .orbit-two {width:76px;height:76px;}
+  .studio-center-icon {width:39px;height:39px;border-radius:12px;font-size:17px;}
+
+  .titan-bottom-nav {
+    display:flex !important; min-height:66px; padding:6px 7px calc(6px + env(safe-area-inset-bottom));
+    background:rgba(10,10,17,.97); border-top:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+  }
+  .bottom-nav-item {min-width:48px;gap:4px;font-size:9px;}
+  .bottom-nav-item i {font-size:17px;}
+  .bottom-upload-space {width:52px;flex:0 0 52px;}
+  .upload-menu {display:block !important;bottom:calc(11px + env(safe-area-inset-bottom));}
+  .upload-trigger {
+    width:52px;height:52px;border-radius:17px;border:2px solid #d6baff;
+    background:linear-gradient(145deg,#a979ff,#6535d1);
+    box-shadow:0 0 0 4px rgba(149,102,255,.12),0 0 25px rgba(149,102,255,.55);
+  }
+}
+
+@media (max-width: 380px), (hover: none) and (pointer: coarse) and (max-width: 430px) {
+  .home-main {padding-left:13px;padding-right:13px;}
+  .shorts-grid {grid-auto-columns:34%;}
+  .recommended-grid {gap:12px 8px;}
+}
