@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TITAN AI — Home</title>
+<meta name="theme-color" content="#08090d">
+
+<title>TITAN AI — Watch, Create, Inspire</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://images.unsplash.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <link rel="stylesheet" href="/css/style.css">
 <link rel="stylesheet" href="/css/home.css">
+
 </head>
 
 <body>
 
 <div id="titan-app">
 
-<!-- ================= HEADER ================= -->
+<!-- =================================
+     TITAN HEADER
+================================= -->
 
 <header class="home-header">
 
     <div class="header-brand">
+
         <div class="brand-crown">
             <i class="fa-solid fa-crown"></i>
         </div>
@@ -26,29 +40,42 @@
             <h1>TITAN <span>AI</span></h1>
             <small>WATCH • CREATE • INSPIRE</small>
         </div>
+
     </div>
 
+
     <nav class="desktop-nav">
+
         <a href="/" class="active">Home</a>
+
         <a href="/pages/shorts.html">Shorts</a>
+
         <a href="/pages/studio.html">AI Studio</a>
+
     </nav>
 
+
     <div class="header-actions">
+
         <a href="/pages/profile.html" class="header-profile">
             <i class="fa-solid fa-user"></i>
         </a>
+
     </div>
 
 </header>
 
 
-<!-- ================= HOME CONTENT ================= -->
+<!-- =================================
+     MAIN HOME CONTENT
+================================= -->
 
 <main class="home-main">
 
 
-<!-- ================= SEARCH BAR ================= -->
+<!-- =================================
+     SEARCH BAR
+================================= -->
 
 <section class="home-search-section">
 
@@ -59,7 +86,7 @@
         <input
             type="search"
             id="titanSearch"
-            placeholder="Search videos, creators, movies..."
+            placeholder="Search videos, movies, creators..."
         >
 
         <button type="button" aria-label="Search">
@@ -71,7 +98,9 @@
 </section>
 
 
-<!-- ================= CATEGORY CATALOG ================= -->
+<!-- =================================
+     CATEGORY CATALOG
+================================= -->
 
 <section class="category-section">
 
@@ -82,27 +111,33 @@
         </button>
 
         <button class="category-chip" data-category="movies">
-            <i class="fa-solid fa-film"></i> Movies
+            <i class="fa-solid fa-film"></i>
+            Movies
         </button>
 
         <button class="category-chip" data-category="music">
-            <i class="fa-solid fa-music"></i> Music
+            <i class="fa-solid fa-music"></i>
+            Music
         </button>
 
         <button class="category-chip" data-category="gaming">
-            <i class="fa-solid fa-gamepad"></i> Gaming
+            <i class="fa-solid fa-gamepad"></i>
+            Gaming
         </button>
 
         <button class="category-chip" data-category="travel">
-            <i class="fa-solid fa-plane"></i> Travel
+            <i class="fa-solid fa-plane"></i>
+            Travel
         </button>
 
         <button class="category-chip" data-category="news">
-            <i class="fa-solid fa-newspaper"></i> News
+            <i class="fa-solid fa-newspaper"></i>
+            News
         </button>
 
         <button class="category-chip" data-category="ai">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Videos
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            AI Videos
         </button>
 
     </div>
@@ -110,20 +145,29 @@
 </section>
 
 
-<!-- ================= FEATURED VIDEOS ================= -->
+<!-- =================================
+     FEATURED CINEMATIC VIDEOS
+================================= -->
 
 <section class="home-section featured-section">
 
     <div class="section-heading">
 
         <div>
-            <span class="section-eyebrow">HANDPICKED FOR YOU</span>
-            <h2>Featured Videos</h2>
-            <p>Discover amazing long-form content.</p>
+
+            <span class="section-eyebrow">
+                TITAN ORIGINALS
+            </span>
+
+            <h2>Featured Movies</h2>
+
+            <p>Discover extraordinary cinematic worlds.</p>
+
         </div>
 
         <a href="#recommended" class="see-all-link">
-            Explore <i class="fa-solid fa-arrow-right"></i>
+            Explore
+            <i class="fa-solid fa-arrow-right"></i>
         </a>
 
     </div>
@@ -131,19 +175,26 @@
 
     <div class="featured-grid">
 
+
+        <!-- FEATURED MOVIE 1 -->
+
         <article class="featured-card" data-category="movies">
 
             <a href="#" class="featured-thumbnail">
 
                 <img
-                    src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=900"
-                    alt="Cinematic movie scene"
+                    src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1000"
+                    alt="Fantasy cinematic world"
+                    loading="lazy"
                 >
 
-                <span class="video-duration">12:45</span>
-
                 <span class="featured-badge">
-                    <i class="fa-solid fa-star"></i> FEATURED
+                    <i class="fa-solid fa-crown"></i>
+                    TITAN ORIGINAL
+                </span>
+
+                <span class="video-duration">
+                    12:45
                 </span>
 
                 <span class="play-button">
@@ -152,14 +203,21 @@
 
             </a>
 
+
             <div class="video-info">
 
-                <div class="creator-avatar">T</div>
+                <div class="creator-avatar">
+                    T
+                </div>
 
                 <div class="video-details">
-                    <h3>The Ultimate Cinematic Experience</h3>
+
+                    <h3>Dragon World — The Beginning</h3>
+
                     <p>TITAN Originals</p>
+
                     <span>125K views • 2 days ago</span>
+
                 </div>
 
                 <button class="video-menu" aria-label="More options">
@@ -171,16 +229,21 @@
         </article>
 
 
+        <!-- FEATURED MOVIE 2 -->
+
         <article class="featured-card" data-category="travel">
 
             <a href="#" class="featured-thumbnail">
 
                 <img
-                    src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900"
-                    alt="Mountain landscape"
+                    src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000"
+                    alt="Epic mountain landscape"
+                    loading="lazy"
                 >
 
-                <span class="video-duration">18:32</span>
+                <span class="video-duration">
+                    18:32
+                </span>
 
                 <span class="play-button">
                     <i class="fa-solid fa-play"></i>
@@ -188,14 +251,21 @@
 
             </a>
 
+
             <div class="video-info">
 
-                <div class="creator-avatar purple">A</div>
+                <div class="creator-avatar purple">
+                    A
+                </div>
 
                 <div class="video-details">
-                    <h3>Explore the Beautiful World</h3>
+
+                    <h3>Journey Beyond the Mountains</h3>
+
                     <p>Adventure World</p>
+
                     <span>86K views • 4 days ago</span>
+
                 </div>
 
                 <button class="video-menu" aria-label="More options">
@@ -211,25 +281,36 @@
 </section>
 
 
-<!-- ================= TITAN SHORTS ================= -->
+<!-- =================================
+     TITAN SHORTS
+================================= -->
 
 <section class="home-section shorts-section">
 
     <div class="section-heading">
 
         <div class="shorts-heading">
+
             <span class="shorts-icon">
                 <i class="fa-solid fa-bolt"></i>
             </span>
 
             <div>
+
                 <h2>TITAN Shorts</h2>
+
                 <p>Quick videos. Endless inspiration.</p>
+
             </div>
+
         </div>
 
+
         <a href="/pages/shorts.html" class="see-all-link">
-            View All <i class="fa-solid fa-arrow-right"></i>
+
+            View All
+            <i class="fa-solid fa-arrow-right"></i>
+
         </a>
 
     </div>
@@ -237,63 +318,96 @@
 
     <div class="shorts-grid">
 
+
         <a href="/pages/shorts.html" class="short-card">
+
             <div class="short-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=500"
-                    alt="Nature short"
+                    alt="Beautiful nature"
+                    loading="lazy"
                 >
+
                 <span class="short-play">
                     <i class="fa-solid fa-play"></i>
                 </span>
+
             </div>
+
             <h3>Beautiful Nature</h3>
+
             <span>25K views</span>
+
         </a>
 
 
         <a href="/pages/shorts.html" class="short-card">
+
             <div class="short-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=500"
-                    alt="Night sky short"
+                    alt="Night sky"
+                    loading="lazy"
                 >
+
                 <span class="short-play">
                     <i class="fa-solid fa-play"></i>
                 </span>
+
             </div>
+
             <h3>Night Sky</h3>
+
             <span>18K views</span>
+
         </a>
 
 
         <a href="/pages/shorts.html" class="short-card">
+
             <div class="short-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500"
-                    alt="Ocean short"
+                    alt="Ocean waves"
+                    loading="lazy"
                 >
+
                 <span class="short-play">
                     <i class="fa-solid fa-play"></i>
                 </span>
+
             </div>
+
             <h3>Ocean Waves</h3>
+
             <span>42K views</span>
+
         </a>
 
 
         <a href="/pages/shorts.html" class="short-card">
+
             <div class="short-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500"
-                    alt="Fantasy short"
+                    alt="Fantasy world"
+                    loading="lazy"
                 >
+
                 <span class="short-play">
                     <i class="fa-solid fa-play"></i>
                 </span>
+
             </div>
+
             <h3>Fantasy World</h3>
+
             <span>31K views</span>
+
         </a>
 
     </div>
@@ -301,19 +415,28 @@
 </section>
 
 
-<!-- ================= RECOMMENDED VIDEOS ================= -->
+<!-- =================================
+     RECOMMENDED VIDEOS
+================================= -->
 
 <section class="home-section recommended-section" id="recommended">
 
     <div class="section-heading">
 
         <div>
-            <span class="section-eyebrow">YOUR NEXT FAVORITE</span>
+
+            <span class="section-eyebrow">
+                DISCOVER MORE
+            </span>
+
             <h2>Recommended Videos</h2>
-            <p>Explore content from amazing creators.</p>
+
+            <p>Content selected for your entertainment.</p>
+
         </div>
 
-        <button class="refresh-button" type="button">
+
+        <button class="refresh-button" type="button" aria-label="Refresh">
             <i class="fa-solid fa-rotate"></i>
         </button>
 
@@ -322,132 +445,221 @@
 
     <div class="recommended-grid">
 
+
+        <!-- MUSIC -->
+
         <article class="recommended-card" data-category="music">
 
             <a href="#" class="recommended-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=700"
                     alt="Music performance"
+                    loading="lazy"
                 >
+
                 <span class="video-duration">08:20</span>
+
             </a>
 
+
             <div class="video-info">
-                <div class="creator-avatar pink">M</div>
-                <div class="video-details">
-                    <h3>Beautiful Music & Emotions</h3>
-                    <p>Music Studio</p>
-                    <span>56K views • 1 day ago</span>
+
+                <div class="creator-avatar pink">
+                    M
                 </div>
+
+                <div class="video-details">
+
+                    <h3>Beautiful Music & Emotions</h3>
+
+                    <p>Music Studio</p>
+
+                    <span>56K views • 1 day ago</span>
+
+                </div>
+
             </div>
 
         </article>
 
+
+        <!-- GAMING -->
 
         <article class="recommended-card" data-category="gaming">
 
             <a href="#" class="recommended-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=700"
-                    alt="Gaming setup"
+                    alt="Gaming experience"
+                    loading="lazy"
                 >
+
                 <span class="video-duration">15:10</span>
+
             </a>
 
+
             <div class="video-info">
-                <div class="creator-avatar blue">G</div>
-                <div class="video-details">
-                    <h3>Next Level Gaming Experience</h3>
-                    <p>Gaming Zone</p>
-                    <span>92K views • 3 days ago</span>
+
+                <div class="creator-avatar blue">
+                    G
                 </div>
+
+                <div class="video-details">
+
+                    <h3>Next Level Gaming Experience</h3>
+
+                    <p>Gaming Zone</p>
+
+                    <span>92K views • 3 days ago</span>
+
+                </div>
+
             </div>
 
         </article>
 
+
+        <!-- AI VIDEOS -->
 
         <article class="recommended-card" data-category="ai">
 
             <a href="#" class="recommended-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=700"
                     alt="Artificial intelligence"
+                    loading="lazy"
                 >
+
                 <span class="video-duration">06:45</span>
+
             </a>
 
+
             <div class="video-info">
-                <div class="creator-avatar purple">AI</div>
-                <div class="video-details">
-                    <h3>Discover the Future of AI</h3>
-                    <p>AI Creator</p>
-                    <span>74K views • 5 days ago</span>
+
+                <div class="creator-avatar purple">
+                    AI
                 </div>
+
+                <div class="video-details">
+
+                    <h3>Discover the Future of AI</h3>
+
+                    <p>AI Creator</p>
+
+                    <span>74K views • 5 days ago</span>
+
+                </div>
+
             </div>
 
         </article>
 
+
+        <!-- TRAVEL -->
 
         <article class="recommended-card" data-category="travel">
 
             <a href="#" class="recommended-thumbnail">
+
                 <img
                     src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=700"
                     alt="Beautiful lake"
+                    loading="lazy"
                 >
+
                 <span class="video-duration">11:30</span>
+
             </a>
 
+
             <div class="video-info">
-                <div class="creator-avatar gold">W</div>
-                <div class="video-details">
-                    <h3>Journey Around the World</h3>
-                    <p>World Explorer</p>
-                    <span>39K views • 6 days ago</span>
+
+                <div class="creator-avatar gold">
+                    W
                 </div>
+
+                <div class="video-details">
+
+                    <h3>Journey Around the World</h3>
+
+                    <p>World Explorer</p>
+
+                    <span>39K views • 6 days ago</span>
+
+                </div>
+
             </div>
 
         </article>
+
 
     </div>
 
 </section>
 
 
-<!-- ================= AI STUDIO BANNER ================= -->
+<!-- =================================
+     AI STUDIO BANNER
+================================= -->
 
 <section class="ai-studio-banner">
 
     <div class="studio-content">
 
         <span class="studio-label">
+
             <i class="fa-solid fa-wand-magic-sparkles"></i>
+
             CREATE SOMETHING AMAZING
+
         </span>
 
-        <h2>Your Imagination.<br>
+
+        <h2>
+
+            Your Imagination.<br>
+
             <span>Powered by AI.</span>
+
         </h2>
 
+
         <p>
+
             Write scripts, develop movie stories and bring
             your creative ideas to life with TITAN AI Studio.
+
         </p>
 
+
         <a href="/pages/studio.html" class="studio-button">
+
             Open AI Studio
+
             <i class="fa-solid fa-arrow-right"></i>
+
         </a>
 
     </div>
 
+
     <div class="studio-visual">
+
         <div class="studio-orbit orbit-one"></div>
+
         <div class="studio-orbit orbit-two"></div>
 
         <div class="studio-center-icon">
+
             <i class="fa-solid fa-wand-magic-sparkles"></i>
+
         </div>
+
     </div>
 
 </section>
@@ -456,46 +668,74 @@
 </main>
 
 
-<!-- ================= UPLOAD MENU ================= -->
+<!-- =================================
+     CENTER UPLOAD MENU
+     Keep outside bottom navigation
+================================= -->
 
 <details class="upload-menu">
 
     <summary class="upload-trigger" aria-label="Upload content">
+
         <i class="fa-solid fa-plus"></i>
+
     </summary>
+
 
     <div class="upload-options">
 
         <div class="upload-menu-title">
+
             <h3>Create on TITAN</h3>
+
             <p>Choose what you want to upload.</p>
+
         </div>
 
+
         <a href="/pages/creator.html?type=short" class="upload-option">
+
             <span class="upload-option-icon short-option">
+
                 <i class="fa-solid fa-bolt"></i>
+
             </span>
+
 
             <span>
+
                 <strong>Upload Short</strong>
+
                 <small>Share a vertical short video</small>
+
             </span>
 
+
             <i class="fa-solid fa-chevron-right"></i>
+
         </a>
 
 
         <a href="/pages/creator.html?type=long" class="upload-option">
+
             <span class="upload-option-icon video-option">
+
                 <i class="fa-solid fa-video"></i>
+
             </span>
+
 
             <span>
+
                 <strong>Upload Long Video</strong>
+
                 <small>Publish a full-length video</small>
+
             </span>
 
+
             <i class="fa-solid fa-chevron-right"></i>
+
         </a>
 
     </div>
@@ -503,36 +743,51 @@
 </details>
 
 
-<!-- ================= BOTTOM NAVIGATION ================= -->
+<!-- =================================
+     BOTTOM NAVIGATION
+================================= -->
 
 <nav class="titan-bottom-nav">
 
     <a href="/" class="bottom-nav-item active">
+
         <i class="fa-solid fa-house"></i>
+
         <span>Home</span>
+
     </a>
 
 
     <a href="/pages/shorts.html" class="bottom-nav-item">
+
         <i class="fa-solid fa-play"></i>
+
         <span>Shorts</span>
+
     </a>
 
 
-    <div class="bottom-upload-space">
-        <label class="bottom-nav-label">Upload</label>
-    </div>
+    <!-- Center Upload Button is positioned separately -->
+
+
+    <div class="bottom-upload-space"></div>
 
 
     <a href="/pages/studio.html" class="bottom-nav-item">
+
         <i class="fa-solid fa-wand-magic-sparkles"></i>
+
         <span>AI Studio</span>
+
     </a>
 
 
     <a href="/pages/profile.html" class="bottom-nav-item">
+
         <i class="fa-solid fa-user"></i>
+
         <span>Profile</span>
+
     </a>
 
 </nav>
