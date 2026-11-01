@@ -155,7 +155,14 @@
   }, true);
 
   window.addEventListener("popstate", () => navigate(location.href, false));
-  const start = () => navigate(location.href, false);
+  const start = () => {
+    navigate(location.href, false).then(() => {
+      const warmRoutes = ["/pages/shorts.html", "/pages/creator.html", "/pages/studio.html", "/pages/profile.html"];
+      const warm = () => warmRoutes.forEach(path => prefetch(path));
+      if ("requestIdleCallback" in window) requestIdleCallback(warm, { timeout: 1200 });
+      else setTimeout(warm, 500);
+    });
+  };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
   else start();
 })();
