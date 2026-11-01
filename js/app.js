@@ -1,134 +1,168 @@
-/* ==========================================
-   TITAN AI — MAIN APPLICATION CONTROLLER
-   Version: 1.0
-   ========================================== */
-
+/* TITAN AI — fast, predictable client-side navigation */
 (() => {
-    "use strict";
+  "use strict";
+  const MOUNT_ID = "app-content";
+  const pageCache = new Map();
+  const pending = new Map();
+  let busy = false;
+  let queued = null;
+  let routeStyleNodes = [];
 
-    const HOME_PAGE = "/pages/home.html";
+  const routePath = url => {
+    const u = new URL(url, location.href);
+    return u.pathname === "/" ? "/pages/home.html" : u.pathname + u.search;
+  };
 
-    async function loadHomePage() {
+  function fetchPage(url) {
+    const path = routePath(url);
+    if (pageCache.has(path)) return Promise.resolve(pageCache.get(path));
+    if (pending.has(path)) return pending.get(path);
+    const request = fetch(path, { cache: "force-cache", credentials: "same-origin" })
+      .then(async response => {
+        if (!response.ok) throw new Error("Page load failed (" + response.status + ")");
+        const html = await response.text();
+        pageCache.set(path, html);
+        return html;
+      })
+      .finally(() => pending.delete(path));
+    pending.set(path, request);
+    return request;
+  }
 
-        const app = document.getElementById("app-content");
+  function prefetch(url) {
+    const target = new URL(url, location.href);
+    if (target.origin !== location.origin) return;
+    const path = routePath(target);
+    if (pageCache.has(path) || pending.has(path)) return;
+    fetchPage(target.href).catch(() => {});
+  }
 
-        if (!app) {
-            console.error("TITAN AI: app-content not found");
-            return;
-        }
+  function waitForStylesheet(node) {
+    if (node.sheet) return Promise.resolve();
+    return new Promise(resolve => {
+      const done = () => resolve();
+      node.addEventListener("load", done, { once: true });
+      node.addEventListener("error", done, { once: true });
+      setTimeout(done, 2500);
+    });
+  }
 
-        try {
+  async function mountStyles(doc) {
+    routeStyleNodes.forEach(node => node.remove());
+    routeStyleNodes = [];
+    const waits = [];
+    doc.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+      const href = link.href;
+      if (!href) return;
+      let node = [...document.querySelectorAll('link[rel="stylesheet"]')].find(x => x.href === href);
+      if (!node) {
+        node = document.createElement("link");
+        node.rel = "stylesheet";
+        node.href = href;
+        node.dataset.titanRouteAsset = "1";
+        document.head.appendChild(node);
+      }
+      if (node.dataset.titanRouteAsset === "1") routeStyleNodes.push(node);
+      waits.push(waitForStylesheet(node));
+    });
+    doc.querySelectorAll("style").forEach(style => {
+      const node = document.createElement("style");
+      node.dataset.titanRouteStyle = "1";
+      node.textContent = style.textContent;
+      document.head.appendChild(node);
+      routeStyleNodes.push(node);
+    });
+    await Promise.all(waits);
+  }
 
-            const response = await fetch(HOME_PAGE, {
-                cache: "no-cache"
-            });
+  function runScripts(scripts, mount) {
+    scripts.forEach(old => {
+      const node = document.createElement("script");
+      [...old.attributes].forEach(a => node.setAttribute(a.name, a.value));
+      node.textContent = old.textContent;
+      mount.appendChild(node);
+    });
+  }
 
-            if (!response.ok) {
-                throw new Error("Home Page Not Found");
-            }
+  async function loadRoute(url, pushState) {
+    const target = new URL(url, location.href);
+    if (target.origin !== location.origin) return;
+    const mount = document.getElementById(MOUNT_ID);
+    if (!mount) { location.assign(target.href); return; }
 
-            const html = await response.text();
+    const html = await fetchPage(target.href);
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const source = doc.querySelector("#titan-app") || doc.body;
+    const scripts = [...source.querySelectorAll("script")];
+    const copy = source.cloneNode(true);
+    copy.querySelectorAll("script").forEach(s => s.remove());
 
-            const parser = new DOMParser();
+    await mountStyles(doc);
+    mount.innerHTML = copy.innerHTML;
+    document.title = doc.title || "TITAN AI — Watch, Create, Inspire";
+    if (pushState) history.pushState({ titan: true }, "", target.pathname + target.search + target.hash);
 
-            const page = parser.parseFromString(
-                html,
-                "text/html"
-            );
-
-            const homeContent = page.querySelector("#titan-app");
-
-            if (!homeContent) {
-                throw new Error("Home Content Missing");
-            }
-
-            // Load Home Page
-            app.innerHTML = homeContent.innerHTML;
-
-            // Load page CSS
-            const cssFiles = page.querySelectorAll(
-                'link[rel="stylesheet"]'
-            );
-
-            cssFiles.forEach(link => {
-
-                const href = link.getAttribute("href");
-
-                if (!href) return;
-
-                const exists = document.querySelector(
-                    `link[rel="stylesheet"][href="${href}"]`
-                );
-
-                if (!exists) {
-
-                    const newLink = document.createElement("link");
-
-                    newLink.rel = "stylesheet";
-                    newLink.href = href;
-
-                    document.head.appendChild(newLink);
-                }
-
-            });
-
-            // Support CSS currently written inside home.html
-            page.querySelectorAll("style").forEach(style => {
-                const newStyle = document.createElement("style");
-                newStyle.textContent = style.textContent;
-                document.head.appendChild(newStyle);
-            });
-
-            console.log("TITAN AI Home Loaded Successfully");
-
-        } catch (error) {
-
-            console.error("TITAN AI Error:", error);
-
-            app.innerHTML = `
-                <div style="
-                    min-height:70vh;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    flex-direction:column;
-                    text-align:center;
-                    padding:20px;
-                    color:white;
-                ">
-                    <h1 style="color:#E9C46A">
-                        TITAN AI
-                    </h1>
-
-                    <p>
-                        Home Page Loading Failed
-                    </p>
-
-                    <button id="retryHome" style="
-                        padding:12px 25px;
-                        background:#8052E8;
-                        border:none;
-                        border-radius:25px;
-                        color:white;
-                        cursor:pointer;
-                    ">
-                        Try Again
-                    </button>
-                </div>
-            `;
-
-            document.getElementById("retryHome")
-                ?.addEventListener("click", loadHomePage);
-        }
+    runScripts(scripts, mount);
+    document.body.classList.toggle("titan-shorts-view", !!document.getElementById("shortFeed"));
+    document.body.classList.toggle("titan-home-view", !!document.querySelector(".home-main"));
+    if (target.hash) requestAnimationFrame(() => document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView());
+    else {
+      window.scrollTo(0, 0);
+      const feed = document.getElementById("shortFeed");
+      if (feed) feed.scrollTop = 0;
     }
+  }
 
-    if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            loadHomePage
-        );
-    } else {
-        loadHomePage();
+  async function navigate(url, pushState = true) {
+    queued = { url, pushState };
+    if (busy) return;
+    busy = true;
+    while (queued) {
+      const job = queued;
+      queued = null;
+      try {
+        await loadRoute(job.url, job.pushState);
+      } catch (error) {
+        console.error("TITAN navigation error:", error);
+        const mount = document.getElementById(MOUNT_ID);
+        if (mount && !mount.children.length) mount.innerHTML = '<p role="alert" style="padding:24px;color:#f4c85b">This page could not load. Please check your connection and try again.</p>';
+      }
     }
+    busy = false;
+  }
 
+  document.addEventListener("pointerover", event => {
+    const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    if (link) prefetch(link.href);
+  }, { passive: true });
+  document.addEventListener("touchstart", event => {
+    const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+    if (link) prefetch(link.href);
+  }, { passive: true, capture: true });
+
+  document.addEventListener("click", event => {
+    const origin = event.target instanceof Element ? event.target : event.target?.parentElement;
+    const link = origin?.closest("a[href]");
+    if (!link || link.target === "_blank" || link.hasAttribute("download")) return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const target = new URL(link.href, location.href);
+    if (target.origin !== location.origin) return;
+    if (!(target.pathname === "/" || target.pathname.startsWith("/pages/"))) return;
+    if (target.pathname === location.pathname && target.search === location.search && !target.hash) return;
+    event.preventDefault();
+    event.stopPropagation();
+    navigate(target.href, true);
+  }, true);
+
+  window.addEventListener("popstate", () => navigate(location.href, false));
+  const start = () => {
+    navigate(location.href, false).then(() => {
+      const warmRoutes = ["/pages/shorts.html", "/pages/creator.html", "/pages/studio.html", "/pages/profile.html"];
+      const warm = () => warmRoutes.forEach(path => prefetch(path));
+      if ("requestIdleCallback" in window) requestIdleCallback(warm, { timeout: 1200 });
+      else setTimeout(warm, 500);
+    });
+  };
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
+  else start();
 })();
