@@ -79,7 +79,21 @@
     scripts.forEach(old => {
       const node = document.createElement("script");
       [...old.attributes].forEach(a => node.setAttribute(a.name, a.value));
-      node.textContent = old.textContent;
+
+      // Dynamically inserted external scripts must keep document order.
+      if (old.src) {
+        node.async = false;
+        node.src = old.src;
+      } else {
+        const type = (old.getAttribute("type") || "").toLowerCase();
+        const code = old.textContent || "";
+        // Give each classic page script its own scope. Without this, navigating
+        // away and back can redeclare top-level let/const names and throw
+        // "Identifier has already been declared", stopping the page setup.
+        node.textContent = type === "module"
+          ? code
+          : "(function () {\\n" + code + "\\n}).call(window);";
+      }
       mount.appendChild(node);
     });
   }
