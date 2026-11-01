@@ -806,6 +806,62 @@
 </nav>
 
 
+
+<script>
+/* Lightweight local catalogue search and category filtering. */
+(() => {
+  const input = document.getElementById("titanSearch");
+  const searchButton = document.querySelector(".home-search-box button");
+  const chips = [...document.querySelectorAll(".category-chip")];
+  const cards = [...document.querySelectorAll(".featured-card,.recommended-card,.short-card")];
+  if (!input || !cards.length) return;
+
+  document.querySelectorAll(".short-card").forEach(card => {
+    if (card.dataset.category) return;
+    const title = (card.querySelector("h3")?.textContent || "").toLowerCase();
+    card.dataset.category = title.includes("teri") ? "music" : title.includes("racing") ? "gaming" : "movies";
+  });
+
+  let category = "all";
+  const apply = () => {
+    const term = input.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(card => {
+      const text = (card.textContent || "").toLowerCase();
+      const matchesText = !term || text.includes(term);
+      const matchesCategory = category === "all" || card.dataset.category === category;
+      card.hidden = !(matchesText && matchesCategory);
+      if (!card.hidden) visible++;
+    });
+    let empty = document.getElementById("titan-search-empty");
+    if (!empty) {
+      empty = document.createElement("p");
+      empty.id = "titan-search-empty";
+      empty.className = "muted";
+      empty.setAttribute("role", "status");
+      empty.textContent = "No videos found. Try another search.";
+      document.querySelector(".home-main")?.append(empty);
+    }
+    empty.hidden = visible > 0;
+  };
+
+  input.addEventListener("input", apply);
+  input.addEventListener("keydown", event => {
+    if (event.key === "Enter") { event.preventDefault(); apply(); }
+  });
+  searchButton?.addEventListener("click", apply);
+  chips.forEach(chip => chip.addEventListener("click", () => {
+    category = chip.dataset.category || "all";
+    chips.forEach(item => {
+      const active = item === chip;
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-pressed", String(active));
+    });
+    apply();
+  }));
+})();
+</script>
+
 </div>
 
 </body>
