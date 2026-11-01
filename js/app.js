@@ -1,134 +1,96 @@
-/* ==========================================
-   TITAN AI — MAIN APPLICATION CONTROLLER
-   Version: 1.0
-   ========================================== */
-
+/* TITAN AI — lightweight client-side page router */
 (() => {
-    "use strict";
+  "use strict";
+  const ROOT_ID = "titan-app";
+  let navigating = false;
 
-    const HOME_PAGE = "/pages/home.html";
+  function addPageAssets(doc) {
+    doc.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+      const href = link.href;
+      if (!href || document.querySelector('link[rel="stylesheet"][href="' + href + '"]')) return;
+      const node = document.createElement("link");
+      node.rel = "stylesheet";
+      node.href = href;
+      document.head.appendChild(node);
+    });
+    doc.querySelectorAll("style").forEach(style => {
+      const node = document.createElement("style");
+      node.dataset.titanPageStyle = location.pathname;
+      node.textContent = style.textContent;
+      document.head.appendChild(node);
+    });
+  }
 
-    async function loadHomePage() {
+  function runPageScripts(container) {
+    const scripts = Array.from(container.querySelectorAll("script"));
+    scripts.forEach(oldScript => {
+      const script = document.createElement("script");
+      Array.from(oldScript.attributes).forEach(attr => script.setAttribute(attr.name, attr.value));
+      script.textContent = oldScript.textContent;
+      oldScript.replaceWith(script);
+    });
+  }
 
-        const app = document.getElementById("app-content");
+  async function navigate(url, push = true) {
+    if (navigating) return;
+    const target = new URL(url, location.origin);
+    if (target.origin !== location.origin) return;
+    navigating = true;
+    try {
+      const response = await fetch(target.pathname + target.search, { cache: "default", headers: { "X-TITAN-Navigation": "1" } });
+      if (!response.ok) throw new Error("Page could not be loaded (" + response.status + ")");
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const root = document.getElementById(ROOT_ID);
+      if (!root) throw new Error("TITAN app container missing");
 
-        if (!app) {
-            console.error("TITAN AI: app-content not found");
-            return;
-        }
-
-        try {
-
-            const response = await fetch(HOME_PAGE, {
-                cache: "default"
-            });
-
-            if (!response.ok) {
-                throw new Error("Home Page Not Found");
-            }
-
-            const html = await response.text();
-
-            const parser = new DOMParser();
-
-            const page = parser.parseFromString(
-                html,
-                "text/html"
-            );
-
-            const homeContent = page.querySelector("#titan-app");
-
-            if (!homeContent) {
-                throw new Error("Home Content Missing");
-            }
-
-            // Load Home Page
-            app.innerHTML = homeContent.innerHTML;
-
-            // Load page CSS
-            const cssFiles = page.querySelectorAll(
-                'link[rel="stylesheet"]'
-            );
-
-            cssFiles.forEach(link => {
-
-                const href = link.getAttribute("href");
-
-                if (!href) return;
-
-                const exists = document.querySelector(
-                    `link[rel="stylesheet"][href="${href}"]`
-                );
-
-                if (!exists) {
-
-                    const newLink = document.createElement("link");
-
-                    newLink.rel = "stylesheet";
-                    newLink.href = href;
-
-                    document.head.appendChild(newLink);
-                }
-
-            });
-
-            // Support CSS currently written inside home.html
-            page.querySelectorAll("style").forEach(style => {
-                const newStyle = document.createElement("style");
-                newStyle.textContent = style.textContent;
-                document.head.appendChild(newStyle);
-            });
-
-            console.log("TITAN AI Home Loaded Successfully");
-
-        } catch (error) {
-
-            console.error("TITAN AI Error:", error);
-
-            app.innerHTML = `
-                <div style="
-                    min-height:70vh;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                    flex-direction:column;
-                    text-align:center;
-                    padding:20px;
-                    color:white;
-                ">
-                    <h1 style="color:#E9C46A">
-                        TITAN AI
-                    </h1>
-
-                    <p>
-                        Home Page Loading Failed
-                    </p>
-
-                    <button id="retryHome" style="
-                        padding:12px 25px;
-                        background:#8052E8;
-                        border:none;
-                        border-radius:25px;
-                        color:white;
-                        cursor:pointer;
-                    ">
-                        Try Again
-                    </button>
-                </div>
-            `;
-
-            document.getElementById("retryHome")
-                ?.addEventListener("click", loadHomePage);
-        }
+      addPageAssets(doc);
+      root.innerHTML = "";
+      const pageRoot = doc.querySelector("#titan-app");
+      if (pageRoot) {
+        root.innerHTML = pageRoot.innerHTML;
+      } else {
+        Array.from(doc.body.children).forEach(child => {
+          if (child.tagName !== "SCRIPT") root.appendChild(document.importNode(child, true));
+        });
+      }
+      document.title = doc.title || "TITAN AI";
+      runPageScripts(root);
+      if (push) history.pushState({ titan: true }, "", target.pathname + target.search + target.hash);
+      if (target.hash) {
+        requestAnimationFrame(() => document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView());
+      } else {
+        window.scrollTo(0, 0);
+        const feed = document.getElementById("shortFeed");
+        if (feed) feed.scrollTop = 0;
+      }
+    } catch (error) {
+      console.error("TITAN navigation:", error);
+      // Safe fallback only if the in-app fetch fails.
+      location.href = target.href;
+    } finally {
+      navigating = false;
     }
+  }
 
-    if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            loadHomePage
-        );
-    } else {
-        loadHomePage();
-    }
+  document.addEventListener("click", event => {
+    const link = event.target.closest("a[href]");
+    if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (link.target === "_blank" || link.hasAttribute("download")) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (!(url.pathname === "/" || url.pathname.startsWith("/pages/"))) return;
+    if (url.pathname === location.pathname && url.search === location.search && !url.hash) return;
+    event.preventDefault();
+    navigate(url.href, true);
+  });
 
+  window.addEventListener("popstate", () => navigate(location.href, false));
+
+  // The homepage is rendered into the same shell as every other screen.
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => navigate("/", false));
+  } else {
+    navigate("/", false);
+  }
 })();
