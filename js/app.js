@@ -37,7 +37,8 @@
     if (target.origin !== location.origin) return;
     navigating = true;
     try {
-      const response = await fetch(target.pathname + target.search, { cache: "default", headers: { "X-TITAN-Navigation": "1" } });
+      const requestPath = target.pathname === "/" ? "/pages/home.html" : target.pathname + target.search;
+      const response = await fetch(requestPath, { cache: "default", headers: { "X-TITAN-Navigation": "1" } });
       if (!response.ok) throw new Error("Page could not be loaded (" + response.status + ")");
       const html = await response.text();
       const doc = new DOMParser().parseFromString(html, "text/html");
