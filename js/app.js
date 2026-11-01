@@ -20,7 +20,7 @@
         try {
 
             const response = await fetch(HOME_PAGE, {
-                cache: "no-cache"
+                cache: "default"
             });
 
             if (!response.ok) {
