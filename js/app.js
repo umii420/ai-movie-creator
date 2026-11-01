@@ -48,13 +48,17 @@
   }
 
   async function mountStyles(doc) {
-    routeStyleNodes.forEach(node => node.remove());
-    routeStyleNodes = [];
+    const previousNodes = routeStyleNodes;
+    const nextNodes = [];
     const waits = [];
+
     doc.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
       const href = link.href;
       if (!href) return;
-      let node = [...document.querySelectorAll('link[rel="stylesheet"]')].find(x => x.href === href);
+
+      let node = [...document.querySelectorAll('link[rel="stylesheet"]')]
+        .find(x => x.href === href && !previousNodes.includes(x));
+
       if (!node) {
         node = document.createElement("link");
         node.rel = "stylesheet";
@@ -62,17 +66,22 @@
         node.dataset.titanRouteAsset = "1";
         document.head.appendChild(node);
       }
-      if (node.dataset.titanRouteAsset === "1") routeStyleNodes.push(node);
+
+      if (node.dataset.titanRouteAsset === "1") nextNodes.push(node);
       waits.push(waitForStylesheet(node));
     });
+
     doc.querySelectorAll("style").forEach(style => {
       const node = document.createElement("style");
       node.dataset.titanRouteStyle = "1";
       node.textContent = style.textContent;
       document.head.appendChild(node);
-      routeStyleNodes.push(node);
+      nextNodes.push(node);
     });
+
     await Promise.all(waits);
+    previousNodes.forEach(node => node.remove());
+    routeStyleNodes = nextNodes;
   }
 
   function runScripts(scripts, mount) {
@@ -162,7 +171,16 @@
     const target = new URL(link.href, location.href);
     if (target.origin !== location.origin) return;
     if (!(target.pathname === "/" || target.pathname.startsWith("/pages/"))) return;
-    if (target.pathname === location.pathname && target.search === location.search && !target.hash) return;
+    if (target.pathname === location.pathname && target.search === location.search) {
+      if (target.hash) {
+        event.preventDefault();
+        event.stopPropagation();
+        history.pushState({ titan: true }, "", target.pathname + target.search + target.hash);
+        const id = decodeURIComponent(target.hash.slice(1));
+        requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }));
+      }
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     navigate(target.href, true);
