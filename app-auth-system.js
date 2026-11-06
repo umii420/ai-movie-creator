@@ -6,6 +6,10 @@
 (function () {
     'use strict';
 
+    // SPA routes may include this file again; initialize Firebase only once.
+    if (window.__TITAN_AUTH_INITIALIZED__) return;
+    window.__TITAN_AUTH_INITIALIZED__ = true;
+
     console.log("⚡ Titan Auth System: Popup + Profile Fixed");
 
     const firebaseConfig = {
