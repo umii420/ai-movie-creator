@@ -91,8 +91,15 @@
 
       // Dynamically inserted external scripts must keep document order.
       if (old.src) {
+        const absoluteSrc = new URL(old.src, location.href).href;
+        // Shared scripts (especially Firebase auth) are loaded once by the app shell.
+        // Re-running them on every SPA route caused duplicate listeners and flaky navigation.
+        const alreadyLoaded = [...document.scripts].some(existing =>
+          existing !== old && existing.src && new URL(existing.src, location.href).href === absoluteSrc
+        );
+        if (alreadyLoaded) return;
         node.async = false;
-        node.src = old.src;
+        node.src = absoluteSrc;
       } else {
         const type = (old.getAttribute("type") || "").toLowerCase();
         const code = old.textContent || "";
