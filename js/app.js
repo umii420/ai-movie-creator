@@ -101,7 +101,7 @@
         // "Identifier has already been declared", stopping the page setup.
         node.textContent = type === "module"
           ? code
-          : "(function () {\\n" + code + "\\n}).call(window);";
+          : "(function () {\n" + code + "\n}).call(window);";
       }
       mount.appendChild(node);
     });
