@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08090d">
+<title>TITAN MUSIC — Discover & Listen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/titan-midnight-aurora.css">
+<style>
+:root{--music-bg:#080a13;--music-panel:#111525;--music-line:rgba(255,255,255,.09);--music-muted:#9ba5bd;--music-cyan:#27d7f2;--music-violet:#9367ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0%,rgba(83,56,173,.23),transparent 38%),radial-gradient(ellipse at 90% 25%,rgba(0,191,220,.12),transparent 32%),var(--music-bg);color:#f7f8ff;font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh}
+.music-wrap{max-width:1200px;margin:auto;padding:26px 22px 110px}.music-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.music-brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none}.music-logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#24d9ef,#7855ff);box-shadow:0 8px 30px #5b55ff55;font-size:21px}.music-brand strong{font:800 20px 'Space Grotesk';letter-spacing:.5px}.music-brand small{display:block;color:var(--music-muted);font-size:10px;letter-spacing:2px;margin-top:3px}.music-back,.music-premium{border:1px solid var(--music-line);border-radius:14px;padding:11px 15px;color:#fff;text-decoration:none;background:#ffffff09;font-weight:700;font-size:13px}.music-premium{background:linear-gradient(110deg,#7557ef,#1cbfd8);border:0}.music-hero{padding:34px;border:1px solid var(--music-line);border-radius:28px;background:linear-gradient(110deg,#201b43dd,#102c3bdd),url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1400') center/cover;position:relative;overflow:hidden;min-height:245px;display:flex;align-items:center}.music-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0b0d19 5%,#111126d9 55%,#11112635)}.hero-copy{position:relative;max-width:560px}.eyebrow{color:#72e8f6;font-size:11px;letter-spacing:2.5px;font-weight:800}.hero-copy h1{font:800 clamp(34px,6vw,58px)/1.02 'Space Grotesk';margin:12px 0}.hero-copy h1 span{background:linear-gradient(90deg,#35dff0,#a78bff);background-clip:text;color:transparent}.hero-copy p{color:#c2c8d8;max-width:460px;line-height:1.65;font-size:14px}.music-search{display:flex;align-items:center;gap:12px;margin:24px 0 30px;background:#111525;border:1px solid var(--music-line);border-radius:16px;padding:0 17px;height:54px}.music-search i{color:#94a0ba}.music-search input{background:none;border:0;outline:0;color:#fff;width:100%;font:500 14px 'Plus Jakarta Sans'}.music-section{margin-top:30px}.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:16px}.section-head h2{font:700 22px 'Space Grotesk';margin:0}.section-head p{color:var(--music-muted);font-size:12px;margin:6px 0 0}.section-head a{color:#80e7f4;text-decoration:none;font-size:12px;font-weight:700}.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.quick-card{border:1px solid var(--music-line);background:linear-gradient(145deg,#171b2c,#101321);border-radius:18px;padding:18px;min-height:118px}.quick-card i{font-size:22px;color:#72dff1}.quick-card strong{display:block;margin-top:15px;font-size:14px}.quick-card span{color:var(--music-muted);font-size:11px}.album-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}.album{min-width:0}.album-art{aspect-ratio:1;border-radius:17px;overflow:hidden;position:relative;background:#1b2033}.album-art img{width:100%;height:100%;object-fit:cover;display:block}.album-art button{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border:0;border-radius:50%;background:linear-gradient(135deg,#25d8ec,#845cff);color:white;font-size:14px;box-shadow:0 6px 20px #0008}.album h3{font-size:13px;margin:10px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.album p{font-size:11px;color:var(--music-muted);margin:0}.notice{margin-top:30px;border:1px solid #8d70ff55;background:#7b5bff12;border-radius:16px;padding:15px 17px;color:#c8c5e8;font-size:12px;line-height:1.6}.notice strong{color:#fff}.bottom-player{position:fixed;z-index:5;bottom:14px;left:50%;transform:translateX(-50%);width:min(760px,calc(100% - 24px));border:1px solid #ffffff20;border-radius:18px;background:#15192aee;backdrop-filter:blur(18px);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:0 15px 55px #0009}.player-label{display:flex;align-items:center;gap:11px;min-width:0}.player-cover{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#20d4e9,#8158ff);display:grid;place-items:center}.player-label strong{display:block;font-size:12px}.player-label small{color:var(--music-muted);font-size:10px}.player-controls{display:flex;gap:18px;align-items:center;color:#e6eaff}.player-controls .play{width:36px;height:36px;border-radius:50%;border:0;background:#fff;color:#111;font-size:13px}.player-status{font-size:10px;color:#aeb8ce;white-space:nowrap}
+@media(max-width:760px){.music-wrap{padding:18px 14px 110px}.music-hero{padding:25px;min-height:230px}.quick-grid{grid-template-columns:repeat(2,1fr)}.album-grid{grid-template-columns:repeat(2,1fr);gap:18px}.music-back{display:none}.player-status{display:none}.bottom-player{bottom:8px}.music-top{margin-bottom:20px}}
+</style>
+</head>
+<body>
+<main class="music-wrap">
+<header class="music-top">
+<a class="music-brand" href="/"><span class="music-logo"><i class="fa-solid fa-headphones"></i></span><span><strong>TITAN MUSIC</strong><small>DISCOVER • FEEL • REPEAT</small></span></a>
+<a class="music-back" href="/"><i class="fa-solid fa-arrow-left"></i> Back to TITAN AI</a>
+<a class="music-premium" href="#premium"><i class="fa-solid fa-crown"></i> Premium</a>
+</header>
+<section class="music-hero">
+<div class="hero-copy"><span class="eyebrow">YOUR SOUND. YOUR WORLD.</span><h1>Music that moves <span>you.</span></h1><p>Discover artists, explore albums and build your own soundtrack — all in the TITAN experience.</p></div>
+</section>
+<label class="music-search"><i class="fa-solid fa-magnifying-glass"></i><input id="musicSearch" type="search" placeholder="Search songs, artists and albums" aria-label="Search songs, artists and albums"></label>
+<section class="music-section"><div class="section-head"><div><h2>Explore TITAN Music</h2><p>Your music space, all in one place.</p></div></div>
+<div class="quick-grid">
+<div class="quick-card"><i class="fa-solid fa-fire"></i><strong>Trending</strong><span>Popular right now</span></div>
+<div class="quick-card"><i class="fa-solid fa-heart"></i><strong>Liked Songs</strong><span>Your favourites</span></div>
+<div class="quick-card"><i class="fa-solid fa-compact-disc"></i><strong>Albums</strong><span>Browse collections</span></div>
+<div class="quick-card"><i class="fa-solid fa-list-music"></i><strong>Playlists</strong><span>Your personal mix</span></div>
+</div></section>
+<section class="music-section"><div class="section-head"><div><h2>Featured moods</h2><p>Pick a mood for your next soundtrack.</p></div><a href="#premium">Explore all <i class="fa-solid fa-arrow-right"></i></a></div>
+<div class="album-grid" id="albumGrid">
+<article class="album"><div class="album-art"><img loading="lazy" src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500" alt="Electronic music lights"><button aria-label="Preview electronic mood"><i class="fa-solid fa-play"></i></button></div><h3>Electronic Nights</h3><p>Energy • Electronic</p></article>
+<article class="album"><div class="album-art"><img loading="lazy" src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=500" alt="Singer performing on stage"><button aria-label="Preview soulful mood"><i class="fa-solid fa-play"></i></button></div><h3>Soulful Moments</h3><p>Emotional • Acoustic</p></article>
+<article class="album"><div class="album-art"><img loading="lazy" src="https://images.unsplash.com/photo-1506157786151-b8491531f063?w=500" alt="Concert crowd"><button aria-label="Preview live mood"><i class="fa-solid fa-play"></i></button></div><h3>Live Forever</h3><p>Live • Concert</p></article>
+<article class="album"><div class="album-art"><img loading="lazy" src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=500" alt="Music studio instruments"><button aria-label="Preview studio mood"><i class="fa-solid fa-play"></i></button></div><h3>Studio Focus</h3><p>Focus • Instrumental</p></article>
+<article class="album"><div class="album-art"><img loading="lazy" src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=500" alt="Night sky"><button aria-label="Preview chill mood"><i class="fa-solid fa-play"></i></button></div><h3>Midnight Chill</h3><p>Relax • Chill</p></article>
+</div></section>
+<div class="notice"><strong><i class="fa-solid fa-circle-info"></i> Music service connection is not active yet.</strong><br>This is the first design preview. No Spotify/Apple catalog or playable tracks are connected yet. We will connect an approved provider only after checking its access, licensing and subscription rules.</div>
+</main>
+<aside class="bottom-player" aria-label="Music player preview"><div class="player-label"><span class="player-cover"><i class="fa-solid fa-music"></i></span><span><strong>TITAN MUSIC</strong><small>Choose a track to start</small></span></div><div class="player-controls"><i class="fa-solid fa-backward-step"></i><button class="play" type="button" aria-label="Playback unavailable"><i class="fa-solid fa-play"></i></button><i class="fa-solid fa-forward-step"></i></div><span class="player-status">PLAYER PREVIEW</span></aside>
+<script>
+(() => {
+ const input=document.getElementById('musicSearch');
+ const cards=[...document.querySelectorAll('.album')];
+ input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();cards.forEach(card=>card.hidden=!card.innerText.toLowerCase().includes(q));});
+})();
+</script>
+</body></html>
