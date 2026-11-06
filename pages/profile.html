@@ -1,4 +1,116 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080811"><title>Creator Profile | TITAN AI</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/css/titan-features.css"><link rel="stylesheet" href="/css/titan-midnight-aurora.css">
-</head><body><div class="titan-page"><header class="titan-head"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="titan-back" href="/pages/settings.html">Settings</a></header><span class="eyebrow">YOUR CREATOR SPACE</span><h1 class="page-title">My Profile</h1><section class="glass"><div class="profile-hero"><img class="avatar" id="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Profile avatar"><div><h2 id="name">TITAN Creator</h2><p class="muted" id="handle">@creator</p><span class="eyebrow">✦ CREATOR</span></div></div><div class="stats" style="margin:20px 0"><div class="stat"><strong id="videoCount">0</strong><span>Videos</span></div><div class="stat"><strong id="followers">0</strong><span>Followers</span></div><div class="stat"><strong id="following">0</strong><span>Following</span></div></div><button class="btn primary" id="editBtn"><i class="fa-solid fa-pen"></i> Edit Profile</button></section><section class="glass" id="editPanel" hidden><h3>Edit your profile</h3><div class="field"><label>Display name</label><input id="editName" maxlength="40" placeholder="Your name"></div><div class="field"><label>Username</label><input id="editHandle" maxlength="30" placeholder="@username"></div><div class="field"><label>Profile image URL</label><input id="editAvatar" type="url" placeholder="https://..."></div><button class="btn gold" id="saveProfile">Save Profile</button></section><section class="glass"><h3>My Videos</h3><div class="video-list" id="myVideos"><p class="muted">No uploaded videos saved on this device yet. Use Upload to add a video draft.</p></div><a class="btn" href="/pages/creator.html" style="margin-top:14px">Upload a video</a></section></div><nav class="titan-bottom"><a href="/"><i class="fa-solid fa-house"></i>Home</a><a href="/pages/shorts.html"><i class="fa-solid fa-bolt"></i>Shorts</a><a href="/pages/creator.html"><i class="fa-solid fa-plus"></i>Upload</a><a href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i>Studio</a><a class="active" href="/pages/profile.html"><i class="fa-solid fa-user"></i>Profile</a></nav><script>
-const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};let p=read("titan_user_profile",{name:"TITAN Creator",handle:"@creator",followers:0,following:0});function render(){document.getElementById("name").textContent=p.name||"TITAN Creator";document.getElementById("handle").textContent=p.handle||"@creator";document.getElementById("followers").textContent=p.followers||0;document.getElementById("following").textContent=p.following||0;document.getElementById("avatar").src=p.avatar||p.photo||"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80";document.getElementById("editName").value=p.name||"";document.getElementById("editHandle").value=p.handle||"";document.getElementById("editAvatar").value=p.avatar||"";const vids=read("titan_user_uploads",[]);document.getElementById("videoCount").textContent=vids.length;const list=document.getElementById("myVideos");list.innerHTML=vids.length?"":'<p class="muted">No uploaded video drafts yet.</p>';vids.forEach(v=>{const row=document.createElement("div");row.className="video-row";row.innerHTML='<div style="min-width:0"><b></b><p class="muted"></p></div><button class="btn">Delete</button>';row.querySelector("b").textContent=v.title;row.querySelector("p").textContent=(v.type==="short"?"Short":"Long video")+" • Draft";row.querySelector("button").onclick=()=>{const next=read("titan_user_uploads",[]).filter(x=>x.id!==v.id);localStorage.setItem("titan_user_uploads",JSON.stringify(next));render()};list.append(row)})}document.getElementById("editBtn").onclick=()=>document.getElementById("editPanel").hidden=!document.getElementById("editPanel").hidden;document.getElementById("saveProfile").onclick=()=>{p={...p,name:document.getElementById("editName").value.trim()||"TITAN Creator",handle:(document.getElementById("editHandle").value.trim().replace(/^@/,"")||"creator").replace(/^/,"@"),avatar:document.getElementById("editAvatar").value.trim(),photo:document.getElementById("editAvatar").value.trim()||p.photo||"",followers:p.followers||0,following:p.following||0};localStorage.setItem("titan_user_profile",JSON.stringify(p));render();alert("Profile saved on this device.")};render();
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080B14"><title>Creator Profile | TITAN AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="/css/titan-features.css"><link rel="stylesheet" href="/css/titan-midnight-aurora.css">
+<style>
+.profile-page{max-width:920px;margin:0 auto;padding:0 0 110px;font-family:'Plus Jakarta Sans',sans-serif}
+.profile-top{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+.profile-cover{height:210px;border-radius:22px;overflow:hidden;position:relative;background:linear-gradient(120deg,#10243a,#151332 65%,#102c45);border:1px solid rgba(0,212,255,.22)}
+.profile-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,9,18,.72),transparent 70%)}
+.profile-main{position:relative;margin:-62px 18px 0;z-index:1}
+.profile-identity{display:flex;align-items:flex-end;gap:16px}
+.profile-avatar{width:116px;height:116px;border-radius:50%;object-fit:cover;border:4px solid #0b1424;background:#17243a;box-shadow:0 0 0 2px rgba(0,212,255,.65),0 8px 28px #0008}
+.profile-name{font:700 clamp(24px,5vw,32px) 'Space Grotesk',sans-serif;margin:0;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.verified{color:#00D4FF;font-size:17px}.profile-handle{color:#9eabc0;margin:5px 0 0;font-size:13px}
+.profile-role{font-size:11px;color:#65e5ff;letter-spacing:1.3px;font-weight:800;margin-top:8px}
+.profile-actions{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+.profile-actions .btn{border-radius:12px;padding:11px 16px}
+.profile-bio{color:#c3ccda;line-height:1.65;margin:14px 0 16px;max-width:680px;font-size:14px}
+.social-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 20px}
+.social-row a{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:#d9e7f7;background:#142239;border:1px solid rgba(0,212,255,.18);text-decoration:none}
+.social-row a:hover{color:#00d4ff;border-color:#00d4ff}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.profile-stat{padding:15px;text-align:center;border-radius:15px;background:#111a2b;border:1px solid rgba(0,212,255,.14)}
+.profile-stat strong{display:block;font:700 22px 'Space Grotesk';color:#fff}.profile-stat span{font-size:11px;color:#9eabc0}
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:18px}
+.profile-card{min-width:0;padding:16px;border-radius:18px;background:linear-gradient(145deg,rgba(20,34,55,.96),rgba(12,20,35,.98));border:1px solid rgba(0,212,255,.16)}
+.profile-card h3{font:700 15px 'Space Grotesk';margin:0 0 13px;color:#fff;display:flex;align-items:center;gap:8px}
+.profile-card h3 i{color:#00d4ff}.profile-card p{color:#aab8cc;font-size:12px;line-height:1.55}
+.profile-link{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:12px;background:#0b1424;border:1px solid rgba(0,212,255,.12);color:#eaf5ff;text-decoration:none;margin-top:9px;font-size:12px}
+.profile-link small{display:block;color:#8d9aaf;margin-top:3px}.profile-link i.arrow{color:#00d4ff}
+.profile-release{display:flex;align-items:center;gap:12px}.release-art{width:70px;height:70px;border-radius:12px;object-fit:cover;background:linear-gradient(135deg,#00d4ff,#815bff);flex:none}
+.release-title{font-weight:700;color:#fff;font-size:13px}.release-meta{font-size:11px;color:#9eabc0;margin-top:5px}
+.event-row{padding:11px 0;border-top:1px solid rgba(0,212,255,.11);display:flex;justify-content:space-between;gap:12px}.event-row:first-of-type{border-top:0}.event-date{font-size:10px;color:#65e5ff;font-weight:800}.event-title{font-size:12px;color:#fff;margin-top:3px}.event-place{font-size:10px;color:#9eabc0;margin-top:3px}
+.video-list{display:grid;gap:9px}.video-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;background:#0b1424;border:1px solid rgba(0,212,255,.12);border-radius:12px}.video-row b{font-size:13px}.video-row .muted{font-size:11px}
+.profile-edit[hidden]{display:none}.profile-edit{margin-top:16px}.profile-edit .field{margin:12px 0}.profile-edit label{display:block;color:#b9c8da;font-size:12px;margin-bottom:6px}.profile-edit input,.profile-edit textarea{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;background:#0b1424;border:1px solid rgba(0,212,255,.2);color:white}.profile-edit textarea{min-height:80px;resize:vertical}
+@media(max-width:620px){.profile-page{padding-left:14px;padding-right:14px}.profile-cover{height:165px;border-radius:17px}.profile-main{margin:-48px 10px 0}.profile-avatar{width:92px;height:92px}.profile-identity{gap:12px}.profile-grid{grid-template-columns:1fr}.profile-card{padding:14px}.profile-stat{padding:12px 6px}.profile-stat strong{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="titan-page profile-page">
+<header class="profile-top"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="titan-back" href="/pages/settings.html">Settings</a></header>
+<div class="profile-cover" id="coverFrame"><img id="coverPhoto" alt="Creator cover" hidden></div>
+<section class="profile-main">
+<div class="profile-identity"><img class="profile-avatar" id="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80" alt="Creator profile photo"><div><h1 class="profile-name"><span id="name">TITAN Creator</span><i class="fa-solid fa-circle-check verified" id="verifiedBadge" title="Verified creator" hidden></i></h1><p class="profile-handle" id="handle">@creator</p><div class="profile-role" id="role">TITAN CREATOR</div></div></div>
+<p class="profile-bio" id="bio">Welcome to my creator space. Watch my latest videos, discover my work and follow my journey.</p>
+<div class="social-row" id="socialLinks" aria-label="Creator social links"></div>
+<div class="profile-stats"><div class="profile-stat"><strong id="videoCount">0</strong><span>VIDEOS</span></div><div class="profile-stat"><strong id="followers">0</strong><span>FOLLOWERS</span></div><div class="profile-stat"><strong id="following">0</strong><span>FOLLOWING</span></div></div>
+<div class="profile-actions"><button class="btn primary" id="editBtn"><i class="fa-solid fa-pen"></i> Edit Profile</button><a class="btn" href="/pages/creator.html"><i class="fa-solid fa-plus"></i> Upload</a></div>
+<section class="glass profile-edit" id="editPanel" hidden><h3>Edit creator profile</h3>
+<div class="field"><label for="editName">Display name</label><input id="editName" maxlength="40" placeholder="Your creator name"></div>
+<div class="field"><label for="editHandle">Username</label><input id="editHandle" maxlength="30" placeholder="@username"></div>
+<div class="field"><label for="editRole">Creator title</label><input id="editRole" maxlength="60" placeholder="DJ / Artist / Video Creator"></div>
+<div class="field"><label for="editBio">Bio</label><textarea id="editBio" maxlength="300" placeholder="Tell people about your work"></textarea></div>
+<div class="field"><label for="editAvatar">Profile photo URL</label><input id="editAvatar" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editCover">Cover photo URL</label><input id="editCover" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editYoutube">YouTube URL</label><input id="editYoutube" type="url" placeholder="https://youtube.com/..."></div>
+<div class="field"><label for="editInstagram">Instagram URL</label><input id="editInstagram" type="url" placeholder="https://instagram.com/..."></div>
+<div class="field"><label for="editSpotify">Spotify artist / playlist URL</label><input id="editSpotify" type="url" placeholder="https://open.spotify.com/..."></div>
+<div class="field"><label for="editWebsite">Website URL</label><input id="editWebsite" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editShop">Shop URL (optional)</label><input id="editShop" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editRelease">Latest release title</label><input id="editRelease" maxlength="80" placeholder="New release"></div>
+<div class="field"><label for="editReleaseLink">Latest release link</label><input id="editReleaseLink" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editReleaseArt">Release artwork URL</label><input id="editReleaseArt" type="url" placeholder="https://..."></div>
+<div class="field"><label for="editEvents">Upcoming shows (one per line: date | title | location)</label><textarea id="editEvents" maxlength="600" placeholder="JUN 21, 2026 | Live show | Karachi, Pakistan"></textarea></div>
+<label style="display:flex;align-items:center;gap:9px;color:#c3ccda;font-size:12px"><input id="editVerified" type="checkbox" style="width:auto"> Show verified badge (reserved for verified accounts)</label>
+<button class="btn primary" id="saveProfile" style="margin-top:14px">Save Profile</button><p class="muted" id="saveStatus" aria-live="polite"></p></section>
+</section>
+<div class="profile-grid">
+<section class="profile-card"><h3><i class="fa-brands fa-spotify"></i> MUSIC & PLAYLISTS</h3><div id="musicContent"><p>Connect your Spotify artist page or playlist in Edit Profile to feature your music here.</p></div></section>
+<section class="profile-card"><h3><i class="fa-brands fa-youtube"></i> YOUTUBE</h3><div id="youtubeContent"><p>Add your YouTube channel in Edit Profile to show it here.</p></div></section>
+<section class="profile-card"><h3><i class="fa-solid fa-store"></i> CREATOR SHOP</h3><div id="shopContent"><p>Showcase your creator store or merchandise link here.</p></div></section>
+<section class="profile-card"><h3><i class="fa-solid fa-calendar-days"></i> UPCOMING SHOWS</h3><div id="eventsContent"><p>Add upcoming events in Edit Profile.</p></div></section>
+<section class="profile-card"><h3><i class="fa-solid fa-compact-disc"></i> LATEST RELEASE</h3><div id="releaseContent"><p>Feature your latest music, video or project release.</p></div></section>
+<section class="profile-card"><h3><i class="fa-solid fa-globe"></i> CREATOR WEBSITE</h3><div id="websiteContent"><p>Add your official website in Edit Profile.</p></div></section>
+</div>
+<section class="profile-card" style="margin-top:14px"><h3><i class="fa-solid fa-clapperboard"></i> MY VIDEOS & SHORTS</h3><div class="video-list" id="myVideos"><p class="muted">No video drafts saved on this device yet. Use Upload to add a video draft.</p></div></section>
+</div>
+<nav class="titan-bottom"><a href="/"><i class="fa-solid fa-house"></i>Home</a><a href="/pages/shorts.html"><i class="fa-solid fa-bolt"></i>Shorts</a><a href="/pages/creator.html"><i class="fa-solid fa-plus"></i>Upload</a><a href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i>Studio</a><a class="active" href="/pages/profile.html"><i class="fa-solid fa-user"></i>Profile</a></nav>
+<script>
+(()=>{
+"use strict";
+const read=(key,fallback)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
+const $=id=>document.getElementById(id);
+const defaults={name:"TITAN Creator",handle:"@creator",role:"TITAN CREATOR",bio:"Welcome to my creator space. Watch my latest videos, discover my work and follow my journey.",followers:0,following:0,events:[]};
+let p={...defaults,...read("titan_user_profile",{})};
+const safeUrl=value=>{try{const u=new URL(value);return ["https:","http:"].includes(u.protocol)?u.href:""}catch{return ""}};
+const setLink=(container,label,url,icon)=>{const href=safeUrl(url);$(container).innerHTML="";if(!href){$(container).innerHTML='<p>Add this link in Edit Profile to feature it here.</p>';return}const a=document.createElement("a");a.className="profile-link";a.href=href;a.target="_blank";a.rel="noopener noreferrer";a.innerHTML='<span><i class="'+icon+'"></i> '+label+'</span><i class="fa-solid fa-arrow-up-right-from-square arrow"></i>';$(container).append(a)};
+function render(){
+$("name").textContent=p.name||defaults.name;$("handle").textContent=p.handle||defaults.handle;$("role").textContent=p.role||defaults.role;$("bio").textContent=p.bio||defaults.bio;
+$("avatar").src=safeUrl(p.avatar||p.photo)||"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80";
+const cover=safeUrl(p.cover);$("coverPhoto").hidden=!cover;if(cover)$("coverPhoto").src=cover;
+$("verifiedBadge").hidden=!p.verified;$("followers").textContent=Number(p.followers)||0;$("following").textContent=Number(p.following)||0;
+const social=[["youtube","fa-brands fa-youtube"],["instagram","fa-brands fa-instagram"],["spotify","fa-brands fa-spotify"],["website","fa-solid fa-link"]];$("socialLinks").innerHTML="";
+social.forEach(([key,icon])=>{const href=safeUrl(p[key]);if(!href)return;const a=document.createElement("a");a.href=href;a.target="_blank";a.rel="noopener noreferrer";a.title=key;a.innerHTML='<i class="'+icon+'"></i>'; $("socialLinks").append(a)});
+setLink("musicContent","Open Spotify",p.spotify,"fa-brands fa-spotify");setLink("youtubeContent","Watch on YouTube",p.youtube,"fa-brands fa-youtube");setLink("shopContent","Visit creator shop",p.shop,"fa-solid fa-store");setLink("websiteContent","Visit website",p.website,"fa-solid fa-globe");
+const events=Array.isArray(p.events)?p.events:[];$("eventsContent").innerHTML=events.length?"":'<p>Add upcoming events in Edit Profile.</p>';
+events.forEach(event=>{const row=document.createElement("div");row.className="event-row";const parts=String(event).split("|").map(x=>x.trim());const left=document.createElement("div");const date=document.createElement("div");date.className="event-date";date.textContent=parts[0]||"UPCOMING";const title=document.createElement("div");title.className="event-title";title.textContent=parts[1]||"Creator event";const place=document.createElement("div");place.className="event-place";place.textContent=parts[2]||"";left.append(date,title,place);row.append(left);$("eventsContent").append(row)});
+$("releaseContent").innerHTML="";if(p.releaseTitle){const wrap=document.createElement("div");wrap.className="profile-release";const img=document.createElement("img");img.className="release-art";img.alt="Release artwork";img.src=safeUrl(p.releaseArt)||"";const info=document.createElement("div");const title=document.createElement("div");title.className="release-title";title.textContent=p.releaseTitle;const meta=document.createElement("div");meta.className="release-meta";meta.textContent="Featured creator release";info.append(title,meta);wrap.append(img,info);$("releaseContent").append(wrap);const href=safeUrl(p.releaseLink);if(href){const a=document.createElement("a");a.className="profile-link";a.href=href;a.target="_blank";a.rel="noopener noreferrer";a.textContent="Open latest release ↗";$("releaseContent").append(a)}}else $("releaseContent").innerHTML="<p>Feature your latest music, video or project release.</p>";
+const vids=read("titan_user_uploads",[]);$("videoCount").textContent=vids.length;const list=$("myVideos");list.innerHTML="";if(!vids.length)list.innerHTML='<p class="muted">No video drafts saved on this device yet.</p>';
+vids.forEach(v=>{const row=document.createElement("div");row.className="video-row";const info=document.createElement("div");info.style.minWidth="0";const title=document.createElement("b");title.textContent=v.title||v.fileName||"Untitled upload";const meta=document.createElement("p");meta.className="muted";meta.textContent=(v.type==="short"?"Short":"Long video")+" • Saved draft";info.append(title,meta);const del=document.createElement("button");del.className="btn";del.type="button";del.textContent="Delete";del.addEventListener("click",()=>{const next=read("titan_user_uploads",[]).filter(x=>x.id!==v.id);localStorage.setItem("titan_user_uploads",JSON.stringify(next));render()});row.append(info,del);list.append(row)});
+}
+const fields={editName:"name",editHandle:"handle",editRole:"role",editBio:"bio",editAvatar:"avatar",editCover:"cover",editYoutube:"youtube",editInstagram:"instagram",editSpotify:"spotify",editWebsite:"website",editShop:"shop",editRelease:"releaseTitle",editReleaseLink:"releaseLink",editReleaseArt:"releaseArt"};
+function fillForm(){Object.entries(fields).forEach(([id,key])=>$(id).value=p[key]||"");$("editEvents").value=(p.events||[]).join("\n");$("editVerified").checked=!!p.verified}
+$("editBtn").addEventListener("click",()=>{const panel=$("editPanel");panel.hidden=!panel.hidden;if(!panel.hidden)fillForm()});
+$("saveProfile").addEventListener("click",()=>{const next={...p};Object.entries(fields).forEach(([id,key])=>next[key]=$(id).value.trim());next.handle="@"+(next.handle||"creator").replace(/^@+/,"");["avatar","cover","youtube","instagram","spotify","website","shop","releaseLink","releaseArt"].forEach(key=>{if(next[key]&&!safeUrl(next[key])){ $("saveStatus").textContent="Please enter valid http or https links.";return} });if($("saveStatus").textContent==="Please enter valid http or https links.")return;
+next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);next.verified=$("editVerified").checked;
+try{localStorage.setItem("titan_user_profile",JSON.stringify(next));p=next;$("saveStatus").textContent="Profile saved on this device.";render()}catch(e){$("saveStatus").textContent="Could not save. Device storage may be full."}});
+render();
+})();
+</script>
+</body></html>
