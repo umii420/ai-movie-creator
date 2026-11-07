@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080811"><title>Upload Center | TITAN AI</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/css/titan-features.css"><link rel="stylesheet" href="/css/titan-midnight-aurora.css">
-</head><body><div class="titan-page"><header class="titan-head"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="titan-back" href="/">Home</a></header><span class="eyebrow">CREATOR CENTER</span><h1 class="page-title">Upload Center</h1><p class="page-sub">Prepare a Short or Long Video draft for your creator profile.</p><div class="notice">This version saves a draft on this device only. Public publishing and permanent video hosting need the connected storage/database service.</div><section class="glass"><div class="field"><label>Upload type</label><select id="type"><option value="short">Short Video · Vertical</option><option value="long">Long Video · Landscape</option></select></div><div class="field"><label>Choose video</label><input id="file" type="file" accept="video/*"></div><div class="field"><label>Video title</label><input id="title" maxlength="100" placeholder="Give your video a title"></div><div class="field"><label>Description</label><textarea id="description" maxlength="1000" placeholder="Tell viewers about your video"></textarea></div><div class="field"><label>Category</label><select id="category"><option>Movies</option><option>Music</option><option>Gaming</option><option>Travel</option><option>News</option><option>AI Videos</option></select></div><video id="preview" class="upload-preview" controls hidden></video><button class="btn primary" id="save"><i class="fa-solid fa-cloud-arrow-up"></i> Save Video Draft</button><p id="status" class="muted" aria-live="polite"></p></section></div><nav class="titan-unified-nav" aria-label="TITAN main navigation">
+</head><body><div class="titan-page"><header class="titan-head"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="titan-back" href="/">Home</a></header><span class="eyebrow">CREATOR CENTER</span><h1 class="page-title">Upload Center</h1><p class="page-sub">Prepare a Short or Long Video draft for your creator profile.</p><div class="notice">Cloud video uploads are saved as private drafts. Public publishing and feed playback are still being connected.</div><section class="glass"><div class="field"><label>Upload type</label><select id="type"><option value="short">Short Video · Vertical</option><option value="long">Long Video · Landscape</option></select></div><div class="field"><label>Choose video</label><input id="file" type="file" accept="video/*"></div><div class="field"><label>Video title</label><input id="title" maxlength="100" placeholder="Give your video a title"></div><div class="field"><label>Description</label><textarea id="description" maxlength="1000" placeholder="Tell viewers about your video"></textarea></div><div class="field"><label>Category</label><select id="category"><option>Movies</option><option>Music</option><option>Gaming</option><option>Travel</option><option>News</option><option>AI Videos</option></select></div><video id="preview" class="upload-preview" controls hidden></video><button class="btn primary" id="save"><i class="fa-solid fa-cloud-arrow-up"></i> Save Video Draft</button><p id="status" class="muted" aria-live="polite"></p></section></div><nav class="titan-unified-nav" aria-label="TITAN main navigation">
   <a class="titan-nav-item " href="/" aria-label="Home"><i class="fa-solid fa-house"></i></a>
   <a class="titan-nav-item " href="/pages/shorts.html" aria-label="Shorts"><i class="fa-solid fa-clapperboard"></i></a>
   <details class="titan-create-menu">
@@ -25,7 +25,7 @@ const firebaseConfig={
 };
 const file=document.getElementById("file"),preview=document.getElementById("preview");
 const statusEl=document.getElementById("status"),saveBtn=document.getElementById("save");
-let chosen=null,auth=null,db=null,storage=null,currentUser=null;
+const CLOUDINARY_CLOUD_NAME="dgeshman";\nconst CLOUDINARY_UPLOAD_PRESET="Titan-upload";\nlet chosen=null,auth=null,db=null,currentUser=null;
 function loadScript(src){
   return new Promise((resolve,reject)=>{
     if(document.querySelector('script[src="'+src+'"]')){resolve();return}
@@ -44,7 +44,7 @@ async function initFirebase(){
   await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js");
   await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js");
   if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-  auth=firebase.auth();db=firebase.firestore();storage=firebase.storage();
+  auth=firebase.auth();db=firebase.firestore();
   currentUser=await waitForAuth();
   if(!currentUser){
     statusEl.textContent="Please sign in with Google before uploading. Return to Home and sign in, then reopen Upload Center.";
@@ -75,14 +75,29 @@ saveBtn.onclick=async()=>{
   const storagePath="users/"+currentUser.uid+"/videos/"+id+"_"+safeName;
   saveBtn.disabled=true;
   try{
-    const ref=storage.ref().child(storagePath);
-    const task=ref.put(chosen,{contentType:chosen.type,customMetadata:{ownerUid:currentUser.uid,videoId:id}});
-    await new Promise((resolve,reject)=>{
-      task.on("state_changed",snap=>{
-        const pct=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
-        statusEl.textContent="Uploading to TITAN cloud: "+pct+"%";
-      },reject,resolve);
+    const form=new FormData();
+    form.append("file",chosen);
+    form.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+    form.append("folder","titan/"+currentUser.uid);
+    const cloudResult=await new Promise((resolve,reject)=>{
+      const xhr=new XMLHttpRequest();
+      xhr.open("POST","https://api.cloudinary.com/v1_1/"+CLOUDINARY_CLOUD_NAME+"/video/upload");
+      xhr.upload.onprogress=event=>{
+        if(event.lengthComputable){
+          const pct=Math.round((event.loaded/event.total)*100);
+          statusEl.textContent="Uploading to TITAN cloud: "+pct+"%";
+        }
+      };
+      xhr.onload=()=>{
+        let data={};try{data=JSON.parse(xhr.responseText)}catch(e){}
+        if(xhr.status>=200&&xhr.status<300)resolve(data);
+        else reject(new Error(data.error?.message||"Cloudinary upload failed ("+xhr.status+")."));
+      };
+      xhr.onerror=()=>reject(new Error("Network error during Cloudinary upload."));
+      xhr.send(form);
     });
+    if(!cloudResult.public_id||!cloudResult.secure_url)throw new Error("Cloudinary did not return a video URL.");
+    const storagePath="users/"+currentUser.uid+"/videos/"+cloudResult.public_id;
     await db.collection("videos").doc(id).set({
       ownerUid:currentUser.uid,title,description,type,category,
       storagePath,status:"draft",
@@ -92,11 +107,11 @@ saveBtn.onclick=async()=>{
     const items=(()=>{try{return JSON.parse(localStorage.getItem("titan_user_uploads")||"[]")}catch(e){return []}})();
     items.unshift({id,title,description,type,category,fileName:chosen.name,size:chosen.size,storagePath,cloud:true,createdAt:new Date().toISOString()});
     localStorage.setItem("titan_user_uploads",JSON.stringify(items.slice(0,30)));
-    statusEl.textContent="Upload complete. Your video and draft details are saved in Firebase.";
+    statusEl.textContent="Upload complete. Your video is in Cloudinary and its private draft details are saved in Firestore.";
     chosen=null;file.value="";saveBtn.disabled=false;
   }catch(error){
     console.error("TITAN cloud upload failed:",error);
-    statusEl.textContent="Cloud upload failed: "+(error.message||"Check Firebase setup, Storage and Firestore rules.");
+    statusEl.textContent="Cloud upload failed: "+(error.message||"Check Cloudinary preset and Firestore rules.");
     saveBtn.disabled=false;
   }
 };
