@@ -115,7 +115,9 @@ service cloud.firestore {
         && request.resource.data.type == resource.data.type
         && request.resource.data.storagePath == resource.data.storagePath
         && request.resource.data.videoUrl == resource.data.videoUrl
-        && request.resource.data.thumbnailPath == resource.data.thumbnailPath
+        && ((!('thumbnailPath' in request.resource.data) && !('thumbnailPath' in resource.data))
+          || (('thumbnailPath' in request.resource.data) && ('thumbnailPath' in resource.data)
+            && request.resource.data.thumbnailPath == resource.data.thumbnailPath))
         && request.resource.data.status == resource.data.status
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.updatedAt == request.time
