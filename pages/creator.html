@@ -71,8 +71,6 @@ saveBtn.onclick=async()=>{
   const type=document.getElementById("type").value;
   const category=document.getElementById("category").value;
   const id=db.collection("videos").doc().id;
-  const safeName=chosen.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-100)||"video";
-  const storagePath="users/"+currentUser.uid+"/videos/"+id+"_"+safeName;
   saveBtn.disabled=true;
   try{
     const form=new FormData();
