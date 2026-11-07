@@ -80,7 +80,21 @@
 </div>
 <section class="profile-card" style="margin-top:14px"><h3><i class="fa-solid fa-clapperboard"></i> MY VIDEOS & SHORTS</h3><div class="video-list" id="myVideos"><p class="muted">No video drafts saved on this device yet. Use Upload to add a video draft.</p></div></section>
 </div>
-<nav class="titan-bottom"><a href="/"><i class="fa-solid fa-house"></i>Home</a><a href="/pages/shorts.html"><i class="fa-solid fa-bolt"></i>Shorts</a><a href="/pages/creator.html"><i class="fa-solid fa-plus"></i>Upload</a><a href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i>Studio</a><a class="active" href="/pages/profile.html"><i class="fa-solid fa-user"></i>Profile</a></nav>
+<nav class="titan-bottom titan-unified-nav" aria-label="Main navigation">
+  <a class="titan-nav-item " href="/" aria-label="Home"><i class="fa-solid fa-house"></i></a>
+  <a class="titan-nav-item " href="/pages/shorts.html" aria-label="Shorts"><i class="fa-solid fa-clapperboard"></i></a>
+  <details class="titan-create-menu">
+    <summary class="titan-nav-item titan-create-trigger" aria-label="Create or upload"><i class="fa-regular fa-paper-plane"></i></summary>
+    <div class="upload-options">
+      <div class="upload-menu-title"><h3>Create on TITAN</h3><p>Choose what you want to upload.</p></div>
+      <a href="/pages/creator.html?type=short" class="upload-option"><span class="upload-option-icon short-option"><i class="fa-solid fa-bolt"></i></span><span><strong>Upload Short</strong><small>Share a vertical short video</small></span><i class="fa-solid fa-chevron-right"></i></a>
+      <a href="/pages/creator.html?type=long" class="upload-option"><span class="upload-option-icon video-option"><i class="fa-solid fa-video"></i></span><span><strong>Upload Long Video</strong><small>Publish a full-length video</small></span><i class="fa-solid fa-chevron-right"></i></a>
+      <a href="/pages/studio.html" class="upload-option"><span class="upload-option-icon short-option"><i class="fa-solid fa-wand-magic-sparkles"></i></span><span><strong>AI Studio</strong><small>Create with TITAN AI</small></span><i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+  </details>
+  <a class="titan-nav-item" href="/#titanSearch" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></a>
+  <a class="titan-nav-item active" href="/pages/profile.html" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
+</nav>
 <script>
 (()=>{
 "use strict";
