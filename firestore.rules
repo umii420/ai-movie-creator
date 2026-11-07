@@ -34,6 +34,42 @@ service cloud.firestore {
         && validProfile(request.resource.data, uid)
         && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if false;
+
+      // A user controls only their own block list.
+      match /blocks/{blockedUid} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+          && blockedUid != uid
+          && request.resource.data.keys().hasOnly(['blockedUid', 'createdAt'])
+          && request.resource.data.blockedUid == blockedUid
+          && request.resource.data.createdAt == request.time;
+        allow delete: if owns(uid);
+        allow update: if false;
+      }
+    }
+
+    // Reports are submitted by signed-in users. Review and resolution are
+    // reserved for a trusted server using the Firebase Admin SDK.
+    match /moderationReports/{reportId} {
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'reporterUid', 'targetType', 'targetId', 'reason', 'details',
+          'status', 'createdAt'
+        ])
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.targetType in ['video', 'comment', 'user']
+        && request.resource.data.targetId is string
+        && request.resource.data.targetId.size() > 0
+        && request.resource.data.targetId.size() <= 200
+        && request.resource.data.reason in [
+          'spam', 'harassment', 'hate', 'sexual_content',
+          'dangerous_content', 'violence', 'privacy', 'copyright', 'other'
+        ]
+        && request.resource.data.details is string
+        && request.resource.data.details.size() <= 1000
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
     }
     match /videos/{videoId} {
       allow read: if (signedIn() && resource.data.ownerUid == request.auth.uid)
