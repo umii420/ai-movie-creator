@@ -23,6 +23,9 @@ const firebaseConfig={
   messagingSenderId:"953003695391",
   appId:"1:953003695391:web:fd85e69723a0cdee96642a"
 };
+const typeSelect=document.getElementById("type");
+const requestedType=new URLSearchParams(window.location.search).get("type");
+if(requestedType==="short"||requestedType==="long")typeSelect.value=requestedType;
 const file=document.getElementById("file"),preview=document.getElementById("preview");
 const statusEl=document.getElementById("status"),saveBtn=document.getElementById("save");
 const CLOUDINARY_CLOUD_NAME="dgeshman";
