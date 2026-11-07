@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080811"><title>Upload Center | TITAN AI</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"><link rel="stylesheet" href="/css/titan-features.css"><link rel="stylesheet" href="/css/titan-midnight-aurora.css">
-</head><body><div class="titan-page"><header class="titan-head"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="titan-back" href="/">Home</a></header><span class="eyebrow">CREATOR CENTER</span><h1 class="page-title">Upload Center</h1><p class="page-sub">Prepare a Short or Long Video draft for your creator profile.</p><div class="notice">This version saves a draft on this device only. Public publishing and permanent video hosting need the connected storage/database service.</div><section class="glass"><div class="field"><label>Upload type</label><select id="type"><option value="short">Short Video · Vertical</option><option value="long">Long Video · Landscape</option></select></div><div class="field"><label>Choose video</label><input id="file" type="file" accept="video/*"></div><div class="field"><label>Video title</label><input id="title" maxlength="100" placeholder="Give your video a title"></div><div class="field"><label>Description</label><textarea id="description" maxlength="1000" placeholder="Tell viewers about your video"></textarea></div><div class="field"><label>Category</label><select id="category"><option>Movies</option><option>Music</option><option>Gaming</option><option>Travel</option><option>News</option><option>AI Videos</option></select></div><video id="preview" class="upload-preview" controls hidden></video><button class="btn primary" id="save"><i class="fa-solid fa-cloud-arrow-up"></i> Save Video Draft</button><p id="status" class="muted" aria-live="polite"></p></section></div><nav class="titan-unified-nav" aria-label="TITAN main navigation">
+</head><body><div class="titan-page"><header class="titan-head"><a class="titan-brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><div style="display:flex;gap:10px;align-items:center"><a class="titan-back" href="/pages/my-videos.html">My Videos</a><a class="titan-back" href="/">Home</a></div></header><span class="eyebrow">CREATOR CENTER</span><h1 class="page-title">Upload Center</h1><p class="page-sub">Prepare a Short or Long Video draft for your creator profile.</p><div class="notice">Cloud video uploads are saved as private drafts. Public publishing and feed playback are still being connected.</div><section class="glass"><div class="field"><label>Upload type</label><select id="type"><option value="short">Short Video · Vertical</option><option value="long">Long Video · Landscape</option></select></div><div class="field"><label>Choose video</label><input id="file" type="file" accept="video/*"></div><div class="field"><label>Video title</label><input id="title" maxlength="100" placeholder="Give your video a title"></div><div class="field"><label>Description</label><textarea id="description" maxlength="1000" placeholder="Tell viewers about your video"></textarea></div><div class="field"><label>Category</label><select id="category"><option>Movies</option><option>Music</option><option>Gaming</option><option>Travel</option><option>News</option><option>AI Videos</option></select></div><video id="preview" class="upload-preview" controls hidden></video><button class="btn primary" id="save"><i class="fa-solid fa-cloud-arrow-up"></i> Save Video Draft</button><p id="status" class="muted" aria-live="polite"></p></section></div><nav class="titan-unified-nav" aria-label="TITAN main navigation">
   <a class="titan-nav-item " href="/" aria-label="Home"><i class="fa-solid fa-house"></i></a>
   <a class="titan-nav-item " href="/pages/shorts.html" aria-label="Shorts"><i class="fa-solid fa-clapperboard"></i></a>
   <details class="titan-create-menu">
@@ -14,6 +14,112 @@
   <a class="titan-nav-item " href="/pages/music.html" aria-label="Music"><i class="fa-solid fa-music"></i></a>
   <a class="titan-nav-item " href="/pages/profile.html" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
 </nav><script>
-let chosen=null;const file=document.getElementById("file"),preview=document.getElementById("preview"),status=document.getElementById("status");
-function saveVideoBlob(id,blob){return new Promise((resolve,reject)=>{const req=indexedDB.open("titan-media-db",1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("videos"))req.result.createObjectStore("videos")};req.onerror=()=>reject(req.error);req.onsuccess=()=>{const db=req.result,tx=db.transaction("videos","readwrite");tx.objectStore("videos").put(blob,id);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}}})}file.addEventListener("change",()=>{chosen=file.files[0]||null;if(!chosen){preview.hidden=true;return}if(!chosen.type.startsWith("video/")){status.textContent="Please select a video file.";chosen=null;return}if(chosen.size>100*1024*1024){status.textContent="Video is larger than the 100 MB draft limit.";chosen=null;return}preview.src=URL.createObjectURL(chosen);preview.hidden=false;status.textContent=chosen.name+" · "+(chosen.size/1048576).toFixed(1)+" MB"});document.getElementById("save").onclick=async()=>{if(!chosen){status.textContent="Choose a video first.";return}const title=document.getElementById("title").value.trim();if(!title){status.textContent="Add a video title first.";return}const items=(()=>{try{return JSON.parse(localStorage.getItem("titan_user_uploads")||"[]")}catch(e){return []}})();const id=Date.now().toString();try{await saveVideoBlob(id,chosen);items.unshift({id,title,description:document.getElementById("description").value,type:document.getElementById("type").value,category:document.getElementById("category").value,fileName:chosen.name,size:chosen.size,createdAt:new Date().toISOString()});localStorage.setItem("titan_user_uploads",JSON.stringify(items.slice(0,30)));status.textContent="Video draft saved on this device. Open Profile → My Videos to manage it.";document.getElementById("save").disabled=true}catch(e){status.textContent="Could not save this video on your device. Free up storage and try again.";console.error("TITAN local video save failed:",e)}};
+"use strict";
+const firebaseConfig={
+  apiKey:"AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",
+  authDomain:"titan-ai-2ed23.firebaseapp.com",
+  projectId:"titan-ai-2ed23",
+  storageBucket:"titan-ai-2ed23.firebasestorage.app",
+  messagingSenderId:"953003695391",
+  appId:"1:953003695391:web:fd85e69723a0cdee96642a"
+};
+const typeSelect=document.getElementById("type");
+const requestedType=new URLSearchParams(window.location.search).get("type");
+if(requestedType==="short"||requestedType==="long")typeSelect.value=requestedType;
+const file=document.getElementById("file"),preview=document.getElementById("preview");
+const statusEl=document.getElementById("status"),saveBtn=document.getElementById("save");
+const CLOUDINARY_CLOUD_NAME="dgeshman";
+const CLOUDINARY_UPLOAD_PRESET="Titan-upload";
+let chosen=null,auth=null,db=null,currentUser=null;
+function loadScript(src){
+  return new Promise((resolve,reject)=>{
+    if(document.querySelector('script[src="'+src+'"]')){resolve();return}
+    const s=document.createElement("script");s.src=src;s.async=true;
+    s.onload=resolve;s.onerror=()=>reject(new Error("Could not load Firebase SDK"));document.head.appendChild(s);
+  });
+}
+function waitForAuth(){
+  return new Promise(resolve=>{
+    const unsubscribe=auth.onAuthStateChanged(user=>{unsubscribe();resolve(user)});
+  });
+}
+async function initFirebase(){
+  await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
+  await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js");
+  await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js");
+  if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+  auth=firebase.auth();db=firebase.firestore();
+  currentUser=await waitForAuth();
+  if(!currentUser){
+    statusEl.textContent="Please sign in with Google before uploading. Return to Home and sign in, then reopen Upload Center.";
+    saveBtn.disabled=true;
+  }else{
+    statusEl.textContent="Connected to TITAN cloud as "+(currentUser.displayName||currentUser.email||"creator")+".";
+    saveBtn.disabled=false;
+  }
+}
+file.addEventListener("change",()=>{
+  chosen=file.files[0]||null;
+  if(!chosen){preview.hidden=true;return}
+  if(!chosen.type.startsWith("video/")){statusEl.textContent="Please select a video file.";chosen=null;file.value="";return}
+  if(chosen.size>100*1024*1024){statusEl.textContent="Video is larger than the 100 MB limit.";chosen=null;file.value="";return}
+  preview.src=URL.createObjectURL(chosen);preview.hidden=false;
+  statusEl.textContent=chosen.name+" · "+(chosen.size/1048576).toFixed(1)+" MB";
+});
+saveBtn.onclick=async()=>{
+  if(!currentUser){statusEl.textContent="Sign in first, then upload.";return}
+  if(!chosen){statusEl.textContent="Choose a video first.";return}
+  const title=document.getElementById("title").value.trim();
+  if(!title){statusEl.textContent="Add a video title first.";return}
+  const description=document.getElementById("description").value.trim();
+  const type=document.getElementById("type").value;
+  const category=document.getElementById("category").value;
+  const id=db.collection("videos").doc().id;
+  saveBtn.disabled=true;
+  try{
+    const form=new FormData();
+    form.append("file",chosen);
+    form.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+    form.append("folder","titan/"+currentUser.uid);
+    const cloudResult=await new Promise((resolve,reject)=>{
+      const xhr=new XMLHttpRequest();
+      xhr.open("POST","https://api.cloudinary.com/v1_1/"+CLOUDINARY_CLOUD_NAME+"/video/upload");
+      xhr.upload.onprogress=event=>{
+        if(event.lengthComputable){
+          const pct=Math.round((event.loaded/event.total)*100);
+          statusEl.textContent="Uploading to TITAN cloud: "+pct+"%";
+        }
+      };
+      xhr.onload=()=>{
+        let data={};try{data=JSON.parse(xhr.responseText)}catch(e){}
+        if(xhr.status>=200&&xhr.status<300)resolve(data);
+        else reject(new Error(data.error?.message||"Cloudinary upload failed ("+xhr.status+")."));
+      };
+      xhr.onerror=()=>reject(new Error("Network error during Cloudinary upload."));
+      xhr.send(form);
+    });
+    if(!cloudResult.public_id||!cloudResult.secure_url)throw new Error("Cloudinary did not return a video URL.");
+    const storagePath="users/"+currentUser.uid+"/videos/"+cloudResult.public_id;
+    await db.collection("videos").doc(id).set({
+      ownerUid:currentUser.uid,title,description,type,category,
+      storagePath,videoUrl:cloudResult.secure_url,status:"draft",
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+    const items=(()=>{try{return JSON.parse(localStorage.getItem("titan_user_uploads")||"[]")}catch(e){return []}})();
+    items.unshift({id,title,description,type,category,fileName:chosen.name,size:chosen.size,storagePath,videoUrl:cloudResult.secure_url,cloud:true,createdAt:new Date().toISOString()});
+    localStorage.setItem("titan_user_uploads",JSON.stringify(items.slice(0,30)));
+    statusEl.textContent="Upload complete. Your video is uploaded to Cloudinary and its draft details are saved in Firestore. The draft is not yet published to the TITAN feed.";
+    chosen=null;file.value="";saveBtn.disabled=false;
+  }catch(error){
+    console.error("TITAN cloud upload failed:",error);
+    statusEl.textContent="Cloud upload failed: "+(error.message||"Check Cloudinary preset and Firestore rules.");
+    saveBtn.disabled=false;
+  }
+};
+initFirebase().catch(error=>{
+  console.error("TITAN Firebase initialization failed:",error);
+  statusEl.textContent="Firebase could not connect. Check Firebase Console setup and reload this page.";
+  saveBtn.disabled=true;
+});
 </script></body></html>

@@ -1,0 +1,172 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function owns(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function validProfile(data, uid) {
+      return data.keys().hasOnly([
+        'uid', 'displayName', 'handle', 'photoURL', 'bio', 'createdAt', 'updatedAt'
+      ])
+      && data.uid == uid
+      && data.displayName is string && data.displayName.size() <= 60
+      && data.handle is string && data.handle.size() <= 30
+      && data.photoURL is string && data.photoURL.size() <= 2048
+      && data.bio is string && data.bio.size() <= 300
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function validVideo(data) {
+      return data.keys().hasOnly([
+        'ownerUid', 'title', 'description', 'type', 'category',
+        'storagePath', 'videoUrl', 'thumbnailPath', 'status', 'createdAt', 'updatedAt'
+      ])
+      && data.ownerUid == request.auth.uid
+      && data.title is string && data.title.size() > 0 && data.title.size() <= 100
+      && data.description is string && data.description.size() <= 1000
+      && data.type in ['short', 'long']
+      && data.category is string && data.category.size() > 0 && data.category.size() <= 40
+      && data.storagePath is string
+      && data.storagePath.matches('users/' + request.auth.uid + '/videos/.*')
+      && data.videoUrl is string && data.videoUrl.size() <= 2048
+      && (!('thumbnailPath' in data) ||
+          (data.thumbnailPath is string &&
+           data.thumbnailPath.matches('users/' + request.auth.uid + '/thumbnails/.*')))
+      && data.status in ['draft', 'published']
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function publishedVideo(videoId) {
+      return exists(/databases/$(database)/documents/videos/$(videoId))
+        && get(/databases/$(database)/documents/videos/$(videoId)).data.status == 'published';
+    }
+
+    match /users/{uid} {
+      allow read: if owns(uid);
+      allow create: if owns(uid)
+        && validProfile(request.resource.data, uid)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if owns(uid)
+        && validProfile(request.resource.data, uid)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+
+      match /blocks/{blockedUid} {
+        allow read: if owns(uid);
+        allow create: if owns(uid)
+          && blockedUid != uid
+          && request.resource.data.keys().hasOnly(['blockedUid', 'createdAt'])
+          && request.resource.data.blockedUid == blockedUid
+          && request.resource.data.createdAt == request.time;
+        allow delete: if owns(uid);
+        allow update: if false;
+      }
+    }
+
+    match /moderationReports/{reportId} {
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly([
+          'reporterUid', 'targetType', 'targetId', 'reason', 'details',
+          'status', 'createdAt'
+        ])
+        && request.resource.data.reporterUid == request.auth.uid
+        && request.resource.data.targetType in ['video', 'comment', 'user']
+        && request.resource.data.targetId is string
+        && request.resource.data.targetId.size() > 0
+        && request.resource.data.targetId.size() <= 200
+        && request.resource.data.reason in [
+          'spam', 'harassment', 'hate', 'sexual_content',
+          'dangerous_content', 'violence', 'privacy', 'copyright', 'other'
+        ]
+        && request.resource.data.details is string
+        && request.resource.data.details.size() <= 1000
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time;
+      allow read, update, delete: if false;
+    }
+
+    match /videos/{videoId} {
+      allow read: if (signedIn() && resource.data.ownerUid == request.auth.uid)
+        || resource.data.status == 'published';
+
+      // Browser uploads may create drafts only. Publishing is reserved for a
+      // trusted server using the Firebase Admin SDK after moderation.
+      allow create: if signedIn()
+        && validVideo(request.resource.data)
+        && request.resource.data.status == 'draft'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      // Owners may edit descriptive metadata only. They cannot replace media,
+      // transfer ownership, change type, or change draft/published status.
+      allow update: if signedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && validVideo(request.resource.data)
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.type == resource.data.type
+        && request.resource.data.storagePath == resource.data.storagePath
+        && request.resource.data.videoUrl == resource.data.videoUrl
+        && ((!('thumbnailPath' in request.resource.data) && !('thumbnailPath' in resource.data))
+          || (('thumbnailPath' in request.resource.data) && ('thumbnailPath' in resource.data)
+            && request.resource.data.thumbnailPath == resource.data.thumbnailPath))
+        && request.resource.data.status == resource.data.status
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['title', 'description', 'category', 'updatedAt']);
+
+      allow delete: if signedIn()
+        && resource.data.ownerUid == request.auth.uid
+        && resource.data.status == 'draft';
+
+      match /comments/{commentId} {
+        allow read: if signedIn() && publishedVideo(videoId);
+        allow create: if signedIn()
+          && publishedVideo(videoId)
+          && request.resource.data.keys().hasOnly(['ownerUid', 'text', 'createdAt'])
+          && request.resource.data.ownerUid == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 500
+          && request.resource.data.createdAt == request.time;
+        allow update: if signedIn()
+          && publishedVideo(videoId)
+          && resource.data.ownerUid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['ownerUid', 'text', 'createdAt'])
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 500;
+        allow delete: if signedIn()
+          && publishedVideo(videoId)
+          && resource.data.ownerUid == request.auth.uid;
+      }
+
+      match /likes/{uid} {
+        allow read: if signedIn() && publishedVideo(videoId);
+        allow create: if owns(uid)
+          && publishedVideo(videoId)
+          && request.resource.data.keys().hasOnly(['ownerUid', 'createdAt'])
+          && request.resource.data.ownerUid == uid
+          && request.resource.data.createdAt == request.time;
+        allow delete: if owns(uid) && publishedVideo(videoId);
+        allow update: if false;
+      }
+    }
+
+    // Deny every collection not explicitly matched above.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

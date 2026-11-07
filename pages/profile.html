@@ -127,4 +127,50 @@ try{localStorage.setItem("titan_user_profile",JSON.stringify(next));p=next;$("sa
 render();
 })();
 </script>
+<script>
+(function(){
+  "use strict";
+  const config={apiKey:"AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",authDomain:"titan-ai-2ed23.firebaseapp.com",projectId:"titan-ai-2ed23",storageBucket:"titan-ai-2ed23.firebasestorage.app",messagingSenderId:"953003695391",appId:"1:953003695391:web:fd85e69723a0cdee96642a"};
+  function load(src){return new Promise((resolve,reject)=>{if(document.querySelector('script[src="'+src+'"]'))return resolve();const s=document.createElement("script");s.src=src;s.async=true;s.onload=resolve;s.onerror=reject;document.head.appendChild(s)})}
+  let db=null,user=null,ready=false;
+  async function init(){
+    try{
+      await load("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
+      await load("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js");
+      await load("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js");
+      if(!firebase.apps.length)firebase.initializeApp(config);
+      db=firebase.firestore();
+      firebase.auth().onAuthStateChanged(u=>{user=u;ready=!!u;});
+    }catch(e){console.warn("TITAN profile cloud sync unavailable:",e);}
+  }
+  document.getElementById("saveProfile").addEventListener("click",()=>{
+    setTimeout(async()=>{
+      if(!ready||!db||!user)return;
+      try{
+        const p=JSON.parse(localStorage.getItem("titan_user_profile")||"{}");
+        const ref=db.collection("users").doc(user.uid);
+        const snap=await ref.get();
+        const stamp=firebase.firestore.FieldValue.serverTimestamp();
+        const payload={
+          uid:user.uid,
+          displayName:String(p.name||user.displayName||"Titan Creator").slice(0,60),
+          handle:String(p.handle||"@creator").slice(0,30),
+          photoURL:String(p.avatar||p.photo||user.photoURL||"").slice(0,2048),
+          bio:String(p.bio||"").slice(0,300),
+          updatedAt:stamp
+        };
+        if(!snap.exists)payload.createdAt=stamp;
+        await ref.set(payload,{merge:true});
+        const status=document.getElementById("saveStatus");
+        if(status)status.textContent="Profile saved on this device and synced to your TITAN account.";
+      }catch(e){
+        console.warn("TITAN profile cloud sync failed:",e);
+        const status=document.getElementById("saveStatus");
+        if(status)status.textContent="Profile saved on this device. Cloud sync is unavailable; please check your connection or account rules.";
+      }
+    },0);
+  });
+  init();
+})();
+</script>
 </body></html>
