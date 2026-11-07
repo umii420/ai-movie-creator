@@ -26,10 +26,12 @@ This document describes the current `backend-foundation` branch. It is not a cla
 - No public publish action is exposed. Uploads are private drafts until a trusted server-side review and publishing workflow exists.
 - Report/block actions are connected on Shorts and long-video cards. Reporting comments/users, a moderator dashboard, trusted server-side review, appeals, account sanctions, age assurance, and automated content scanning are not implemented.
 - Deleting a Firestore draft does not delete its Cloudinary media asset; secure cleanup needs a signed server-side operation.
-- Profile sync, followers, notifications, persistent Shorts likes/comments and World Updates provider are incomplete.
+- Basic creator profile fields (display name, handle, photo URL and bio) now sync to the signed-in user's Firestore document when signing in and when saving the profile. Extended profile fields remain device-local.
+- Settings now links to a World Updates page backed by a cached server-side RSS endpoint for BBC World and DW World; availability depends on those publishers' feeds.
+- Followers, notifications and persistent Shorts likes/comments remain incomplete.
 - Music page is a demo, not a licensed streaming service.
 - AI image generation and actual video rendering providers are not connected.
-- No browser/runtime test, Firestore Emulator test, or production deployment test has been completed.
+- JavaScript syntax checks passed for the edited auth, profile, settings, and World Updates scripts. No browser/runtime test, Firestore Emulator test, or production deployment test has been completed.
 
 ## Required external setup
 1. Confirm `GROQ_API_KEY` exists only as a server-side Vercel environment variable.
