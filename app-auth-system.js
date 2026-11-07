@@ -24,6 +24,24 @@
 
     let authInstance = null;
     let googleProviderInstance = null;
+    let profileDb = null;
+
+    async function syncBasicProfile(user, localProfile) {
+        if (!profileDb || !user) return;
+        const ref = profileDb.collection('users').doc(user.uid);
+        const snapshot = await ref.get();
+        const now = window.firebase.firestore.FieldValue.serverTimestamp();
+        const payload = {
+            uid: user.uid,
+            displayName: String(localProfile.name || user.displayName || 'Titan Creator').slice(0, 60),
+            handle: String(localProfile.handle || ('@' + (user.email ? user.email.split('@')[0] : 'creator'))).slice(0, 30),
+            photoURL: String(localProfile.photo || user.photoURL || '').slice(0, 2048),
+            bio: String(localProfile.bio || 'Titan AI Creator').slice(0, 300),
+            updatedAt: now
+        };
+        if (!snapshot.exists) payload.createdAt = now;
+        await ref.set(payload, { merge: true });
+    }
 
     function loadScript(src) {
         return new Promise((resolve, reject) => {
@@ -63,24 +81,26 @@
         // Clean handle from email or name
         let handle = "@" + (user.email ? user.email.split("@")[0] : (user.displayName || "creator").toLowerCase().replace(/\s+/g, ""));
 
+        let previous = {};
+        try { previous = JSON.parse(localStorage.getItem('titan_user_profile') || '{}') || {}; } catch (_) {}
         const profile = {
-            name: user.displayName || "Titan Creator",
-            email: user.email || "",
-            photo: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || "User")}&background=00b2ff&color=fff`,
+            ...previous,
+            name: previous.name || user.displayName || 'Titan Creator',
+            email: user.email || '',
+            photo: previous.photo || user.photoURL || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'User') + '&background=00b2ff&color=fff'),
             uid: user.uid,
-            handle: handle,
-            bio: "Titan AI Creator",
-            ytLink: "",
-            followers: "0",
-            following: "0",
-            likes: "0",
-            // A Google login confirms identity with Google; it does not grant TITAN verification.
+            handle: previous.handle || handle,
+            bio: previous.bio || 'Titan AI Creator',
+            followers: previous.followers || '0',
+            following: previous.following || '0',
+            likes: previous.likes || '0',
             verified: false,
-            joinedDate: new Date().toISOString()
+            joinedDate: previous.joinedDate || new Date().toISOString()
         };
 
-        localStorage.setItem("titan_user_profile", JSON.stringify(profile));
-        localStorage.setItem("titan_logged_in", "true");
+        localStorage.setItem('titan_user_profile', JSON.stringify(profile));
+        localStorage.setItem('titan_logged_in', 'true');
+        if (profileDb) syncBasicProfile(user, profile).catch(error => console.warn('TITAN profile cloud sync:', error));
         console.log("✅ Unlocked + Profile Saved:", profile.name);
     };
 
@@ -88,12 +108,14 @@
         try {
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js");
+            await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js");
 
             if (!window.firebase.apps.length) {
                 window.firebase.initializeApp(firebaseConfig);
             }
 
             authInstance = window.firebase.auth();
+            profileDb = window.firebase.firestore();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
             googleProviderInstance.setCustomParameters({
                 prompt: "select_account"
