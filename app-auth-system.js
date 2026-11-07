@@ -74,7 +74,8 @@
             followers: "0",
             following: "0",
             likes: "0",
-            verified: true,
+            // A Google login confirms identity with Google; it does not grant TITAN verification.
+            verified: false,
             joinedDate: new Date().toISOString()
         };
 
@@ -125,14 +126,14 @@
             }
 
             const result = await authInstance.signInWithPopup(googleProviderInstance);
-            
+
             if (result && result.user) {
                 window.unlockTitanApp(result.user);
             }
 
         } catch (error) {
             console.error("Login Error:", error);
-            
+
             if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
                 try {
                     await authInstance.signInWithRedirect(googleProviderInstance);
