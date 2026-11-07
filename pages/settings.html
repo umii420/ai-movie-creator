@@ -2,7 +2,15 @@
 </head><body><div class="page-wrap"><header class="page-head"><a class="brand" href="/">♛ TITAN <b>AI</b><small>WATCH • CREATE • INSPIRE</small></a><a class="back" href="/">Home</a></header><main><span class="eyebrow">TITAN AI • SETTINGS</span><h1 class="title">Settings</h1><p class="sub">Manage your TITAN AI app preferences.</p><section class="panel"><div class="field"><label>Appearance</label><select id="settingTheme"><option value="dark">Dark — TITAN Premium</option><option value="system">System default</option></select></div><div class="field"><label>Language</label><select id="settingLanguage"><option>English</option><option>Urdu</option><option>Roman Urdu</option></select></div><div class="field"><label>Notifications</label><select id="settingNotifications"><option value="on">On</option><option value="off">Off</option></select></div><div class="field"><label>Privacy</label><select id="settingPrivacy"><option value="public">Public profile</option><option value="private">Private profile</option></select></div><a class="tile" href="#world"><i class="fa-solid fa-globe"></i><strong>World Updates</strong><span class="muted">News section planned for a later integration phase.</span></a><p id="settingsStatus" class="muted" style="margin-top:14px" aria-live="polite">Your preferences are saved on this device.</p></section></main></div><nav class="titan-unified-nav" aria-label="TITAN main navigation">
   <a class="titan-nav-item " href="/" aria-label="Home"><i class="fa-solid fa-house"></i></a>
   <a class="titan-nav-item " href="/pages/shorts.html" aria-label="Shorts"><i class="fa-solid fa-clapperboard"></i></a>
-  <a class="titan-nav-item titan-upload-nav " href="/pages/creator.html" aria-label="Upload"><i class="fa-solid fa-plus"></i></a>
+  <details class="titan-create-menu">
+    <summary class="titan-nav-item titan-upload-nav " aria-label="Upload"><i class="fa-solid fa-plus"></i></summary>
+    <div class="upload-options">
+      <div class="upload-menu-title"><h3>Create on TITAN</h3><p>Choose what you want to upload.</p></div>
+      <a href="/pages/creator.html?type=short" class="upload-option"><span class="upload-option-icon short-option"><i class="fa-solid fa-bolt"></i></span><span><strong>Upload Short</strong><small>Share a vertical short video</small></span><i class="fa-solid fa-chevron-right"></i></a>
+      <a href="/pages/creator.html?type=long" class="upload-option"><span class="upload-option-icon video-option"><i class="fa-solid fa-video"></i></span><span><strong>Upload Long Video</strong><small>Publish a full-length video</small></span><i class="fa-solid fa-chevron-right"></i></a>
+    </div>
+  </details>
+  <a class="titan-nav-item " href="/pages/studio.html" aria-label="AI Studio"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
   <a class="titan-nav-item " href="/pages/music.html" aria-label="Music"><i class="fa-solid fa-music"></i></a>
   <a class="titan-nav-item " href="/pages/profile.html" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
 </nav><script>
