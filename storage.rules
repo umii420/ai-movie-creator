@@ -1,21 +1,34 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /users/{uid}/videos/{fileName} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow create, update: if request.auth != null
-        && request.auth.uid == uid
-        && request.resource.size < 100 * 1024 * 1024
-        && request.resource.contentType.matches('video/.*');
-      allow delete: if request.auth != null && request.auth.uid == uid;
+    function owns(uid) {
+      return request.auth != null && request.auth.uid == uid;
     }
+
+    match /users/{uid}/videos/{fileName} {
+      allow read: if owns(uid);
+      // New uploads only. Prevent replacing an existing object through the client.
+      allow create: if owns(uid)
+        && request.resource.size > 0
+        && request.resource.size <= 100 * 1024 * 1024
+        && request.resource.contentType.matches('video/(mp4|webm|quicktime|x-matroska)');
+      allow update: if false;
+      allow delete: if owns(uid);
+    }
+
     match /users/{uid}/thumbnails/{fileName} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow create, update: if request.auth != null
-        && request.auth.uid == uid
-        && request.resource.size < 10 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
-      allow delete: if request.auth != null && request.auth.uid == uid;
+      allow read: if owns(uid);
+      allow create: if owns(uid)
+        && request.resource.size > 0
+        && request.resource.size <= 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp)');
+      allow update: if false;
+      allow delete: if owns(uid);
+    }
+
+    // No public access and no unmatched object access.
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }
