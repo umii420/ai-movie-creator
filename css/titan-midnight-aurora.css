@@ -105,3 +105,99 @@ input:focus,textarea:focus,select:focus{outline:2px solid rgba(0,212,255,.28);bo
  .titan-unified-nav .titan-create-menu .titan-nav-item { width:100%!important; }
  .titan-unified-nav .titan-create-menu[open] .upload-options { position:absolute!important; left:50%!important; bottom:calc(60px + env(safe-area-inset-bottom))!important; transform:translateX(-50%)!important; width:min(285px,85vw)!important; z-index:10000!important; }
 }
+
+
+/* TITAN AI — five destinations with a raised right-side create button */
+@media (max-width:700px) {
+  .titan-unified-nav {
+    position:fixed!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:0!important;
+    height:calc(66px + env(safe-area-inset-bottom))!important;
+    min-height:66px!important;
+    padding:0 5px env(safe-area-inset-bottom)!important;
+    background:rgba(5,7,13,.97)!important;
+    border-top:1px solid rgba(0,212,255,.16)!important;
+    box-shadow:0 -8px 28px rgba(0,0,0,.24)!important;
+  }
+  .titan-unified-nav > a.titan-nav-item {
+    position:relative!important;
+    flex:1 1 20%!important;
+    width:20%!important;
+    max-width:20%!important;
+    height:60px!important;
+    min-height:60px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    color:#aebbd0!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    text-decoration:none!important;
+    font-size:0!important;
+  }
+  .titan-unified-nav > a.titan-nav-item i {
+    font-size:24px!important;
+    line-height:1!important;
+    transition:color .2s ease, transform .2s ease, filter .2s ease;
+  }
+  .titan-unified-nav > a.titan-nav-item.active {color:#45ddf5!important}
+  .titan-unified-nav > a.titan-nav-item.active i {
+    filter:drop-shadow(0 0 8px rgba(0,212,255,.38))!important;
+    transform:translateY(-1px);
+  }
+  .titan-unified-nav .titan-create-menu {
+    position:absolute!important;
+    right:17px!important;
+    bottom:calc(66px + env(safe-area-inset-bottom) + 9px)!important;
+    z-index:1005!important;
+    display:block!important;
+    flex:none!important;
+    width:58px!important;
+    height:58px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  .titan-unified-nav .titan-create-menu > summary.titan-nav-item {
+    list-style:none!important;
+    cursor:pointer!important;
+    width:58px!important;
+    height:58px!important;
+    min-height:58px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border:1px solid rgba(105,235,255,.65)!important;
+    border-radius:50%!important;
+    color:#fff!important;
+    background:linear-gradient(145deg,#00c9ee 0%,#438bff 54%,#815bff 100%)!important;
+    box-shadow:0 8px 24px rgba(0,190,239,.30),0 0 0 5px rgba(0,212,255,.08)!important;
+    font-size:0!important;
+    transform:none!important;
+  }
+  .titan-unified-nav .titan-create-menu > summary::-webkit-details-marker {display:none!important}
+  .titan-unified-nav .titan-create-menu > summary i {
+    font-size:25px!important;
+    color:#fff!important;
+  }
+  .titan-unified-nav .titan-create-menu[open] .upload-options {
+    position:absolute!important;
+    right:0!important;
+    left:auto!important;
+    bottom:calc(100% + 12px)!important;
+    transform:none!important;
+    width:min(285px,85vw)!important;
+    z-index:1010!important;
+    padding:8px!important;
+    border:1px solid rgba(0,212,255,.24)!important;
+    border-radius:18px!important;
+    background:rgba(12,19,33,.98)!important;
+    box-shadow:0 14px 42px rgba(0,0,0,.48)!important;
+    backdrop-filter:blur(18px)!important;
+  }
+  body {padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
+}
