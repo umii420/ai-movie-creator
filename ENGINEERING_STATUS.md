@@ -18,7 +18,7 @@ This document describes the current `backend-foundation` branch. It is not a cla
 - AI Studio explains that scripts, scene breakdowns and image prompts are available, while finished image/video rendering is not yet connected.
 
 ## Not implemented or not verified
-- Public Shorts and long-video feeds, playback and pagination are not connected to Firestore.
+- Shorts and long-video feeds read published Firestore records only; uploads remain private drafts and pagination is not implemented.
 - No public publish action is exposed. Uploads are private drafts until content review/moderation is designed.
 - Deleting a Firestore draft does not delete its Cloudinary media asset; secure cleanup needs a signed server-side operation.
 - Profile sync, followers, notifications, persistent Shorts likes/comments and World Updates provider are incomplete.
