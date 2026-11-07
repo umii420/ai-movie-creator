@@ -74,15 +74,21 @@ service cloud.firestore {
         allow delete: if signedIn() && resource.data.ownerUid == request.auth.uid;
       }
       match /likes/{uid} {
+        function parentIsPublished() {
+          return get(/databases/$(database)/documents/videos/$(videoId)).data.status == 'published';
+        }
         allow read: if signedIn() && (
-          get(/databases/$(database)/documents/videos/$(videoId)).data.status == 'published'
+          parentIsPublished()
           || get(/databases/$(database)/documents/videos/$(videoId)).data.ownerUid == request.auth.uid
         );
         allow create: if owns(uid)
+          && parentIsPublished()
           && request.resource.data.keys().hasOnly(['ownerUid', 'createdAt'])
           && request.resource.data.ownerUid == uid
           && request.resource.data.createdAt == request.time;
-        allow delete: if owns(uid);
+        allow delete: if owns(uid)
+          && (parentIsPublished()
+            || get(/databases/$(database)/documents/videos/$(videoId)).data.ownerUid == request.auth.uid);
         allow update: if false;
       }
     }
