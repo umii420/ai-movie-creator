@@ -13,6 +13,7 @@ This document describes the current `backend-foundation` branch. It is not a cla
 - Firestore rules restrict profile ownership, preserve profile creation timestamps, protect video ownership, and limit new uploads to private drafts.
 - Firestore rules allow signed-in users to submit private moderation reports with a constrained category list; clients cannot read or alter reports.
 - Firestore rules allow users to manage only their own block lists.
+- Shorts and long-video cards now offer signed-in users report and block-creator actions; blocked creators are filtered from those feeds for that signed-in user.
 - `COMMUNITY_GUIDELINES.md` documents platform standards for safety, minors, harassment, privacy, dangerous content, spam, copyright, AI-generated media, reporting, and enforcement.
 - Google sign-in no longer automatically grants a TITAN verified badge.
 - Creator Center uploads videos to the configured Cloudinary unsigned preset and writes private draft metadata to Firestore.
@@ -23,7 +24,7 @@ This document describes the current `backend-foundation` branch. It is not a cla
 ## Not implemented or not verified
 - Shorts and long-video feeds read published Firestore records only; uploads remain private drafts and pagination is not implemented.
 - No public publish action is exposed. Uploads are private drafts until a trusted server-side review and publishing workflow exists.
-- Community reporting/block-list database rules are present, but report/block UI, moderator dashboard, server-side review, appeals, account sanctions, age assurance, and automated content scanning are not implemented.
+- Report/block actions are connected on Shorts and long-video cards. Reporting comments/users, a moderator dashboard, trusted server-side review, appeals, account sanctions, age assurance, and automated content scanning are not implemented.
 - Deleting a Firestore draft does not delete its Cloudinary media asset; secure cleanup needs a signed server-side operation.
 - Profile sync, followers, notifications, persistent Shorts likes/comments and World Updates provider are incomplete.
 - Music page is a demo, not a licensed streaming service.
