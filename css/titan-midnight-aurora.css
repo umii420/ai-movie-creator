@@ -56,3 +56,77 @@ input:focus,textarea:focus,select:focus{outline:2px solid rgba(0,212,255,.28);bo
 .upload-trigger,.titan-bottom a[href="/pages/creator.html"]{background:linear-gradient(135deg,#00BFEF,#815BFF)!important;border-color:#65E5FF!important;box-shadow:0 0 22px rgba(0,212,255,.3)!important}
 .brand-crown,.brand-mark,.titan-brand-mark{color:#00D4FF!important;border-color:rgba(0,212,255,.4)!important;background:linear-gradient(145deg,rgba(0,212,255,.18),rgba(129,91,255,.16))!important}
 .btn.gold,.btn.primary,.titan-btn-primary{background:linear-gradient(110deg,#00BFEF,#815BFF)!important;color:#fff!important;box-shadow:0 8px 24px rgba(0,212,255,.16)!important}
+
+
+/* Unified Instagram-inspired mobile navigation across every TITAN page */
+.titan-unified-nav {
+  display: none;
+}
+@media (max-width: 700px) {
+  .titan-unified-nav {
+    position: fixed !important;
+    z-index: 999 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: calc(64px + env(safe-area-inset-bottom)) !important;
+    min-height: 64px !important;
+    padding: 0 7px env(safe-area-inset-bottom) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+    background: rgba(8,9,13,.98) !important;
+    border-top: 1px solid rgba(255,255,255,.10) !important;
+    backdrop-filter: blur(18px);
+  }
+  .titan-unified-nav .titan-nav-item {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    min-height: 54px !important;
+    height: 54px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 0 !important;
+    color: #f5f5f5 !important;
+    font-size: 0 !important;
+    text-decoration: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    list-style: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .titan-unified-nav .titan-nav-item i {
+    font-size: 25px !important;
+    line-height: 1 !important;
+  }
+  .titan-unified-nav .titan-nav-item.active { color: #fff !important; }
+  .titan-unified-nav .titan-nav-item.active i { filter: drop-shadow(0 0 2px rgba(255,255,255,.18)); }
+  .titan-create-menu {
+    position: relative !important;
+    flex: 1 1 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .titan-create-trigger::-webkit-details-marker { display: none; }
+  .titan-create-menu[open] .titan-create-trigger { transform: none !important; }
+  .titan-create-menu .upload-options {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: calc(58px + env(safe-area-inset-bottom)) !important;
+    transform: translateX(-50%) !important;
+    width: min(290px,85vw) !important;
+    z-index: 1000 !important;
+  }
+  body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 701px) {
+  .titan-unified-nav { display: none !important; }
+}
