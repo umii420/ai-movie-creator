@@ -98,14 +98,14 @@ saveBtn.onclick=async()=>{
     const storagePath="users/"+currentUser.uid+"/videos/"+cloudResult.public_id;
     await db.collection("videos").doc(id).set({
       ownerUid:currentUser.uid,title,description,type,category,
-      storagePath,status:"draft",
+      storagePath,videoUrl:cloudResult.secure_url,status:"draft",
       createdAt:firebase.firestore.FieldValue.serverTimestamp(),
       updatedAt:firebase.firestore.FieldValue.serverTimestamp()
     });
     const items=(()=>{try{return JSON.parse(localStorage.getItem("titan_user_uploads")||"[]")}catch(e){return []}})();
-    items.unshift({id,title,description,type,category,fileName:chosen.name,size:chosen.size,storagePath,cloud:true,createdAt:new Date().toISOString()});
+    items.unshift({id,title,description,type,category,fileName:chosen.name,size:chosen.size,storagePath,videoUrl:cloudResult.secure_url,cloud:true,createdAt:new Date().toISOString()});
     localStorage.setItem("titan_user_uploads",JSON.stringify(items.slice(0,30)));
-    statusEl.textContent="Upload complete. Your video is in Cloudinary and its private draft details are saved in Firestore.";
+    statusEl.textContent="Upload complete. Your video is uploaded to Cloudinary and its draft details are saved in Firestore. The draft is not yet published to the TITAN feed.";
     chosen=null;file.value="";saveBtn.disabled=false;
   }catch(error){
     console.error("TITAN cloud upload failed:",error);
