@@ -3,6 +3,15 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
     function owns(uid) { return signedIn() && request.auth.uid == uid; }
+    function validProfile(data, uid) {
+      return data.keys().hasOnly([
+        'uid', 'displayName', 'handle', 'photoURL', 'bio', 'createdAt', 'updatedAt'
+      ])
+      && data.uid == uid
+      && data.displayName is string && data.displayName.size() <= 60
+      && data.handle is string && data.handle.size() <= 30
+      && data.bio is string && data.bio.size() <= 300;
+    }
     function validVideo(data) {
       return data.keys().hasOnly([
         'ownerUid', 'title', 'description', 'type', 'category',
@@ -18,37 +27,29 @@ service cloud.firestore {
       && data.videoUrl is string && data.videoUrl.size() <= 2048
       && data.status in ['draft', 'published'];
     }
-
     match /users/{uid} {
       allow read: if owns(uid);
-      allow create, update: if owns(uid)
-        && request.resource.data.keys().hasOnly([
-          'uid', 'displayName', 'handle', 'photoURL', 'bio', 'createdAt', 'updatedAt'
-        ])
-        && request.resource.data.uid == uid
-        && request.resource.data.displayName is string
-        && request.resource.data.displayName.size() <= 60
-        && request.resource.data.handle is string
-        && request.resource.data.handle.size() <= 30
-        && request.resource.data.bio is string
-        && request.resource.data.bio.size() <= 300;
+      allow create: if owns(uid) && validProfile(request.resource.data, uid);
+      allow update: if owns(uid)
+        && validProfile(request.resource.data, uid)
+        && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if false;
     }
-
     match /videos/{videoId} {
       allow read: if (signedIn() && resource.data.ownerUid == request.auth.uid)
         || resource.data.status == 'published';
       allow create: if signedIn() && validVideo(request.resource.data)
+        && request.resource.data.status == 'draft'
         && request.resource.data.createdAt == request.time
         && request.resource.data.updatedAt == request.time;
       allow update: if signedIn()
         && resource.data.ownerUid == request.auth.uid
         && request.resource.data.ownerUid == resource.data.ownerUid
         && validVideo(request.resource.data)
+        && request.resource.data.status == resource.data.status
         && request.resource.data.createdAt == resource.data.createdAt
         && request.resource.data.updatedAt == request.time;
       allow delete: if signedIn() && resource.data.ownerUid == request.auth.uid;
-
       match /comments/{commentId} {
         function parentVisible() {
           return get(/databases/$(database)/documents/videos/$(videoId)).data.status == 'published'
@@ -72,7 +73,6 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly(['ownerUid', 'text', 'createdAt']);
         allow delete: if signedIn() && resource.data.ownerUid == request.auth.uid;
       }
-
       match /likes/{uid} {
         allow read: if signedIn() && (
           get(/databases/$(database)/documents/videos/$(videoId)).data.status == 'published'
