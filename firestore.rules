@@ -6,7 +6,7 @@ service cloud.firestore {
     function validVideo(data) {
       return data.keys().hasOnly([
         'ownerUid', 'title', 'description', 'type', 'category',
-        'storagePath', 'thumbnailPath', 'status', 'createdAt', 'updatedAt'
+        'storagePath', 'videoUrl', 'thumbnailPath', 'status', 'createdAt', 'updatedAt'
       ])
       && data.ownerUid == request.auth.uid
       && data.title is string && data.title.size() > 0 && data.title.size() <= 100
@@ -15,6 +15,7 @@ service cloud.firestore {
       && data.category is string && data.category.size() <= 40
       && data.storagePath is string
       && data.storagePath.matches('users/' + request.auth.uid + '/videos/.*')
+      && data.videoUrl is string && data.videoUrl.size() <= 2048
       && data.status in ['draft', 'published'];
     }
 
