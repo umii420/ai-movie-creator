@@ -11,6 +11,9 @@ This document describes the current `backend-foundation` branch. It is not a cla
 
 ## Implemented in this branch
 - Firestore rules restrict profile ownership, preserve profile creation timestamps, protect video ownership, and limit new uploads to private drafts.
+- Firestore rules allow signed-in users to submit private moderation reports with a constrained category list; clients cannot read or alter reports.
+- Firestore rules allow users to manage only their own block lists.
+- `COMMUNITY_GUIDELINES.md` documents platform standards for safety, minors, harassment, privacy, dangerous content, spam, copyright, AI-generated media, reporting, and enforcement.
 - Google sign-in no longer automatically grants a TITAN verified badge.
 - Creator Center uploads videos to the configured Cloudinary unsigned preset and writes private draft metadata to Firestore.
 - My Videos page lists the signed-in user's video records and lets the owner delete a Firestore record.
@@ -19,7 +22,8 @@ This document describes the current `backend-foundation` branch. It is not a cla
 
 ## Not implemented or not verified
 - Shorts and long-video feeds read published Firestore records only; uploads remain private drafts and pagination is not implemented.
-- No public publish action is exposed. Uploads are private drafts until content review/moderation is designed.
+- No public publish action is exposed. Uploads are private drafts until a trusted server-side review and publishing workflow exists.
+- Community reporting/block-list database rules are present, but report/block UI, moderator dashboard, server-side review, appeals, account sanctions, age assurance, and automated content scanning are not implemented.
 - Deleting a Firestore draft does not delete its Cloudinary media asset; secure cleanup needs a signed server-side operation.
 - Profile sync, followers, notifications, persistent Shorts likes/comments and World Updates provider are incomplete.
 - Music page is a demo, not a licensed streaming service.
@@ -38,7 +42,7 @@ This document describes the current `backend-foundation` branch. It is not a cla
 1. Add Firebase Emulator rules tests and browser smoke tests.
 2. Add moderated publishing/review before public uploads enter feeds.
 3. Connect Shorts and long-video feeds to approved published records with playback and pagination.
-4. Add persistent likes/comments with sign-in states, reporting and abuse controls.
+4. Add report/block user interfaces and a trusted moderator review, appeal, and enforcement workflow; then connect persistent likes/comments with sign-in states and abuse controls.
 5. Connect profile data to Firestore without self-awarded verification.
 6. Connect World Updates to a reputable news provider with attribution and caching.
 7. Build music around creator-owned or properly licensed audio.
