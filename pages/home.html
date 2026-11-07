@@ -682,126 +682,56 @@
 </main>
 
 
-<!-- =================================
-     CENTER UPLOAD MENU
-     Keep outside bottom navigation
-================================= -->
-
-<details class="upload-menu">
-
-    <summary class="upload-trigger" aria-label="Upload content">
-
-        <i class="fa-solid fa-plus"></i>
-
-    </summary>
-
-
-    <div class="upload-options">
-
-        <div class="upload-menu-title">
-
-            <h3>Create on TITAN</h3>
-
-            <p>Choose what you want to upload.</p>
-
-        </div>
-
-
-        <a href="/pages/creator.html?type=short" class="upload-option">
-
-            <span class="upload-option-icon short-option">
-
-                <i class="fa-solid fa-bolt"></i>
-
-            </span>
-
-
-            <span>
-
-                <strong>Upload Short</strong>
-
-                <small>Share a vertical short video</small>
-
-            </span>
-
-
-            <i class="fa-solid fa-chevron-right"></i>
-
-        </a>
-
-
-        <a href="/pages/creator.html?type=long" class="upload-option">
-
-            <span class="upload-option-icon video-option">
-
-                <i class="fa-solid fa-video"></i>
-
-            </span>
-
-
-            <span>
-
-                <strong>Upload Long Video</strong>
-
-                <small>Publish a full-length video</small>
-
-            </span>
-
-
-            <i class="fa-solid fa-chevron-right"></i>
-
-        </a>
-
-    </div>
-
-</details>
+<!-- Upload menu is opened from the compact Create icon in bottom navigation. -->
 
 
 <!-- =================================
      BOTTOM NAVIGATION
 ================================= -->
 
-<nav class="titan-bottom-nav">
+<nav class="titan-bottom-nav" aria-label="Main navigation">
 
-    <a href="/" class="bottom-nav-item active">
-
+    <a href="/" class="bottom-nav-item active" aria-label="Home">
         <i class="fa-solid fa-house"></i>
-
-        <span>Home</span>
-
     </a>
 
-
-    <a href="/pages/shorts.html" class="bottom-nav-item">
-
-        <i class="fa-solid fa-play"></i>
-
-        <span>Shorts</span>
-
+    <a href="/pages/shorts.html" class="bottom-nav-item" aria-label="Shorts">
+        <i class="fa-solid fa-clapperboard"></i>
     </a>
 
+    <details class="upload-menu bottom-create-menu">
+        <summary class="bottom-nav-item create-nav-trigger" aria-label="Create or upload">
+            <i class="fa-regular fa-paper-plane"></i>
+        </summary>
+        <div class="upload-options">
+            <div class="upload-menu-title">
+                <h3>Create on TITAN</h3>
+                <p>Choose what you want to upload.</p>
+            </div>
+            <a href="/pages/creator.html?type=short" class="upload-option">
+                <span class="upload-option-icon short-option"><i class="fa-solid fa-bolt"></i></span>
+                <span><strong>Upload Short</strong><small>Share a vertical short video</small></span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="/pages/creator.html?type=long" class="upload-option">
+                <span class="upload-option-icon video-option"><i class="fa-solid fa-video"></i></span>
+                <span><strong>Upload Long Video</strong><small>Publish a full-length video</small></span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+            <a href="/pages/studio.html" class="upload-option">
+                <span class="upload-option-icon short-option"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+                <span><strong>AI Studio</strong><small>Create with TITAN AI</small></span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    </details>
 
-    <!-- Center Upload Button is positioned separately -->
-
-
-    <div class="bottom-upload-space"></div>
-
-
-    <a href="/pages/studio.html" class="bottom-nav-item">
-
-        <i class="fa-solid fa-wand-magic-sparkles"></i>
-
-        <span>AI Studio</span>
-
+    <a href="/#titanSearch" class="bottom-nav-item titan-search-nav" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
     </a>
 
-
-    <a href="/pages/profile.html" class="bottom-nav-item">
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>Profile</span>
-
+    <a href="/pages/profile.html" class="bottom-nav-item" aria-label="Profile">
+        <i class="fa-regular fa-user"></i>
     </a>
 
 </nav>
