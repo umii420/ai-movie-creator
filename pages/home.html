@@ -21,6 +21,44 @@
 <link rel="stylesheet" href="/css/mobile-premium.css">
 
 <link rel="stylesheet" href="/css/titan-midnight-aurora.css">
+<style id="titan-home-nav-position-fix">
+@media (max-width:700px) {
+  .titan-unified-nav {
+    position:fixed!important; left:0!important; right:0!important; bottom:0!important;
+    width:100%!important; height:calc(66px + env(safe-area-inset-bottom))!important;
+    min-height:66px!important; display:flex!important; align-items:center!important;
+    justify-content:space-around!important; gap:0!important;
+    padding:0 5px env(safe-area-inset-bottom)!important; z-index:9999!important;
+  }
+  .titan-unified-nav > a.titan-nav-item {
+    position:relative!important; flex:1 1 20%!important; width:20%!important;
+    max-width:20%!important; min-width:0!important; height:60px!important;
+    display:flex!important; align-items:center!important; justify-content:center!important;
+    font-size:0!important;
+  }
+  .titan-unified-nav .titan-create-menu {
+    position:fixed!important; right:17px!important;
+    bottom:calc(66px + env(safe-area-inset-bottom) + 9px)!important;
+    display:block!important; flex:none!important; width:58px!important;
+    height:58px!important; margin:0!important; padding:0!important; z-index:10000!important;
+  }
+  .titan-unified-nav .titan-create-menu > summary.titan-nav-item {
+    width:58px!important; height:58px!important; min-height:58px!important;
+    display:flex!important; align-items:center!important; justify-content:center!important;
+    border-radius:50%!important; font-size:0!important;
+    background:linear-gradient(145deg,#00c9ee 0%,#438bff 54%,#815bff 100%)!important;
+    border:1px solid rgba(105,235,255,.65)!important;
+    box-shadow:0 8px 24px rgba(0,190,239,.30),0 0 0 5px rgba(0,212,255,.08)!important;
+  }
+  .titan-unified-nav .titan-create-menu > summary i {font-size:25px!important;color:#fff!important}
+  .titan-unified-nav .titan-create-menu[open] .upload-options {
+    position:absolute!important; right:0!important; left:auto!important;
+    bottom:calc(100% + 12px)!important; transform:none!important;
+    width:min(285px,85vw)!important; z-index:10001!important;
+  }
+  body {padding-bottom:calc(78px + env(safe-area-inset-bottom))!important}
+}
+</style>
 </head>
 
 <body>
