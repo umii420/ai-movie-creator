@@ -82,6 +82,12 @@
     await Promise.all(waits);
     previousNodes.forEach(node => node.remove());
     routeStyleNodes = nextNodes;
+
+    // Route pages bring their own legacy stylesheets and inline styles.
+    // Keep the unified Netflix theme AFTER route assets on every SPA navigation,
+    // otherwise route CSS can repaint the UI in the old Spotify palette.
+    const globalTheme = document.querySelector('link[href$="/css/titan-spotify-system.css"]');
+    if (globalTheme) document.head.appendChild(globalTheme);
   }
 
   function runScripts(scripts, mount) {

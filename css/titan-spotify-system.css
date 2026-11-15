@@ -226,3 +226,19 @@ input:focus,textarea:focus,select:focus {
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
 }
+
+/* Final token lock: prevent legacy route themes from leaking through variables. */
+:root {
+  --titan-bg:#080808 !important; --titan-bg-soft:#141414 !important;
+  --titan-surface:#181818 !important; --titan-surface-2:#242424 !important; --titan-surface-3:#303030 !important;
+  --titan-gold:#e50914 !important; --titan-gold-strong:#f6121d !important; --titan-gold-soft:rgba(229,9,20,.16) !important;
+  --titan-purple:#b20710 !important; --titan-purple-soft:rgba(178,7,16,.16) !important;
+  --titan-info:#e50914 !important; --titan-shadow-glow:0 0 28px rgba(229,9,20,.16) !important;
+  --titan-text:#fff !important; --titan-text-soft:#d2d2d2 !important; --titan-muted:#a3a3a3 !important;
+  --titan-border:rgba(255,255,255,.10) !important; --titan-border-strong:rgba(255,255,255,.20) !important;
+  --home-bg:#080808 !important; --home-card:#181818 !important; --home-card-light:#242424 !important;
+  --home-gold:#e50914 !important; --home-purple:#b20710 !important; --home-text:#fff !important;
+  --home-muted:#a3a3a3 !important; --home-border:rgba(255,255,255,.10) !important;
+  --bg:#080808 !important; --panel:#181818 !important; --line:rgba(255,255,255,.10) !important;
+  --gold:#e50914 !important; --purple:#b20710 !important; --text:#fff !important;
+}
