@@ -242,3 +242,119 @@ input:focus,textarea:focus,select:focus {
   --bg:#080808 !important; --panel:#181818 !important; --line:rgba(255,255,255,.10) !important;
   --gold:#e50914 !important; --purple:#b20710 !important; --text:#fff !important;
 }
+
+
+/* =========================================================
+   TITAN AI — SINGLE BRAND LOCK
+   Netflix-inspired palette: near-black, charcoal, white, Netflix red.
+   This layer intentionally wins over legacy page-level accent colors.
+   ========================================================= */
+:root {
+  color-scheme: dark !important;
+  --titan-bg:#080808 !important;
+  --titan-bg-soft:#141414 !important;
+  --titan-surface:#181818 !important;
+  --titan-surface-2:#232323 !important;
+  --titan-surface-3:#303030 !important;
+  --titan-gold:#e50914 !important;
+  --titan-gold-strong:#f6121d !important;
+  --titan-gold-soft:rgba(229,9,20,.16) !important;
+  --titan-purple:#e50914 !important;
+  --titan-purple-soft:rgba(229,9,20,.14) !important;
+  --titan-info:#e50914 !important;
+  --titan-shadow-glow:0 0 26px rgba(229,9,20,.18) !important;
+  --titan-text:#fff !important;
+  --titan-text-soft:#d2d2d2 !important;
+  --titan-muted:#a3a3a3 !important;
+  --titan-border:rgba(255,255,255,.10) !important;
+  --titan-border-strong:rgba(255,255,255,.20) !important;
+  --home-bg:#080808 !important;
+  --home-card:#181818 !important;
+  --home-card-light:#232323 !important;
+  --home-gold:#e50914 !important;
+  --home-purple:#e50914 !important;
+  --home-text:#fff !important;
+  --home-muted:#a3a3a3 !important;
+  --home-border:rgba(255,255,255,.10) !important;
+  --bg:#080808 !important;
+  --panel:#181818 !important;
+  --line:rgba(255,255,255,.10) !important;
+  --gold:#e50914 !important;
+  --purple:#e50914 !important;
+  --text:#fff !important;
+  --primary:#e50914 !important;
+  --accent:#e50914 !important;
+  --success:#e50914 !important;
+  --spotify-green:#e50914 !important;
+}
+html,body,#titan-app { background:#080808 !important; color:#fff !important; }
+body { color-scheme:dark; }
+a { text-decoration-color:rgba(229,9,20,.45); }
+:where(.titan-purple-text,.titan-gradient-text,.brand-crown,.brand-mark,
+       .brand-text h1 span,.brand-text h1 b,.brand b,.titan-brand b,
+       .short-brand b,.titan-brand-mark,.music-logo,.studio-kicker,
+       .studio-hero h1 span,.mode-choice i,.eyebrow,
+       .section-eyebrow,.see-all-link,.platform-strip-items a i) {
+  color:#e50914 !important;
+}
+:where(.titan-btn-primary,.titan-btn-purple,.btn.primary,.btn.gold,
+       .primary-button,.create-button,.studio-button,.music-premium,
+       .home-search-box button,.upload-trigger,.short-option,.video-option,
+       .category-chip.active,.mode-choice.active,
+       .titan-bottom a.active,.bottom a.active) {
+  background-color:#e50914 !important;
+  border-color:#e50914 !important;
+  color:#fff !important;
+  box-shadow:none;
+}
+:where(.titan-btn-primary,.titan-btn-purple,.btn.primary,.btn.gold,
+       .primary-button,.create-button,.studio-button,.music-premium,
+       .home-search-box button,.upload-trigger,.short-option,.video-option):hover {
+  background-color:#f6121d !important;
+  border-color:#f6121d !important;
+  color:#fff !important;
+}
+:where(.titan-card,.titan-panel,.glass,.panel,.studio-panel,.feature-tile,
+       .featured-card,.recommended-card,.quick-card,.profile-card,.profile-stat,
+       .tile,.short-card,.video-row,.notice,.upload-preview) {
+  background-color:#181818 !important;
+  border-color:rgba(255,255,255,.10) !important;
+  color:#fff;
+}
+:where(.home-search-box,.music-search,.titan-input,.titan-select,
+       .titan-textarea,.field input,.field textarea,.field select,
+       input,textarea,select) {
+  background-color:#141414;
+  border-color:rgba(255,255,255,.14);
+  color:#fff;
+}
+:where(.home-search-box:focus-within,.music-search:focus-within,
+       .titan-input:focus,.titan-select:focus,.titan-textarea:focus,
+       .field input:focus,.field textarea:focus,.field select:focus,
+       input:focus,textarea:focus,select:focus) {
+  border-color:#e50914 !important;
+  outline-color:#e50914 !important;
+  box-shadow:0 0 0 2px rgba(229,9,20,.16) !important;
+}
+:where(.category-chip,.titan-badge-gold,.titan-badge-purple,
+       .featured-badge,.shorts-icon,.short-play,.play-button,
+       .round-action.liked,.shorts-progress span) {
+  border-color:rgba(229,9,20,.45) !important;
+}
+:where(.category-chip.active,.featured-badge,.shorts-icon,
+       .short-play,.play-button,.round-action.liked) {
+  color:#fff !important;
+}
+:where(.titan-bottom-nav,.titan-bottom,.bottom,.home-header) {
+  background-color:rgba(8,8,8,.96) !important;
+  border-color:rgba(255,255,255,.10) !important;
+}
+:where(.titan-bottom a.active i,.bottom a.active i,
+       .desktop-nav a.active,.desktop-nav a:hover) {
+  color:#e50914 !important;
+}
+:where(.titan-btn-outline:hover,.btn:hover,.tile:hover,
+       .feature-tile:hover,.platform-strip-items a:hover) {
+  border-color:rgba(229,9,20,.55) !important;
+}
+::selection { background:rgba(229,9,20,.35) !important; color:#fff !important; }
