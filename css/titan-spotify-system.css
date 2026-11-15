@@ -1,0 +1,228 @@
+/* TITAN AI — Netflix-inspired cinematic design system
+   Visual-only layer. Keeps existing routes, components, and app logic intact. */
+:root {
+  color-scheme: dark;
+  --titan-bg: #080808;
+  --titan-bg-soft: #141414;
+  --titan-surface: #181818;
+  --titan-surface-2: #242424;
+  --titan-surface-3: #303030;
+  --titan-accent: #e50914;
+  --titan-accent-hover: #f6121d;
+  --titan-accent-soft: rgba(229,9,20,.16);
+  --titan-text: #fff;
+  --titan-text-soft: #d2d2d2;
+  --titan-muted: #a3a3a3;
+  --titan-border: rgba(255,255,255,.10);
+  --titan-border-strong: rgba(255,255,255,.2);
+  --titan-gold: #e50914;
+  --titan-gold-strong: #f6121d;
+  --titan-gold-soft: rgba(229,9,20,.16);
+  --titan-purple: #b20710;
+  --home-bg: #080808;
+  --home-card: #181818;
+  --home-card-light: #242424;
+  --home-gold: #e50914;
+  --home-purple: #b20710;
+  --home-text: #fff;
+  --home-muted: #a3a3a3;
+  --home-border: rgba(255,255,255,.10);
+  --bg: #080808;
+  --panel: #181818;
+  --line: rgba(255,255,255,.10);
+  --gold: #e50914;
+  --purple: #b20710;
+  --text: #fff;
+}
+html, body, #titan-app {
+  min-height: 100%;
+  background: #080808 !important;
+  color: #fff !important;
+}
+body {
+  background:
+    radial-gradient(ellipse at 50% -22%, rgba(120,0,8,.28), transparent 48%),
+    linear-gradient(180deg,#141414 0,#080808 420px,#080808 100%) !important;
+}
+h1,h2,h3,h4,h5,h6 { color:#fff !important; }
+p,.muted,.page-sub { color:#b3b3b3; }
+a { transition: color .18s ease, border-color .18s ease, background .18s ease; }
+button,.btn,.titan-btn { transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+button:active,.btn:active,.titan-btn:active { transform:scale(.98); }
+:focus-visible { outline:2px solid #e50914 !important; outline-offset:3px; }
+::selection { background:rgba(229,9,20,.35); color:#fff; }
+
+/* Global shell and navigation */
+.home-header {
+  background:rgba(8,8,8,.94) !important;
+  border-bottom:1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(18px);
+}
+.brand-crown,.brand-mark,.titan-brand-mark,.music-logo {
+  background:#e50914 !important;
+  border:0 !important;
+  color:#fff !important;
+  box-shadow:0 5px 22px rgba(229,9,20,.25) !important;
+}
+.brand-text h1 span,.brand-text h1 b,.brand b,.titan-brand b,
+.short-brand b { color:#e50914 !important; }
+.desktop-nav a { color:#d0d0d0 !important; }
+.desktop-nav a:hover,.desktop-nav a.active { color:#fff !important; }
+.desktop-nav a.active:after { background:#e50914 !important; }
+.header-profile { background:#242424 !important; border-color:rgba(255,255,255,.12) !important; }
+.titan-platform-strip {
+  background:#111 !important;
+  border-color:rgba(255,255,255,.08) !important;
+}
+.platform-strip-label { color:#eee !important; }
+.platform-strip-items a { color:#c8c8c8 !important; border-color:rgba(255,255,255,.12) !important; }
+.platform-strip-items a i { color:#e50914 !important; }
+.titan-head,.page-head,.profile-top { border-color:rgba(255,255,255,.10) !important; }
+.titan-brand,.brand { color:#fff !important; }
+.titan-back,.back { color:#f1f1f1 !important; }
+
+/* Home: cinematic featured area and browse rails */
+.home-main { color:#fff !important; }
+.home-search-box,.music-search {
+  background:#202020 !important;
+  border:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:none !important;
+}
+.home-search-box:focus-within,.music-search:focus-within {
+  border-color:#e50914 !important;
+  box-shadow:0 0 0 1px #e50914 !important;
+}
+.home-search-box>i,.section-eyebrow,.see-all-link,.eyebrow { color:#e50914 !important; }
+.home-search-box button,.upload-trigger,.studio-button,.music-premium {
+  background:#e50914 !important;
+  color:#fff !important;
+  border:0 !important;
+  box-shadow:0 5px 18px rgba(229,9,20,.22) !important;
+}
+.home-search-box button:hover,.upload-trigger:hover,.studio-button:hover,.music-premium:hover {
+  background:#f6121d !important;
+}
+.category-chip {
+  background:#242424 !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  color:#e5e5e5 !important;
+}
+.category-chip.active {
+  background:#e50914 !important;
+  color:#fff !important;
+  border-color:#e50914 !important;
+  box-shadow:0 5px 18px rgba(229,9,20,.2) !important;
+}
+.featured-card,.recommended-card,.quick-card,.glass,.panel,.studio-panel,
+.profile-card,.profile-stat,.tile {
+  background:#181818 !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  box-shadow:0 8px 26px rgba(0,0,0,.22) !important;
+}
+.featured-card,.recommended-card,.quick-card,.album,.feature-tile { overflow:hidden; }
+.featured-card:hover,.recommended-card:hover,.titan-card-hover:hover {
+  transform:translateY(-3px);
+  border-color:rgba(229,9,20,.45) !important;
+}
+.featured-thumbnail,.short-thumbnail,.recommended-thumbnail { border:0 !important; box-shadow:none !important; }
+.featured-badge,.shorts-icon,.short-play,.play-button {
+  background:#e50914 !important;
+  color:#fff !important;
+  border-color:transparent !important;
+}
+.shorts-heading h2,.section-heading h2 { color:#fff !important; }
+.section-heading p,.video-details p,.video-details span { color:#a3a3a3 !important; }
+.ai-studio-banner,.studio-hero {
+  background:linear-gradient(115deg,#321014,#181818 72%) !important;
+  border:1px solid rgba(229,9,20,.28) !important;
+}
+.studio-content h2 span,.studio-label,.studio-kicker,.studio-hero h1 span { color:#ff424b !important; }
+.studio-orbit { border-color:rgba(229,9,20,.35) !important; }
+.studio-center-icon { background:#e50914 !important; color:#fff !important; }
+
+/* Shared controls, cards, forms, creator profile and settings */
+.btn.primary,.btn.gold,.titan-btn-primary,.btn-primary,.primary-btn,.titan-primary {
+  background:#e50914 !important;
+  color:#fff !important;
+  border:0 !important;
+  box-shadow:0 5px 18px rgba(229,9,20,.2) !important;
+}
+.btn,.titan-btn,.btn-outline {
+  background:#292929 !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.13) !important;
+}
+.btn:hover,.titan-btn:hover,.btn-outline:hover { background:#383838 !important; }
+.field input,.field textarea,.field select,.titan-input,.titan-select,.titan-textarea,
+input,textarea,select {
+  background:#111 !important;
+  color:#fff !important;
+  border-color:rgba(255,255,255,.16) !important;
+}
+.field input:focus,.field textarea:focus,.field select:focus,
+input:focus,textarea:focus,select:focus {
+  border-color:#e50914 !important;
+  outline-color:rgba(229,9,20,.25) !important;
+}
+.feature-tile,.video-row,.profile-link,.stat {
+  background:#202020 !important;
+  border-color:rgba(255,255,255,.09) !important;
+}
+.titan-bottom,.titan-bottom-nav,.titan-unified-nav,.bottom {
+  background:rgba(8,8,8,.97) !important;
+  border-color:rgba(255,255,255,.10) !important;
+}
+.titan-bottom a.active,.bottom a.active,.titan-unified-nav .titan-nav-item.active { color:#ff303a !important; }
+.titan-bottom a[href="/pages/creator.html"],
+.titan-unified-nav .titan-create-menu>summary.titan-nav-item {
+  background:#e50914 !important;
+  color:#fff !important;
+  border-color:#e50914 !important;
+  box-shadow:0 6px 22px rgba(229,9,20,.24) !important;
+}
+.notice { background:rgba(229,9,20,.09) !important; border-color:rgba(229,9,20,.25) !important; color:#f1d5d6 !important; }
+.profile-cover { border-color:rgba(229,9,20,.25) !important; }
+.profile-avatar { border-color:#080808 !important; box-shadow:0 0 0 2px rgba(229,9,20,.7) !important; }
+.verified,.profile-role,.profile-card h3 i,.social-row a:hover { color:#ff303a !important; }
+.social-row a { background:#202020 !important; border-color:rgba(255,255,255,.10) !important; }
+
+/* Music page — preserve its existing layout while matching the cinema palette */
+.music-wrap { color:#fff !important; }
+.music-brand small,.music-back { color:#b3b3b3 !important; }
+.music-hero {
+  background-image:
+    linear-gradient(90deg,rgba(8,8,8,.97) 3%,rgba(20,8,9,.84) 58%,rgba(20,8,9,.28)),
+    url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1400') !important;
+  border-color:rgba(255,255,255,.12) !important;
+}
+.music-hero:before { background:linear-gradient(90deg,#080808 5%,#181818d9 55%,#18181835) !important; }
+.music-hero .eyebrow,.music-hero h1 span,.section-head a,.music-search i,.quick-card i { color:#ff303a !important; }
+.quick-card { background:#181818 !important; }
+.album-art { background:#242424 !important; }
+.album-art button,.player-controls .play {
+  background:#e50914 !important;
+  color:#fff !important;
+  box-shadow:0 5px 18px rgba(229,9,20,.24) !important;
+}
+.bottom-player {
+  background:rgba(24,24,24,.97) !important;
+  border-color:rgba(255,255,255,.14) !important;
+}
+.player-cover { background:#e50914 !important; color:#fff !important; }
+
+/* Shorts overlays: retain immersive full-screen video and improve controls contrast */
+.short-top>div>a { background:rgba(8,8,8,.72) !important; border-color:rgba(255,255,255,.18) !important; }
+.short-actions .round-action { background:rgba(20,20,20,.72) !important; border-color:rgba(255,255,255,.3) !important; }
+.shorts-progress span { background:#e50914 !important; }
+
+@media (max-width:700px) {
+  .home-main { padding-left:16px !important; padding-right:16px !important; }
+  .home-section { margin-bottom:28px !important; }
+  .section-heading h2 { font-size:21px !important; }
+  .music-wrap { padding:16px 14px 120px !important; }
+  .music-hero { padding:24px !important; border-radius:20px !important; }
+  .bottom-player { bottom:76px !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+}
