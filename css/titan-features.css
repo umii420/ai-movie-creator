@@ -16,3 +16,11 @@ a{color:inherit}.titan-page{width:min(100% - 28px,920px);margin:auto;padding:18p
   .titan-bottom a[href="/pages/creator.html"] i { font-size:25px; margin:0; }
   .titan-bottom a:active { transform:scale(.97); }
 }
+
+
+
+/* Spotify-inspired green accents for standalone feature pages */
+:root{--bg:#080B09;--panel:#121A15;--line:rgba(30,215,96,.16);--gold:#1ED760;--purple:#1DB954;--muted:#AAB5AD;--text:#F5F7F5}
+body{background:radial-gradient(ellipse at top,rgba(30,215,96,.10) 0,#080B09 52%)!important;color:var(--text)}
+.titan-brand b,.titan-back,.eyebrow{color:#1ED760!important}
+.glass{background:linear-gradient(145deg,#17221A,#101712)!important;border-color:rgba(30,215,96,.18)!important}
