@@ -374,3 +374,32 @@ button:not(.titan-nav-item),.btn-primary,.primary-btn,.titan-primary{
 }
 input:focus,textarea:focus,select:focus{outline-color:rgba(30,215,96,.55)!important;border-color:#1ED760!important}
 ::selection{background:rgba(30,215,96,.35);color:#fff}
+
+
+/* Spotify-inspired UI polish: harmonize legacy component surfaces */
+:root{--home-bg:#080B09!important;--home-card:#121A15!important;--home-card-light:#19251D!important;--home-gold:#1ED760!important;--home-purple:#1DB954!important;--home-text:#F5F7F5!important;--home-muted:#AAB5AD!important;--home-border:rgba(255,255,255,.09)!important}
+.home-header{background:rgba(8,11,9,.96)!important;border-bottom-color:rgba(255,255,255,.09)!important}
+.home-search-box{background:#121A15!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:none!important}
+.home-search-box:focus-within{border-color:#1ED760!important;box-shadow:0 0 0 1px #1ED760!important}
+.home-search-box>i,.section-eyebrow,.see-all-link{color:#1ED760!important}
+.home-search-box button,.upload-trigger{background:#1ED760!important;color:#071109!important;box-shadow:0 6px 22px rgba(30,215,96,.2)!important}
+.category-chip{background:#171F19!important;border-color:rgba(255,255,255,.08)!important;color:#D4DDD6!important}
+.category-chip.active{background:#1ED760!important;border-color:#1ED760!important;color:#071109!important;box-shadow:none!important}
+.category-chip:hover{border-color:#1ED760!important}
+.featured-card,.recommended-card{background:#121A15!important;border-color:rgba(255,255,255,.08)!important;box-shadow:none!important}
+.featured-thumbnail,.short-thumbnail,.recommended-thumbnail{border-color:rgba(255,255,255,.09)!important;box-shadow:none!important}
+.titan-platform-strip{background:#0B110D!important;border-bottom-color:rgba(255,255,255,.08)!important}
+.titan-platform-strip .platform-strip-label{color:#E9F2EB!important}
+.platform-strip-items a{color:#B8C7BC!important;border-left-color:rgba(255,255,255,.1)!important}
+.platform-strip-items a i{color:#1ED760!important}
+.platform-strip-items a:hover{color:#fff!important}
+.music-wrap{background:transparent!important}
+.music-top .music-logo,.album-art button,.music-premium{background:#1ED760!important;color:#071109!important;box-shadow:0 6px 20px rgba(30,215,96,.2)!important}
+.music-hero{background-image:linear-gradient(90deg,rgba(8,13,9,.96) 3%,rgba(9,22,13,.82) 58%,rgba(9,22,13,.35)),url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1400')!important;border-color:rgba(255,255,255,.12)!important}
+.music-hero:before{background:linear-gradient(90deg,#080d09 5%,#101b13d9 55%,#101b1335)!important}
+.music-hero .eyebrow,.music-hero h1 span,.section-head a,.music-search i,.quick-card i{color:#1ED760!important}
+.music-search,.quick-card{background:#121A15!important;border-color:rgba(255,255,255,.12)!important}
+.music-search:focus-within{border-color:#1ED760!important}
+.bottom-player{background:#121A15ee!important;border-color:rgba(255,255,255,.12)!important}
+.notice{background:rgba(30,215,96,.08)!important;border-color:rgba(30,215,96,.25)!important}
+@media(max-width:700px){.home-main{padding-inline:16px!important}.home-section{margin-bottom:30px!important}.section-heading h2{font-size:21px!important}}
