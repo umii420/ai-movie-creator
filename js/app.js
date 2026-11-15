@@ -17,7 +17,7 @@
     const path = routePath(url);
     if (pageCache.has(path)) return Promise.resolve(pageCache.get(path));
     if (pending.has(path)) return pending.get(path);
-    const request = fetch(path, { cache: "force-cache", credentials: "same-origin" })
+    const request = fetch(path, { cache: "no-cache", credentials: "same-origin" })
       .then(async response => {
         if (!response.ok) throw new Error("Page load failed (" + response.status + ")");
         const html = await response.text();
