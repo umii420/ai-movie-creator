@@ -507,3 +507,85 @@ a { text-decoration-color:rgba(229,9,20,.45); }
     box-shadow: inset 0 0 0 1px rgba(229,9,20,.18) !important;
   }
 }
+
+
+/* Spotify-inspired final mobile navigation polish — retain TITAN destinations and floating Create. */
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  .titan-unified-nav {
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: calc(76px + env(safe-area-inset-bottom)) !important;
+    padding: 9px 8px calc(8px + env(safe-area-inset-bottom)) !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255,255,255,.09) !important;
+    border-radius: 22px 22px 0 0 !important;
+    background: rgba(8,8,10,.90) !important;
+    -webkit-backdrop-filter: blur(26px) saturate(150%) !important;
+    backdrop-filter: blur(26px) saturate(150%) !important;
+    box-shadow: 0 -8px 28px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.035) !important;
+  }
+  .titan-unified-nav > a.titan-nav-item {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    min-height: 56px !important;
+    border-radius: 14px !important;
+    gap: 6px !important;
+    color: rgba(232,235,242,.68) !important;
+  }
+  .titan-unified-nav .titan-nav-item i {
+    font-size: 23px !important;
+    line-height: 1 !important;
+  }
+  .titan-unified-nav .titan-nav-item::after {
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: .05px !important;
+  }
+  .titan-unified-nav > a.titan-nav-item.active {
+    color: #fff !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .titan-unified-nav > a.titan-nav-item.active i {
+    color: #ff3540 !important;
+    filter: drop-shadow(0 2px 8px rgba(229,9,20,.40)) !important;
+    transform: none !important;
+  }
+  .titan-unified-nav > .titan-create-menu {
+    right: 18px !important;
+    bottom: calc(88px + env(safe-area-inset-bottom)) !important;
+  }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item {
+    width: 60px !important;
+    min-width: 60px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    border: 1px solid rgba(255,255,255,.40) !important;
+    border-radius: 21px !important;
+    background: linear-gradient(145deg,#ff3440 0%,#e50914 58%,#b80710 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 26px rgba(229,9,20,.34), inset 0 1px 0 rgba(255,255,255,.30) !important;
+  }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item i {
+    font-size: 29px !important;
+    color: #fff !important;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.16));
+  }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item:active {
+    transform: scale(.94) !important;
+  }
+  body { padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important; }
+
+  /* Keep the floating Create control clear of the persistent mini-player. */
+  body:has(.bottom-player) .titan-unified-nav > .titan-create-menu {
+    bottom: calc(174px + env(safe-area-inset-bottom)) !important;
+  }
+  body:has(.bottom-player) .bottom-player {
+    bottom: calc(82px + env(safe-area-inset-bottom)) !important;
+    z-index: 1100 !important;
+  }
+  body:has(.bottom-player) { padding-bottom: calc(190px + env(safe-area-inset-bottom)) !important; }
+}
