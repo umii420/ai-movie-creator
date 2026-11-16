@@ -358,3 +358,121 @@ a { text-decoration-color:rgba(229,9,20,.45); }
   border-color:rgba(229,9,20,.55) !important;
 }
 ::selection { background:rgba(229,9,20,.35) !important; color:#fff !important; }
+
+
+/* TITAN AI — modern transparent glass navigation (mobile)
+   Visual-only: keeps the existing Home, Shorts, Create, AI Studio, Music and Profile routes. */
+@media (max-width: 700px), (hover: none) and (pointer: coarse) {
+  .titan-unified-nav {
+    position: fixed !important;
+    left: 14px !important;
+    right: 14px !important;
+    bottom: calc(10px + env(safe-area-inset-bottom)) !important;
+    z-index: 1200 !important;
+    min-height: 70px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    gap: 4px !important;
+    padding: 8px 12px !important;
+    border: 1px solid rgba(255,255,255,.18) !important;
+    border-radius: 24px !important;
+    background: rgba(18,18,22,.62) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(155%) !important;
+    backdrop-filter: blur(24px) saturate(155%) !important;
+    box-shadow: 0 12px 34px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  }
+  .titan-unified-nav > .titan-nav-item,
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item {
+    position: relative !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    min-height: 50px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 5px 2px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    background: transparent !important;
+    color: rgba(255,255,255,.72) !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    list-style: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .titan-unified-nav .titan-nav-item i {
+    display: block !important;
+    margin: 0 !important;
+    font-size: 19px !important;
+    line-height: 1 !important;
+    color: currentColor !important;
+    transition: transform .2s ease, color .2s ease, filter .2s ease;
+  }
+  .titan-unified-nav .titan-nav-item::after {
+    content: attr(aria-label);
+    display: block;
+    font: 500 9px/1.1 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: .1px;
+    color: currentColor;
+    white-space: nowrap;
+  }
+  .titan-unified-nav .titan-nav-item.active {
+    color: #ff3540 !important;
+    background: rgba(229,9,20,.12) !important;
+    box-shadow: inset 0 0 0 1px rgba(229,9,20,.16) !important;
+  }
+  .titan-unified-nav .titan-nav-item.active i {
+    color: #ff3540 !important;
+    filter: drop-shadow(0 0 7px rgba(229,9,20,.62));
+    transform: translateY(-1px);
+  }
+  .titan-unified-nav .titan-nav-item:active { transform: scale(.94); }
+
+  /* Keep the Create control as a separate floating action on the right. */
+  .titan-unified-nav > .titan-create-menu {
+    position: fixed !important;
+    right: 22px !important;
+    bottom: calc(94px + env(safe-area-inset-bottom)) !important;
+    z-index: 1201 !important;
+    margin: 0 !important;
+  }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item {
+    width: 58px !important;
+    min-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    padding: 0 !important;
+    border: 1px solid rgba(255,255,255,.32) !important;
+    border-radius: 50% !important;
+    background: linear-gradient(145deg,#ff2633,#c9000b) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(229,9,20,.38), inset 0 1px 0 rgba(255,255,255,.24) !important;
+  }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item::after { content: none !important; }
+  .titan-unified-nav > .titan-create-menu > summary.titan-nav-item i {
+    font-size: 25px !important;
+    color: #fff !important;
+  }
+  .titan-unified-nav > .titan-create-menu[open] > summary i { transform: rotate(45deg); }
+  .titan-unified-nav .titan-create-menu .upload-options {
+    position: absolute !important;
+    right: 0 !important;
+    bottom: 70px !important;
+    width: min(290px, calc(100vw - 36px)) !important;
+    max-height: min(65vh, 520px) !important;
+    overflow-y: auto !important;
+    border: 1px solid rgba(255,255,255,.16) !important;
+    border-radius: 20px !important;
+    background: rgba(18,18,22,.94) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    backdrop-filter: blur(24px) !important;
+    box-shadow: 0 18px 48px rgba(0,0,0,.55) !important;
+  }
+  body { padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .titan-unified-nav .titan-nav-item i { transition: none !important; }
+}
