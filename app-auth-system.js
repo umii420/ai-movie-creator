@@ -58,6 +58,19 @@
         });
     }
 
+    function ensureGate() {
+        if (document.getElementById("titanAuthGateOverlay")) return;
+        const gate = document.createElement("div");
+        gate.id = "titanAuthGateOverlay";
+        gate.innerHTML = '<div class="titan-auth-card" role="dialog" aria-modal="true"><div class="titan-auth-mark"><i class="fa-solid fa-crown"></i></div><h2>Welcome to TITAN AI</h2><p>Sign in to upload videos, manage your creator profile, and save your work.</p><button class="btn-google-gate" type="button" onclick="handleGoogleLogin()"><i class="fa-brands fa-google"></i><span>Continue with Google</span></button><button class="titan-auth-guest" type="button">Continue as guest</button><small>Your account keeps your creator content connected to you.</small></div>';
+        const style = document.createElement("style");
+        style.id = "titan-auth-gate-style";
+        style.textContent = "#titanAuthGateOverlay{position:fixed;inset:0;z-index:999999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(4,5,10,.78);backdrop-filter:blur(14px)}.titan-auth-card{width:min(100%,420px);padding:30px 24px;border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(145deg,#171923,#0b0c11);box-shadow:0 24px 80px rgba(0,0,0,.55);color:#fff;text-align:center;font-family:inherit}.titan-auth-mark{width:56px;height:56px;margin:0 auto 14px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#ff3434,#a20b16);font-size:22px}.titan-auth-card h2{margin:0 0 10px;font-size:24px;font-weight:800}.titan-auth-card p{margin:0 0 22px;color:#b9bac4;line-height:1.55}.btn-google-gate{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border:0;border-radius:14px;background:#fff;color:#111;font-weight:800;cursor:pointer}.btn-google-gate:disabled{opacity:.65;cursor:wait}.titan-auth-guest{margin:14px 0 8px;background:transparent;border:0;color:#d4d5dc;padding:10px;cursor:pointer;font-weight:700}.titan-auth-card small{display:block;color:#858793;font-size:11px;line-height:1.5}";
+        if (!document.getElementById(style.id)) document.head.appendChild(style);
+        document.body.appendChild(gate);
+        gate.querySelector(".titan-auth-guest").addEventListener("click", hideGate);
+    }
+
     function hideGate() {
         const gate = document.getElementById("titanAuthGateOverlay");
         if (gate) {
@@ -66,7 +79,7 @@
         }
     }
 
-    function showGate() {
+    function showGate() {\n        ensureGate();
         const gate = document.getElementById("titanAuthGateOverlay");
         if (gate) {
             gate.style.display = "flex";
