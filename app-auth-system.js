@@ -24,7 +24,7 @@
 
     let authInstance = null;
     let googleProviderInstance = null;
-    let profileDb = null;
+    let profileDb = null;\n    let firebaseInitPromise = null;
 
     async function syncBasicProfile(user, localProfile) {
         if (!profileDb || !user) return;
@@ -152,34 +152,49 @@
     }
 
     window.handleGoogleLogin = async function () {
-        try {
-            if (!authInstance) await initFirebase();
+        const btn = document.querySelector(".btn-google-gate");
+        const card = document.querySelector(".titan-auth-card");
+        let status = card && card.querySelector(".titan-auth-status");
+        if (card && !status) {
+            status = document.createElement("p");
+            status.className = "titan-auth-status";
+            status.style.cssText = "margin:12px 0 0;color:#ffb7b7;font-size:13px;line-height:1.5";
+            card.appendChild(status);
+        }
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Connecting to Google...</span>';
+        }
+        if (status) status.textContent = "Opening secure Google sign-in…";
 
-            const btn = document.querySelector(".btn-google-gate");
-            if (btn) {
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Connecting...`;
-                btn.disabled = true;
-            }
+        try {
+            await initFirebase();
+            if (!authInstance || !googleProviderInstance) throw new Error("Firebase Authentication did not initialize.");
 
             const result = await authInstance.signInWithPopup(googleProviderInstance);
-
             if (result && result.user) {
                 window.unlockTitanApp(result.user);
+                if (status) status.textContent = "Signed in successfully.";
             }
-
         } catch (error) {
-            console.error("Login Error:", error);
-
-            if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+            console.error("TITAN Google Login Error:", error);
+            const message = error && error.code
+                ? error.code + (error.message ? ": " + error.message : "")
+                : (error.message || "Unknown login error");
+            if (status) status.textContent = "Sign-in failed: " + message;
+            if (error && error.code === "auth/popup-blocked") {
                 try {
                     await authInstance.signInWithRedirect(googleProviderInstance);
-                } catch (err2) {
-                    alert("Login failed. Please allow popups or try again.");
-                    location.reload();
+                    return;
+                } catch (redirectError) {
+                    console.error("TITAN redirect login error:", redirectError);
+                    if (status) status.textContent = "Sign-in failed: " + (redirectError.message || redirectError.code || "Redirect error");
                 }
-            } else {
-                alert("Login failed: " + (error.message || "Unknown error"));
-                location.reload();
+            }
+        } finally {
+            if (btn && document.contains(btn)) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-brands fa-google"></i><span>Continue with Google</span>';
             }
         }
     };
