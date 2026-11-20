@@ -119,36 +119,32 @@
     };
 
     async function initFirebase() {
-        try {
+        if (firebaseInitPromise) return firebaseInitPromise;
+        firebaseInitPromise = (async () => {
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js");
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js");
             await loadScript("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js");
-
-            if (!window.firebase.apps.length) {
-                window.firebase.initializeApp(firebaseConfig);
-            }
-
+            if (!window.firebase.apps.length) window.firebase.initializeApp(firebaseConfig);
             authInstance = window.firebase.auth();
             profileDb = window.firebase.firestore();
             googleProviderInstance = new window.firebase.auth.GoogleAuthProvider();
-            googleProviderInstance.setCustomParameters({
-                prompt: "select_account"
-            });
-
-            authInstance.onAuthStateChanged((user) => {
-                if (user) {
-                    window.unlockTitanApp(user);
-                } else {
+            googleProviderInstance.setCustomParameters({ prompt: "select_account" });
+            authInstance.onAuthStateChanged(user => {
+                if (user) window.unlockTitanApp(user);
+                else {
                     localStorage.removeItem("titan_user_profile");
                     localStorage.setItem("titan_logged_in", "false");
                     showGate();
                 }
             });
-
-        } catch (error) {
+            return authInstance;
+        })().catch(error => {
+            firebaseInitPromise = null;
             console.error("Firebase Error:", error);
             showGate();
-        }
+            throw error;
+        });
+        return firebaseInitPromise;
     }
 
     window.handleGoogleLogin = async function () {
