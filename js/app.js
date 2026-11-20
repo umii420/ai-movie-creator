@@ -88,6 +88,8 @@
     // otherwise route CSS can repaint the UI in the old Spotify palette.
     const globalTheme = document.querySelector('link[href$="/css/titan-spotify-system.css"]');
     if (globalTheme) document.head.appendChild(globalTheme);
+    const lightTheme = document.querySelector('link[href$="/css/titan-light-default.css"]');
+    if (lightTheme) document.head.appendChild(lightTheme);
   }
 
   function runScripts(scripts, mount) {
