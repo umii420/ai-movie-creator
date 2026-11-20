@@ -79,7 +79,8 @@
         }
     }
 
-    function showGate() {\n        ensureGate();
+    function showGate() {
+        ensureGate();
         const gate = document.getElementById("titanAuthGateOverlay");
         if (gate) {
             gate.style.display = "flex";
