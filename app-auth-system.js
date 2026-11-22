@@ -24,7 +24,8 @@
 
     let authInstance = null;
     let googleProviderInstance = null;
-    let profileDb = null;\n    let firebaseInitPromise = null;
+    let profileDb = null;
+    let firebaseInitPromise = null;
 
     async function syncBasicProfile(user, localProfile) {
         if (!profileDb || !user) return;
