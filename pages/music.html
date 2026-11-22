@@ -50,7 +50,14 @@
 (() => {
  const input=document.getElementById('musicSearch');
  const cards=[...document.querySelectorAll('.album')];
- input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();cards.forEach(card=>card.hidden=!card.innerText.toLowerCase().includes(q));});
+ const grid=document.getElementById('albumGrid');
+ const status=document.createElement('p');
+ status.className='player-status'; status.setAttribute('role','status'); status.hidden=true; grid.after(status);
+ input.addEventListener('input',()=>{const q=input.value.trim().toLowerCase();let visible=0;cards.forEach(card=>{card.hidden=!card.innerText.toLowerCase().includes(q);if(!card.hidden)visible++;});status.hidden=visible>0||!q;status.textContent=visible?'':'No preview moods match your search.';});
+ document.querySelectorAll('.album-art button').forEach(button=>button.addEventListener('click',()=>{status.hidden=false;status.textContent='Track playback is not connected yet. These are visual music previews.';}));
+ document.querySelector('.music-premium')?.addEventListener('click',event=>{event.preventDefault();status.hidden=false;status.textContent='Premium subscriptions are not available yet.';});
+ document.querySelectorAll('a[href="#premium"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();status.hidden=false;status.textContent='Music catalog and premium features are not connected yet.';}));
+ document.querySelector('.bottom-player .play')?.setAttribute('disabled','disabled');
 })();
 </script>
 <nav class="titan-unified-nav" aria-label="TITAN main navigation">
