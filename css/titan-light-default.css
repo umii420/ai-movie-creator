@@ -1,29 +1,44 @@
-/* TITAN AI — DEFAULT LIGHT THEME */
-:root{color-scheme:light;--titan-bg:#f7f8fa;--titan-bg-soft:#eef1f5;--titan-surface:#fff;--titan-surface-2:#f1f3f6;--titan-surface-3:#e7ebf0;--titan-accent:#e50914;--titan-accent-hover:#c90812;--titan-accent-soft:rgba(229,9,20,.08);--titan-gold:#e50914;--titan-gold-strong:#c90812;--titan-gold-soft:rgba(229,9,20,.08);--titan-purple:#b20710;--titan-text:#17191d;--titan-text-soft:#4b5563;--titan-muted:#6b7280;--titan-border:rgba(15,23,42,.10);--titan-border-strong:rgba(15,23,42,.18);--home-bg:#f7f8fa;--home-card:#fff;--home-card-light:#f1f3f6;--home-gold:#e50914;--home-purple:#b20710;--home-text:#17191d;--home-muted:#6b7280;--home-border:rgba(15,23,42,.10);--bg:#f7f8fa;--panel:#fff;--line:rgba(15,23,42,.10);--gold:#e50914;--purple:#b20710;--text:#17191d}
-html,body,#titan-app,#app-content{background:#f7f8fa!important;color:#17191d!important}
-body{background:#f7f8fa!important}
-h1,h2,h3,h4,h5,h6,.titan-display,.brand-text h1{color:#17191d!important}
-p,.muted,.page-sub,.titan-muted{color:#626b78!important}
-.home-header,.titan-header,.header,.nav-header{background:rgba(255,255,255,.94)!important;border-color:rgba(15,23,42,.09)!important;color:#17191d!important}
-.home-main,.titan-page,.page-wrap,.profile-page,.music-page{background:#f7f8fa!important;color:#17191d!important}
-.panel,.glass,.studio-panel,.card,.featured-card,.recommended-card,.home-card,.music-card,.profile-card,.settings-card,.video-card,.creator-card{background:#fff!important;color:#17191d!important;border-color:rgba(15,23,42,.10)!important;box-shadow:0 8px 26px rgba(15,23,42,.045)!important}
-input,textarea,select,.studio-result,.home-search-box{background:#fff!important;color:#17191d!important;border-color:rgba(15,23,42,.16)!important}
-input::placeholder,textarea::placeholder{color:#9299a4!important}
-button,.btn,.titan-btn{color:inherit}
-.btn.primary,.btn.gold,.primary-button,.create-button,.category-chip.active,.home-search-box button{background:#e50914!important;color:#fff!important;border-color:transparent!important}
-.brand-crown,.brand-mark,.titan-brand-mark,.music-logo{background:#e50914!important;color:#fff!important;box-shadow:0 5px 18px rgba(229,9,20,.16)!important}
+/* TITAN AI — GLOBAL DARK THEME OVERRIDE
+   Loaded last by the app shell to keep every route consistently dark.
+   Visual-only: no app logic or route behavior changed. */
+:root {
+ color-scheme:dark;
+ --titan-bg:#080808;--titan-bg-soft:#141414;--titan-surface:#181818;--titan-surface-2:#242424;--titan-surface-3:#303030;
+ --titan-accent:#e50914;--titan-accent-hover:#f6121d;--titan-accent-soft:rgba(229,9,20,.16);
+ --titan-gold:#e50914;--titan-gold-strong:#f6121d;--titan-gold-soft:rgba(229,9,20,.16);--titan-purple:#b20710;
+ --titan-text:#fff;--titan-text-soft:#d2d2d2;--titan-muted:#a3a3a3;--titan-border:rgba(255,255,255,.10);--titan-border-strong:rgba(255,255,255,.2);
+ --home-bg:#080808;--home-card:#181818;--home-card-light:#242424;--home-gold:#e50914;--home-purple:#b20710;--home-text:#fff;--home-muted:#a3a3a3;--home-border:rgba(255,255,255,.10);
+ --bg:#080808;--panel:#181818;--line:rgba(255,255,255,.10);--gold:#e50914;--purple:#b20710;--text:#fff;
+}
+html,body,#titan-app,#app-content{min-height:100%;background:#080808!important;color:#fff!important}
+body{background:radial-gradient(ellipse at 50% -22%,rgba(120,0,8,.24),transparent 48%),linear-gradient(180deg,#141414 0,#080808 420px,#080808 100%)!important}
+h1,h2,h3,h4,h5,h6,.titan-display,.brand-text h1{color:#fff!important}
+p,.muted,.page-sub,.titan-muted{color:#b3b3b3!important}
+.home-header,.titan-header,.header,.nav-header,.titan-head,.page-head{background:rgba(8,8,8,.94)!important;border-color:rgba(255,255,255,.08)!important;color:#fff!important;backdrop-filter:blur(18px)}
+.home-main,.titan-page,.page-wrap,.profile-page,.music-page{background:transparent!important;color:#fff!important}
+.panel,.glass,.studio-panel,.card,.featured-card,.recommended-card,.home-card,.music-card,.profile-card,.creator-card,.settings-card,.video-card,.tile{background:#181818!important;color:#fff!important;border-color:rgba(255,255,255,.10)!important;box-shadow:0 8px 26px rgba(0,0,0,.22)!important}
+input,textarea,select,.studio-result,.home-search-box,.field input,.field textarea,.field select{background:#202020!important;color:#fff!important;border-color:rgba(255,255,255,.14)!important}
+input::placeholder,textarea::placeholder{color:#888!important}
+.btn.primary,.btn.gold,.primary-button,.create-button,.category-chip.active,.home-search-box button,.upload-trigger,.studio-button{background:#e50914!important;color:#fff!important;border-color:transparent!important}
+.brand-crown,.brand-mark,.titan-brand-mark,.music-logo{background:#e50914!important;color:#fff!important;box-shadow:0 5px 22px rgba(229,9,20,.25)!important}
 .brand-text h1 span,.brand-text h1 b,.brand b,.titan-brand b,.short-brand b{color:#e50914!important}
-.desktop-nav a,.platform-strip-items a{color:#596273!important}
-.desktop-nav a.active,.desktop-nav a:hover,.platform-strip-items a:hover{color:#e50914!important}
-.titan-platform-strip{background:#fff!important;border-color:rgba(15,23,42,.08)!important}
-.platform-strip-label{color:#252a32!important}
-.platform-strip-items a{border-color:rgba(15,23,42,.12)!important}
-.home-header,.titan-head,.page-head,.profile-top{border-color:rgba(15,23,42,.10)!important}
-.category-chip,.chip,.tag,.filter-chip{background:#f1f3f6!important;color:#414956!important;border-color:rgba(15,23,42,.10)!important}
+.desktop-nav a,.platform-strip-items a{color:#d0d0d0!important}
+.desktop-nav a.active,.desktop-nav a:hover,.platform-strip-items a:hover{color:#fff!important}
+.desktop-nav a.active:after{background:#e50914!important}
+.titan-platform-strip{background:#111!important;border-color:rgba(255,255,255,.08)!important}
+.platform-strip-label{color:#eee!important}.platform-strip-items a{border-color:rgba(255,255,255,.12)!important}
+.category-chip,.chip,.tag,.filter-chip{background:#242424!important;color:#e5e5e5!important;border-color:rgba(255,255,255,.08)!important}
 .category-chip.active{color:#fff!important}
-.short-thumbnail,.featured-thumbnail,.recommended-thumbnail{border-color:rgba(15,23,42,.10)!important}
-#titanAuthGateOverlay .titan-auth-card{background:#fff!important;color:#17191d!important}
-#titanAuthGateOverlay .titan-auth-card h2{color:#17191d!important}
-#titanAuthGateOverlay .titan-auth-card p,#titanAuthGateOverlay .titan-auth-card small{color:#626b78!important}
-:focus-visible{outline-color:#e50914!important}
-::selection{background:rgba(229,9,20,.18);color:#17191d}
+.short-thumbnail,.featured-thumbnail,.recommended-thumbnail{border-color:rgba(255,255,255,.08)!important}
+#titanAuthGateOverlay .titan-auth-card{background:#181818!important;color:#fff!important;border-color:rgba(255,255,255,.12)!important}
+#titanAuthGateOverlay .titan-auth-card h2{color:#fff!important}
+#titanAuthGateOverlay .titan-auth-card p,#titanAuthGateOverlay .titan-auth-card small{color:#b3b3b3!important}
+.titan-bottom,.bottom,.titan-unified-nav{background:rgba(8,8,8,.97)!important;border-color:rgba(255,255,255,.10)!important}
+.titan-bottom a,.titan-nav-item{color:#b3b3b3!important}
+.titan-bottom a.active,.titan-nav-item.active{color:#e50914!important}
+.titan-bottom a.active i,.titan-nav-item.active i{filter:drop-shadow(0 0 8px rgba(229,9,20,.35))}
+.titan-create-menu .upload-options,.upload-options{background:#181818!important;color:#fff!important;border-color:rgba(255,255,255,.12)!important}
+.upload-option{color:#fff!important;border-color:rgba(255,255,255,.08)!important}
+.upload-option:hover{background:#242424!important}
+:focus-visible{outline:2px solid #e50914!important;outline-offset:3px}
+::selection{background:rgba(229,9,20,.35);color:#fff}
