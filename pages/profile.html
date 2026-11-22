@@ -121,9 +121,23 @@ vids.forEach(v=>{const row=document.createElement("div");row.className="video-ro
 const fields={editName:"name",editHandle:"handle",editRole:"role",editBio:"bio",editAvatar:"avatar",editCover:"cover",editYoutube:"youtube",editInstagram:"instagram",editSpotify:"spotify",editWebsite:"website",editShop:"shop",editRelease:"releaseTitle",editReleaseLink:"releaseLink",editReleaseArt:"releaseArt"};
 function fillForm(){Object.entries(fields).forEach(([id,key])=>$(id).value=p[key]||"");$("editEvents").value=(p.events||[]).join("\n");$("editVerified").checked=!!p.verified}
 $("editBtn").addEventListener("click",()=>{const panel=$("editPanel");panel.hidden=!panel.hidden;if(!panel.hidden)fillForm()});
-$("saveProfile").addEventListener("click",()=>{const next={...p};Object.entries(fields).forEach(([id,key])=>next[key]=$(id).value.trim());next.handle="@"+(next.handle||"creator").replace(/^@+/,"");["avatar","cover","youtube","instagram","spotify","website","shop","releaseLink","releaseArt"].forEach(key=>{if(next[key]&&!safeUrl(next[key])){ $("saveStatus").textContent="Please enter valid http or https links.";return} });if($("saveStatus").textContent==="Please enter valid http or https links.")return;
-next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);next.verified=false;
-try{localStorage.setItem("titan_user_profile",JSON.stringify(next));p=next;$("saveStatus").textContent="Profile saved on this device.";render()}catch(e){$("saveStatus").textContent="Could not save. Device storage may be full."}});
+$("saveProfile").addEventListener("click",()=>{
+$("saveStatus").textContent="";
+const next={...p};
+Object.entries(fields).forEach(([id,key])=>next[key]=$(id).value.trim());
+next.handle="@"+(next.handle||"creator").replace(/^@+/,"");
+const urlFields=["avatar","cover","youtube","instagram","spotify","website","shop","releaseLink","releaseArt"];
+const invalid=urlFields.find(key=>next[key]&&!safeUrl(next[key]));
+if(invalid){$("saveStatus").textContent="Please enter a valid http or https link for "+invalid+".";return}
+next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);
+next.verified=false;
+try{
+localStorage.setItem("titan_user_profile",JSON.stringify(next));
+p=next;
+$("saveStatus").textContent="Profile saved on this device.";
+render();
+}catch(e){$("saveStatus").textContent="Could not save. Device storage may be full."}
+});
 render();
 })();
 </script>
