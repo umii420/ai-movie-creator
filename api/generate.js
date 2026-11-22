@@ -34,12 +34,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Please provide a valid PNG, JPG or WEBP image.' });
     }
 
-    const safePrompt = prompt || 'Create a cinematic scene';
-    const systemInstruction = `You are an AI Film Director.
+    const workflowInstructions = {
+      script: 'Write an original screenplay. Include a title, characters, scene headings, action and dialogue. Format it clearly.',
+      scene: 'Create a cinematic scene breakdown. Include scene number, location, time, visual action, camera direction, mood, and dialogue or narration where useful.',
+      image: 'Create a detailed standalone AI image-generation prompt, not a screenplay. Specify subject, environment, composition, camera/lens feel, lighting, color palette, mood, visual style and aspect ratio. Add a concise negative prompt at the end.',
+      'Titan Shorts': 'Create a short vertical-video concept for a 9:16 format. Include a strong opening hook, a concise beat-by-beat script, on-screen text, visual directions and a closing beat. Keep it suitable for a broad audience.',
+      'Titan Video': 'Create a long-form video plan. Include title, hook, outline with timestamps or sections, narration, visual/B-roll suggestions, transitions and ending.'
+    };
+
+    const systemInstruction = `You are an AI Film Director and creative assistant.
 Analyze the provided idea and image if supplied.
-Create a useful, original movie script or scene in ${lang}.
-The requested workflow is: ${category}.
-Be direct, engaging, and atmospheric in clean Markdown formatting.`;
+Respond in ${lang}.
+Workflow: ${category}.
+${workflowInstructions[category]}
+Be original, practical, direct and engaging. Use clean Markdown formatting.`;
 
     const messages = [{ role: 'system', content: systemInstruction }];
 
@@ -47,12 +55,12 @@ Be direct, engaging, and atmospheric in clean Markdown formatting.`;
       messages.push({
         role: 'user',
         content: [
-          { type: 'text', text: safePrompt },
+          { type: 'text', text: prompt || 'Analyze this image and create the requested creative output.' },
           { type: 'image_url', image_url: { url: imageBase64 } }
         ]
       });
     } else {
-      messages.push({ role: 'user', content: safePrompt });
+      messages.push({ role: 'user', content: prompt });
     }
 
     const selectedModel = imageBase64
@@ -95,7 +103,7 @@ Be direct, engaging, and atmospheric in clean Markdown formatting.`;
       return res.status(502).json({ error: 'The AI provider returned an empty result. Please try again.' });
     }
 
-    // Script generation is active; actual video rendering is not connected yet.
+    // Text generation is active; actual image/video rendering is not connected yet.
     return res.status(200).json({
       script: aiScript,
       videoUrl: null,
