@@ -71,13 +71,13 @@ saveBtn.onclick=async()=>{
   if(!currentUser){statusEl.textContent="Sign in first, then upload.";return}
   if(!chosen){statusEl.textContent="Choose a video first.";return}
   const title=document.getElementById("title").value.trim();
+  const description=document.getElementById("description").value.trim();
   if(!title){statusEl.textContent="Add a video title first.";return}
   if(title.length>100){statusEl.textContent="Title must be 100 characters or fewer.";return}
   if(description.length>1000){statusEl.textContent="Description must be 1,000 characters or fewer.";return}
   if(!chosen.type.startsWith("video/")){statusEl.textContent="Please select a valid video file.";return}
   if(chosen.size<=0){statusEl.textContent="The selected file is empty.";return}
   if(chosen.size>100*1024*1024){statusEl.textContent="Video is larger than the 100 MB limit.";return}
-  const description=document.getElementById("description").value.trim();
   const type=document.getElementById("type").value;
   const category=document.getElementById("category").value;
   const id=db.collection("videos").doc().id;
