@@ -3,7 +3,7 @@ const SOURCES = [
   { name: "DW World", url: "https://rss.dw.com/rdf/rss-en-world" }
 ];
 function decode(value) {
-  return String(value || "").replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
+  return String(value || "").replace(/<!\\[CDATA\\[([\\s\\S]*?)\\]\\]>/g, "$1")
     .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").trim();
 }
@@ -11,15 +11,24 @@ function tag(block, name) {
   const match = block.match(new RegExp("<(?:[\\w-]+:)?" + name + "\\b[^>]*>([\\s\\S]*?)<\\/(?:[\\w-]+:)?" + name + ">", "i"));
   return match ? decode(match[1]).replace(/<[^>]+>/g, "").trim() : "";
 }
+function extractLink(block) {
+  // RSS 2.0 commonly uses a plain-text <link> element without a closing tag.
+  const textLink = block.match(/<link\\b[^>]*>\\s*([^<\\s][^<]*?)\\s*(?:<\\/link\\s*>|(?=<))/i);
+  if (textLink) return decode(textLink[1]).trim();
+
+  // Atom-style feeds may encode the URL in an href attribute.
+  const hrefLink = block.match(/<link\\b[^>]*href=["']([^"']+)["'][^>]*\\/?\\s*>/i);
+  return hrefLink ? decode(hrefLink[1]).trim() : "";
+}
 function parseItems(xml, source) {
-  const blocks = xml.match(/<item\b[\s\S]*?<\/item>/gi) || [];
+  const blocks = xml.match(/<item\\b[\\s\\S]*?<\\/item>/gi) || [];
   return blocks.map(block => ({
     source,
     title: tag(block, "title"),
-    link: (block.match(/<link\b[^>]*>([\s\S]*?)<\/link>/i) || [,""])[1].trim(),
+    link: extractLink(block),
     description: tag(block, "description").slice(0, 360),
     publishedAt: tag(block, "pubDate")
-  })).filter(item => item.title && /^https:\/\//i.test(item.link));
+  })).filter(item => item.title && /^https:\\/\\//i.test(item.link));
 }
 export default async function handler(req, res) {
   if (req.method !== "GET") {
