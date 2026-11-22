@@ -78,3 +78,19 @@ body:not(.titan-shorts-view) .titan-bottom { background:#fff!important; border-c
 body:not(.titan-shorts-view) .titan-bottom a { color:#6b7280!important; }
 body:not(.titan-shorts-view) .titan-bottom a.active { color:#e50914!important; }
 body:not(.titan-shorts-view) .titan-bottom a[href="/pages/creator.html"] { background:#e50914!important; color:#fff!important; box-shadow:0 0 0 4px rgba(229,9,20,.08)!important; border-color:#e50914!important; }
+
+/* Shorts is an immersive video surface; keep the light shell from whitening it. */
+html:has(body.titan-shorts-view),
+body.titan-shorts-view,
+body.titan-shorts-view #titan-app,
+body.titan-shorts-view #app-content,
+body.titan-shorts-view .shorts-shell,
+body.titan-shorts-view .short-feed {
+  background:#050509!important;
+  color:#fff!important;
+}
+body.titan-shorts-view .short-card,
+body.titan-shorts-view .short-card h2,
+body.titan-shorts-view .short-card p,
+body.titan-shorts-view .short-card a,
+body.titan-shorts-view .short-card small {color:#fff!important;}
