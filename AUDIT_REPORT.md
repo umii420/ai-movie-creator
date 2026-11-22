@@ -54,3 +54,9 @@ GitHub commit status for the audit branch HEAD reports all six Vercel project ch
 
 ## Branch safety
 All changes are on `titan-audit-white-cleanup`. The `main` branch and production deployment were not modified by this audit.
+
+
+## Bug fix — AI Studio workflow mismatch (2026-11-22)
+- **Found:** The API accepted `image`, `scene`, `Titan Shorts`, and `Titan Video` categories but used one generic screenplay instruction for every category. The Image Prompt mode could therefore return a screenplay instead of an image-generation prompt, and other workflows lacked format-specific outputs.
+- **Fixed on audit branch:** `api/generate.js` now uses workflow-specific instructions for screenplay, cinematic scene breakdown, standalone image prompt, vertical Shorts concept, and long-form video plan. Image-only input also receives a clearer instruction.
+- **Verification:** Source review confirms the category instructions are mapped and the request still uses the existing endpoint/response shape. Runtime provider test is pending; no live deployment was made.
