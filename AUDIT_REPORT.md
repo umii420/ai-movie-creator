@@ -66,3 +66,9 @@ All changes are on `titan-audit-white-cleanup`. The `main` branch and production
 - **Found:** Cloudinary upload XHR had no timeout or abort handling. A stalled request could leave the UI in an uploading state until the browser/network eventually resolved it.
 - **Fixed on audit branch:** Upload now has a 120-second timeout and explicit timeout/abort error messages; the existing catch path restores the upload button.
 - **Verification:** Source confirms timeout and handlers are present. Network/runtime upload test remains pending.
+
+
+## Bug fix — guest mode auth gate (2026-11-22)
+- **Found:** The guest button only removed the login overlay. Firebase's `onAuthStateChanged(null)` callback then reopened the gate, so guest access could fail to persist.
+- **Fixed on audit branch:** Guest choice now stores a local guest-mode flag, the auth listener respects that flag for signed-out sessions, Google sign-in clears guest mode, and logout clears it.
+- **Verification:** Source-level flow reviewed. Browser test is pending; this does not grant guests Firebase authentication or account-only permissions.
