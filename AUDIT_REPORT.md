@@ -35,5 +35,8 @@ This audit is based on source-code review of branch `titan-audit-white-cleanup`.
 - Settings choices are disclosed as device-local placeholders and should not be represented as functional account-wide controls.
 - No browser smoke test, Firebase Emulator test, or production deployment verification was completed.
 
+## Current deployment status (checked 2026-11-22)
+GitHub commit status for the audit branch HEAD reports all six Vercel project checks as failed with the same reason: **deployment rate limited — retry in 24 hours**. This is a Vercel deployment quota/limit status, not evidence of a source-code build error. No deployment was initiated by this audit. The live site and deployed commit remain unverified.
+
 ## Branch safety
 All changes are on `titan-audit-white-cleanup`. The `main` branch and production deployment were not modified by this audit.
