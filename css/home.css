@@ -1111,3 +1111,21 @@
     width: min(290px, 85vw);
   }
 }
+
+
+/* TITAN unified bottom navigation — missing styles repaired on audit branch */
+.titan-unified-nav{position:fixed;z-index:1200;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,720px);display:flex;align-items:center;justify-content:space-around;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);border:1px solid rgba(15,23,42,.10);border-bottom:0;border-radius:22px 22px 0 0;box-shadow:0 -8px 28px rgba(15,23,42,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.titan-nav-item{position:relative;display:grid;place-items:center;width:48px;height:46px;flex:0 0 48px;border-radius:15px;color:#6b7280;text-decoration:none;font-size:19px;transition:background .18s,color .18s,transform .18s}
+.titan-nav-item:hover,.titan-nav-item.active{background:#f1f3f6;color:#e50914}
+.titan-nav-item:active{transform:scale(.94)}
+.titan-create-menu{position:relative;flex:0 0 54px}
+.titan-create-menu summary{list-style:none;cursor:pointer}
+.titan-create-menu summary::-webkit-details-marker{display:none}
+.titan-upload-nav{width:52px;height:52px;margin-top:-15px;border:3px solid #fff;border-radius:18px;background:linear-gradient(145deg,#ff3540,#b20710);color:#fff;box-shadow:0 0 0 4px rgba(229,9,20,.10),0 8px 22px rgba(229,9,20,.28);font-size:23px}
+.titan-create-menu[open] .titan-upload-nav{transform:rotate(45deg)}
+.upload-options{position:absolute;bottom:calc(100% + 15px);left:50%;transform:translateX(-50%);width:min(330px,calc(100vw - 24px));padding:12px;border:1px solid #e5e7eb;border-radius:20px;background:#fff;color:#17191d;box-shadow:0 18px 55px rgba(15,23,42,.18)}
+.upload-menu-title{padding:8px 8px 12px}.upload-menu-title h3{font-size:16px;color:#17191d;margin:0 0 4px}.upload-menu-title p{font-size:12px;color:#6b7280;margin:0}
+.upload-option{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;color:#17191d;text-decoration:none}.upload-option:hover{background:#f5f6f8}.upload-option-icon{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:#fff0f1;color:#e50914}.upload-option>span:nth-child(2){display:grid;gap:3px;flex:1}.upload-option strong{font-size:13px}.upload-option small{font-size:11px;color:#6b7280}.upload-option>i{font-size:12px;color:#9ca3af}
+.home-main{padding-bottom:120px}
+@media(min-width:701px){.titan-unified-nav{bottom:16px;border:1px solid rgba(15,23,42,.10);border-radius:24px;padding:10px 18px;box-shadow:0 10px 32px rgba(15,23,42,.10)}.home-main{padding-bottom:90px}}
+@media(max-width:420px){.titan-unified-nav{gap:3px;padding-left:6px;padding-right:6px}.titan-nav-item{width:42px;flex-basis:42px}.titan-create-menu{flex-basis:48px}.titan-upload-nav{width:48px;height:48px}}
