@@ -1,11 +1,11 @@
 /* TITAN AI — DEFAULT LIGHT THEME */
-:root{color-scheme:light;--titan-bg:#f7f8fa;--titan-bg-soft:#eef1f5;--titan-surface:#fff;--titan-surface-2:#f1f3f6;--titan-surface-3:#e7ebf0;--titan-accent:#e50914;--titan-accent-hover:#c90812;--titan-accent-soft:rgba(229,9,20,.08);--titan-gold:#e50914;--titan-gold-strong:#c90812;--titan-gold-soft:rgba(229,9,20,.08);--titan-purple:#b20710;--titan-text:#17191d;--titan-text-soft:#4b5563;--titan-muted:#6b7280;--titan-border:rgba(15,23,42,.10);--titan-border-strong:rgba(15,23,42,.18);--home-bg:#f7f8fa;--home-card:#fff;--home-card-light:#f1f3f6;--home-gold:#e50914;--home-purple:#b20710;--home-text:#17191d;--home-muted:#6b7280;--home-border:rgba(15,23,42,.10);--bg:#f7f8fa;--panel:#fff;--line:rgba(15,23,42,.10);--gold:#e50914;--purple:#b20710;--text:#17191d}
-html,body,#titan-app,#app-content{background:#f7f8fa!important;color:#17191d!important}
-body{background:#f7f8fa!important}
+:root{color-scheme:light;--titan-bg:#ffffff;--titan-bg-soft:#f7f7f7;--titan-surface:#fff;--titan-surface-2:#f1f3f6;--titan-surface-3:#e7ebf0;--titan-accent:#e50914;--titan-accent-hover:#c90812;--titan-accent-soft:rgba(229,9,20,.08);--titan-gold:#e50914;--titan-gold-strong:#c90812;--titan-gold-soft:rgba(229,9,20,.08);--titan-purple:#b20710;--titan-text:#17191d;--titan-text-soft:#4b5563;--titan-muted:#6b7280;--titan-border:rgba(15,23,42,.10);--titan-border-strong:rgba(15,23,42,.18);--home-bg:#ffffff;--home-card:#fff;--home-card-light:#f1f3f6;--home-gold:#e50914;--home-purple:#b20710;--home-text:#17191d;--home-muted:#6b7280;--home-border:rgba(15,23,42,.10);--bg:#ffffff;--panel:#fff;--line:rgba(15,23,42,.10);--gold:#e50914;--purple:#b20710;--text:#17191d}
+html,body,#titan-app,#app-content{background:#ffffff!important;color:#17191d!important}
+body{background:#ffffff!important}
 h1,h2,h3,h4,h5,h6,.titan-display,.brand-text h1{color:#17191d!important}
 p,.muted,.page-sub,.titan-muted{color:#626b78!important}
 .home-header,.titan-header,.header,.nav-header{background:rgba(255,255,255,.94)!important;border-color:rgba(15,23,42,.09)!important;color:#17191d!important}
-.home-main,.titan-page,.page-wrap,.profile-page,.music-page{background:#f7f8fa!important;color:#17191d!important}
+.home-main,.titan-page,.page-wrap,.profile-page,.music-page{background:#ffffff!important;color:#17191d!important}
 .panel,.glass,.studio-panel,.card,.featured-card,.recommended-card,.home-card,.music-card,.profile-card,.settings-card,.video-card,.creator-card{background:#fff!important;color:#17191d!important;border-color:rgba(15,23,42,.10)!important;box-shadow:0 8px 26px rgba(15,23,42,.045)!important}
 input,textarea,select,.studio-result,.home-search-box{background:#fff!important;color:#17191d!important;border-color:rgba(15,23,42,.16)!important}
 input::placeholder,textarea::placeholder{color:#9299a4!important}
@@ -27,3 +27,9 @@ button,.btn,.titan-btn{color:inherit}
 #titanAuthGateOverlay .titan-auth-card p,#titanAuthGateOverlay .titan-auth-card small{color:#626b78!important}
 :focus-visible{outline-color:#e50914!important}
 ::selection{background:rgba(229,9,20,.18);color:#17191d}
+
+/* Unified clean-white foundation: page-specific components may keep media overlays. */
+html,body,#titan-app,#app-content{background:#fff!important;color:#17191d!important}
+body{background:#fff!important}
+.titan-page,.page-wrap,.profile-page,.music-page,.home-main,.studio-wrap,.manage-wrap,.watch-wrap,.news-wrap{background:#fff!important;color:#17191d!important}
+.panel,.glass,.studio-panel,.card,.featured-card,.recommended-card,.home-card,.music-card,.profile-card,.settings-card,.video-card,.creator-card,.feature-tile,.tile{background:#fff!important;color:#17191d!important;border-color:#e5e7eb!important}
