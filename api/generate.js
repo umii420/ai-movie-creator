@@ -26,8 +26,8 @@ export default async function handler(req, res) {
       return res.status(413).json({ error: 'Your idea is too long. Please keep it under 5,000 characters.' });
     }
 
-    if (imageBase64.length > 8 * 1024 * 1024) {
-      return res.status(413).json({ error: 'Image is too large. Please use an image under 6 MB.' });
+    if (imageBase64.length > 3 * 1024 * 1024) {
+      return res.status(413).json({ error: 'Image is too large. Please use a smaller image (about 2 MB or less).' });
     }
 
     if (imageBase64 && !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/i.test(imageBase64)) {
