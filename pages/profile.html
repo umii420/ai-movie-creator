@@ -67,7 +67,7 @@
 <div class="field"><label for="editReleaseLink">Latest release link</label><input id="editReleaseLink" type="url" placeholder="https://..."></div>
 <div class="field"><label for="editReleaseArt">Release artwork URL</label><input id="editReleaseArt" type="url" placeholder="https://..."></div>
 <div class="field"><label for="editEvents">Upcoming shows (one per line: date | title | location)</label><textarea id="editEvents" maxlength="600" placeholder="JUN 21, 2026 | Live show | Karachi, Pakistan"></textarea></div>
-<label style="display:flex;align-items:center;gap:9px;color:#c3ccda;font-size:12px"><input id="editVerified" type="checkbox" style="width:auto"> Show verified badge (reserved for verified accounts)</label>
+<label style="display:flex;align-items:center;gap:9px;color:#c3ccda;font-size:12px"><input id="editVerified" type="checkbox" style="width:auto" disabled> Verified badge (reserved for authorized verification)</label>
 <button class="btn primary" id="saveProfile" style="margin-top:14px">Save Profile</button><p class="muted" id="saveStatus" aria-live="polite"></p></section>
 </section>
 <div class="profile-grid">
@@ -108,7 +108,7 @@ function render(){
 $("name").textContent=p.name||defaults.name;$("handle").textContent=p.handle||defaults.handle;$("role").textContent=p.role||defaults.role;$("bio").textContent=p.bio||defaults.bio;
 $("avatar").src=safeUrl(p.avatar||p.photo)||"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80";
 const cover=safeUrl(p.cover);$("coverPhoto").hidden=!cover;if(cover)$("coverPhoto").src=cover;
-$("verifiedBadge").hidden=!p.verified;$("followers").textContent=Number(p.followers)||0;$("following").textContent=Number(p.following)||0;
+$("verifiedBadge").hidden=true;$("followers").textContent=Number(p.followers)||0;$("following").textContent=Number(p.following)||0;
 const social=[["youtube","fa-brands fa-youtube"],["instagram","fa-brands fa-instagram"],["spotify","fa-brands fa-spotify"],["website","fa-solid fa-link"]];$("socialLinks").innerHTML="";
 social.forEach(([key,icon])=>{const href=safeUrl(p[key]);if(!href)return;const a=document.createElement("a");a.href=href;a.target="_blank";a.rel="noopener noreferrer";a.title=key;a.innerHTML='<i class="'+icon+'"></i>'; $("socialLinks").append(a)});
 setLink("musicContent","Open Spotify",p.spotify,"fa-brands fa-spotify");setLink("youtubeContent","Watch on YouTube",p.youtube,"fa-brands fa-youtube");setLink("shopContent","Visit creator shop",p.shop,"fa-solid fa-store");setLink("websiteContent","Visit website",p.website,"fa-solid fa-globe");
@@ -122,7 +122,7 @@ const fields={editName:"name",editHandle:"handle",editRole:"role",editBio:"bio",
 function fillForm(){Object.entries(fields).forEach(([id,key])=>$(id).value=p[key]||"");$("editEvents").value=(p.events||[]).join("\n");$("editVerified").checked=!!p.verified}
 $("editBtn").addEventListener("click",()=>{const panel=$("editPanel");panel.hidden=!panel.hidden;if(!panel.hidden)fillForm()});
 $("saveProfile").addEventListener("click",()=>{const next={...p};Object.entries(fields).forEach(([id,key])=>next[key]=$(id).value.trim());next.handle="@"+(next.handle||"creator").replace(/^@+/,"");["avatar","cover","youtube","instagram","spotify","website","shop","releaseLink","releaseArt"].forEach(key=>{if(next[key]&&!safeUrl(next[key])){ $("saveStatus").textContent="Please enter valid http or https links.";return} });if($("saveStatus").textContent==="Please enter valid http or https links.")return;
-next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);next.verified=$("editVerified").checked;
+next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);next.verified=false;
 try{localStorage.setItem("titan_user_profile",JSON.stringify(next));p=next;$("saveStatus").textContent="Profile saved on this device.";render()}catch(e){$("saveStatus").textContent="Could not save. Device storage may be full."}});
 render();
 })();
