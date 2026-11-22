@@ -60,3 +60,9 @@ All changes are on `titan-audit-white-cleanup`. The `main` branch and production
 - **Found:** The API accepted `image`, `scene`, `Titan Shorts`, and `Titan Video` categories but used one generic screenplay instruction for every category. The Image Prompt mode could therefore return a screenplay instead of an image-generation prompt, and other workflows lacked format-specific outputs.
 - **Fixed on audit branch:** `api/generate.js` now uses workflow-specific instructions for screenplay, cinematic scene breakdown, standalone image prompt, vertical Shorts concept, and long-form video plan. Image-only input also receives a clearer instruction.
 - **Verification:** Source review confirms the category instructions are mapped and the request still uses the existing endpoint/response shape. Runtime provider test is pending; no live deployment was made.
+
+
+## Bug fix — Creator upload timeout (2026-11-22)
+- **Found:** Cloudinary upload XHR had no timeout or abort handling. A stalled request could leave the UI in an uploading state until the browser/network eventually resolved it.
+- **Fixed on audit branch:** Upload now has a 120-second timeout and explicit timeout/abort error messages; the existing catch path restores the upload button.
+- **Verification:** Source confirms timeout and handlers are present. Network/runtime upload test remains pending.
