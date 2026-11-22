@@ -12,18 +12,26 @@ This audit is based on source-code review of branch `titan-audit-white-cleanup`.
 | Feature | Source review status | Remaining work |
 |---|---|---|
 | Home / navigation | UI and local search/category filters exist | Demo cards are not a real video feed; playback/search backend missing |
-| Google authentication | Firebase popup flow and guest UI exist | Browser test, redirect flow, logout/session test |
-| Profile | Local edit UI and basic Firestore sync exist | Extended fields cross-device sync, real follower/following data |
+| Google authentication | Firebase popup flow and guest UI exist; shell auth listener initializes before SPA navigation | Browser test, redirect flow, logout/session test; guest is a local UI bypass rather than an authenticated account |
+| Profile | Local edit UI and basic Firestore sync exist | Extended fields cross-device sync, real follower/following data; verify merge writes against strict profile document-key rules for pre-existing documents |
 | Shorts | Feed UI, scroll-snap, report/block controls | Feed publishing, likes/comments, pagination, moderation workflow |
 | TITAN Video | Published-record feed/player code exists | Trusted publish flow, search, pagination, runtime Firestore test |
 | Upload Center | Cloudinary upload + Firestore private draft; client validation | Preset restrictions, upload recovery, orphan cleanup, server-side validation |
-| AI Studio | Script/scene/prompt generation endpoint | Actual image/video rendering provider, persistence/export, auth/rate limit |
+| AI Studio | Script/scene/prompt generation endpoint; endpoint validates prompt, language/category and image data size/type; provider timeout and empty-result handling exist | Actual image/video rendering provider, persistence/export, auth/rate limit; endpoint still has no verified auth or durable rate limit |
 | Music | UI/demo states | Real catalogue, playback, licensing, search |
 | World Updates | BBC/DW RSS API with cache and timeout; parser link fix committed | Runtime feed verification, category/search, fallback UX |
 | Settings | Local preference storage and disclosure | Settings currently do not change all app behavior; account/cloud sync |
 | Security | Restrictive Firestore/Storage rules present | Emulator tests, trusted moderation/publishing, API abuse/rate limiting, age/safety workflow |
 | Monetization | UI concepts only | Eligibility, verification, payments, fraud controls, payout system |
 | Deployment | Not verified | Confirm Vercel project, deployment limits, build, and live commit |
+
+## Additional source-review findings (2026-11-22)
+- `api/generate.js` restricts POST, prompt length, image payload size/type, language and category; it uses a 25-second timeout and returns provider errors. Authentication and durable rate limiting are not present.
+- The AI Studio UI correctly discloses that image/video rendering is not connected and generated text is not persisted automatically.
+- The home catalog and local search/category filter are explicitly preview content; search does not query a backend video catalogue.
+- Shorts and TITAN Video query published Firestore videos, but no trusted publishing workflow was found; public feed can remain empty until an authorized process publishes content.
+- Guest access is a local gate bypass, not an authenticated Firebase identity. Account-dependent actions still require sign-in.
+- The profile cloud-sync path should be runtime-tested against strict Firestore profile document key validation, especially when merging into documents that may contain extra fields.
 
 ## Important security and operational findings
 - Firebase client config is present in browser code. Firebase API keys are identifiers, not server secrets; security must come from Firebase Auth, rules, authorized domains, and provider restrictions.
