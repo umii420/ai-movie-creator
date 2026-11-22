@@ -55,6 +55,10 @@
     doc.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
       const href = link.href;
       if (!href) return;
+      // Legacy global dark theme layers are intentionally excluded.
+      // The app shell owns the unified light design system.
+      if (href.includes("/css/titan-midnight-aurora.css") ||
+          href.includes("/css/titan-spotify-system.css")) return;
 
       let node = [...document.querySelectorAll('link[rel="stylesheet"]')]
         .find(x => x.href === href && !previousNodes.includes(x));
@@ -83,13 +87,8 @@
     previousNodes.forEach(node => node.remove());
     routeStyleNodes = nextNodes;
 
-    // Route pages bring their own legacy stylesheets and inline styles.
-    // Keep the unified Netflix theme AFTER route assets on every SPA navigation,
-    // otherwise route CSS can repaint the UI in the old Spotify palette.
-    const globalTheme = document.querySelector('link[href$="/css/titan-spotify-system.css"]');
-    if (globalTheme) document.head.appendChild(globalTheme);
-    const lightTheme = document.querySelector('link[href$="/css/titan-light-default.css"]');
-    if (lightTheme) document.head.appendChild(lightTheme);
+    // The app shell's light design system remains global.
+    // Legacy dark theme layers are filtered above to prevent palette conflicts.
   }
 
   function runScripts(scripts, mount) {
