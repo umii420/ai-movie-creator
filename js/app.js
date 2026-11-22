@@ -84,6 +84,9 @@
     });
 
     await Promise.all(waits);
+    // Keep the unified light theme last so route-local CSS cannot reintroduce legacy colors.
+    const appTheme = document.querySelector('link[href*="titan-light-default.css"]');
+    if (appTheme) document.head.appendChild(appTheme);
     previousNodes.forEach(node => node.remove());
     routeStyleNodes = nextNodes;
 
