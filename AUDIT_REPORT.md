@@ -46,5 +46,11 @@ This audit is based on source-code review of branch `titan-audit-white-cleanup`.
 ## Current deployment status (checked 2026-11-22)
 GitHub commit status for the audit branch HEAD reports all six Vercel project checks as failed with the same reason: **deployment rate limited — retry in 24 hours**. This is a Vercel deployment quota/limit status, not evidence of a source-code build error. No deployment was initiated by this audit. The live site and deployed commit remain unverified.
 
+## Additional UI and account findings (2026-11-22)
+- Settings stores local preference values but the controls do not apply theme/language/notification/privacy behavior; the page discloses this.
+- Music page is a visual preview: search filters preview mood cards, playback is disabled, and no catalog/provider is connected. The page discloses this.
+- My Videos deletes the Firestore draft record only. Cloudinary media can remain orphaned; the UI warns users of this.
+- Video feed report and block actions are present in source, but Firestore rules and runtime testing still need verification for the complete workflow.
+
 ## Branch safety
 All changes are on `titan-audit-white-cleanup`. The `main` branch and production deployment were not modified by this audit.
