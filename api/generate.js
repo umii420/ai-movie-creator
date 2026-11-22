@@ -52,7 +52,7 @@ Be direct, engaging, and atmospheric in clean Markdown formatting.`;
     }
 
     const selectedModel = imageBase64
-      ? 'llama-3.2-11b-vision-preview'
+      ? 'qwen/qwen3.8-27b'
       : 'openai/gpt-oss-120b';
 
     const controller = new AbortController();
