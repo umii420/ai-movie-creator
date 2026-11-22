@@ -18,6 +18,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'GROQ_API_KEY is not configured on Vercel.' });
     }
 
+    if (!prompt && !imageBase64) {
+      return res.status(400).json({ error: 'Please enter your story idea or provide an image.' });
+    }
+
     if (prompt.length > 5000) {
       return res.status(413).json({ error: 'Your idea is too long. Please keep it under 5,000 characters.' });
     }
