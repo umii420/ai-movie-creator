@@ -750,6 +750,23 @@
     if (event.key === "Enter") { event.preventDefault(); apply(); }
   });
   searchButton?.addEventListener("click", apply);
+  document.querySelectorAll('a[href="#"].featured-thumbnail, a[href="#"].recommended-thumbnail').forEach(link => {
+    link.addEventListener("click", event => {
+      event.preventDefault();
+      let notice = document.getElementById("titan-preview-notice");
+      if (!notice) {
+        notice = document.createElement("p");
+        notice.id = "titan-preview-notice";
+        notice.className = "muted";
+        notice.setAttribute("role", "status");
+        notice.textContent = "These are catalog preview cards. Video playback is not connected yet.";
+        document.querySelector(".home-main")?.append(notice);
+      }
+      notice.hidden = false;
+    });
+  });
+  document.querySelector(".refresh-button")?.addEventListener("click", () => location.reload());
+
   chips.forEach(chip => chip.addEventListener("click", () => {
     category = chip.dataset.category || "all";
     chips.forEach(item => {
