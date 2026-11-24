@@ -44,7 +44,26 @@
 
   function renderTracks(tracks) {
     resultsHost.replaceChildren();
-    if (!tracks.length) return message("No tracks found. Try another song, artist, or genre.");
+    if (!tracks.length) {
+      resultsHost.replaceChildren();
+      const wrap = document.createElement("div");
+      wrap.className = "jamendo-empty-state";
+      wrap.textContent = "No match in Jamendo’s independent-music catalog. Popular commercial recordings may not be available here. Try a genre or independent artist:";
+      const suggestions = document.createElement("div");
+      suggestions.className = "jamendo-search-suggestions";
+      ["ambient", "electronic", "acoustic", "rock", "jazz"].forEach(term => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = term;
+        button.addEventListener("click", () => {
+          searchInput.value = term;
+          search(term);
+        });
+        suggestions.appendChild(button);
+      });
+      resultsHost.append(wrap, suggestions);
+      return;
+    }
     tracks.forEach(track => {
       const card = document.createElement("article");
       card.className = "jamendo-song-card";
