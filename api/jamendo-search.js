@@ -31,6 +31,10 @@ export default async function handler(req, res) {
     const upstream = await fetch(url, { headers: { Accept: "application/json" } });
     if (!upstream.ok) throw new Error("Jamendo catalog request failed");
     const payload = await upstream.json();
+    if (payload?.headers?.status && payload.headers.status !== "success") {
+      console.error("Jamendo API response:", payload.headers.code, payload.headers.error_message);
+      return res.status(502).json({ error: "Jamendo API rejected the request. Check the application key and API plan." });
+    }
     const tracks = Array.isArray(payload.results) ? payload.results : [];
     res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
     return res.status(200).json({
