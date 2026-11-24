@@ -150,7 +150,7 @@
     playButton.addEventListener("click", async () => {
       if (!currentMusic) return;
       try {
-        if (currentMusic.isPlaying) {
+        if (currentMusic.player && currentMusic.player.isPlaying) {
           await currentMusic.pause();
           playButton.innerHTML = '<i class="fa-solid fa-play"></i>';
         } else {
