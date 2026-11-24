@@ -162,4 +162,17 @@
       }
     });
   }
+
+  const playerIcons = document.querySelectorAll(".player-controls > i");
+  if (playerIcons.length >= 2) {
+    playerIcons[0].setAttribute("role", "button");
+    playerIcons[0].setAttribute("tabindex", "0");
+    playerIcons[0].setAttribute("aria-label", "Previous track");
+    playerIcons[1].setAttribute("role", "button");
+    playerIcons[1].setAttribute("tabindex", "0");
+    playerIcons[1].setAttribute("aria-label", "Next track");
+
+    playerIcons[0].addEventListener("click", () => currentMusic && currentMusic.skipToPreviousItem());
+    playerIcons[1].addEventListener("click", () => currentMusic && currentMusic.skipToNextItem());
+  }
 })();
