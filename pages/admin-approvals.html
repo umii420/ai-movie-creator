@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080808"><title>Video Approval | TITAN AI</title><link rel="stylesheet" href="/css/titan-midnight-aurora.css"><style>
+body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}.wrap{max-width:900px;margin:auto;padding:28px 16px 100px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px}.head a{color:#fff}.sub{color:#aaa;line-height:1.6}.list{display:grid;gap:16px;margin-top:24px}.item{padding:16px;border:1px solid #ffffff22;border-radius:16px;background:#ffffff09}.item video{width:100%;max-height:360px;background:#000;border-radius:10px}.item h2{font-size:19px}.item p{color:#bbb;white-space:pre-wrap}.approve{padding:12px 18px;border:0;border-radius:10px;background:#e50914;color:white;font-weight:700}.muted{color:#aaa}
+</style></head><body><main class="wrap"><header class="head"><a href="/">♛ TITAN AI</a><a href="/">Home</a></header><h1>Video Approval Center</h1><p class="sub">Admin account: umaralipakistan07@gmail.com. Review each private upload before publishing it to TITAN feeds.</p><p id="status" class="sub">Checking admin access…</p><section id="list" class="list"></section></main>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script>
+(function(){
+'use strict';
+const config={apiKey:"AIzaSyB1R9HB5diMfai85WBxqhi3Bcntmg0ZG3Y",authDomain:"titanai-3a3aa.firebaseapp.com",projectId:"titanai-3a3aa",storageBucket:"titanai-3a3aa.firebasestorage.app",messagingSenderId:"92111516949",appId:"1:92111516949:web:1128d02bd9e78dc237a51c"};
+const status=document.getElementById('status'),list=document.getElementById('list');
+if(!firebase.apps.length)firebase.initializeApp(config);
+firebase.auth().onAuthStateChanged(async user=>{
+ if(!user){status.textContent='Please sign in with the admin Google account first.';return}
+ if((user.email||'').toLowerCase()!=='umaralipakistan07@gmail.com'){status.textContent='This Google account is not authorized as TITAN admin.';return}
+ try{const token=await user.getIdToken(true);const response=await fetch('/api/admin/videos',{headers:{Authorization:'Bearer '+token}});const data=await response.json();if(!response.ok)throw Error(data.error||'Could not load approvals.');
+ list.replaceChildren();if(!data.videos.length){status.textContent='No videos waiting for approval.';return}
+ status.textContent=data.videos.length+' private draft(s) waiting for review.';
+ data.videos.forEach(v=>{const card=document.createElement('article');card.className='item';const title=document.createElement('h2');title.textContent=v.title;const desc=document.createElement('p');desc.textContent=v.description;const type=document.createElement('p');type.className='muted';type.textContent='Type: '+v.type+' · Creator: '+v.ownerUid;const player=document.createElement('video');player.src=v.videoUrl;player.controls=true;player.preload='metadata';player.playsInline=true;const btn=document.createElement('button');btn.className='approve';btn.textContent='Approve & Publish';btn.onclick=async()=>{btn.disabled=true;btn.textContent='Publishing…';try{const r=await fetch('/api/admin/videos',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({videoId:v.id})});const result=await r.json();if(!r.ok)throw Error(result.error||'Publish failed');card.remove();status.textContent='Video published successfully.'+(list.children.length?' More drafts remain.':' No pending drafts remain.')}catch(e){btn.disabled=false;btn.textContent='Approve & Publish';status.textContent=e.message}};card.append(title,type,player,desc,btn);list.append(card)});
+ }catch(e){status.textContent=e.message}
+});
+})();
+</script></body></html>
