@@ -15,13 +15,17 @@
 
   function fetchPage(url) {
     const path = routePath(url);
-    if (pageCache.has(path)) return Promise.resolve(pageCache.get(path));
+    const cached = pageCache.get(path);
+    // Keep prefetch useful, but never let an old route stay cached for the
+    // lifetime of the SPA. This prevents recently deployed HTML from being
+    // hidden behind an earlier prefetched page.
+    if (cached && Date.now() - cached.savedAt < 15000) return Promise.resolve(cached.html);
     if (pending.has(path)) return pending.get(path);
     const request = fetch(path, { cache: "no-cache", credentials: "same-origin" })
       .then(async response => {
         if (!response.ok) throw new Error("Page load failed (" + response.status + ")");
         const html = await response.text();
-        pageCache.set(path, html);
+        pageCache.set(path, { html, savedAt: Date.now() });
         return html;
       })
       .finally(() => pending.delete(path));
