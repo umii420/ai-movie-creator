@@ -28,7 +28,7 @@
 <section class="music-hero">
 <div class="hero-copy"><span class="eyebrow">YOUR SOUND. YOUR WORLD.</span><h1>Music that moves <span>you.</span></h1><p>Discover artists, explore albums and build your own soundtrack — all in the TITAN experience.</p></div>
 </section>
-<section class="jamendo-connect-card"><div class="jamendo-connect-icon"><i class="fa-solid fa-headphones"></i></div><div class="jamendo-connect-copy"><strong>Jamendo independent music</strong><span>Search and play tracks shared by independent artists. Each track displays its license information.</span></div><button id="jamendoInfo" type="button">About music <i class="fa-solid fa-arrow-right"></i></button></section>
+<section class="jamendo-connect-card"><div class="jamendo-connect-icon"><i class="fa-solid fa-headphones"></i></div><div class="jamendo-connect-copy"><strong>Jamendo independent music</strong><span>Search and play tracks shared by independent artists. Each track displays its license information.</span></div><button id="jamendoInfo" type="button">About music <i class="fa-solid fa-arrow-right"></i></button><details class="music-create-menu"><summary aria-label="Create on TITAN"><i class="fa-solid fa-plus"></i></summary><div class="upload-options"><div class="upload-menu-title"><h3>Create on TITAN</h3><p>Choose what you want to upload.</p></div><a href="/pages/creator.html?type=short" class="upload-option"><span class="upload-option-icon short-option"><i class="fa-solid fa-bolt"></i></span><span><strong>Upload Short</strong><small>Share a vertical short video</small></span><i class="fa-solid fa-chevron-right"></i></a><a href="/pages/creator.html?type=long" class="upload-option"><span class="upload-option-icon video-option"><i class="fa-solid fa-video"></i></span><span><strong>Upload Long Video</strong><small>Publish a full-length video</small></span><i class="fa-solid fa-chevron-right"></i></a></div></details></section>
 <label class="music-search"><i class="fa-solid fa-magnifying-glass"></i><input id="musicSearch" type="search" placeholder="Search songs, artists and albums" aria-label="Search songs, artists and albums"></label><div class="jamendo-music-results" id="jamendoMusicResults" aria-live="polite"></div>
 <section class="music-section"><div class="section-head"><div><h2>Explore TITAN Music</h2><p>Your music space, all in one place.</p></div></div>
 <div class="quick-grid">
@@ -49,18 +49,10 @@
 </main>
 <aside class="bottom-player" aria-label="Music player preview"><div class="player-label"><span class="player-cover"><i class="fa-solid fa-music"></i></span><span><strong>TITAN MUSIC</strong><small>Choose a track to start</small></span></div><div class="player-controls"><i class="fa-solid fa-backward-step"></i><button class="play" type="button" aria-label="Playback unavailable"><i class="fa-solid fa-play"></i></button><i class="fa-solid fa-forward-step"></i></div><span class="player-status">PLAYER PREVIEW</span></aside>
 
-<nav class="titan-unified-nav" aria-label="TITAN main navigation">
-  <a class="titan-nav-item " href="/" aria-label="Home"><i class="fa-solid fa-house"></i></a>
-  <a class="titan-nav-item " href="/pages/shorts.html" aria-label="Shorts"><i class="fa-solid fa-circle-play"></i></a>
-  <details class="titan-create-menu">
-    <summary class="titan-nav-item titan-upload-nav " aria-label="Upload"><i class="fa-solid fa-plus"></i></summary>
-    <div class="upload-options">
-      <div class="upload-menu-title"><h3>Create on TITAN</h3><p>Choose what you want to upload.</p></div>
-      <a href="/pages/creator.html?type=short" class="upload-option"><span class="upload-option-icon short-option"><i class="fa-solid fa-bolt"></i></span><span><strong>Upload Short</strong><small>Share a vertical short video</small></span><i class="fa-solid fa-chevron-right"></i></a>
-      <a href="/pages/creator.html?type=long" class="upload-option"><span class="upload-option-icon video-option"><i class="fa-solid fa-video"></i></span><span><strong>Upload Long Video</strong><small>Publish a full-length video</small></span><i class="fa-solid fa-chevron-right"></i></a>
-    </div>
-  </details>
-  <a class="titan-nav-item " href="/pages/studio.html" aria-label="AI Studio"><i class="fa-solid fa-wand-magic-sparkles"></i></a>
-  <a class="titan-nav-item active" href="/pages/music.html" aria-label="Music"><i class="fa-solid fa-music"></i></a>
-  <a class="titan-nav-item " href="/pages/profile.html" aria-label="Profile"><i class="fa-regular fa-user"></i></a>
+<nav class="titan-unified-nav music-bottom-nav" aria-label="TITAN main navigation">
+  <a class="titan-nav-item" href="/"><i class="fa-solid fa-house"></i><span>Home</span></a>
+  <a class="titan-nav-item" href="/pages/shorts.html"><i class="fa-solid fa-circle-play"></i><span>Shorts</span></a>
+  <a class="titan-nav-item" href="/pages/studio.html"><i class="fa-solid fa-wand-magic-sparkles"></i><span>AI Studio</span></a>
+  <a class="titan-nav-item active" href="/pages/music.html" aria-current="page"><i class="fa-solid fa-music"></i><span>Music</span></a>
+  <a class="titan-nav-item" href="/pages/profile.html"><i class="fa-regular fa-user"></i><span>Profile</span></a>
 </nav><script src="/js/jamendo-music.js" defer></script>\n</body></html>
