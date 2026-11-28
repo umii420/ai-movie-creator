@@ -50,7 +50,7 @@
 <p class="profile-bio" id="bio">Welcome to my creator space. Watch my latest videos, discover my work and follow my journey.</p>
 <div class="social-row" id="socialLinks" aria-label="Creator social links"></div>
 <div class="profile-stats"><div class="profile-stat"><strong id="videoCount">0</strong><span>VIDEOS</span></div><div class="profile-stat"><strong id="followers">0</strong><span>FOLLOWERS</span></div><div class="profile-stat"><strong id="following">0</strong><span>FOLLOWING</span></div></div>
-<div class="profile-actions"><button class="btn primary" id="editBtn"><i class="fa-solid fa-pen"></i> Edit Profile</button><a class="btn" href="/pages/creator.html"><i class="fa-solid fa-plus"></i> Upload</a></div>
+<div class="profile-actions"><button class="btn primary" id="editBtn"><i class="fa-solid fa-pen"></i> Edit Profile</button><a class="btn" href="/pages/creator.html"><i class="fa-solid fa-plus"></i> Upload</a><button class="btn" id="titanLogoutBtn" type="button" style="border:1px solid rgba(229,9,20,.55);color:#ff6b73;background:rgba(229,9,20,.10)"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button></div>
 <section class="glass profile-edit" id="editPanel" hidden><h3>Edit creator profile</h3>
 <div class="field"><label for="editName">Display name</label><input id="editName" maxlength="40" placeholder="Your creator name"></div>
 <div class="field"><label for="editHandle">Username</label><input id="editHandle" maxlength="30" placeholder="@username"></div>
@@ -121,6 +121,7 @@ vids.forEach(v=>{const row=document.createElement("div");row.className="video-ro
 const fields={editName:"name",editHandle:"handle",editRole:"role",editBio:"bio",editAvatar:"avatar",editCover:"cover",editYoutube:"youtube",editInstagram:"instagram",editSpotify:"spotify",editWebsite:"website",editShop:"shop",editRelease:"releaseTitle",editReleaseLink:"releaseLink",editReleaseArt:"releaseArt"};
 function fillForm(){Object.entries(fields).forEach(([id,key])=>$(id).value=p[key]||"");$("editEvents").value=(p.events||[]).join("\n");$("editVerified").checked=!!p.verified}
 $("editBtn").addEventListener("click",()=>{const panel=$("editPanel");panel.hidden=!panel.hidden;if(!panel.hidden)fillForm()});
+$("titanLogoutBtn").addEventListener("click",()=>{if(typeof window.handleTitanLogout==="function"){window.handleTitanLogout()}else{const status=$("saveStatus");if(status)status.textContent="Logout is not ready yet. Please refresh and try again."}});
 $("saveProfile").addEventListener("click",()=>{const next={...p};Object.entries(fields).forEach(([id,key])=>next[key]=$(id).value.trim());next.handle="@"+(next.handle||"creator").replace(/^@+/,"");["avatar","cover","youtube","instagram","spotify","website","shop","releaseLink","releaseArt"].forEach(key=>{if(next[key]&&!safeUrl(next[key])){ $("saveStatus").textContent="Please enter valid http or https links.";return} });if($("saveStatus").textContent==="Please enter valid http or https links.")return;
 next.events=$("editEvents").value.split("\n").map(x=>x.trim()).filter(Boolean);next.verified=$("editVerified").checked;
 try{localStorage.setItem("titan_user_profile",JSON.stringify(next));p=next;$("saveStatus").textContent="Profile saved on this device.";render()}catch(e){$("saveStatus").textContent="Could not save. Device storage may be full."}});
