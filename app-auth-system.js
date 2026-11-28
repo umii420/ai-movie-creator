@@ -13,18 +13,18 @@
     console.log("⚡ Titan Auth System: Popup + Profile Fixed");
 
     const firebaseConfig = {
-        apiKey: "AIzaSyB3OBHZ0XsaHO6Wld097gtvUK44JW2BBTQ",
-        authDomain: "titan-ai-2ed23.firebaseapp.com",
-        projectId: "titan-ai-2ed23",
-        storageBucket: "titan-ai-2ed23.firebasestorage.app",
-        messagingSenderId: "953003695391",
-        appId: "1:953003695391:web:fd85e69723a0cdee96642a",
-        measurementId: "G-829X9X9W02"
+        apiKey: "AIzaSyB1R9HB5diMfai85WBxqhi3Bcntmg0ZG3Y",
+        authDomain: "titanai-3a3aa.firebaseapp.com",
+        projectId: "titanai-3a3aa",
+        storageBucket: "titanai-3a3aa.firebasestorage.app",
+        messagingSenderId: "92111516949",
+        appId: "1:92111516949:web:1128d02bd9e78dc237a51c"
     };
 
     let authInstance = null;
     let googleProviderInstance = null;
-    let profileDb = null;\n    let firebaseInitPromise = null;
+    let profileDb = null;
+    let firebaseInitPromise = null;
 
     async function syncBasicProfile(user, localProfile) {
         if (!profileDb || !user) return;
