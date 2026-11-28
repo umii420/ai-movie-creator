@@ -589,3 +589,119 @@ a { text-decoration-color:rgba(229,9,20,.45); }
   }
   body:has(.bottom-player) { padding-bottom: calc(190px + env(safe-area-inset-bottom)) !important; }
 }
+
+
+/* TITAN MUSIC — stable five-item mobile layout (scoped to Music route) */
+@media (max-width:700px) {
+  body:has(.music-wrap) {
+    background:#080808!important;
+    padding-bottom:calc(84px + env(safe-area-inset-bottom))!important;
+  }
+  .music-wrap { padding-bottom:110px!important; }
+  .jamendo-connect-card {
+    position:relative!important;
+    padding-right:88px!important;
+    min-height:150px!important;
+    background:linear-gradient(135deg,#171717,#21151b)!important;
+  }
+  .jamendo-connect-copy { min-width:0!important; }
+  .music-create-menu {
+    position:absolute!important;
+    right:14px!important;
+    top:50%!important;
+    transform:translateY(-50%)!important;
+    z-index:20!important;
+    width:58px!important;
+    height:58px!important;
+  }
+  .music-create-menu>summary {
+    list-style:none!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:58px!important;
+    height:58px!important;
+    border-radius:18px!important;
+    cursor:pointer!important;
+    color:#fff!important;
+    background:#e50914!important;
+    border:1px solid rgba(255,255,255,.22)!important;
+    box-shadow:0 6px 22px rgba(229,9,20,.28)!important;
+    font-size:28px!important;
+  }
+  .music-create-menu>summary::-webkit-details-marker {display:none!important}
+  .music-create-menu[open] .upload-options {
+    position:absolute!important;
+    right:0!important;
+    left:auto!important;
+    bottom:calc(100% + 12px)!important;
+    width:min(285px,85vw)!important;
+    z-index:30!important;
+    padding:10px!important;
+    border:1px solid rgba(255,255,255,.14)!important;
+    border-radius:16px!important;
+    background:#181818!important;
+    box-shadow:0 14px 42px rgba(0,0,0,.55)!important;
+  }
+  .music-bottom-nav {
+    position:fixed!important;
+    inset:auto 0 0!important;
+    z-index:9999!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-around!important;
+    gap:0!important;
+    width:100%!important;
+    height:calc(72px + env(safe-area-inset-bottom))!important;
+    min-height:72px!important;
+    padding:5px 4px env(safe-area-inset-bottom)!important;
+    box-sizing:border-box!important;
+    background:rgba(8,8,8,.98)!important;
+    border-top:1px solid rgba(255,255,255,.10)!important;
+    box-shadow:0 -8px 24px rgba(0,0,0,.28)!important;
+    backdrop-filter:blur(18px)!important;
+  }
+  .music-bottom-nav>.titan-nav-item {
+    position:relative!important;
+    flex:1 1 20%!important;
+    width:20%!important;
+    max-width:20%!important;
+    min-width:0!important;
+    height:62px!important;
+    min-height:62px!important;
+    margin:0!important;
+    padding:5px 0 3px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:4px!important;
+    color:#aeb3bd!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:12px!important;
+    box-shadow:none!important;
+    text-decoration:none!important;
+    font-size:11px!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+  }
+  .music-bottom-nav>.titan-nav-item i {font-size:23px!important;line-height:1!important}
+  .music-bottom-nav>.titan-nav-item span {display:block!important;font-size:11px!important}
+  .music-bottom-nav>.titan-nav-item.active {color:#fff!important}
+  .music-bottom-nav>.titan-nav-item.active i {color:#e50914!important;filter:drop-shadow(0 0 6px rgba(229,9,20,.25))!important}
+  .music-bottom-nav>.titan-nav-item.active:before {
+    content:"";
+    position:absolute;
+    top:0;
+    left:50%;
+    width:28px;
+    height:3px;
+    border-radius:4px;
+    background:#e50914;
+    transform:translateX(-50%);
+  }
+}
+@media (min-width:701px) {
+  .music-create-menu {position:relative}
+}
