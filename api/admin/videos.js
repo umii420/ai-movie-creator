@@ -5,8 +5,7 @@ const ADMIN_EMAIL = 'umaralipakistan07@gmail.com';
 const API_KEY = 'AIzaSyB1R9HB5diMfai85WBxqhi3Bcntmg0ZG3Y';
 
 function b64url(value) {
-  return Buffer.from(typeof value === 'string' ? value : JSON.stringify(value))
-    .toString('base64').replace(/=/g, '').replace(/\\+/g, '-').replace(/\\//g, '_');
+  return Buffer.from(typeof value === 'string' ? value : JSON.stringify(value)).toString('base64url');
 }
 function serviceAccount() {
   const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
